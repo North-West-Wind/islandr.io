@@ -1,0 +1,1 @@
+export const MAP_SIZE = [1000, 1000];
