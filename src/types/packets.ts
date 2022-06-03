@@ -1,3 +1,5 @@
+import { MovementDirection, Vec2 } from "./maths";
+
 interface IPacket {
 	type: string;
 }
@@ -6,19 +8,19 @@ class PingPacket implements IPacket {
 	type = "ping";
 }
 
-interface KeyPacket extends IPacket {
+interface MovementPacket extends IPacket {
 	type: string;
-	keycode: number;
+	direction: MovementDirection;
 }
 
-export abstract class KeyPressPacket implements KeyPacket {
-	type = "keypress";
-	keycode!: number;
+export abstract class MovementPressPacket implements MovementPacket {
+	type = "movementpress";
+	direction!: MovementDirection;
 }
 
-export abstract class KeyReleasePacket implements KeyPacket {
-	type = "keyrelease";
-	keycode!: number;
+export abstract class MovementReleasePacket implements MovementPacket {
+	type = "movementrelease";
+	direction!: MovementDirection;
 }
 
 interface MousePacket extends IPacket {
@@ -36,4 +38,10 @@ export abstract class MouseReleasePacket implements MousePacket {
 	button!: number;
 }
 
-export type PacketResolvable = PingPacket | KeyPressPacket | KeyReleasePacket | MousePressPacket | MouseReleasePacket;
+export abstract class MouseMovePacket implements IPacket {
+	type = "mousemove";
+	x!: number;
+	y!: number;
+}
+
+export type PacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket;
