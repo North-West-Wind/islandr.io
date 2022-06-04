@@ -4,6 +4,19 @@ An open-source implementation of [surviv.io](https://surviv.io), a 2D battle roy
 ### Server
 This repository is the server side code of Open Surviv.io. All entity and object updates happen here.
 
+## Usage
+You will be able to host a server with this repository.
+
+### Requirements
+Install [Node.js](https://nodejs.org) before hand.
+
+### Instructions
+1. Clone this repository by either `git clone` or downloading as ZIP and extracting it.
+2. Open your terminal and `cd` into the directory it is cloned.
+3. Run `npm install` and `npm test`.
+
+Note: Once the project is finished, it will be published in `npm`. Instructions will be different after that.
+
 ## The Story Behind
 [surviv.io](https://surviv.io) has existed since 2017. It was at first quite popular, and really fun, until the initial developers, Justin Kim and Nick Clark, sold it to Kongregate (Kong) in March 2020. Unfortunately, Kong did not pay enough attention to their acquisition, and ended up just squeezing profits from [surviv.io](https://surviv.io) in the mobile market.
 
