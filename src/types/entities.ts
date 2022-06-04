@@ -10,10 +10,12 @@ export class Entity {
 	hitbox: Hitbox = CircleHitbox.ZERO;
 
 	constructor() {
+		// Currently selects a random position to spawn. Will change in the future.
 		this.position = new Vec2((Math.random() + 1) * MAP_SIZE[0], (Math.random() + 1) * MAP_SIZE[1]);
 	}
 
 	tick() {
+		// Add the velocity to the position, and cap it at map size.
 		this.position = this.position.addVec(this.velocity);
 		this.position = new Vec2(clamp(this.position.x, 0, MAP_SIZE[0]), clamp(this.position.y, 0, MAP_SIZE[1]));
 	}
@@ -26,9 +28,12 @@ export class Entity {
 		this.direction = direction.unit();
 	}
 
+	// Hitbox collision check
 	entityCollided(entity: Entity) {
+		// For circle it is distance < sum of radii
 		if (this.hitbox.type === "circle" && entity.hitbox.type === "circle") return this.position.addVec(entity.position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>this.hitbox).radius + (<CircleHitbox>entity.hitbox).radius, 2);
 		else if (this.hitbox.type === "rect" && entity.hitbox.type === "rect") {
+			// Check for each point to see if it falls into another rectangle
 			const thisHalfWidth = (<RectHitbox>this.hitbox).width / 2, thisHalfHeight = (<RectHitbox>this.hitbox).height / 2;
 			const thesePoints = [this.position.addX(-thisHalfWidth), this.position.addX(thisHalfWidth), this.position.addY(-thisHalfHeight), this.position.addY(thisHalfHeight)];
 			const thatHalfWidth = (<RectHitbox>entity.hitbox).width / 2, thatHalfHeight = (<RectHitbox>entity.hitbox).height / 2;
@@ -37,6 +42,8 @@ export class Entity {
 			for (const point of thesePoints) if (thosePoints[0].x < point.x && thosePoints[1].x > point.x && thosePoints[2].y < point.y && thosePoints[3].y > point.y) return true;
 			return false;
 		} else {
+			// https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
+			// Not the best answer, but good enough.
 			if (this.hitbox.type === "circle") return check(this, entity);
 			else return check(entity, this);
 			function check(circle: Entity, rect: Entity) {
@@ -69,6 +76,7 @@ export class Player extends Entity {
 	}
 
 	setVelocity(velocity: Vec2) {
+		// Also scale the velocity to boost by soda and pills
 		super.setVelocity(velocity.scaleAll(this.boost));
 	}
 }

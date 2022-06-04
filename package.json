@@ -4,6 +4,8 @@
   "description": "An open-source implementation of surviv.io (server)",
   "main": "lib/index.js",
   "scripts": {
+    "start": "node lib/index.js",
+    "build": "tsc",
     "test": "npm run build && npm start"
   },
   "keywords": [

@@ -1,3 +1,4 @@
+// Calculus paid off!
 export class Vec2 {
 	static readonly ZERO = new Vec2(0, 0);
 	static readonly ONE = new Vec2(1, 0);
@@ -71,6 +72,7 @@ export interface Hitbox {
 	type: "rect" | "circle";
 }
 
+// Rectangle hitbox with a width and height
 export class RectHitbox implements Hitbox {
 	static readonly ZERO = new RectHitbox(0, 0);
 
@@ -84,6 +86,7 @@ export class RectHitbox implements Hitbox {
 	}
 }
 
+// Circle hitbox with a radius
 export class CircleHitbox implements Hitbox {
 	static readonly ZERO = new RectHitbox(0, 0);
 
@@ -95,6 +98,7 @@ export class CircleHitbox implements Hitbox {
 	}
 }
 
+// The 4 movement directions
 export enum MovementDirection {
 	RIGHT = 0,
 	UP = 1,
