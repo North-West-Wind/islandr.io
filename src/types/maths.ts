@@ -38,7 +38,9 @@ export class Vec2 {
 
 	angle() {
 		// Magnitude of unit vector is 1
-		return Math.acos((this.x) / (this.magnitude()));
+		const angle = Math.acos((this.x) / (this.magnitude()));
+		if (this.y > 0) return angle;
+		else return -angle;
 	}
 
 	addAngle(radian: number) {

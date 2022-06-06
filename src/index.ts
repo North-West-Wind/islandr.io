@@ -14,6 +14,7 @@ const entities: Entity[] = [];
 const objects = [];
 
 server.on("connection", async socket => {
+	console.log("Received a connection request");
 	// Set the type for msgpack later.
 	socket.binaryType = "arraybuffer";
 
@@ -24,6 +25,7 @@ server.on("connection", async socket => {
 	// Setup the close connection listener. Socket will be deleted from map.
 	var connected = false;
 	socket.on("close", () => {
+		console.log("Connection closed");
 		sockets.delete(id);
 		connected = false;
 	});
@@ -34,17 +36,20 @@ server.on("connection", async socket => {
 		socket.once("message", (msg: ArrayBuffer) => {
 			const decoded = decode(new Uint8Array(msg));
 			if (decoded.id == id) connected = true;
-			else socket.close();
+			else try { socket.close(); } catch (err) { };
 			resolve();
 		})
 	})]);
 	if (!connected) return;
+	console.log(`A new player with ID ${id} connected!`);
 
 	// Create the new player and add it to the entity list.
 	const player = new Player(id);
 	entities.push(player);
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
-	const timeout = setTimeout(socket.close, 30000);
+	const timeout = setTimeout(() => {
+		try { socket.close(); } catch (err) { }
+	}, 30000);
 
 	// The 4 directions of movement
 	const movements = [false, false, false, false];
@@ -63,7 +68,7 @@ server.on("connection", async socket => {
 				// Add corresponding direction vector to a zero vector to determine the velocity and direction.
 				var angleVec = Vec2.ZERO;
 				for (let ii = 0; ii < movements.length; ii++) if (movements[ii]) angleVec = angleVec.addVec(DIRECTION_VEC[ii]);
-				player.setVelocity(angleVec);
+				player.setVelocity(angleVec.scaleAll(0.1));
 				break;
 			case "movementrelease":
 				// Make the direction false
@@ -72,7 +77,7 @@ server.on("connection", async socket => {
 				// Same as movementpress
 				var angleVec = Vec2.ZERO;
 				for (let ii = 0; ii < movements.length; ii++) if (movements[ii]) angleVec = angleVec.addVec(DIRECTION_VEC[ii]);
-				player.setVelocity(angleVec);
+				player.setVelocity(angleVec.scaleAll(0.1));
 				break;
 			// Very not-done. Will probably change to "attack" and "use" tracking.
 			case "mousepress":
@@ -88,24 +93,20 @@ server.on("connection", async socket => {
 				break;
 		}
 	});
-
-	// Send data if connected.
-	while (connected) {
-		socket.send(encode({
-			// Filter out of range entities. (Early cheat prevention)
-			entities: entities.filter(entity => (entity.type !== "player" || (<Player>entity).id !== id) && entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((entity: any) => {
-				const obj: any = {};
-				// Remove some properties before sending like velocity and hitbox.
-				for (const prop in entity) if (!ENTITY_EXCLUDE.includes(prop) && typeof entity[prop] !== "function") obj[prop] = entity[prop];
-				return obj;
-			}),
-			// Data of the player itself.
-			player: { health: player.health, boost: player.boost, scope: player.scope, position: { x: player.position.x, y: player.position.y } }
-		}).buffer);
-	}
 });
 
 setInterval(() => {
 	// Tick every single entity.
 	entities.forEach(entity => entity.tick());
+	// Filter players from entities and send them packets
+	const players = <Player[]>entities.filter(entity => entity.type === "player");
+	players.forEach(player => sockets.get(player.id)?.send(encode({
+		type: "game",
+		entities: entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((entity: any) => {
+			const obj: any = {};
+			// Remove some properties before sending like velocity and hitbox.
+			for (const prop in entity) if (!ENTITY_EXCLUDE.includes(prop) && typeof entity[prop] !== "function") obj[prop] = entity[prop];
+			return obj;
+		})
+	}).buffer));
 }, 1000 / TICKS_PER_SECOND);

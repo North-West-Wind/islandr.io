@@ -1,4 +1,4 @@
-import { MovementDirection, Vec2 } from "./maths";
+import { MovementDirection } from "./maths";
 
 interface IPacket {
 	type: string;
@@ -13,12 +13,12 @@ interface MovementPacket extends IPacket {
 	direction: MovementDirection;
 }
 
-export abstract class MovementPressPacket implements MovementPacket {
+export class MovementPressPacket implements MovementPacket {
 	type = "movementpress";
 	direction!: MovementDirection;
 }
 
-export abstract class MovementReleasePacket implements MovementPacket {
+export class MovementReleasePacket implements MovementPacket {
 	type = "movementrelease";
 	direction!: MovementDirection;
 }
@@ -28,17 +28,17 @@ interface MousePacket extends IPacket {
 	button: number;
 }
 
-export abstract class MousePressPacket implements MousePacket {
+export class MousePressPacket implements MousePacket {
 	type = "mousepress";
 	button!: number;
 }
 
-export abstract class MouseReleasePacket implements MousePacket {
+export class MouseReleasePacket implements MousePacket {
 	type = "mouserelease";
 	button!: number;
 }
 
-export abstract class MouseMovePacket implements IPacket {
+export class MouseMovePacket implements IPacket {
 	type = "mousemove";
 	x!: number;
 	y!: number;

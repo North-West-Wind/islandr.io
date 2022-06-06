@@ -11,7 +11,7 @@ export class Entity {
 
 	constructor() {
 		// Currently selects a random position to spawn. Will change in the future.
-		this.position = new Vec2((Math.random() + 1) * MAP_SIZE[0], (Math.random() + 1) * MAP_SIZE[1]);
+		this.position = new Vec2((Math.random() + 1) * MAP_SIZE[0] / 2, (Math.random() + 1) * MAP_SIZE[1] / 2);
 	}
 
 	tick() {
@@ -65,8 +65,10 @@ export class Entity {
 
 export class Player extends Entity {
 	type = "player";
+	hitbox = new CircleHitbox(1);
 	id: string;
 	health: number = 100;
+	maxHealth: number = 100;
 	boost: number = 1;
 	scope: number = 1;
 
@@ -79,10 +81,15 @@ export class Player extends Entity {
 		// Also scale the velocity to boost by soda and pills
 		super.setVelocity(velocity.scaleAll(this.boost));
 	}
+
+	tick() {
+		super.tick();
+	}
 }
 
 export class Bullet extends Entity {
 	type = "bullet";
+	hitbox = new CircleHitbox(0.1);
 	damage: number;
 	ticks: number;
 
