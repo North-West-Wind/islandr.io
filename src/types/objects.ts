@@ -1,36 +1,46 @@
 import { MAP_SIZE } from "../constants";
-import { clamp } from "../utils";
-import { CircleHitbox, Hitbox, RectHitbox, Vec2 } from "./maths";
-import { GameObject } from "./objects";
+import { Entity } from "./entities";
+import { Vec2, Hitbox, CircleHitbox, RectHitbox } from "./maths";
 
-export class Entity {
+export class GameObject {
 	type: string = "";
 	position: Vec2;
-	velocity: Vec2 = Vec2.ZERO;
-	direction: Vec2 = Vec2.ONE;
-	hitbox: Hitbox = CircleHitbox.ZERO;
+	baseHitbox: Hitbox;
+	minHitbox: Hitbox;
+	hitbox: Hitbox;
 	vulnerable = true;
-	health: number = 100;
-	maxHealth: number = 100;
+	health: number;
+	maxHealth: number;
 	despawn = false;
 
-	constructor() {
-		// Currently selects a random position to spawn. Will change in the future.
+	constructor(baseHitbox: Hitbox, minHitbox: Hitbox, health: number, maxHealth: number) {
+		if (baseHitbox.type !== minHitbox.type) throw new Error("Hitboxes are not the same type!");
 		this.position = new Vec2((Math.random() + 1) * MAP_SIZE[0] / 2, (Math.random() + 1) * MAP_SIZE[1] / 2);
+		this.baseHitbox = this.hitbox = baseHitbox;
+		this.minHitbox = minHitbox;
+		this.health = health;
+		this.maxHealth = maxHealth;
 	}
 
-	tick(_entities: Entity[], _objects: GameObject[]) {
-		// Add the velocity to the position, and cap it at map size.
-		this.position = this.position.addVec(this.velocity);
-		this.position = new Vec2(clamp(this.position.x, 0, MAP_SIZE[0]), clamp(this.position.y, 0, MAP_SIZE[1]));
+	damage(dmg: number) {
+		if (this.despawn || !this.vulnerable) return;
+		this.health -= dmg;
+		if (this.health <= 0) this.die();
+		this.hitbox = this.baseHitbox.scaleAll(this.health / this.maxHealth + this.minHitbox.comparable() / this.baseHitbox.comparable());
 	}
 
-	setVelocity(velocity: Vec2) {
-		this.velocity = velocity;
+	die() {
+		this.despawn = true;
 	}
+}
 
-	setDirection(direction: Vec2) {
-		this.direction = direction.unit();
+export class Tree extends GameObject {
+	type = "tree";
+	
+	constructor(objects: GameObject[]) {
+		const salt = 1 + (Math.random() - 0.5) / 5;
+		super(new CircleHitbox(1.2).scaleAll(salt), new CircleHitbox(0.5).scaleAll(salt), 160, 160);
+		//while (objects.find(object => this.collided(object))) this.position = new Vec2((Math.random() + 1) * MAP_SIZE[0] / 2, (Math.random() + 1) * MAP_SIZE[1] / 2);
 	}
 
 	// Hitbox collision check
@@ -64,74 +74,6 @@ export class Entity {
 
 				return (Math.pow(cirDist.x - halfWidth, 2) + Math.pow(cirDist.y - halfHeight, 2) <= radius * radius);
 			}
-		}
-	}
-
-	damage(dmg: number) {
-		if (!this.vulnerable) return;
-		this.health -= dmg;
-	}
-
-	die() {
-		this.despawn = true;
-	}
-}
-
-export class Player extends Entity {
-	type = "player";
-	hitbox = new CircleHitbox(1);
-	id: string;
-	boost: number = 1;
-	scope: number = 1;
-
-	constructor(id: string) {
-		super();
-		this.id = id;
-	}
-
-	setVelocity(velocity: Vec2) {
-		// Also scale the velocity to boost by soda and pills
-		super.setVelocity(velocity.scaleAll(this.boost));
-	}
-
-	tick(entities: Entity[], objects: GameObject[]) {
-		super.tick(entities, objects);
-		for (const object of objects) {
-			if (this.collided(object)) {
-				if (object.hitbox.type === "circle") {
-					const relative = this.position.addVec(object.position.inverse());
-					this.position = object.position.addVec(relative.scaleAll((object.hitbox.comparable() + this.hitbox.comparable()) / relative.magnitude()));
-				}
-			}
-		}
-	}
-}
-
-export class Bullet extends Entity {
-	type = "bullet";
-	hitbox = new CircleHitbox(0.1);
-	dmg: number;
-	ticks: number;
-
-	constructor(dmg: number, velocity: Vec2, ticks: number) {
-		super();
-		this.dmg = dmg;
-		this.velocity = velocity;
-		this.ticks = ticks;
-		this.vulnerable = false;
-	}
-
-	tick(entities: Entity[], objects: GameObject[]) {
-		super.tick(entities, objects);
-		for (const object of objects) if (this.collided(object)) {
-			object.damage(this.dmg);
-			this.die();
-			break;
-		}
-		if (!this.despawn) for (const entity of entities) if (this.collided(entity)) {
-			entity.damage(this.dmg);
-			this.die();
-			break;
 		}
 	}
 }

@@ -3,15 +3,19 @@ import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
 import { PacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket } from "./types/packets";
 import { Entity, Player } from "./types/entities";
-import { BASE_RADIUS, DIRECTION_VEC, ENTITY_EXCLUDE, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
+import { BASE_RADIUS, DIRECTION_VEC, ENTITY_EXCLUDE, MAP_SIZE, OBJECT_EXCLUDE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/maths";
+import { GameObject, Tree } from "./types/objects";
 
 const server = new ws.Server({ port: 8080 });
 server.once("listening", () => console.log(`WebSocket Server listening at port ${server.options.port}`));
 
 const sockets = new Map<string, ws.WebSocket>();
 const entities: Entity[] = [];
-const objects = [];
+const objects: GameObject[] = [];
+
+// Initialize the map
+for (let ii = 0; ii < 1000; ii++) objects.push(new Tree(objects));
 
 server.on("connection", async socket => {
 	console.log("Received a connection request");
@@ -68,7 +72,7 @@ server.on("connection", async socket => {
 				// Add corresponding direction vector to a zero vector to determine the velocity and direction.
 				var angleVec = Vec2.ZERO;
 				for (let ii = 0; ii < movements.length; ii++) if (movements[ii]) angleVec = angleVec.addVec(DIRECTION_VEC[ii]);
-				player.setVelocity(angleVec.scaleAll(0.1));
+				player.setVelocity(angleVec.unit().scaleAll(0.1));
 				break;
 			case "movementrelease":
 				// Make the direction false
@@ -77,7 +81,7 @@ server.on("connection", async socket => {
 				// Same as movementpress
 				var angleVec = Vec2.ZERO;
 				for (let ii = 0; ii < movements.length; ii++) if (movements[ii]) angleVec = angleVec.addVec(DIRECTION_VEC[ii]);
-				player.setVelocity(angleVec.scaleAll(0.1));
+				player.setVelocity(angleVec.unit().scaleAll(0.1));
 				break;
 			// Very not-done. Will probably change to "attack" and "use" tracking.
 			case "mousepress":
@@ -97,16 +101,23 @@ server.on("connection", async socket => {
 
 setInterval(() => {
 	// Tick every single entity.
-	entities.forEach(entity => entity.tick());
+	entities.forEach(entity => entity.tick(entities, objects));
 	// Filter players from entities and send them packets
 	const players = <Player[]>entities.filter(entity => entity.type === "player");
 	players.forEach(player => sockets.get(player.id)?.send(encode({
 		type: "game",
 		entities: entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((entity: any) => {
 			const obj: any = {};
-			// Remove some properties before sending like velocity and hitbox.
+			// Remove some properties before sending like velocity and health.
 			for (const prop in entity) if (!ENTITY_EXCLUDE.includes(prop) && typeof entity[prop] !== "function") obj[prop] = entity[prop];
 			return obj;
-		})
+		}),
+		objects: objects.filter(object => object.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((object: any) => {
+			const obj: any = {};
+			// Remove some properties before sending like velocity and health.
+			for (const prop in object) if (!OBJECT_EXCLUDE.includes(prop) && typeof object[prop] !== "function") obj[prop] = object[prop];
+			return obj;
+		}),
+		player
 	}).buffer));
 }, 1000 / TICKS_PER_SECOND);

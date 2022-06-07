@@ -25,6 +25,7 @@ export class Vec2 {
 
 	unit() {
 		const mag = this.magnitude();
+		if (mag === 0) return Vec2.ZERO;
 		return new Vec2(this.x / mag, this.y / mag);
 	}
 
@@ -72,6 +73,9 @@ export class Vec2 {
 
 export interface Hitbox {
 	type: "rect" | "circle";
+
+	comparable(): number;
+	scaleAll(ratio: number): Hitbox;
 }
 
 // Rectangle hitbox with a width and height
@@ -86,6 +90,14 @@ export class RectHitbox implements Hitbox {
 		this.width = width;
 		this.height = height;
 	}
+
+	comparable() {
+		return this.width;
+	}
+
+	scaleAll(ratio: number) {
+		return new RectHitbox(this.width * ratio, this.height * ratio);
+	}
 }
 
 // Circle hitbox with a radius
@@ -98,6 +110,14 @@ export class CircleHitbox implements Hitbox {
 	constructor(radius: number) {
 		this.radius = radius;
 	}
+
+	comparable() {
+		return this.radius;
+	}
+
+	scaleAll(ratio: number) {
+		return new CircleHitbox(this.radius * ratio);
+	}
 }
 
 // The 4 movement directions
@@ -106,4 +126,10 @@ export enum MovementDirection {
 	UP = 1,
 	LEFT = 2,
 	DOWN = 3
+}
+
+export enum CommonAngles {
+	PI_FOUR = Math.PI / 4,
+	PI_TWO = Math.PI / 2,
+	TWO_PI = Math.PI * 2
 }
