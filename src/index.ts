@@ -1,9 +1,9 @@
 import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
-import { PacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket } from "./types/packets";
+import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket } from "./types/packets";
 import { Entity, Player } from "./types/entities";
-import { BASE_RADIUS, DIRECTION_VEC, ENTITY_EXCLUDE, MAP_SIZE, OBJECT_EXCLUDE, TICKS_PER_SECOND } from "./constants";
+import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/maths";
 import { GameObject, Tree } from "./types/objects";
 
@@ -50,6 +50,10 @@ server.on("connection", async socket => {
 	// Create the new player and add it to the entity list.
 	const player = new Player(id);
 	entities.push(player);
+
+	// Send the player the entire map
+
+
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
 		try { socket.close(); } catch (err) { }
@@ -60,7 +64,7 @@ server.on("connection", async socket => {
 	const buttons = new Map<number, boolean>();
 
 	socket.on("message", (msg: ArrayBuffer) => {
-		const decoded = <PacketResolvable>decode(new Uint8Array(msg));
+		const decoded = <ClientPacketResolvable>decode(new Uint8Array(msg));
 		switch (decoded.type) {
 			case "ping":
 				timeout.refresh();
@@ -104,20 +108,5 @@ setInterval(() => {
 	entities.forEach(entity => entity.tick(entities, objects));
 	// Filter players from entities and send them packets
 	const players = <Player[]>entities.filter(entity => entity.type === "player");
-	players.forEach(player => sockets.get(player.id)?.send(encode({
-		type: "game",
-		entities: entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((entity: any) => {
-			const obj: any = {};
-			// Remove some properties before sending like velocity and health.
-			for (const prop in entity) if (!ENTITY_EXCLUDE.includes(prop) && typeof entity[prop] !== "function") obj[prop] = entity[prop];
-			return obj;
-		}),
-		objects: objects.filter(object => object.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((object: any) => {
-			const obj: any = {};
-			// Remove some properties before sending like velocity and health.
-			for (const prop in object) if (!OBJECT_EXCLUDE.includes(prop) && typeof object[prop] !== "function") obj[prop] = object[prop];
-			return obj;
-		}),
-		player
-	}).buffer));
+	players.forEach(player => sockets.get(player.id)?.send(encode(new GamePacket(entities, objects, player)).buffer));
 }, 1000 / TICKS_PER_SECOND);

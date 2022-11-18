@@ -1,4 +1,7 @@
-import { MovementDirection } from "./maths";
+import { BASE_RADIUS, ENTITY_EXCLUDE, OBJECT_EXCLUDE } from "../constants";
+import { Entity, Player } from "./entities";
+import { MovementDirection, Vec2 } from "./maths";
+import { GameObject } from "./objects";
 
 interface IPacket {
 	type: string;
@@ -44,4 +47,36 @@ export class MouseMovePacket implements IPacket {
 	y!: number;
 }
 
-export type PacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket;
+export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket;
+
+export class GamePacket implements IPacket {
+	type = "game";
+	entities: Entity[];
+	objects: GameObject[];
+	player: Player;
+
+	constructor(entities: Entity[], objects: GameObject[], player: Player) {
+		this.entities = entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((entity: any) => {
+			const obj: any = {};
+			// Remove some properties before sending like velocity and health.
+			for (const prop in entity) if (!ENTITY_EXCLUDE.includes(prop) && typeof entity[prop] !== "function") obj[prop] = entity[prop];
+			return obj;
+		});
+		this.objects = objects.filter(object => object.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((object: any) => {
+			const obj: any = {};
+			// Remove some properties before sending like velocity and health.
+			for (const prop in object) if (!OBJECT_EXCLUDE.includes(prop) && typeof object[prop] !== "function") obj[prop] = object[prop];
+			return obj;
+		});
+		this.player = player;
+	}
+}
+
+export class MapPacket implements IPacket {
+	type = "map";
+	objects: { type: string, position: Vec2 }[];
+
+	constructor(objects: GameObject[]) {
+		this.objects = objects.map(object => ({ type: object.type, position: object.position }));
+	}
+}
