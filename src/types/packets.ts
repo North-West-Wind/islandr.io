@@ -1,3 +1,4 @@
+import { ticksElapsed } from "..";
 import { BASE_RADIUS, ENTITY_EXCLUDE, OBJECT_EXCLUDE } from "../constants";
 import { Entity, Player } from "./entities";
 import { MovementDirection, Vec2 } from "./maths";
@@ -60,6 +61,7 @@ export class GamePacket implements IPacket {
 			const obj: any = {};
 			// Remove some properties before sending like velocity and health.
 			for (const prop in entity) if (!ENTITY_EXCLUDE.includes(prop) && typeof entity[prop] !== "function") obj[prop] = entity[prop];
+			obj.inventory = { holding: entity.inventory.weapons[entity.inventory.holding] };
 			return obj;
 		});
 		this.objects = objects.filter(object => object.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((object: any) => {

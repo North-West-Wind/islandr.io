@@ -2,6 +2,21 @@ import { MAP_SIZE } from "../constants";
 import { clamp } from "../utils";
 import { CircleHitbox, Hitbox, RectHitbox, Vec2 } from "./maths";
 import { GameObject } from "./objects";
+import { Fist, Weapon } from "./weapons";
+
+interface AttackAttribute {
+	name: string;
+	duration: number;
+}
+
+export interface Inventory {
+	holding: number;
+	weapons: Weapon[];
+	slots: number;
+}
+
+const DEFAULT_EMPTY_INVENTORY = { holding: 2, weapons: Array(4), slots: 4 };
+DEFAULT_EMPTY_INVENTORY.weapons[2] = new Fist();
 
 export class Entity {
 	type: string = "";
@@ -13,16 +28,23 @@ export class Entity {
 	health: number = 100;
 	maxHealth: number = 100;
 	despawn = false;
+	attack: AttackAttribute = { name: "", duration: 0 };
+	inventory: Inventory;
 
 	constructor() {
 		// Currently selects a random position to spawn. Will change in the future.
 		this.position = new Vec2((Math.random() + 1) * MAP_SIZE[0] / 2, (Math.random() + 1) * MAP_SIZE[1] / 2);
+		this.inventory = DEFAULT_EMPTY_INVENTORY;
 	}
 
 	tick(_entities: Entity[], _objects: GameObject[]) {
 		// Add the velocity to the position, and cap it at map size.
 		this.position = this.position.addVec(this.velocity);
 		this.position = new Vec2(clamp(this.position.x, 0, MAP_SIZE[0]), clamp(this.position.y, 0, MAP_SIZE[1]));
+		if (this.attack.name) {
+			if (this.attack.duration > 0) this.attack.duration--;
+			else this.attack.name = "";
+		}
 	}
 
 	setVelocity(velocity: Vec2) {
@@ -83,6 +105,7 @@ export class Player extends Entity {
 	id: string;
 	boost: number = 1;
 	scope: number = 1;
+	tryAttacking: boolean = false;
 
 	constructor(id: string) {
 		super();

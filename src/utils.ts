@@ -14,3 +14,8 @@ export function clamp(val: number, min: number, max: number) {
     if (val > max) return max;
     return val;
 }
+
+// Pick random element from array
+export function randomSelect(arr: any[]) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}

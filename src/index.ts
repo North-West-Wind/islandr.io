@@ -1,11 +1,13 @@
 import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
-import { ID, wait } from "./utils";
+import { ID, randomSelect, wait } from "./utils";
 import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket } from "./types/packets";
 import { Entity, Player } from "./types/entities";
-import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
+import { ATTACKS, DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/maths";
 import { GameObject, Tree } from "./types/objects";
+
+export var ticksElapsed = 0;
 
 const server = new ws.Server({ port: 8080 });
 server.once("listening", () => console.log(`WebSocket Server listening at port ${server.options.port}`));
@@ -90,9 +92,11 @@ server.on("connection", async socket => {
 			// Very not-done. Will probably change to "attack" and "use" tracking.
 			case "mousepress":
 				buttons.set((<MousePressPacket>decoded).button, true);
+				if (buttons.get(0)) player.tryAttacking = true;
 				break;
-			case "mousepress":
+			case "mouserelease":
 				buttons.set((<MouseReleasePacket>decoded).button, false);
+				if (buttons.get(0)) player.tryAttacking = false;
 				break;
 			case "mousemove":
 				const mMvPacket = <MouseMovePacket>decoded;
@@ -104,9 +108,20 @@ server.on("connection", async socket => {
 });
 
 setInterval(() => {
+	ticksElapsed++;
 	// Tick every single entity.
 	entities.forEach(entity => entity.tick(entities, objects));
 	// Filter players from entities and send them packets
 	const players = <Player[]>entities.filter(entity => entity.type === "player");
-	players.forEach(player => sockets.get(player.id)?.send(encode(new GamePacket(entities, objects, player)).buffer));
+	players.forEach(player => {
+		if (player.tryAttacking && player.attack.duration <= 0) {
+			const weapon = player.inventory.weapons[player.inventory.holding];
+			if (weapon) {
+				player.attack.name = randomSelect(weapon.attacks);
+				player.attack.duration = ATTACKS[player.attack.name];
+				if (!weapon.continuous) player.tryAttacking = false;
+			}
+		}
+		sockets.get(player.id)?.send(encode(new GamePacket(entities, objects, player)).buffer)
+	});
 }, 1000 / TICKS_PER_SECOND);
