@@ -5,7 +5,7 @@ import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMove
 import { Entity, Player } from "./types/entities";
 import { ATTACKS, DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/maths";
-import { GameObject, Tree } from "./types/objects";
+import { GameObject, Tree, Bush } from "./types/objects";
 
 export var ticksElapsed = 0;
 
@@ -18,6 +18,7 @@ const objects: GameObject[] = [];
 
 // Initialize the map
 for (let ii = 0; ii < 1000; ii++) objects.push(new Tree(objects));
+for (let ii = 0; ii < 1000; ii++) objects.push(new Bush(objects));
 
 server.on("connection", async socket => {
 	console.log("Received a connection request");
