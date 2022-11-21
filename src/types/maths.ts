@@ -1,3 +1,5 @@
+import { MinCircleHitbox, MinHitbox, MinRectHitbox, MinVec2 } from "./minimized";
+
 // Calculus paid off!
 export class Vec2 {
 	static readonly ZERO = new Vec2(0, 0);
@@ -69,6 +71,10 @@ export class Vec2 {
 	scaleAll(ratio: number) {
 		return this.scale(ratio, ratio);
 	}
+
+	minimize() {
+		return <MinVec2> { x: this.x, y: this.y };
+	}
 }
 
 export interface Hitbox {
@@ -76,6 +82,7 @@ export interface Hitbox {
 
 	comparable(): number;
 	scaleAll(ratio: number): Hitbox;
+	minimize(): MinHitbox;
 }
 
 // Rectangle hitbox with a width and height
@@ -98,6 +105,10 @@ export class RectHitbox implements Hitbox {
 	scaleAll(ratio: number) {
 		return new RectHitbox(this.width * ratio, this.height * ratio);
 	}
+
+	minimize() {
+		return <MinRectHitbox> { type: this.type, width: this.width, height: this.height };
+	}
 }
 
 // Circle hitbox with a radius
@@ -117,6 +128,10 @@ export class CircleHitbox implements Hitbox {
 
 	scaleAll(ratio: number) {
 		return new CircleHitbox(this.radius * ratio);
+	}
+
+	minimize() {
+		return <MinCircleHitbox> { type: this.type, radius: this.radius };
 	}
 }
 

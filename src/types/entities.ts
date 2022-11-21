@@ -4,19 +4,30 @@ import { CircleHitbox, Hitbox, RectHitbox, Vec2 } from "./maths";
 import { GameObject } from "./objects";
 import { Weapon } from "./weapons";
 import { Fists } from "../store/weapons";
+import { MinEntity, MinInventory } from "./minimized";
 
-interface AttackAttribute {
+export interface AttackAttribute {
 	name: string;
 	duration: number;
 }
 
-export interface Inventory {
+export class Inventory {
 	holding: number;
 	weapons: Weapon[];
 	slots: number;
+
+	constructor(holding: number, slots: number, weapons?: Weapon[]) {
+		this.holding = holding;
+		this.slots = slots;
+		this.weapons = weapons || Array(slots);
+	}
+
+	minimize() {
+		return <MinInventory> { holding: this.weapons[this.holding] };
+	}
 }
 
-export const DEFAULT_EMPTY_INVENTORY = { holding: 2, weapons: Array(4), slots: 4 };
+export const DEFAULT_EMPTY_INVENTORY = new Inventory(2, 4);
 DEFAULT_EMPTY_INVENTORY.weapons[2] = new Fists();
 
 export class Entity {
@@ -95,6 +106,15 @@ export class Entity {
 
 	die() {
 		this.despawn = true;
+	}
+
+	minimize() {
+		return <MinEntity> {
+			position: this.position.minimize(),
+			direction: this.direction.minimize(),
+			hitbox: this.hitbox.minimize(),
+			attack: this.attack
+		}
 	}
 }
 

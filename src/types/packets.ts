@@ -1,7 +1,8 @@
-import { BASE_RADIUS, ENTITY_EXCLUDE, OBJECT_EXCLUDE } from "../constants";
+import { BASE_RADIUS } from "../constants";
 import { Player } from "../store/entities";
 import { Entity } from "./entities";
 import { MovementDirection, Vec2 } from "./maths";
+import { MinEntity, MinGameObject } from "./minimized";
 import { GameObject } from "./objects";
 
 interface IPacket {
@@ -52,13 +53,13 @@ export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleas
 
 export class GamePacket implements IPacket {
 	type = "game";
-	entities: Entity[];
-	objects: GameObject[];
+	entities: MinEntity[];
+	objects: MinGameObject[];
 	player: Player;
 
 	constructor(entities: Entity[], objects: GameObject[], player: Player) {
-		this.entities = entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2));
-		this.objects = objects.filter(object => object.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2));
+		this.entities = entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(entity => entity.minimize());
+		this.objects = objects.filter(object => object.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(object => object.minimize());
 		this.player = player;
 	}
 }

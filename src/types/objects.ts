@@ -1,6 +1,7 @@
 import { MAP_SIZE } from "../constants";
 import { Entity } from "./entities";
 import { Vec2, Hitbox, CircleHitbox, RectHitbox } from "./maths";
+import { MinGameObject } from "./minimized";
 
 export class GameObject {
 	type: string = "";
@@ -70,4 +71,8 @@ export class GameObject {
 
 	// No implementation by default
 	onCollision(thing: Entity | GameObject) { }
+
+	minimize() {
+		return <MinGameObject> { type: this.type, position: this.position.minimize(), hitbox: this.hitbox.minimize() };
+	}
 }
