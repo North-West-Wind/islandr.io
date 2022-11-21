@@ -23,7 +23,7 @@ export class Inventory {
 	}
 
 	minimize() {
-		return <MinInventory> { holding: this.weapons[this.holding] };
+		return <MinInventory> { holding: this.weapons[this.holding].minimize() };
 	}
 }
 

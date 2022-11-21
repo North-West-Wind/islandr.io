@@ -1,5 +1,4 @@
 import { Animation } from "./entities";
-import { Weapon } from "./weapons";
 
 export interface MinVec2 {
 	x: number;
