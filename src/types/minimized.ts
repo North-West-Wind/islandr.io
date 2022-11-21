@@ -28,7 +28,7 @@ export interface MinEntity {
 }
 
 export interface MinInventory {
-	holding: Weapon;
+	holding: MinWeapon;
 }
 
 export interface MinGameObject {
