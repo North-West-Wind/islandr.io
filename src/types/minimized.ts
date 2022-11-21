@@ -24,7 +24,7 @@ export interface MinEntity {
 	position: MinVec2;
 	direction: MinVec2;
 	hitbox: MinHitbox;
-	attack: Animation;
+	animation: Animation;
 }
 
 export interface MinInventory {
@@ -35,4 +35,9 @@ export interface MinGameObject {
 	type: string;
 	position: MinVec2;
 	hitbox: MinHitbox;
+}
+
+export interface MinWeapon {
+	id: string;
+	name: string;
 }

@@ -114,7 +114,7 @@ export class Entity {
 			position: this.position.minimize(),
 			direction: this.direction.minimize(),
 			hitbox: this.hitbox.minimize(),
-			attack: this.animation
+			animation: this.animation
 		}
 	}
 }

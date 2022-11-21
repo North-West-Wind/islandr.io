@@ -1,6 +1,6 @@
 import { Weapon, WeaponType } from "../../types/weapons";
 
-export default class Fists implements Weapon {
+export default class Fists extends Weapon {
 	id = "fists";
 	name = "Fists";
 	continuous = false;
