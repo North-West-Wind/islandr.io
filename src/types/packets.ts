@@ -1,6 +1,6 @@
-import { ticksElapsed } from "..";
 import { BASE_RADIUS, ENTITY_EXCLUDE, OBJECT_EXCLUDE } from "../constants";
-import { Entity, Player } from "./entities";
+import { Player } from "../store/entities";
+import { Entity } from "./entities";
 import { MovementDirection, Vec2 } from "./maths";
 import { GameObject } from "./objects";
 
@@ -57,19 +57,8 @@ export class GamePacket implements IPacket {
 	player: Player;
 
 	constructor(entities: Entity[], objects: GameObject[], player: Player) {
-		this.entities = entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((entity: any) => {
-			const obj: any = {};
-			// Remove some properties before sending like velocity and health.
-			for (const prop in entity) if (!ENTITY_EXCLUDE.includes(prop) && typeof entity[prop] !== "function") obj[prop] = entity[prop];
-			obj.inventory = { holding: entity.inventory.weapons[entity.inventory.holding] };
-			return obj;
-		});
-		this.objects = objects.filter(object => object.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map((object: any) => {
-			const obj: any = {};
-			// Remove some properties before sending like velocity and health.
-			for (const prop in object) if (!OBJECT_EXCLUDE.includes(prop) && typeof object[prop] !== "function") obj[prop] = object[prop];
-			return obj;
-		});
+		this.entities = entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2));
+		this.objects = objects.filter(object => object.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2));
 		this.player = player;
 	}
 }

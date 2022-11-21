@@ -2,11 +2,12 @@ import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, randomSelect, wait } from "./utils";
 import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket } from "./types/packets";
-import { Entity, Player } from "./types/entities";
-import { ATTACKS, DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
+import { Entity } from "./types/entities";
+import { ATTACKS, DIRECTION_VEC, ENTITY_EXCLUDE, MAP_SIZE, OBJECT_EXCLUDE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/maths";
 import { GameObject } from "./types/objects";
 import { Tree, Bush } from "./store/objects";
+import { Player } from "./store/entities";
 
 export var ticksElapsed = 0;
 
@@ -115,6 +116,19 @@ setInterval(() => {
 	entities.forEach(entity => entity.tick(entities, objects));
 	// Filter players from entities and send them packets
 	const players = <Player[]>entities.filter(entity => entity.type === "player");
+	const mappedEntities = entities.map((entity: any) => {
+		const obj: any = {};
+		// Remove some properties before sending like velocity and health.
+		for (const prop in entity) if (!ENTITY_EXCLUDE.includes(prop) && typeof entity[prop] !== "function") obj[prop] = entity[prop];
+		if (entity.inventory) obj.inventory = { holding: entity.inventory.weapons[entity.inventory.holding] };
+		return obj;
+	});
+	const mappedObjects = objects.map((object: any) => {
+		const obj: any = {};
+		// Remove some properties before sending like velocity and health.
+		for (const prop in object) if (!OBJECT_EXCLUDE.includes(prop) && typeof object[prop] !== "function") obj[prop] = object[prop];
+		return obj;
+	});
 	players.forEach(player => {
 		if (player.tryAttacking && player.attack.duration <= 0) {
 			const weapon = player.inventory.weapons[player.inventory.holding];
@@ -124,6 +138,6 @@ setInterval(() => {
 				if (!weapon.continuous) player.tryAttacking = false;
 			}
 		}
-		sockets.get(player.id)?.send(encode(new GamePacket(entities, objects, player)).buffer)
+		sockets.get(player.id)?.send(encode(new GamePacket(mappedEntities, mappedObjects, player)).buffer)
 	});
 }, 1000 / TICKS_PER_SECOND);

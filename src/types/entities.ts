@@ -16,7 +16,7 @@ export interface Inventory {
 	slots: number;
 }
 
-const DEFAULT_EMPTY_INVENTORY = { holding: 2, weapons: Array(4), slots: 4 };
+export const DEFAULT_EMPTY_INVENTORY = { holding: 2, weapons: Array(4), slots: 4 };
 DEFAULT_EMPTY_INVENTORY.weapons[2] = new Fists();
 
 export class Entity {
@@ -30,12 +30,10 @@ export class Entity {
 	maxHealth: number = 100;
 	despawn = false;
 	attack: AttackAttribute = { name: "", duration: 0 };
-	inventory: Inventory;
 
 	constructor() {
 		// Currently selects a random position to spawn. Will change in the future.
 		this.position = new Vec2((Math.random() + 1) * MAP_SIZE[0] / 2, (Math.random() + 1) * MAP_SIZE[1] / 2);
-		this.inventory = DEFAULT_EMPTY_INVENTORY;
 	}
 
 	tick(_entities: Entity[], _objects: GameObject[]) {
@@ -100,67 +98,3 @@ export class Entity {
 	}
 }
 
-export class Player extends Entity {
-	type = "player";
-	hitbox = new CircleHitbox(1);
-	id: string;
-	boost: number = 1;
-	scope: number = 1;
-	tryAttacking: boolean = false;
-
-	constructor(id: string) {
-		super();
-		this.id = id;
-	}
-
-	setVelocity(velocity: Vec2) {
-		// Also scale the velocity to boost by soda and pills
-		super.setVelocity(velocity.scaleAll(this.boost));
-	}
-
-	tick(entities: Entity[], objects: GameObject[]) {
-		super.tick(entities, objects);
-		for (const object of objects) {
-			if (this.collided(object)) {
-				object.onCollision(this);
-				if (!object.noCollision) {
-					if (object.hitbox.type === "circle") {
-						const relative = this.position.addVec(object.position.inverse());
-						this.position = object.position.addVec(relative.scaleAll((object.hitbox.comparable() + this.hitbox.comparable()) / relative.magnitude()));
-					} else if (object.hitbox.type === "rect") {
-						// TODO: implement rectangular hitbox collision check
-					}
-				}
-			}
-		}
-	}
-}
-
-export class Bullet extends Entity {
-	type = "bullet";
-	hitbox = new CircleHitbox(0.1);
-	dmg: number;
-	ticks: number;
-
-	constructor(dmg: number, velocity: Vec2, ticks: number) {
-		super();
-		this.dmg = dmg;
-		this.velocity = velocity;
-		this.ticks = ticks;
-		this.vulnerable = false;
-	}
-
-	tick(entities: Entity[], objects: GameObject[]) {
-		super.tick(entities, objects);
-		for (const object of objects) if (this.collided(object)) {
-			object.damage(this.dmg);
-			this.die();
-			break;
-		}
-		if (!this.despawn) for (const entity of entities) if (this.collided(entity)) {
-			entity.damage(this.dmg);
-			this.die();
-			break;
-		}
-	}
-}
