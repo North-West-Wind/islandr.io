@@ -6,7 +6,7 @@ import { Weapon } from "./weapons";
 import { Fists } from "../store/weapons";
 import { MinEntity, MinInventory } from "./minimized";
 
-export interface AttackAttribute {
+export interface Animation {
 	name: string;
 	duration: number;
 }
@@ -40,7 +40,8 @@ export class Entity {
 	health: number = 100;
 	maxHealth: number = 100;
 	despawn = false;
-	attack: AttackAttribute = { name: "", duration: 0 };
+	// Tells the client which animation is going on
+	animation: Animation = { name: "", duration: 0 };
 
 	constructor() {
 		// Currently selects a random position to spawn. Will change in the future.
@@ -51,9 +52,9 @@ export class Entity {
 		// Add the velocity to the position, and cap it at map size.
 		this.position = this.position.addVec(this.velocity);
 		this.position = new Vec2(clamp(this.position.x, 0, MAP_SIZE[0]), clamp(this.position.y, 0, MAP_SIZE[1]));
-		if (this.attack.name) {
-			if (this.attack.duration > 0) this.attack.duration--;
-			else this.attack.name = "";
+		if (this.animation.name) {
+			if (this.animation.duration > 0) this.animation.duration--;
+			else this.animation.name = "";
 		}
 	}
 
@@ -113,7 +114,7 @@ export class Entity {
 			position: this.position.minimize(),
 			direction: this.direction.minimize(),
 			hitbox: this.hitbox.minimize(),
-			attack: this.attack
+			attack: this.animation
 		}
 	}
 }

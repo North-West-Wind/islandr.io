@@ -1,4 +1,4 @@
-import { AttackAttribute } from "./entities";
+import { Animation } from "./entities";
 import { Weapon } from "./weapons";
 
 export interface MinVec2 {
@@ -24,7 +24,7 @@ export interface MinEntity {
 	position: MinVec2;
 	direction: MinVec2;
 	hitbox: MinHitbox;
-	attack: AttackAttribute;
+	attack: Animation;
 }
 
 export interface MinInventory {

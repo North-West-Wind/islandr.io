@@ -7,9 +7,4 @@ export const TICKS_PER_SECOND = 100;
 export const BASE_RADIUS = 50;
 export const DIRECTION_VEC = [Vec2.ONE, Vec2.ONE.addAngle(-CommonAngles.PI_TWO), Vec2.ONE.addAngle(Math.PI), Vec2.ONE.addAngle(CommonAngles.PI_TWO)];
 
-export const ATTACKS: any = {
-	left_fist: 50,
-	right_fist: 50
-}
-
 export const TSCONFIG = JSON.parse(fs.readFileSync("./tsconfig.json", { encoding: "utf8" }));

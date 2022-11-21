@@ -1,4 +1,3 @@
-import { ATTACKS } from "../../constants";
 import { DEFAULT_EMPTY_INVENTORY, Entity, Inventory } from "../../types/entities";
 import { CircleHitbox, Vec2 } from "../../types/maths";
 import { GameObject } from "../../types/objects";
@@ -26,11 +25,12 @@ export default class Player extends Entity {
 
 	tick(entities: Entity[], objects: GameObject[]) {
 		super.tick(entities, objects);
-		if (this.tryAttacking && this.attack.duration <= 0) {
+		// Only attack when trying + no animation is playing
+		if (this.tryAttacking && this.animation.duration <= 0) {
 			const weapon = this.inventory.weapons[this.inventory.holding];
 			if (weapon) {
-				this.attack.name = randomSelect(weapon.animations);
-				this.attack.duration = ATTACKS[this.attack.name];
+				this.animation.name = randomSelect(weapon.animations);
+				this.animation.duration = weapon.durations[weapon.animations.indexOf(this.animation.name)];
 				if (!weapon.continuous) this.tryAttacking = false;
 			}
 		}
