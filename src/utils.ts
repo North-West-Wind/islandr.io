@@ -1,4 +1,6 @@
 import * as crypto from "crypto";
+import * as fs from "fs";
+import * as path from "path";
 
 // ID generator
 export async function ID() {
@@ -18,4 +20,26 @@ export function clamp(val: number, min: number, max: number) {
 // Pick random element from array
 export function randomSelect(arr: any[]) {
     return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Read all file names under a directory (recursive)
+export function deepReaddir(dir: string) {
+    let results: string[] = [];
+    const list = fs.readdirSync(dir);
+    let i = 0;
+    function next(): string[] {
+        let file = list[i++];
+        if (!file) return results;
+        file = path.resolve(dir, file);
+        const stat = fs.statSync(file);
+        if (stat && stat.isDirectory()) {
+            const res = deepReaddir(file);
+            results = results.concat(res);
+            return next();
+        } else {
+            results.push(file);
+            return next();
+        }
+    }
+    return next();
 }

@@ -1,4 +1,5 @@
 import { CommonAngles, Vec2 } from "./types/maths";
+import * as fs from "fs";
 
 export const MAP_SIZE = [1000, 1000];
 export const TICKS_PER_SECOND = 100;
@@ -12,3 +13,5 @@ export const ATTACKS: any = {
 	left_fist: 50,
 	right_fist: 50
 }
+
+export const TSCONFIG = JSON.parse(fs.readFileSync("./tsconfig.json", { encoding: "utf8" }));

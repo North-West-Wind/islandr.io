@@ -1,11 +1,15 @@
-export interface Weapon {
-	name: string;
-	continuous: boolean;
-	attacks: string[]
+export enum WeaponType {
+	MELEE = "melee",
+	GUN = "gun",
+	GRENADE = "grenade"
 }
 
-export class Fist {
-	name = "fist";
-	continuous = false;
-	attacks = ["left_fist", "right_fist"];
+export interface Weapon {
+	id: string;
+	name: string;
+	continuous: boolean;
+	// This is handled client-side, but still needs to be sent from server
+	animations: string[];
+	damage: number;
+	type: WeaponType;
 }

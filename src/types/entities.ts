@@ -2,7 +2,8 @@ import { MAP_SIZE } from "../constants";
 import { clamp } from "../utils";
 import { CircleHitbox, Hitbox, RectHitbox, Vec2 } from "./maths";
 import { GameObject } from "./objects";
-import { Fist, Weapon } from "./weapons";
+import { Weapon } from "./weapons";
+import { Fists } from "../store/weapons";
 
 interface AttackAttribute {
 	name: string;
@@ -16,7 +17,7 @@ export interface Inventory {
 }
 
 const DEFAULT_EMPTY_INVENTORY = { holding: 2, weapons: Array(4), slots: 4 };
-DEFAULT_EMPTY_INVENTORY.weapons[2] = new Fist();
+DEFAULT_EMPTY_INVENTORY.weapons[2] = new Fists();
 
 export class Entity {
 	type: string = "";
@@ -121,9 +122,14 @@ export class Player extends Entity {
 		super.tick(entities, objects);
 		for (const object of objects) {
 			if (this.collided(object)) {
-				if (object.hitbox.type === "circle") {
-					const relative = this.position.addVec(object.position.inverse());
-					this.position = object.position.addVec(relative.scaleAll((object.hitbox.comparable() + this.hitbox.comparable()) / relative.magnitude()));
+				object.onCollision(this);
+				if (!object.noCollision) {
+					if (object.hitbox.type === "circle") {
+						const relative = this.position.addVec(object.position.inverse());
+						this.position = object.position.addVec(relative.scaleAll((object.hitbox.comparable() + this.hitbox.comparable()) / relative.magnitude()));
+					} else if (object.hitbox.type === "rect") {
+						// TODO: implement rectangular hitbox collision check
+					}
 				}
 			}
 		}

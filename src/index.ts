@@ -5,7 +5,8 @@ import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMove
 import { Entity, Player } from "./types/entities";
 import { ATTACKS, DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/maths";
-import { GameObject, Tree, Bush } from "./types/objects";
+import { GameObject } from "./types/objects";
+import { Tree, Bush } from "./store/objects";
 
 export var ticksElapsed = 0;
 
@@ -118,7 +119,7 @@ setInterval(() => {
 		if (player.tryAttacking && player.attack.duration <= 0) {
 			const weapon = player.inventory.weapons[player.inventory.holding];
 			if (weapon) {
-				player.attack.name = randomSelect(weapon.attacks);
+				player.attack.name = randomSelect(weapon.animations);
 				player.attack.duration = ATTACKS[player.attack.name];
 				if (!weapon.continuous) player.tryAttacking = false;
 			}
