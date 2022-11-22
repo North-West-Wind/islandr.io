@@ -72,6 +72,10 @@ export class Vec2 {
 		return this.scale(ratio, ratio);
 	}
 
+	projectTo(vec: Vec2) {
+		return vec.scaleAll(this.dot(vec) / vec.magnitudeSqr());
+	}
+
 	minimize() {
 		return <MinVec2> { x: this.x, y: this.y };
 	}
