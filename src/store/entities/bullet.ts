@@ -5,6 +5,7 @@ import { GameObject } from "../../types/objects";
 export default class Bullet extends Entity {
 	type = "bullet";
 	hitbox = new CircleHitbox(0.1);
+	discardable = true;
 	dmg: number;
 
 	constructor(dmg: number, velocity: Vec2, ticks: number) {

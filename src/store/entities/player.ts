@@ -7,14 +7,16 @@ export default class Player extends Entity {
 	type = "player";
 	hitbox = new CircleHitbox(1);
 	id: string;
+	username: string;
 	boost: number = 1;
 	scope: number = 1;
 	tryAttacking: boolean = false;
 	inventory: Inventory;
 
-	constructor(id: string) {
+	constructor(id: string, username: string) {
 		super();
 		this.id = id;
+		this.username = username;
 		this.inventory = DEFAULT_EMPTY_INVENTORY;
 	}
 
@@ -51,6 +53,6 @@ export default class Player extends Entity {
 
 	minimize() {
 		const min = super.minimize();
-		return Object.assign(min, { boost: this.boost, inventory: this.inventory.minimize() })
+		return Object.assign(min, { username: this.username, boost: this.boost, inventory: this.inventory.minimize() })
 	}
 }

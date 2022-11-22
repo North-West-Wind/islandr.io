@@ -39,6 +39,7 @@ export class Entity {
 	vulnerable = true;
 	health: number = 100;
 	maxHealth: number = 100;
+	discardable = false;
 	despawn = false;
 	// Tells the client which animation is going on
 	animation: Animation = { name: "", duration: 0 };
@@ -52,10 +53,13 @@ export class Entity {
 		// Add the velocity to the position, and cap it at map size.
 		this.position = this.position.addVec(this.velocity);
 		this.position = new Vec2(clamp(this.position.x, 0, MAP_SIZE[0]), clamp(this.position.y, 0, MAP_SIZE[1]));
+
 		if (this.animation.name) {
 			if (this.animation.duration > 0) this.animation.duration--;
 			else this.animation.name = "";
 		}
+
+		if (this.vulnerable && this.health <= 0) this.die();
 	}
 
 	setVelocity(velocity: Vec2) {
@@ -114,7 +118,8 @@ export class Entity {
 			position: this.position.minimize(),
 			direction: this.direction.minimize(),
 			hitbox: this.hitbox.minimize(),
-			animation: this.animation
+			animation: this.animation,
+			despawn: this.despawn
 		}
 	}
 }

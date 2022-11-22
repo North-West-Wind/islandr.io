@@ -1,11 +1,12 @@
 import { MAP_SIZE } from "../constants";
 import { Entity } from "./entities";
-import { Vec2, Hitbox, CircleHitbox, RectHitbox } from "./maths";
+import { Vec2, Hitbox, CircleHitbox, RectHitbox, CommonAngles } from "./maths";
 import { MinGameObject } from "./minimized";
 
 export class GameObject {
 	type: string = "";
 	position: Vec2;
+	direction: Vec2;
 	baseHitbox: Hitbox;
 	minHitbox: Hitbox;
 	hitbox: Hitbox;
@@ -13,11 +14,13 @@ export class GameObject {
 	vulnerable = true;
 	health: number;
 	maxHealth: number;
+	discardable = false;
 	despawn = false;
 
 	constructor(baseHitbox: Hitbox, minHitbox: Hitbox, health: number, maxHealth: number) {
 		if (baseHitbox.type !== minHitbox.type) throw new Error("Hitboxes are not the same type!");
 		this.position = new Vec2((Math.random() + 1) * MAP_SIZE[0] / 2, (Math.random() + 1) * MAP_SIZE[1] / 2);
+		this.direction = Vec2.ONE.addAngle(Math.random() * CommonAngles.TWO_PI);
 		this.baseHitbox = this.hitbox = baseHitbox;
 		this.minHitbox = minHitbox;
 		this.health = health;
@@ -72,7 +75,11 @@ export class GameObject {
 	// No implementation by default
 	onCollision(thing: Entity | GameObject) { }
 
+	tick(_entities: Entity[], _objects: GameObject[]) {
+		if (this.vulnerable && this.health <= 0) this.die();
+	}
+
 	minimize() {
-		return <MinGameObject> { type: this.type, position: this.position.minimize(), hitbox: this.hitbox.minimize() };
+		return <MinGameObject> { type: this.type, position: this.position.minimize(), direction: this.direction.minimize(), hitbox: this.hitbox.minimize() };
 	}
 }

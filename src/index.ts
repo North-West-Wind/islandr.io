@@ -39,13 +39,16 @@ server.on("connection", async socket => {
 		connected = false;
 	});
 
-	// Communicate with the client by sending the ID and map size. The client should respond with { id: ID }, or else close the connection.
+	var username: string = "";
+	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
 		socket.send(encode({ id, size: MAP_SIZE }).buffer);
 		socket.once("message", (msg: ArrayBuffer) => {
 			const decoded = decode(new Uint8Array(msg));
-			if (decoded.id == id) connected = true;
-			else try { socket.close(); } catch (err) { };
+			if (decoded.id == id && decoded.username) {
+				connected = true;
+				username = decoded.username;
+			} else try { socket.close(); } catch (err) { };
 			resolve();
 		})
 	})]);
@@ -53,7 +56,7 @@ server.on("connection", async socket => {
 	console.log(`A new player with ID ${id} connected!`);
 
 	// Create the new player and add it to the entity list.
-	const player = new Player(id);
+	const player = new Player(id, username);
 	entities.push(player);
 
 	// Send the player the entire map
@@ -112,8 +115,27 @@ server.on("connection", async socket => {
 
 setInterval(() => {
 	ticksElapsed++;
-	// Tick every single entity.
-	entities.forEach(entity => entity.tick(entities, objects));
+	// Tick every entity and object.
+	let ii: number;
+	var removable: number[] = [];
+	for (ii = 0; ii < entities.length; ii++) {
+		const entity = entities[ii];
+		entity.tick(entities, objects);
+		// Mark entity for removal
+		if (entity.despawn && entity.discardable) removable.push(ii);
+	}
+	// Remove all discardable entities
+	for (ii = 0; ii < removable.length; ii++) entities.splice(removable[ii] - ii, 1);
+
+	removable = [];
+	for (ii = 0; ii < objects.length; ii++) {
+		const object = objects[ii];
+		object.tick(entities, objects);
+		// Mark object for removal
+		if (object.despawn && object.discardable) removable.push(ii);
+	}
+	// Remove all discardable objects
+	for (ii = 0; ii < removable.length; ii++) objects.splice(removable[ii] - ii, 1);
 	// Filter players from entities and send them packets
 	const players = <Player[]>entities.filter(entity => entity.type === "player");
 	players.forEach(player => {
