@@ -46,15 +46,78 @@ export default class Player extends Entity {
 						const relative = this.position.addVec(object.position.inverse());
 						this.position = object.position.addVec(relative.scaleAll((object.hitbox.comparable() + this.hitbox.comparable()) / relative.magnitude()));
 					} else if (collisionType == CollisionType.CIRCLE_RECT_CENTER_INSIDE) {
-						// TODO: implement rectangular hitbox collision
-						const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height).addAngle(object.direction.angle()));
 						const rectVecs = [
 							new Vec2((<RectHitbox>object.hitbox).width, 0).addAngle(object.direction.angle()),
 							new Vec2(0, (<RectHitbox>object.hitbox).height).addAngle(object.direction.angle())
 						];
 						const centerToCenter = this.position.addVec(object.position.inverse());
-					} else if (collisionType == CollisionType.CIRCLE_RECT_LINE_INSIDE) {
+						/* In the order of right up left down
+						 * Think of the rectangle as vectors
+						 *       up vec0
+						 *      +------->
+						 *      |
+						 * left |        right
+						 * vec1 |
+						 *      v
+						 *         down
+						 */
+						const horiProject = centerToCenter.projectTo(rectVecs[0]);
+						const vertProject = centerToCenter.projectTo(rectVecs[1]);
+						// Distances between center and each side
+						const distances = [
+							rectVecs[0].scaleAll(0.5).addVec(horiProject.inverse()),
+							rectVecs[1].scaleAll(-0.5).addVec(vertProject.inverse()),
+							rectVecs[0].scaleAll(-0.5).addVec(horiProject.inverse()),
+							rectVecs[1].scaleAll(0.5).addVec(vertProject.inverse())
+						];
+						var shortestIndex = 0;
+						for (let ii = 1; ii < distances.length; ii++)
+							if (distances[ii].magnitudeSqr() < distances[shortestIndex].magnitudeSqr())
+								shortestIndex = ii;
 
+						this.position = this.position.addVec(distances[shortestIndex]).addVec(distances[shortestIndex].unit().scaleAll(this.hitbox.comparable()));
+					} else if (collisionType == CollisionType.CIRCLE_RECT_LINE_INSIDE) {
+						const rectVecs = [
+							new Vec2((<RectHitbox>object.hitbox).width, 0).addAngle(object.direction.angle()),
+							new Vec2(0, (<RectHitbox>object.hitbox).height).addAngle(object.direction.angle())
+						];
+						const centerToCenter = this.position.addVec(object.position.inverse());
+						/* In the order of right up left down
+						 * Think of the rectangle as vectors
+						 *       up vec0
+						 *      +------->
+						 *      |
+						 * left |        right
+						 * vec1 |
+						 *      v
+						 *         down
+						 */
+						const horiProject = centerToCenter.projectTo(rectVecs[0]);
+						const vertProject = centerToCenter.projectTo(rectVecs[1]);
+						// Distances between center and each side
+						const distances = [
+							horiProject.addVec(rectVecs[0].scaleAll(-0.5)),
+							vertProject.addVec(rectVecs[1].scaleAll(0.5)),
+							horiProject.addVec(rectVecs[0].scaleAll(0.5)),
+							vertProject.addVec(rectVecs[1].scaleAll(-0.5))
+						];
+						const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height).addAngle(object.direction.angle()));
+						const ap = this.position.addVec(rectStartingPoint.inverse());
+						const apab2 = ap.dot(rectVecs[0]);
+						const apad2 = ap.dot(rectVecs[1]);
+						if (0 <= apab2 && apab2 * apab2 <= rectVecs[0].magnitudeSqr()) {
+							distances.splice(0, 1);
+							distances.splice(1, 1);
+						} else if (0 <= apad2 && apad2 * apad2 <= rectVecs[1].magnitudeSqr()) {
+							distances.splice(1, 1);
+							distances.splice(2, 1);
+						}
+						var shortestIndex = 0;
+						for (let ii = 0; ii < distances.length; ii++)
+							if (distances[ii].magnitudeSqr() < distances[shortestIndex].magnitudeSqr())
+								shortestIndex = ii;
+
+						this.position = this.position.addVec(distances[shortestIndex].unit().scaleAll(this.hitbox.comparable())).addVec(distances[shortestIndex].inverse());
 					}
 				}
 			}
