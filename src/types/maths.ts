@@ -139,14 +139,6 @@ export class CircleHitbox implements Hitbox {
 	}
 }
 
-// The 4 movement directions
-export enum MovementDirection {
-	RIGHT = 0,
-	UP = 1,
-	LEFT = 2,
-	DOWN = 3
-}
-
 export enum CommonAngles {
 	PI_FOUR = Math.PI / 4,
 	PI_TWO = Math.PI / 2,

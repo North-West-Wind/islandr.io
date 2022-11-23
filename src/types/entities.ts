@@ -5,6 +5,7 @@ import { GameObject } from "./objects";
 import { Weapon } from "./weapons";
 import { Fists } from "../store/weapons";
 import { MinEntity, MinInventory } from "./minimized";
+import { CollisionType } from "./misc";
 
 export interface Animation {
 	name: string;
@@ -73,7 +74,7 @@ export class Entity {
 	// Hitbox collision check
 	collided(thing: Entity | GameObject) {
 		// For circle it is distance < sum of radii
-		if (this.hitbox.type === "circle" && thing.hitbox.type === "circle") return this.position.addVec(thing.position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>this.hitbox).radius + (<CircleHitbox>thing.hitbox).radius, 2);
+		if (this.hitbox.type === "circle" && thing.hitbox.type === "circle") return this.position.addVec(thing.position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>this.hitbox).radius + (<CircleHitbox>thing.hitbox).radius, 2) ? CollisionType.CIRCLE_CIRCLE : CollisionType.NONE;
 		else if (this.hitbox.type === "rect" && thing.hitbox.type === "rect") {
 			// https://math.stackexchange.com/questions/1278665/how-to-check-if-two-rectangles-intersect-rectangles-can-be-rotated
 			// Using the last answer
@@ -108,17 +109,17 @@ export class Entity {
 				const mainMagSqr = mainVec.magnitudeSqr();
 				for (ii = 0; ii < thingPoints.length; ii++)
 					results[ii] = thingPoints[ii].addVec(thisStartingPoint.inverse()).dot(mainVec) < 0 || thingPoints[ii].addVec(thisStartingPoint.inverse()).projectTo(mainVec).magnitudeSqr() > mainMagSqr;
-				if (results.every(x => x)) return false;
+				if (results.every(x => x)) return CollisionType.NONE;
 			}
 
 			for (const mainVec of thingVecs) {
 				const mainMagSqr = mainVec.magnitudeSqr();
 				for (ii = 0; ii < thisPoints.length; ii++)
 					results[ii] = thisPoints[ii].addVec(thisStartingPoint.inverse()).dot(mainVec) < 0 || thisPoints[ii].addVec(thisStartingPoint.inverse()).projectTo(mainVec).magnitudeSqr() > mainMagSqr;
-				if (results.every(x => x)) return false;
+				if (results.every(x => x)) return CollisionType.NONE;
 			}
 
-			return true;
+			return CollisionType.RECT_RECT;
 		} else {
 			// https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
 			// Using the chosen answer
@@ -136,7 +137,7 @@ export class Entity {
 				const abab2 = Math.pow(rectVecs[0].magnitudeSqr(), 2);
 				const apad2 = ap.magnitudeSqr() * rectVecs[1].magnitudeSqr();
 				const adad2 = Math.pow(rectVecs[1].magnitudeSqr(), 2);
-				if (0 <= apab2 && apab2 <= abab2 && 0 <= apad2 && apad2 <= adad2) return true;
+				if (0 <= apab2 && apab2 <= abab2 && 0 <= apad2 && apad2 <= adad2) return CollisionType.CIRCLE_RECT_CENTER_INSIDE;
 
 				/*if (
 					!(circle.position.addVec(rectStartingPoint.inverse()).dot(rectVecs[0]) < 0 || circle.position.addVec(rectStartingPoint.inverse()).projectTo(rectVecs[0]).magnitudeSqr() > rectVecs[0].magnitudeSqr())
@@ -160,9 +161,9 @@ export class Entity {
 					centerToCenter.projectTo(rectVecs[0]).magnitude() - rectVecs[0].scaleAll(0.5).magnitude() < (<CircleHitbox>circle.hitbox).radius
 					&&
 					centerToCenter.projectTo(rectVecs[1]).magnitude() - rectVecs[1].scaleAll(0.5).magnitude() < (<CircleHitbox>circle.hitbox).radius
-				) return true;
+				) return CollisionType.CIRCLE_RECT_LINE_INSIDE;
 				
-				return false;
+				return CollisionType.NONE;
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 import { DEFAULT_EMPTY_INVENTORY, Entity, Inventory } from "../../types/entities";
-import { CircleHitbox, Vec2 } from "../../types/maths";
+import { CircleHitbox, RectHitbox, Vec2 } from "../../types/maths";
+import { CollisionType } from "../../types/misc";
 import { GameObject } from "../../types/objects";
 import { randomSelect } from "../../utils";
 
@@ -37,14 +38,23 @@ export default class Player extends Entity {
 			}
 		}
 		for (const object of objects) {
-			if (this.collided(object)) {
+			const collisionType = this.collided(object);
+			if (collisionType) {
 				object.onCollision(this);
 				if (!object.noCollision) {
-					if (object.hitbox.type === "circle") {
+					if (collisionType == CollisionType.CIRCLE_CIRCLE) {
 						const relative = this.position.addVec(object.position.inverse());
 						this.position = object.position.addVec(relative.scaleAll((object.hitbox.comparable() + this.hitbox.comparable()) / relative.magnitude()));
-					} else if (object.hitbox.type === "rect") {
+					} else if (collisionType == CollisionType.CIRCLE_RECT_CENTER_INSIDE) {
 						// TODO: implement rectangular hitbox collision
+						const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height).addAngle(object.direction.angle()));
+						const rectVecs = [
+							new Vec2((<RectHitbox>object.hitbox).width, 0).addAngle(object.direction.angle()),
+							new Vec2(0, (<RectHitbox>object.hitbox).height).addAngle(object.direction.angle())
+						];
+						const centerToCenter = this.position.addVec(object.position.inverse());
+					} else if (collisionType == CollisionType.CIRCLE_RECT_LINE_INSIDE) {
+
 					}
 				}
 			}

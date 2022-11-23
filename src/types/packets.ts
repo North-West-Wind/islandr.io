@@ -1,8 +1,9 @@
 import { BASE_RADIUS } from "../constants";
 import { Player } from "../store/entities";
 import { Entity } from "./entities";
-import { MovementDirection, Vec2 } from "./maths";
+import { Vec2 } from "./maths";
 import { MinEntity, MinGameObject } from "./minimized";
+import { MovementDirection } from "./misc";
 import { GameObject } from "./objects";
 
 interface IPacket {
