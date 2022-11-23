@@ -1,6 +1,7 @@
 import * as crypto from "crypto";
 import * as fs from "fs";
 import * as path from "path";
+import { Vec2 } from "./types/maths";
 
 // ID generator
 export async function ID() {
@@ -22,24 +23,11 @@ export function randomSelect(arr: any[]) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// Read all file names under a directory (recursive)
-export function deepReaddir(dir: string) {
-    let results: string[] = [];
-    const list = fs.readdirSync(dir);
-    let i = 0;
-    function next(): string[] {
-        let file = list[i++];
-        if (!file) return results;
-        file = path.resolve(dir, file);
-        const stat = fs.statSync(file);
-        if (stat && stat.isDirectory()) {
-            const res = deepReaddir(file);
-            results = results.concat(res);
-            return next();
-        } else {
-            results.push(file);
-            return next();
-        }
-    }
-    return next();
+// Check line circle intersection
+export function lineCircleIntersect(lineA: Vec2, lineB: Vec2, center: Vec2, radius: number) {
+    const a = lineB.y - lineA.y;
+    const b = lineA.x - lineB.x;
+    const c = (lineB.x - lineA.x) * lineA.y - (lineB.y - lineA.y) * lineA.x;
+
+    return Math.abs(a * center.x + b * center.y + c) / Math.sqrt(a*a + b*b) < radius;
 }

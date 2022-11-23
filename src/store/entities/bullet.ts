@@ -1,6 +1,7 @@
 import { Entity } from "../../types/entities";
 import { CircleHitbox, Vec2 } from "../../types/maths";
 import { GameObject } from "../../types/objects";
+import { lineCircleIntersect } from "../../utils";
 
 export default class Bullet extends Entity {
 	type = "bullet";
@@ -18,16 +19,26 @@ export default class Bullet extends Entity {
 
 	tick(entities: Entity[], objects: GameObject[]) {
 		super.tick(entities, objects);
-		for (const object of objects) if (this.collided(object)) {
-			object.damage(this.dmg);
+		const combined: (Entity | GameObject)[] = [];
+		combined.concat(entities, objects);
+		for (const thing of combined) if (this.collided(thing)) {
+			thing.damage(this.dmg);
 			this.die();
 			break;
 		}
-		if (!this.despawn) for (const entity of entities) if (this.collided(entity)) {
-			entity.damage(this.dmg);
-			this.die();
-			break;
-		}
+		// In case the bullet is moving too fast, check for hitbox intersection
+		if (!this.despawn) for (const thing of combined) {
+			if (
+				thing.hitbox.type === "circle" && lineCircleIntersect(this.position, this.position.addVec(this.velocity), thing.position, thing.hitbox.comparable())
+				||
+				false // this is the part that checks line rectangle
+			) {
+				thing.damage(this.dmg);
+				this.die();
+				break;
+			}
+		} 
+
 		if (!this.despawn) {
 			this.health--;
 			if (this.health <= 0) this.die();
