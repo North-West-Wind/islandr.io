@@ -23,11 +23,11 @@ export default class Bullet extends Entity {
 			else return this.die();
 		}
 		super.tick(entities, objects);
-		const combined: (Entity | GameObject)[] = [];
-		combined.concat(entities, objects);
+		var combined: (Entity | GameObject)[] = [];
+		combined = combined.concat(entities, objects);
 		if (!this.despawning)
 			for (const thing of combined)
-				if (this.collided(thing.hitbox, thing.position, thing.direction)) {
+				if (thing.collided(this.hitbox, this.position, this.direction)) {
 					thing.damage(this.dmg);
 					this.startDespawn();
 					break;

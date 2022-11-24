@@ -1,6 +1,6 @@
 import { MAP_SIZE } from "../constants";
 import { Entity } from "./entities";
-import { Vec2, Hitbox, CircleHitbox, RectHitbox, CommonAngles } from "./maths";
+import { Vec2, Hitbox, CircleHitbox, RectHitbox, CommonAngles, Line } from "./maths";
 import { MinGameObject } from "./minimized";
 import { Animation, CollisionType } from "./misc";
 
@@ -30,10 +30,10 @@ export class GameObject {
 	}
 
 	damage(dmg: number) {
-		if (this.despawn || !this.vulnerable) return;
+		if (this.despawn || this.health <= 0 || !this.vulnerable) return;
 		this.health -= dmg;
 		if (this.health <= 0) this.die();
-		this.hitbox = this.baseHitbox.scaleAll(this.health / this.maxHealth + this.minHitbox.comparable() / this.baseHitbox.comparable());
+		this.hitbox = this.baseHitbox.scaleAll(this.minHitbox.comparable / this.baseHitbox.comparable + (this.health / this.maxHealth) * (1 - this.minHitbox.comparable / this.baseHitbox.comparable));
 	}
 
 	die() {
@@ -44,7 +44,7 @@ export class GameObject {
 	// Hitbox collision check
 	collided(hitbox: Hitbox, position: Vec2, direction: Vec2) {
 		if (this.despawn) return CollisionType.NONE;
-		if (this.position.distanceTo(position) > this.hitbox.comparable() + hitbox.comparable()) return CollisionType.NONE;
+		if (this.position.distanceTo(position) > this.hitbox.comparable + hitbox.comparable) return CollisionType.NONE;
 		// For circle it is distance < sum of radii
 		if (this.hitbox.type === "circle" && hitbox.type === "circle") return this.position.addVec(position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>this.hitbox).radius + (<CircleHitbox>hitbox).radius, 2) ? CollisionType.CIRCLE_CIRCLE : CollisionType.NONE;
 		else if (this.hitbox.type === "rect" && hitbox.type === "rect") {
@@ -110,13 +110,21 @@ export class GameObject {
 				const apad2 = ap.magnitudeSqr() * rectVecs[1].magnitudeSqr();
 				const adad2 = Math.pow(rectVecs[1].magnitudeSqr(), 2);
 				if (0 <= apab2 && apab2 <= abab2 && 0 <= apad2 && apad2 <= adad2) return CollisionType.CIRCLE_RECT_CENTER_INSIDE;
-				
-				const centerToCenter = circle.position.addVec(rect.position.inverse());
-				if (
-					centerToCenter.projectTo(rectVecs[0]).magnitude() - rectVecs[0].scaleAll(0.5).magnitude() < circle.hitbox.radius
-					&&
-					centerToCenter.projectTo(rectVecs[1]).magnitude() - rectVecs[1].scaleAll(0.5).magnitude() < circle.hitbox.radius
-				) return CollisionType.CIRCLE_RECT_LINE_INSIDE;
+
+				const rectPoints = [
+					rectStartingPoint,
+					rectStartingPoint.addVec(new Vec2(rect.hitbox.width, 0).addAngle(rect.direction.angle())),
+					rectStartingPoint.addVec(new Vec2(rect.hitbox.width, rect.hitbox.height).addAngle(rect.direction.angle())),
+					rectStartingPoint.addVec(new Vec2(0, rect.hitbox.height).addAngle(rect.direction.angle()))
+				];
+
+				for (let ii = 0; ii < rectPoints.length; ii++)
+					if (rectPoints[ii].addVec(circle.position.inverse()).magnitudeSqr() < Math.pow(circle.hitbox.radius, 2))
+						return CollisionType.CIRCLE_RECT_POINT_INSIDE;
+
+				for (let ii = 0; ii < rectPoints.length; ii++)
+					if (circle.hitbox.lineIntersects(new Line(rectPoints[ii], rectPoints[(ii + 1) % rectPoints.length]), circle.position))
+						return CollisionType.CIRCLE_RECT_LINE_INSIDE;
 				
 				return CollisionType.NONE;
 			}
@@ -127,7 +135,7 @@ export class GameObject {
 	onCollision(thing: Entity | GameObject) { }
 
 	tick(_entities: Entity[], _objects: GameObject[]) {
-		if (this.vulnerable && this.health <= 0) this.die();
+		if (this.vulnerable && this.health <= 0 && !this.despawn) this.die();
 	}
 
 	rotateAround(pivot: Vec2, angle: number) {
@@ -136,6 +144,12 @@ export class GameObject {
 	}
 
 	minimize() {
-		return <MinGameObject> { type: this.type, position: this.position.minimize(), direction: this.direction.minimize(), hitbox: this.hitbox.minimize() };
+		return <MinGameObject> {
+			type: this.type,
+			position: this.position.minimize(),
+			direction: this.direction.minimize(),
+			hitbox: this.hitbox.minimize(),
+			despawn: this.despawn
+		};
 	}
 }

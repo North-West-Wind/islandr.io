@@ -84,6 +84,10 @@ export class Vec2 {
 		return Math.sqrt(this.distanceSqrTo(vec));
 	}
 
+	perpendicular() {
+		return new Vec2(this.y, -this.x);
+	}
+
 	minimize() {
 		return <MinVec2>{ x: this.x, y: this.y };
 	}
@@ -108,12 +112,35 @@ export class Line {
 	direction(point: Vec2) {
 		return (this.b.y - this.a.y) * (point.x - this.b.x) - (this.b.x - this.a.x) * (point.y - this.b.y);
 	}
+
+	distanceTo(point: Vec2) {
+		const a = this.b.y - this.a.y;
+    const b = this.a.x - this.b.x;
+    const c = (this.b.x - this.a.x) * this.a.y - (this.b.y - this.a.y) * this.a.x;
+
+    return Math.abs(a * point.x + b * point.y + c) / Math.sqrt(a*a + b*b);
+	}
+
+	intersects(line: Line) {
+		const dir1 = line.direction(this.a);
+		const dir2 = line.direction(this.b);
+		const dir3 = this.direction(line.a);
+		const dir4 = this.direction(line.b);
+
+		if (dir1 != dir2 && dir3 != dir4) return true;
+		if (dir1 == 0 && line.passthrough(this.a)) return true;
+		if (dir2 == 0 && line.passthrough(this.b)) return true;
+		if (dir3 == 0 && line.passthrough(line.a)) return true;
+		if (dir4 == 0 && line.passthrough(line.b)) return true;
+
+		return false;
+	}
 }
 
 export interface Hitbox {
 	type: "rect" | "circle";
+	comparable: number;
 
-	comparable(): number;
 	scaleAll(ratio: number): Hitbox;
 	lineIntersects(line: Line, position: Vec2, direction: Vec2): boolean;
 	minimize(): MinHitbox;
@@ -126,14 +153,12 @@ export class RectHitbox implements Hitbox {
 	type: "rect" = "rect";
 	width: number;
 	height: number;
+	comparable: number;
 
 	constructor(width: number, height: number) {
 		this.width = width;
 		this.height = height;
-	}
-
-	comparable() {
-		return Math.sqrt(Math.pow(this.width / 2, 2) + Math.pow(this.height / 2, 2));
+		this.comparable = Math.sqrt(Math.pow(this.width / 2, 2) + Math.pow(this.height / 2, 2));
 	}
 
 	scaleAll(ratio: number) {
@@ -151,31 +176,15 @@ export class RectHitbox implements Hitbox {
 			startingPoint.addX(this.width).addY(this.height)
 		].map(point => point.addAngle(direction.angle()));
 
-		for (let ii = 0; ii < points.length; ii++) {
-			const point1 = points[ii], point2 = points[ii + 1 % points.length];
-			const rectLine = new Line(point1, point2);
-			const dir1 = rectLine.direction(line.a);
-		  const dir2 = rectLine.direction(line.b);
-		  const dir3 = line.direction(point1);
-		  const dir4 = line.direction(point2);
-
-			if (dir1 != dir2 && dir3 != dir4) return true;
-			if (dir1 == 0 && rectLine.passthrough(line.a)) return true;
-			if (dir2 == 0 && rectLine.passthrough(line.b)) return true;
-			if (dir3 == 0 && line.passthrough(point1)) return true;
-			if (dir4 == 0 && line.passthrough(point2)) return true;
-		}
+		for (let ii = 0; ii < points.length; ii++)
+			if (line.intersects(new Line(points[ii], points[(ii + 1) % points.length])))
+				return true;
 
 		return false;
 	}
 
 	minimize() {
 		return <MinRectHitbox>{ type: this.type, width: this.width, height: this.height };
-	}
-
-	// 0 is collinear, negative is anti-clockwise, positive is clockwise
-	private orientation(a: Vec2, b: Vec2, c: Vec2) {
-		return (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
 	}
 }
 
@@ -185,13 +194,10 @@ export class CircleHitbox implements Hitbox {
 
 	type: "circle" = "circle";
 	radius: number;
+	comparable: number;
 
 	constructor(radius: number) {
-		this.radius = radius;
-	}
-
-	comparable() {
-		return this.radius;
+		this.comparable = this.radius = radius;
 	}
 
 	scaleAll(ratio: number) {

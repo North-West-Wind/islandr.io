@@ -1,6 +1,6 @@
 import { MAP_SIZE } from "../constants";
 import { clamp } from "../utils";
-import { CircleHitbox, Hitbox, RectHitbox, Vec2 } from "./maths";
+import { CircleHitbox, Hitbox, Line, RectHitbox, Vec2 } from "./maths";
 import { GameObject } from "./objects";
 import { Weapon } from "./weapons";
 import { Fists } from "../store/weapons";
@@ -42,7 +42,7 @@ export class Entity {
 
 	constructor() {
 		// Currently selects a random position to spawn. Will change in the future.
-		this.position = new Vec2((Math.random() + 1) * MAP_SIZE[0] / 2, (Math.random() + 1) * MAP_SIZE[1] / 2);
+		this.position = new Vec2(Math.random() * MAP_SIZE[0], Math.random() * MAP_SIZE[1]);
 	}
 
 	tick(_entities: Entity[], _objects: GameObject[]) {
@@ -69,7 +69,7 @@ export class Entity {
 	// Hitbox collision check
 	collided(hitbox: Hitbox, position: Vec2, direction: Vec2) {
 		if (this.despawn) return CollisionType.NONE;
-		if (this.position.distanceTo(position) > this.hitbox.comparable() + hitbox.comparable()) return CollisionType.NONE;
+		if (this.position.distanceTo(position) > this.hitbox.comparable + hitbox.comparable) return CollisionType.NONE;
 		// For circle it is distance < sum of radii
 		if (this.hitbox.type === "circle" && hitbox.type === "circle") return this.position.addVec(position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>this.hitbox).radius + (<CircleHitbox>hitbox).radius, 2) ? CollisionType.CIRCLE_CIRCLE : CollisionType.NONE;
 		else if (this.hitbox.type === "rect" && hitbox.type === "rect") {
@@ -136,12 +136,16 @@ export class Entity {
 				const adad2 = Math.pow(rectVecs[1].magnitudeSqr(), 2);
 				if (0 <= apab2 && apab2 <= abab2 && 0 <= apad2 && apad2 <= adad2) return CollisionType.CIRCLE_RECT_CENTER_INSIDE;
 				
-				const centerToCenter = circle.position.addVec(rect.position.inverse());
-				if (
-					centerToCenter.projectTo(rectVecs[0]).magnitude() - rectVecs[0].scaleAll(0.5).magnitude() < circle.hitbox.radius
-					&&
-					centerToCenter.projectTo(rectVecs[1]).magnitude() - rectVecs[1].scaleAll(0.5).magnitude() < circle.hitbox.radius
-				) return CollisionType.CIRCLE_RECT_LINE_INSIDE;
+				const rectPoints = [
+					rectStartingPoint,
+					rectStartingPoint.addVec(new Vec2(rect.hitbox.width, 0).addAngle(rect.direction.angle())),
+					rectStartingPoint.addVec(new Vec2(rect.hitbox.width, rect.hitbox.height).addAngle(rect.direction.angle())),
+					rectStartingPoint.addVec(new Vec2(0, rect.hitbox.height).addAngle(rect.direction.angle()))
+				];
+
+				for (let ii = 0; ii < rectPoints.length; ii++)
+					if (circle.hitbox.lineIntersects(new Line(rectPoints[ii], rectPoints[(ii + 1) % rectPoints.length]), circle.position))
+						return CollisionType.CIRCLE_RECT_LINE_INSIDE;
 				
 				return CollisionType.NONE;
 			}

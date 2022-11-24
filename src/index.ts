@@ -6,7 +6,7 @@ import { Entity } from "./types/entities";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/maths";
 import { GameObject } from "./types/objects";
-import { Tree, Bush } from "./store/objects";
+import { Tree, Bush, Crate } from "./store/objects";
 import { Player } from "./store/entities";
 
 export var ticksElapsed = 0;
@@ -19,8 +19,9 @@ const entities: Entity[] = [];
 const objects: GameObject[] = [];
 
 // Initialize the map
-for (let ii = 0; ii < 1000; ii++) objects.push(new Tree(objects));
-for (let ii = 0; ii < 1000; ii++) objects.push(new Bush(objects));
+for (let ii = 0; ii < 500; ii++) objects.push(new Tree(objects));
+for (let ii = 0; ii < 500; ii++) objects.push(new Bush(objects));
+for (let ii = 0; ii < 500; ii++) objects.push(new Crate(objects));
 
 server.on("connection", async socket => {
 	console.log("Received a connection request");

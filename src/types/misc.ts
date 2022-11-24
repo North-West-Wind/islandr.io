@@ -7,8 +7,10 @@ export enum CollisionType {
 	RECT_RECT = 2,
 	// Circle-rectangle intersection, with the circle's center inside the rectangle
 	CIRCLE_RECT_CENTER_INSIDE = 3,
+	// Circle-rectangle intersection, with point(s) of the rectangle inside the circle
+	CIRCLE_RECT_POINT_INSIDE = 4,
 	// Circle-rectangle intersection, with line(s) of the rectangle inside the circle
-	CIRCLE_RECT_LINE_INSIDE = 4
+	CIRCLE_RECT_LINE_INSIDE = 5
 }
 
 // The 4 movement directions

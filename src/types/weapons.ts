@@ -33,4 +33,5 @@ export abstract class MeleeWeapon extends Weapon {
 	distance!: Vec2;
 	rotation!: Vec2;
 	delay!: number;
+	single = true;
 }
