@@ -76,6 +76,14 @@ export class Vec2 {
 		return vec.scaleAll(this.dot(vec) / vec.magnitudeSqr());
 	}
 
+	distanceSqrTo(vec: Vec2) {
+		return this.addVec(vec.inverse()).magnitudeSqr();
+	}
+
+	distanceTo(vec: Vec2) {
+		return Math.sqrt(this.distanceSqrTo(vec));
+	}
+
 	minimize() {
 		return <MinVec2>{ x: this.x, y: this.y };
 	}
@@ -125,7 +133,7 @@ export class RectHitbox implements Hitbox {
 	}
 
 	comparable() {
-		return this.width;
+		return Math.sqrt(Math.pow(this.width / 2, 2) + Math.pow(this.height / 2, 2));
 	}
 
 	scaleAll(ratio: number) {

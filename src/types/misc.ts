@@ -18,3 +18,8 @@ export enum MovementDirection {
 	LEFT = 2,
 	DOWN = 3
 }
+
+export interface Animation {
+	name: string;
+	duration: number;
+}

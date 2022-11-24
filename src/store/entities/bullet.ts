@@ -27,7 +27,7 @@ export default class Bullet extends Entity {
 		combined.concat(entities, objects);
 		if (!this.despawning)
 			for (const thing of combined)
-				if (this.collided(thing)) {
+				if (this.collided(thing.hitbox, thing.position, thing.direction)) {
 					thing.damage(this.dmg);
 					this.startDespawn();
 					break;

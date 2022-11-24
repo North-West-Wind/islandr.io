@@ -2,7 +2,6 @@ import { DEFAULT_EMPTY_INVENTORY, Entity, Inventory } from "../../types/entities
 import { CircleHitbox, RectHitbox, Vec2 } from "../../types/maths";
 import { CollisionType } from "../../types/misc";
 import { GameObject } from "../../types/objects";
-import { randomSelect } from "../../utils";
 
 export default class Player extends Entity {
 	type = "player";
@@ -32,13 +31,12 @@ export default class Player extends Entity {
 		if (this.tryAttacking && this.animation.duration <= 0) {
 			const weapon = this.inventory.weapons[this.inventory.holding];
 			if (weapon) {
-				this.animation.name = randomSelect(weapon.animations);
-				this.animation.duration = weapon.durations[weapon.animations.indexOf(this.animation.name)];
+				weapon.attack(this, entities, objects);
 				if (!weapon.continuous) this.tryAttacking = false;
 			}
 		}
 		for (const object of objects) {
-			const collisionType = this.collided(object);
+			const collisionType = this.collided(object.hitbox, object.position, object.direction);
 			if (collisionType) {
 				object.onCollision(this);
 				if (!object.noCollision) {

@@ -5,12 +5,7 @@ import { GameObject } from "./objects";
 import { Weapon } from "./weapons";
 import { Fists } from "../store/weapons";
 import { MinEntity, MinInventory } from "./minimized";
-import { CollisionType } from "./misc";
-
-export interface Animation {
-	name: string;
-	duration: number;
-}
+import { Animation, CollisionType } from "./misc";
 
 export class Inventory {
 	holding: number;
@@ -72,14 +67,16 @@ export class Entity {
 	}
 
 	// Hitbox collision check
-	collided(thing: Entity | GameObject) {
+	collided(hitbox: Hitbox, position: Vec2, direction: Vec2) {
+		if (this.despawn) return CollisionType.NONE;
+		if (this.position.distanceTo(position) > this.hitbox.comparable() + hitbox.comparable()) return CollisionType.NONE;
 		// For circle it is distance < sum of radii
-		if (this.hitbox.type === "circle" && thing.hitbox.type === "circle") return this.position.addVec(thing.position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>this.hitbox).radius + (<CircleHitbox>thing.hitbox).radius, 2) ? CollisionType.CIRCLE_CIRCLE : CollisionType.NONE;
-		else if (this.hitbox.type === "rect" && thing.hitbox.type === "rect") {
+		if (this.hitbox.type === "circle" && hitbox.type === "circle") return this.position.addVec(position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>this.hitbox).radius + (<CircleHitbox>hitbox).radius, 2) ? CollisionType.CIRCLE_CIRCLE : CollisionType.NONE;
+		else if (this.hitbox.type === "rect" && hitbox.type === "rect") {
 			// https://math.stackexchange.com/questions/1278665/how-to-check-if-two-rectangles-intersect-rectangles-can-be-rotated
 			// Using the last answer
 			const thisStartingPoint = this.position.addVec(new Vec2(-(<RectHitbox>this.hitbox).width / 2, -(<RectHitbox>this.hitbox).height).addAngle(this.direction.angle()));
-			const thingStartingPoint = this.position.addVec(new Vec2(-(<RectHitbox>thing.hitbox).width / 2, -(<RectHitbox>thing.hitbox).height).addAngle(thing.direction.angle()));
+			const thingStartingPoint = this.position.addVec(new Vec2(-(<RectHitbox>hitbox).width / 2, -(<RectHitbox>hitbox).height).addAngle(direction.angle()));
 			const thisPoints = [
 				thisStartingPoint,
 				thisStartingPoint.addVec(new Vec2((<RectHitbox>this.hitbox).width, 0).addAngle(this.direction.angle())),
@@ -88,9 +85,9 @@ export class Entity {
 			];
 			const thingPoints = [
 				thingStartingPoint,
-				thingStartingPoint.addVec(new Vec2((<RectHitbox>thing.hitbox).width, 0).addAngle(thing.direction.angle())),
-				thingStartingPoint.addVec(new Vec2(0, (<RectHitbox>thing.hitbox).height).addAngle(thing.direction.angle())),
-				thingStartingPoint.addVec(new Vec2((<RectHitbox>thing.hitbox).width, (<RectHitbox>thing.hitbox).height).addAngle(thing.direction.angle()))
+				thingStartingPoint.addVec(new Vec2((<RectHitbox>hitbox).width, 0).addAngle(direction.angle())),
+				thingStartingPoint.addVec(new Vec2(0, (<RectHitbox>hitbox).height).addAngle(direction.angle())),
+				thingStartingPoint.addVec(new Vec2((<RectHitbox>hitbox).width, (<RectHitbox>hitbox).height).addAngle(direction.angle()))
 			];
 			var results: boolean[] = Array(4);
 			var ii: number;
@@ -101,8 +98,8 @@ export class Entity {
 			];
 
 			const thingVecs = [
-				new Vec2((<RectHitbox>thing.hitbox).width, 0).addAngle(thing.direction.angle()),
-				new Vec2(0, (<RectHitbox>thing.hitbox).height).addAngle(thing.direction.angle())
+				new Vec2((<RectHitbox>hitbox).width, 0).addAngle(direction.angle()),
+				new Vec2(0, (<RectHitbox>hitbox).height).addAngle(direction.angle())
 			];
 
 			for (const mainVec of thisVecs) {
@@ -123,13 +120,13 @@ export class Entity {
 		} else {
 			// https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
 			// Using the chosen answer
-			if (this.hitbox.type === "circle") return check(this, thing);
-			else return check(thing, this);
-			function check(circle: Entity | GameObject, rect: Entity | GameObject) {
-				const rectStartingPoint = rect.position.addVec(new Vec2(-(<RectHitbox>rect.hitbox).width / 2, -(<RectHitbox>rect.hitbox).height).addAngle(rect.direction.angle()));
+			if (this.hitbox.type === "circle") return check({ hitbox: <CircleHitbox>this.hitbox, position: this.position, direction: this.direction }, { hitbox: <RectHitbox> hitbox, position, direction });
+			else return check({ hitbox: <CircleHitbox> hitbox, position, direction }, { hitbox: <RectHitbox>this.hitbox, position: this.position, direction: this.direction });
+			function check(circle: { hitbox: CircleHitbox, position: Vec2, direction: Vec2 }, rect: { hitbox: RectHitbox, position: Vec2, direction: Vec2 }) {
+				const rectStartingPoint = rect.position.addVec(new Vec2(-rect.hitbox.width / 2, -rect.hitbox.height).addAngle(rect.direction.angle()));
 				const rectVecs = [
-					new Vec2((<RectHitbox>rect.hitbox).width, 0).addAngle(rect.direction.angle()),
-					new Vec2(0, (<RectHitbox>rect.hitbox).height).addAngle(rect.direction.angle())
+					new Vec2(rect.hitbox.width, 0).addAngle(rect.direction.angle()),
+					new Vec2(0, rect.hitbox.height).addAngle(rect.direction.angle())
 				];
 
 				const ap = circle.position.addVec(rectStartingPoint.inverse());
@@ -138,29 +135,12 @@ export class Entity {
 				const apad2 = ap.magnitudeSqr() * rectVecs[1].magnitudeSqr();
 				const adad2 = Math.pow(rectVecs[1].magnitudeSqr(), 2);
 				if (0 <= apab2 && apab2 <= abab2 && 0 <= apad2 && apad2 <= adad2) return CollisionType.CIRCLE_RECT_CENTER_INSIDE;
-
-				/*if (
-					!(circle.position.addVec(rectStartingPoint.inverse()).dot(rectVecs[0]) < 0 || circle.position.addVec(rectStartingPoint.inverse()).projectTo(rectVecs[0]).magnitudeSqr() > rectVecs[0].magnitudeSqr())
-					&&
-					!(circle.position.addVec(rectStartingPoint.inverse()).dot(rectVecs[1]) < 0 || circle.position.addVec(rectStartingPoint.inverse()).projectTo(rectVecs[1]).magnitudeSqr() > rectVecs[1].magnitudeSqr())
-				) return true;
-
-				const rectPoints = [
-					rectStartingPoint,
-					rectStartingPoint.addVec(new Vec2((<RectHitbox>rect.hitbox).width, 0).addAngle(rect.direction.angle())),
-					rectStartingPoint.addVec(new Vec2(0, (<RectHitbox>rect.hitbox).height).addAngle(rect.direction.angle())),
-					rectStartingPoint.addVec(new Vec2((<RectHitbox>rect.hitbox).width, (<RectHitbox>rect.hitbox).height).addAngle(rect.direction.angle()))
-				];
-
-				for (const point of rectPoints)
-					if (point.addVec(circle.position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>circle.hitbox).radius, 2))
-						return true;*/
 				
 				const centerToCenter = circle.position.addVec(rect.position.inverse());
 				if (
-					centerToCenter.projectTo(rectVecs[0]).magnitude() - rectVecs[0].scaleAll(0.5).magnitude() < (<CircleHitbox>circle.hitbox).radius
+					centerToCenter.projectTo(rectVecs[0]).magnitude() - rectVecs[0].scaleAll(0.5).magnitude() < circle.hitbox.radius
 					&&
-					centerToCenter.projectTo(rectVecs[1]).magnitude() - rectVecs[1].scaleAll(0.5).magnitude() < (<CircleHitbox>circle.hitbox).radius
+					centerToCenter.projectTo(rectVecs[1]).magnitude() - rectVecs[1].scaleAll(0.5).magnitude() < circle.hitbox.radius
 				) return CollisionType.CIRCLE_RECT_LINE_INSIDE;
 				
 				return CollisionType.NONE;
