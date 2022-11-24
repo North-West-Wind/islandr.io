@@ -1,6 +1,4 @@
 import * as crypto from "crypto";
-import * as fs from "fs";
-import * as path from "path";
 import { Vec2 } from "./types/maths";
 
 // ID generator
@@ -21,13 +19,4 @@ export function clamp(val: number, min: number, max: number) {
 // Pick random element from array
 export function randomSelect(arr: any[]) {
     return arr[Math.floor(Math.random() * arr.length)];
-}
-
-// Check line circle intersection
-export function lineCircleIntersect(lineA: Vec2, lineB: Vec2, center: Vec2, radius: number) {
-    const a = lineB.y - lineA.y;
-    const b = lineA.x - lineB.x;
-    const c = (lineB.x - lineA.x) * lineA.y - (lineB.y - lineA.y) * lineA.x;
-
-    return Math.abs(a * center.x + b * center.y + c) / Math.sqrt(a*a + b*b) < radius;
 }

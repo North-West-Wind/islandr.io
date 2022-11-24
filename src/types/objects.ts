@@ -126,6 +126,11 @@ export class GameObject {
 		if (this.vulnerable && this.health <= 0) this.die();
 	}
 
+	rotateAround(pivot: Vec2, angle: number) {
+		this.direction = this.direction.addAngle(angle);
+		this.position = pivot.addVec(this.position.addVec(pivot.inverse()).addAngle(angle));
+	}
+
 	minimize() {
 		return <MinGameObject> { type: this.type, position: this.position.minimize(), direction: this.direction.minimize(), hitbox: this.hitbox.minimize() };
 	}
