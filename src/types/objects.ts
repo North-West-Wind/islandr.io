@@ -38,6 +38,7 @@ export class GameObject {
 
 	die() {
 		this.despawn = true;
+		this.health = 0;
 	}
 
 	// Hitbox collision check

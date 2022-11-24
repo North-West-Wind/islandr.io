@@ -155,6 +155,7 @@ export class Entity {
 
 	die() {
 		this.despawn = true;
+		this.health = 0;
 	}
 
 	minimize() {
