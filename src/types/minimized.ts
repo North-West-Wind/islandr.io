@@ -1,4 +1,4 @@
-import { Animation } from "./entities";
+import { Animation } from "./misc";
 
 export interface MinVec2 {
 	x: number;
