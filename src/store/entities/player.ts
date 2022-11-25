@@ -9,7 +9,7 @@ export default class Player extends Entity {
 	id: string;
 	username: string;
 	boost: number = 2;
-	scope: number = 4;
+	scope: number = 2;
 	tryAttacking: boolean = false;
 	inventory: Inventory;
 
@@ -136,12 +136,7 @@ export default class Player extends Entity {
 
 	private handleCircleRectLineCollision(object: GameObject) {
 		console.log("line in circle!")
-		// 8, 8
 		const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height / 2).addAngle(object.direction.angle()));
-		// 8, 8
-		// 12, 8
-		// 12, 12
-		// 8, 12
 		const rectPoints = [
 			rectStartingPoint,
 			rectStartingPoint.addVec(new Vec2((<RectHitbox>object.hitbox).width, 0).addAngle(object.direction.angle())),
