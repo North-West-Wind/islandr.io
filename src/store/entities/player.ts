@@ -1,3 +1,4 @@
+import { PUSH_THRESHOLD } from "../../constants";
 import { DEFAULT_EMPTY_INVENTORY, Entity, Inventory } from "../../types/entities";
 import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/maths";
 import { CollisionType } from "../../types/misc";
@@ -150,13 +151,13 @@ export default class Player extends Entity {
 			vecs[ii] = point2.addVec(point1.inverse());
 			distances[ii] = new Line(point1, point2).distanceTo(this.position);
 		}
-		console.log(distances);
 		var shortestIndex = 0;
 		for (let ii = 1; ii < distances.length; ii++)
 			if (distances[ii] < distances[shortestIndex])
 				shortestIndex = ii;
 		
 		const push = vecs[shortestIndex].perpendicular().unit().scaleAll(this.hitbox.radius - distances[shortestIndex]);
+		if (Math.abs(push.y) < PUSH_THRESHOLD && Math.abs(push.x) < PUSH_THRESHOLD) return;
 		console.log(push)
 		this.position = this.position.addVec(push);
 	}

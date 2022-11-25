@@ -120,39 +120,42 @@ export class Entity {
 		} else {
 			// https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
 			// Using the chosen answer
-			if (this.hitbox.type === "circle") return check({ hitbox: <CircleHitbox>this.hitbox, position: this.position, direction: this.direction }, { hitbox: <RectHitbox> hitbox, position, direction });
-			else return check({ hitbox: <CircleHitbox> hitbox, position, direction }, { hitbox: <RectHitbox>this.hitbox, position: this.position, direction: this.direction });
-			function check(circle: { hitbox: CircleHitbox, position: Vec2, direction: Vec2 }, rect: { hitbox: RectHitbox, position: Vec2, direction: Vec2 }) {
-				const rectStartingPoint = rect.position.addVec(new Vec2(-rect.hitbox.width / 2, -rect.hitbox.height / 2).addAngle(rect.direction.angle()));
-				const rectVecs = [
-					new Vec2(rect.hitbox.width, 0).addAngle(rect.direction.angle()),
-					new Vec2(0, rect.hitbox.height).addAngle(rect.direction.angle())
-				];
-
-				const ap = circle.position.addVec(rectStartingPoint.inverse());
-				const apab2 = ap.magnitudeSqr() * rectVecs[0].magnitudeSqr();
-				const abab2 = Math.pow(rectVecs[0].magnitudeSqr(), 2);
-				const apad2 = ap.magnitudeSqr() * rectVecs[1].magnitudeSqr();
-				const adad2 = Math.pow(rectVecs[1].magnitudeSqr(), 2);
-				if (0 <= apab2 && apab2 <= abab2 && 0 <= apad2 && apad2 <= adad2) return CollisionType.CIRCLE_RECT_CENTER_INSIDE;
-				
-				const rectPoints = [
-					rectStartingPoint,
-					rectStartingPoint.addVec(new Vec2(rect.hitbox.width, 0).addAngle(rect.direction.angle())),
-					rectStartingPoint.addVec(new Vec2(rect.hitbox.width, rect.hitbox.height).addAngle(rect.direction.angle())),
-					rectStartingPoint.addVec(new Vec2(0, rect.hitbox.height).addAngle(rect.direction.angle()))
-				];
-
-				for (let ii = 0; ii < rectPoints.length; ii++)
-					if (rectPoints[ii].addVec(circle.position.inverse()).magnitudeSqr() < Math.pow(circle.hitbox.radius, 2))
-						return CollisionType.CIRCLE_RECT_POINT_INSIDE;
-
-				for (let ii = 0; ii < rectPoints.length; ii++)
-					if (circle.hitbox.lineIntersects(new Line(rectPoints[ii], rectPoints[(ii + 1) % rectPoints.length]), circle.position))
-						return CollisionType.CIRCLE_RECT_LINE_INSIDE;
-				
-				return CollisionType.NONE;
+			var circle: { hitbox: CircleHitbox, position: Vec2, direction: Vec2 };
+			var rect: { hitbox: RectHitbox, position: Vec2, direction: Vec2 };
+			if (this.hitbox.type === "circle") {
+				circle = { hitbox: <CircleHitbox>this.hitbox, position: this.position, direction: this.direction };
+				rect = { hitbox: <RectHitbox>hitbox, position, direction };
+			} else {
+				circle = { hitbox: <CircleHitbox>hitbox, position, direction };
+				rect = { hitbox: <RectHitbox>this.hitbox, position: this.position, direction: this.direction };
 			}
+			const rectStartingPoint = rect.position.addVec(new Vec2(-rect.hitbox.width / 2, -rect.hitbox.height / 2).addAngle(rect.direction.angle()));
+			
+			/*const ap = circle.position.addVec(rectStartingPoint.inverse());
+			const apab2 = ap.magnitudeSqr() * rectVecs[0].magnitudeSqr();
+			const abab2 = Math.pow(rectVecs[0].magnitudeSqr(), 2);
+			const apad2 = ap.magnitudeSqr() * rectVecs[1].magnitudeSqr();
+			const adad2 = Math.pow(rectVecs[1].magnitudeSqr(), 2);
+			if (0 <= apab2 && apab2 <= abab2 && 0 <= apad2 && apad2 <= adad2) return CollisionType.CIRCLE_RECT_CENTER_INSIDE;*/
+
+			const rectPoints = [
+				rectStartingPoint,
+				rectStartingPoint.addVec(new Vec2(rect.hitbox.width, 0).addAngle(rect.direction.angle())),
+				rectStartingPoint.addVec(new Vec2(rect.hitbox.width, rect.hitbox.height).addAngle(rect.direction.angle())),
+				rectStartingPoint.addVec(new Vec2(0, rect.hitbox.height).addAngle(rect.direction.angle()))
+			];
+
+			if (this.pointInRect(rectPoints[0], rectPoints[1], rectPoints[2], rectPoints[3], circle.position)) return CollisionType.CIRCLE_RECT_CENTER_INSIDE;
+
+			for (let ii = 0; ii < rectPoints.length; ii++)
+				if (rectPoints[ii].addVec(circle.position.inverse()).magnitudeSqr() < Math.pow(circle.hitbox.radius, 2))
+					return CollisionType.CIRCLE_RECT_POINT_INSIDE;
+
+			for (let ii = 0; ii < rectPoints.length; ii++)
+				if (circle.hitbox.lineIntersects(new Line(rectPoints[ii], rectPoints[(ii + 1) % rectPoints.length]), circle.position))
+					return CollisionType.CIRCLE_RECT_LINE_INSIDE;
+
+			return CollisionType.NONE;
 		}
 	}
 
@@ -174,6 +177,14 @@ export class Entity {
 			animation: this.animation,
 			despawn: this.despawn
 		}
+	}
+
+	private isLeft(a: Vec2, b: Vec2, c: Vec2) {
+		return ((b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y));
+	}
+
+	private pointInRect(a: Vec2, b: Vec2, c: Vec2, d: Vec2, p: Vec2) {
+		return (this.isLeft(a, b, p) > 0 && this.isLeft(b, c, p) > 0 && this.isLeft(c, d, p) > 0 && this.isLeft(d, a, p) > 0);
 	}
 }
 
