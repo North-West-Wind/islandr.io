@@ -9,7 +9,7 @@ export default class Player extends Entity {
 	hitbox = new CircleHitbox(1);
 	id: string;
 	username: string;
-	boost: number = 2;
+	boost: number = 1;
 	scope: number = 2;
 	tryAttacking: boolean = false;
 	inventory: Inventory;
@@ -19,7 +19,7 @@ export default class Player extends Entity {
 		this.id = id;
 		this.username = username;
 		this.inventory = DEFAULT_EMPTY_INVENTORY;
-		this.position = new Vec2(1, 1);
+		//this.position = new Vec2(1, 1);
 	}
 
 	setVelocity(velocity: Vec2) {
@@ -62,7 +62,6 @@ export default class Player extends Entity {
 	}
 
 	private handleCircleRectCenterCollision(object: GameObject) {
-		console.log("center in rectangle!")
 		const rectVecs = [
 			new Vec2((<RectHitbox>object.hitbox).width, 0).addAngle(object.direction.angle()),
 			new Vec2(0, (<RectHitbox>object.hitbox).height).addAngle(object.direction.angle())
@@ -96,7 +95,6 @@ export default class Player extends Entity {
 	}
 
 	private handleCircleRectPointCollision(object: GameObject) {
-		console.log("point in circle!")
 		const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height / 2).addAngle(object.direction.angle()));
 		const rectPoints = [
 			rectStartingPoint,
@@ -111,14 +109,12 @@ export default class Player extends Entity {
 				intersections[ii] = true;
 				counts++;
 			}
-		if (counts == 0) return console.log("wtf?");
 		if (counts == 2) return this.handleCircleRectLineCollision(object);
 		var sum = 0;
 		for (let ii = 0; ii < intersections.length; ii++)
 			if (intersections[ii])
 				sum += ii;
 		const index = sum / counts;
-		console.log(index);
 		const adjacents = [
 			rectPoints[((index - 1) < 0 ? rectPoints.length : index) - 1],
 			rectPoints[index],
@@ -136,7 +132,6 @@ export default class Player extends Entity {
 	}
 
 	private handleCircleRectLineCollision(object: GameObject) {
-		console.log("line in circle!")
 		const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height / 2).addAngle(object.direction.angle()));
 		const rectPoints = [
 			rectStartingPoint,
@@ -158,7 +153,6 @@ export default class Player extends Entity {
 		
 		const push = vecs[shortestIndex].perpendicular().unit().scaleAll(this.hitbox.radius - distances[shortestIndex]);
 		if (Math.abs(push.y) < PUSH_THRESHOLD && Math.abs(push.x) < PUSH_THRESHOLD) return;
-		console.log(push)
 		this.position = this.position.addVec(push);
 	}
 }

@@ -11,8 +11,8 @@ export default class Fists extends MeleeWeapon {
 	animations = ["left_fist", "right_fist"];
 	durations = [50, 50];
 	damage = 24;
-	hitbox = new RectHitbox(2, 1);
-	distance = new Vec2(2, 0);
+	hitbox = new RectHitbox(1, 1);
+	distance = new Vec2(1.5, 0);
 	rotation = Vec2.ONE;
 	delay = 25;
 	

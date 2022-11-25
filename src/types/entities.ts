@@ -120,6 +120,7 @@ export class Entity {
 		} else {
 			// https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
 			// Using the chosen answer
+			// EDIT: I don't even know if this is the same answer anymore
 			var circle: { hitbox: CircleHitbox, position: Vec2, direction: Vec2 };
 			var rect: { hitbox: RectHitbox, position: Vec2, direction: Vec2 };
 			if (this.hitbox.type === "circle") {
@@ -130,13 +131,6 @@ export class Entity {
 				rect = { hitbox: <RectHitbox>this.hitbox, position: this.position, direction: this.direction };
 			}
 			const rectStartingPoint = rect.position.addVec(new Vec2(-rect.hitbox.width / 2, -rect.hitbox.height / 2).addAngle(rect.direction.angle()));
-			
-			/*const ap = circle.position.addVec(rectStartingPoint.inverse());
-			const apab2 = ap.magnitudeSqr() * rectVecs[0].magnitudeSqr();
-			const abab2 = Math.pow(rectVecs[0].magnitudeSqr(), 2);
-			const apad2 = ap.magnitudeSqr() * rectVecs[1].magnitudeSqr();
-			const adad2 = Math.pow(rectVecs[1].magnitudeSqr(), 2);
-			if (0 <= apab2 && apab2 <= abab2 && 0 <= apad2 && apad2 <= adad2) return CollisionType.CIRCLE_RECT_CENTER_INSIDE;*/
 
 			const rectPoints = [
 				rectStartingPoint,
@@ -151,9 +145,10 @@ export class Entity {
 				if (rectPoints[ii].addVec(circle.position.inverse()).magnitudeSqr() < Math.pow(circle.hitbox.radius, 2))
 					return CollisionType.CIRCLE_RECT_POINT_INSIDE;
 
-			for (let ii = 0; ii < rectPoints.length; ii++)
+			for (let ii = 0; ii < rectPoints.length; ii++) {
 				if (circle.hitbox.lineIntersects(new Line(rectPoints[ii], rectPoints[(ii + 1) % rectPoints.length]), circle.position))
 					return CollisionType.CIRCLE_RECT_LINE_INSIDE;
+			}
 
 			return CollisionType.NONE;
 		}

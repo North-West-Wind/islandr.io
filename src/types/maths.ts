@@ -104,16 +104,16 @@ export class Line {
 
 	passthrough(point: Vec2) {
 		return point.x <= Math.max(this.a.x, this.b.x)
-		&& point.x <= Math.min(this.a.x, this.b.x)
-		&& (point.y <= Math.max(this.a.y, this.b.y)
-		&& point.y <= Math.min(this.a.y, this.b.y));
+			&& point.x <= Math.min(this.a.x, this.b.x)
+			&& (point.y <= Math.max(this.a.y, this.b.y)
+				&& point.y <= Math.min(this.a.y, this.b.y));
 	}
 
 	direction(point: Vec2) {
 		return (this.b.y - this.a.y) * (point.x - this.b.x) - (this.b.x - this.a.x) * (point.y - this.b.y);
 	}
 
-	distanceTo(point: Vec2) {
+	distanceSqrTo(point: Vec2) {
 		const ab = this.b.addVec(this.a.inverse());
 		const be = point.addVec(this.b.inverse());
 		const ae = point.addVec(this.a.inverse());
@@ -124,10 +124,14 @@ export class Line {
 		if (abae < 0) return ae.magnitude();
 
 		const a = this.b.y - this.a.y;
-    	const b = this.a.x - this.b.x;
-    	const c = (this.b.x - this.a.x) * this.a.y - (this.b.y - this.a.y) * this.a.x;
+		const b = this.a.x - this.b.x;
+		const c = (this.b.x - this.a.x) * this.a.y - (this.b.y - this.a.y) * this.a.x;
 
-    	return Math.abs(a * point.x + b * point.y + c) / Math.sqrt(a*a + b*b);
+		return Math.pow(a * point.x + b * point.y + c, 2) / (a * a + b * b);
+	}
+
+	distanceTo(point: Vec2) {
+		return Math.sqrt(this.distanceSqrTo(point));
 	}
 
 	intersects(line: Line) {
@@ -214,11 +218,7 @@ export class CircleHitbox implements Hitbox {
 	}
 
 	lineIntersects(line: Line, center: Vec2) {
-		const a = Math.pow(line.a.x - line.b.x, 2) + Math.pow(line.a.y - line.b.y, 2);
-		const b = 2 * ((line.a.x - line.b.x) * (line.b.x - center.x) + (line.a.y - line.b.y) * (line.b.y - center.y));
-		const c = Math.pow(line.b.x - center.x, 2) + Math.pow(line.b.y - center.y, 2) - this.radius * this.radius;
-
-		return b * b - 4 * a * c > 0;
+		return line.distanceSqrTo(center) < Math.pow(this.radius, 2);
 	}
 
 	minimize() {
