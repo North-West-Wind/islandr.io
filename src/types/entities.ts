@@ -75,8 +75,8 @@ export class Entity {
 		else if (this.hitbox.type === "rect" && hitbox.type === "rect") {
 			// https://math.stackexchange.com/questions/1278665/how-to-check-if-two-rectangles-intersect-rectangles-can-be-rotated
 			// Using the last answer
-			const thisStartingPoint = this.position.addVec(new Vec2(-(<RectHitbox>this.hitbox).width / 2, -(<RectHitbox>this.hitbox).height).addAngle(this.direction.angle()));
-			const thingStartingPoint = this.position.addVec(new Vec2(-(<RectHitbox>hitbox).width / 2, -(<RectHitbox>hitbox).height).addAngle(direction.angle()));
+			const thisStartingPoint = this.position.addVec(new Vec2(-(<RectHitbox>this.hitbox).width / 2, -(<RectHitbox>this.hitbox).height / 2).addAngle(this.direction.angle()));
+			const thingStartingPoint = this.position.addVec(new Vec2(-(<RectHitbox>hitbox).width / 2, -(<RectHitbox>hitbox).height / 2).addAngle(direction.angle()));
 			const thisPoints = [
 				thisStartingPoint,
 				thisStartingPoint.addVec(new Vec2((<RectHitbox>this.hitbox).width, 0).addAngle(this.direction.angle())),
@@ -123,7 +123,7 @@ export class Entity {
 			if (this.hitbox.type === "circle") return check({ hitbox: <CircleHitbox>this.hitbox, position: this.position, direction: this.direction }, { hitbox: <RectHitbox> hitbox, position, direction });
 			else return check({ hitbox: <CircleHitbox> hitbox, position, direction }, { hitbox: <RectHitbox>this.hitbox, position: this.position, direction: this.direction });
 			function check(circle: { hitbox: CircleHitbox, position: Vec2, direction: Vec2 }, rect: { hitbox: RectHitbox, position: Vec2, direction: Vec2 }) {
-				const rectStartingPoint = rect.position.addVec(new Vec2(-rect.hitbox.width / 2, -rect.hitbox.height).addAngle(rect.direction.angle()));
+				const rectStartingPoint = rect.position.addVec(new Vec2(-rect.hitbox.width / 2, -rect.hitbox.height / 2).addAngle(rect.direction.angle()));
 				const rectVecs = [
 					new Vec2(rect.hitbox.width, 0).addAngle(rect.direction.angle()),
 					new Vec2(0, rect.hitbox.height).addAngle(rect.direction.angle())
@@ -142,6 +142,10 @@ export class Entity {
 					rectStartingPoint.addVec(new Vec2(rect.hitbox.width, rect.hitbox.height).addAngle(rect.direction.angle())),
 					rectStartingPoint.addVec(new Vec2(0, rect.hitbox.height).addAngle(rect.direction.angle()))
 				];
+
+				for (let ii = 0; ii < rectPoints.length; ii++)
+					if (rectPoints[ii].addVec(circle.position.inverse()).magnitudeSqr() < Math.pow(circle.hitbox.radius, 2))
+						return CollisionType.CIRCLE_RECT_POINT_INSIDE;
 
 				for (let ii = 0; ii < rectPoints.length; ii++)
 					if (circle.hitbox.lineIntersects(new Line(rectPoints[ii], rectPoints[(ii + 1) % rectPoints.length]), circle.position))

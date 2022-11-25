@@ -18,6 +18,7 @@ export default class Player extends Entity {
 		this.id = id;
 		this.username = username;
 		this.inventory = DEFAULT_EMPTY_INVENTORY;
+		this.position = new Vec2(1, 1);
 	}
 
 	setVelocity(velocity: Vec2) {
@@ -95,7 +96,7 @@ export default class Player extends Entity {
 
 	private handleCircleRectPointCollision(object: GameObject) {
 		console.log("point in circle!")
-		const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height).addAngle(object.direction.angle()));
+		const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height / 2).addAngle(object.direction.angle()));
 		const rectPoints = [
 			rectStartingPoint,
 			rectStartingPoint.addVec(new Vec2((<RectHitbox>object.hitbox).width, 0).addAngle(object.direction.angle())),
@@ -109,15 +110,16 @@ export default class Player extends Entity {
 				intersections[ii] = true;
 				counts++;
 			}
-
+		if (counts == 0) return console.log("wtf?");
 		if (counts == 2) return this.handleCircleRectLineCollision(object);
 		var sum = 0;
 		for (let ii = 0; ii < intersections.length; ii++)
 			if (intersections[ii])
 				sum += ii;
 		const index = sum / counts;
+		console.log(index);
 		const adjacents = [
-			rectPoints[index - 1 < 0 ? rectPoints.length - 1 : index - 1],
+			rectPoints[((index - 1) < 0 ? rectPoints.length : index) - 1],
 			rectPoints[index],
 			rectPoints[(index + 1) % rectPoints.length]
 		];
@@ -134,7 +136,12 @@ export default class Player extends Entity {
 
 	private handleCircleRectLineCollision(object: GameObject) {
 		console.log("line in circle!")
-		const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height).addAngle(object.direction.angle()));
+		// 8, 8
+		const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height / 2).addAngle(object.direction.angle()));
+		// 8, 8
+		// 12, 8
+		// 12, 12
+		// 8, 12
 		const rectPoints = [
 			rectStartingPoint,
 			rectStartingPoint.addVec(new Vec2((<RectHitbox>object.hitbox).width, 0).addAngle(object.direction.angle())),
@@ -148,6 +155,7 @@ export default class Player extends Entity {
 			vecs[ii] = point2.addVec(point1.inverse());
 			distances[ii] = new Line(point1, point2).distanceTo(this.position);
 		}
+		console.log(distances);
 		var shortestIndex = 0;
 		for (let ii = 1; ii < distances.length; ii++)
 			if (distances[ii] < distances[shortestIndex])

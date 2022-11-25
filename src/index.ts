@@ -19,9 +19,12 @@ const entities: Entity[] = [];
 const objects: GameObject[] = [];
 
 // Initialize the map
-for (let ii = 0; ii < 500; ii++) objects.push(new Tree(objects));
-for (let ii = 0; ii < 500; ii++) objects.push(new Bush(objects));
-for (let ii = 0; ii < 500; ii++) objects.push(new Crate(objects));
+//for (let ii = 0; ii < 50; ii++) objects.push(new Tree(objects));
+//for (let ii = 0; ii < 50; ii++) objects.push(new Bush(objects));
+//for (let ii = 0; ii < 50; ii++) objects.push(new Crate(objects));
+const crate = new Crate(objects);
+crate.position = new Vec2(10, 10);
+objects.push(crate);
 
 server.on("connection", async socket => {
 	console.log("Received a connection request");
