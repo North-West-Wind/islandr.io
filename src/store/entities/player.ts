@@ -3,6 +3,7 @@ import { DEFAULT_EMPTY_INVENTORY, Entity, Inventory } from "../../types/entities
 import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/maths";
 import { CollisionType } from "../../types/misc";
 import { GameObject } from "../../types/objects";
+import { GunWeapon, WeaponType } from "../../types/weapons";
 
 export default class Player extends Entity {
 	type = "player";
@@ -19,7 +20,6 @@ export default class Player extends Entity {
 		this.id = id;
 		this.username = username;
 		this.inventory = DEFAULT_EMPTY_INVENTORY;
-		//this.position = new Vec2(1, 1);
 	}
 
 	setVelocity(velocity: Vec2) {
@@ -28,10 +28,18 @@ export default class Player extends Entity {
 	}
 
 	tick(entities: Entity[], objects: GameObject[]) {
+		// When the player dies, don't tick anything
+		if (this.despawn) return;
+		const oriVel = this.velocity;
+		// Scale the velocity before ticking
+		this.velocity = this.velocity.scaleAll(this.boost);
+		const weapon = this.inventory.weapons[this.inventory.holding];
+		if (weapon.type === WeaponType.GUN) this.velocity = this.velocity.scaleAll((<GunWeapon>weapon).weight);
 		super.tick(entities, objects);
+		// Restore the original velocity
+		this.velocity = oriVel;
 		// Only attack when trying + no animation is playing
 		if (this.tryAttacking && this.animation.duration <= 0) {
-			const weapon = this.inventory.weapons[this.inventory.holding];
 			if (weapon) {
 				weapon.attack(this, entities, objects);
 				if (!weapon.continuous) this.tryAttacking = false;

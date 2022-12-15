@@ -1,5 +1,5 @@
 import { MAP_SIZE } from "../constants";
-import { clamp } from "../utils";
+import { clamp, ID } from "../utils";
 import { CircleHitbox, Hitbox, Line, RectHitbox, Vec2 } from "./maths";
 import { GameObject } from "./objects";
 import { Weapon } from "./weapons";
@@ -27,6 +27,7 @@ export const DEFAULT_EMPTY_INVENTORY = new Inventory(2, 4);
 DEFAULT_EMPTY_INVENTORY.weapons[2] = new Fists();
 
 export class Entity {
+	id: string;
 	type: string = "";
 	position: Vec2;
 	velocity: Vec2 = Vec2.ZERO;
@@ -41,6 +42,7 @@ export class Entity {
 	animation: Animation = { name: "", duration: 0 };
 
 	constructor() {
+		this.id = ID();
 		// Currently selects a random position to spawn. Will change in the future.
 		this.position = new Vec2(Math.random() * MAP_SIZE[0], Math.random() * MAP_SIZE[1]);
 	}

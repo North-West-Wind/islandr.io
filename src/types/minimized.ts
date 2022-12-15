@@ -43,3 +43,8 @@ export interface MinWeapon {
 	id: string;
 	name: string;
 }
+
+export interface MinParticle {
+	id: string;
+	position: MinVec2;
+}

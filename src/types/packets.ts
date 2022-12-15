@@ -2,9 +2,10 @@ import { BASE_RADIUS } from "../constants";
 import { Player } from "../store/entities";
 import { Entity } from "./entities";
 import { Vec2 } from "./maths";
-import { MinEntity, MinGameObject } from "./minimized";
+import { MinEntity, MinGameObject, MinParticle } from "./minimized";
 import { MovementDirection } from "./misc";
 import { GameObject } from "./objects";
+import { Particle } from "./particles";
 
 interface IPacket {
 	type: string;
@@ -71,5 +72,24 @@ export class MapPacket implements IPacket {
 
 	constructor(objects: GameObject[]) {
 		this.objects = objects.map(object => ({ type: object.type, position: object.position }));
+	}
+}
+
+export class AnnouncePacket implements IPacket {
+	type = "announce";
+	announcement: string;
+
+	constructor(announcement: string) {
+		this.announcement = announcement;
+	}
+}
+
+// Let the client handle particles
+export class ParticlesPacket implements IPacket {
+	type = "particles";
+	particles: MinParticle[];
+
+	constructor(particles: Particle[], player: Player) {
+		this.particles = particles.filter(particle => particle.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(particle => particle.minimize());;
 	}
 }

@@ -1,10 +1,12 @@
 import { MAP_SIZE } from "../constants";
+import { ID } from "../utils";
 import { Entity } from "./entities";
 import { Vec2, Hitbox, CircleHitbox, RectHitbox, CommonAngles, Line } from "./maths";
 import { MinGameObject } from "./minimized";
 import { Animation, CollisionType } from "./misc";
 
 export class GameObject {
+	id: string;
 	type: string = "";
 	position: Vec2;
 	direction: Vec2;
@@ -21,6 +23,7 @@ export class GameObject {
 
 	constructor(baseHitbox: Hitbox, minHitbox: Hitbox, health: number, maxHealth: number) {
 		if (baseHitbox.type !== minHitbox.type) throw new Error("Hitboxes are not the same type!");
+		this.id = ID();
 		this.position = new Vec2(Math.random() * MAP_SIZE[0], Math.random() * MAP_SIZE[1]);
 		this.direction = Vec2.ONE.addAngle(Math.random() * CommonAngles.TWO_PI);
 		this.baseHitbox = this.hitbox = baseHitbox;

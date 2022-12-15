@@ -1,13 +1,14 @@
 import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
-import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket } from "./types/packets";
+import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket } from "./types/packets";
 import { Entity } from "./types/entities";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/maths";
 import { GameObject } from "./types/objects";
 import { Tree, Bush, Crate } from "./store/objects";
 import { Player } from "./store/entities";
+import { Particle } from "./types/particles";
 
 export var ticksElapsed = 0;
 
@@ -29,7 +30,7 @@ server.on("connection", async socket => {
 	socket.binaryType = "arraybuffer";
 
 	// Add socket to map with a generated ID.
-	const id = await ID();
+	const id = ID();
 	sockets.set(id, socket);
 
 	// Setup the close connection listener. Socket will be deleted from map.
@@ -114,6 +115,17 @@ server.on("connection", async socket => {
 	});
 });
 
+var pendingParticles: Particle[] = [];
+export function addParticles(...particles: Particle[]) {
+	pendingParticles.push(...particles);
+}
+export function addEntities(...e: Entity[]) {
+	entities.push(...e);
+}
+export function addObjects(...o: GameObject[]) {
+	objects.push(...o);
+}
+
 setInterval(() => {
 	ticksElapsed++;
 	// Tick every entity and object.
@@ -140,6 +152,10 @@ setInterval(() => {
 	// Filter players from entities and send them packets
 	const players = <Player[]>entities.filter(entity => entity.type === "player");
 	players.forEach(player => {
-		sockets.get(player.id)?.send(encode(new GamePacket(entities, objects, player)).buffer)
+		const socket = sockets.get(player.id);
+		if (!socket) return;
+		socket.send(encode(new GamePacket(entities, objects, player)).buffer);
+		if (pendingParticles.length) socket.send(encode(new ParticlesPacket(pendingParticles, player)).buffer);
 	});
+	pendingParticles = [];
 }, 1000 / TICKS_PER_SECOND);

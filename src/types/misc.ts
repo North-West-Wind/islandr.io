@@ -1,3 +1,6 @@
+import { Vec2 } from "./maths";
+import { MinParticle, MinVec2 } from "./minimized";
+
 export enum CollisionType {
 	// No intersection
 	NONE = 0,

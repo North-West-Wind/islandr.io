@@ -21,17 +21,6 @@ export default class Fists extends MeleeWeapon {
 		attacker.animation.name = this.animations[index];
 		attacker.animation.duration = this.durations[index];
 
-		setTimeout(() => {
-			var combined: (Entity | GameObject)[] = [];
-			combined = combined.concat(entities, objects);
-			const angles = this.rotation.angle() + attacker.direction.angle();
-			const position = attacker.position.addVec(this.distance.addAngle(angles));
-
-			for (const thing of combined)
-				if (thing.collided(this.hitbox, position, Vec2.ONE.addAngle(angles))) {
-					thing.damage(this.damage);
-					if (this.single) break;
-				}
-		}, this.delay * 1000 / TICKS_PER_SECOND);
+		this.damageThing(attacker, entities, objects);
 	}
 }
