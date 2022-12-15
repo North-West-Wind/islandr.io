@@ -1,6 +1,3 @@
-import { Vec2 } from "./maths";
-import { MinParticle, MinVec2 } from "./minimized";
-
 export enum CollisionType {
 	// No intersection
 	NONE = 0,
@@ -27,4 +24,11 @@ export enum MovementDirection {
 export interface Animation {
 	name: string;
 	duration: number;
+}
+
+export enum GunColor {
+	YELLOW = 0,
+	RED = 1,
+	BLUE = 2,
+	GREEN = 3
 }

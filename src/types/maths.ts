@@ -163,12 +163,13 @@ export interface Hitbox {
 export class RectHitbox implements Hitbox {
 	static readonly ZERO = new RectHitbox(0, 0);
 
-	type: "rect" = "rect";
+	type: "rect" | "circle";
 	width: number;
 	height: number;
 	comparable: number;
 
 	constructor(width: number, height: number) {
+		this.type = "rect";
 		this.width = width;
 		this.height = height;
 		this.comparable = Math.sqrt(Math.pow(this.width / 2, 2) + Math.pow(this.height / 2, 2));
@@ -205,11 +206,12 @@ export class RectHitbox implements Hitbox {
 export class CircleHitbox implements Hitbox {
 	static readonly ZERO = new RectHitbox(0, 0);
 
-	type: "circle" = "circle";
+	type: "rect" | "circle";
 	radius: number;
 	comparable: number;
 
 	constructor(radius: number) {
+		this.type = "circle";
 		this.comparable = this.radius = radius;
 	}
 

@@ -90,6 +90,6 @@ export class ParticlesPacket implements IPacket {
 	particles: MinParticle[];
 
 	constructor(particles: Particle[], player: Player) {
-		this.particles = particles.filter(particle => particle.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(particle => particle.minimize());;
+		this.particles = particles.filter(particle => particle.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(particle => particle.minimize());
 	}
 }

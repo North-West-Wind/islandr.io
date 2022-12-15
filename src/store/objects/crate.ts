@@ -1,6 +1,9 @@
+import { addEntities } from "../..";
 import { MAP_SIZE } from "../../constants";
-import { RectHitbox, Vec2 } from "../../types/maths";
+import { CommonAngles, RectHitbox, Vec2 } from "../../types/maths";
 import { GameObject } from "../../types/objects";
+import { GunColor } from "../../types/misc";
+import { Gun } from "../entities";
 
 export default class Crate extends GameObject {
 	type = "crate";
@@ -15,5 +18,9 @@ export default class Crate extends GameObject {
 	die() {
 		super.die();
 		// TODO: Spawn loots
+		const gun = new Gun("m9", GunColor.YELLOW);
+		gun.position = this.position;
+		gun.velocity = Vec2.ONE.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.05);
+		addEntities(gun);
 	}
 }

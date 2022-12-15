@@ -1,4 +1,3 @@
-import { TICKS_PER_SECOND } from "../../constants";
 import { Entity } from "../../types/entities";
 import { RectHitbox, Vec2 } from "../../types/maths";
 import { GameObject } from "../../types/objects";

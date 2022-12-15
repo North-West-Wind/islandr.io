@@ -2,24 +2,25 @@
 
 import { Entity } from "../../types/entities";
 import { CircleHitbox } from "../../types/maths";
-
-export enum GunColor {
-	YELLOW = 0,
-	RED = 1,
-	BLUE = 2,
-	GREEN = 3
-}
+import { GunColor } from "../../types/misc";
+import { GameObject } from "../../types/objects";
 
 export default class Gun extends Entity {
 	type = "gun";
 	hitbox = new CircleHitbox(2);
 	name: string;
 	color: GunColor;
+	friction = 0.02; // frictional acceleration, not force
 
 	constructor(name: string, color: GunColor) {
 		super();
 		this.name = name;
 		this.color = color;
+	}
+
+	tick(entities: Entity[], objects: GameObject[]) {
+		super.tick(entities, objects);
+		this.velocity = this.velocity.scaleAll(1 - this.friction);
 	}
 
 	minimize() {

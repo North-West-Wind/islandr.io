@@ -7,7 +7,7 @@ import { Animation, CollisionType } from "./misc";
 
 export class GameObject {
 	id: string;
-	type: string = "";
+	type = "";
 	position: Vec2;
 	direction: Vec2;
 	baseHitbox: Hitbox;
@@ -133,7 +133,7 @@ export class GameObject {
 	}
 
 	// No implementation by default
-	onCollision(thing: Entity | GameObject) { }
+	onCollision(_thing: Entity | GameObject) { }
 
 	tick(_entities: Entity[], _objects: GameObject[]) {
 		if (this.vulnerable && this.health <= 0 && !this.despawn) this.die();

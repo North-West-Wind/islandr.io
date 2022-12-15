@@ -41,7 +41,7 @@ server.on("connection", async socket => {
 		connected = false;
 	});
 
-	var username: string = "";
+	var username = "";
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
 		socket.send(encode({ id, size: MAP_SIZE }).buffer);
@@ -50,7 +50,7 @@ server.on("connection", async socket => {
 			if (decoded.id == id && decoded.username) {
 				connected = true;
 				username = decoded.username;
-			} else try { socket.close(); } catch (err) { };
+			} else try { socket.close(); } catch (err) { }
 			resolve();
 		})
 	})]);

@@ -10,9 +10,9 @@ export default class Player extends Entity {
 	hitbox = new CircleHitbox(1);
 	id: string;
 	username: string;
-	boost: number = 1;
-	scope: number = 2;
-	tryAttacking: boolean = false;
+	boost = 1;
+	scope = 2;
+	tryAttacking = false;
 	inventory: Inventory;
 
 	constructor(id: string, username: string) {

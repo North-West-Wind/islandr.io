@@ -28,14 +28,14 @@ DEFAULT_EMPTY_INVENTORY.weapons[2] = new Fists();
 
 export class Entity {
 	id: string;
-	type: string = "";
+	type = "";
 	position: Vec2;
 	velocity: Vec2 = Vec2.ZERO;
 	direction: Vec2 = Vec2.ONE;
 	hitbox: Hitbox = CircleHitbox.ZERO;
 	vulnerable = true;
-	health: number = 100;
-	maxHealth: number = 100;
+	health = 100;
+	maxHealth = 100;
 	discardable = false;
 	despawn = false;
 	// Tells the client which animation is going on
@@ -168,6 +168,7 @@ export class Entity {
 
 	minimize() {
 		return <MinEntity> {
+			type: this.type,
 			position: this.position.minimize(),
 			direction: this.direction.minimize(),
 			hitbox: this.hitbox.minimize(),

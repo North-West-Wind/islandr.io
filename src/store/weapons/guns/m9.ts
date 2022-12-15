@@ -1,5 +1,5 @@
 import { GunWeapon } from "../../../types/weapons";
-import { GunColor } from "../../entities/gun";
+import { GunColor } from "../../../types/misc";
 
 export default class M9 extends GunWeapon {
 	id = "m9";

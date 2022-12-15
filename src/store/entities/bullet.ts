@@ -1,6 +1,6 @@
 import { addParticles } from "../..";
 import { Entity } from "../../types/entities";
-import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/maths";
+import { CircleHitbox, Line, Vec2 } from "../../types/maths";
 import { GameObject } from "../../types/objects";
 import { Particle } from "../../types/particles";
 

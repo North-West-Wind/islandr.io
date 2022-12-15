@@ -1,7 +1,7 @@
 import { addEntities } from "..";
 import { TICKS_PER_SECOND } from "../constants";
 import { Bullet } from "../store/entities";
-import { GunColor } from "../store/entities/gun";
+import { GunColor } from "./misc";
 import { clamp } from "../utils";
 import { Entity } from "./entities";
 import { CommonAngles, Hitbox, Vec2 } from "./maths";
