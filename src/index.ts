@@ -1,7 +1,7 @@
 import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
-import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket } from "./types/packets";
+import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket } from "./types/packets";
 import { Entity } from "./types/entities";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/maths";
@@ -62,7 +62,7 @@ server.on("connection", async socket => {
 	entities.push(player);
 
 	// Send the player the entire map
-
+	socket.send(encode(new MapPacket(objects)).buffer);
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
