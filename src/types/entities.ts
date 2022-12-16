@@ -50,7 +50,7 @@ export class Entity {
 	tick(_entities: Entity[], _objects: GameObject[]) {
 		// Add the velocity to the position, and cap it at map size.
 		this.position = this.position.addVec(this.velocity);
-		this.position = new Vec2(clamp(this.position.x, 0, MAP_SIZE[0]), clamp(this.position.y, 0, MAP_SIZE[1]));
+		this.position = new Vec2(clamp(this.position.x, this.hitbox.comparable, MAP_SIZE[0] - this.hitbox.comparable), clamp(this.position.y, this.hitbox.comparable, MAP_SIZE[1] - this.hitbox.comparable));
 
 		if (this.animation.name) {
 			if (this.animation.duration > 0) this.animation.duration--;
