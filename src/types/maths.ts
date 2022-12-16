@@ -88,6 +88,10 @@ export class Vec2 {
 		return new Vec2(this.y, -this.x);
 	}
 
+	equals(vec: Vec2) {
+		return this.x === vec.x && this.y === vec.y;
+	}
+
 	minimize() {
 		return <MinVec2>{ x: this.x, y: this.y };
 	}

@@ -37,7 +37,7 @@ export default class Player extends Entity {
 		if (weapon.type === WeaponType.GUN) this.velocity = this.velocity.scaleAll((<GunWeapon>weapon).weight);
 		super.tick(entities, objects);
 		// Restore the original velocity
-		this.velocity = oriVel;
+		if (this.velocity.equals(oriVel.scaleAll(this.boost))) this.velocity = oriVel;
 		// Only attack when trying + no animation is playing
 		if (this.tryAttacking && this.animation.duration <= 0) {
 			if (weapon) {

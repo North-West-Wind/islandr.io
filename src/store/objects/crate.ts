@@ -20,7 +20,7 @@ export default class Crate extends GameObject {
 		// TODO: Spawn loots
 		const gun = new Gun("m9", GunColor.YELLOW);
 		gun.position = this.position;
-		gun.velocity = Vec2.ONE.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.05);
+		gun.velocity = Vec2.ONE.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
 		addEntities(gun);
 	}
 }
