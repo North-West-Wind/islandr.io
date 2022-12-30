@@ -1,4 +1,3 @@
-import { MAP_SIZE } from "../constants";
 import { clamp, ID } from "../utils";
 import { CircleHitbox, Hitbox, Line, RectHitbox, Vec2 } from "./maths";
 import { GameObject } from "./objects";
@@ -6,6 +5,7 @@ import { Weapon } from "./weapons";
 import { Fists } from "../store/weapons";
 import { MinEntity, MinInventory } from "./minimized";
 import { Animation, CollisionType } from "./misc";
+import { world } from "..";
 
 export class Inventory {
 	holding: number;
@@ -44,13 +44,13 @@ export class Entity {
 	constructor() {
 		this.id = ID();
 		// Currently selects a random position to spawn. Will change in the future.
-		this.position = new Vec2(Math.random() * MAP_SIZE[0], Math.random() * MAP_SIZE[1]);
+		this.position = world.size.scale(Math.random(), Math.random());
 	}
 
 	tick(_entities: Entity[], _objects: GameObject[]) {
 		// Add the velocity to the position, and cap it at map size.
 		this.position = this.position.addVec(this.velocity);
-		this.position = new Vec2(clamp(this.position.x, this.hitbox.comparable, MAP_SIZE[0] - this.hitbox.comparable), clamp(this.position.y, this.hitbox.comparable, MAP_SIZE[1] - this.hitbox.comparable));
+		this.position = new Vec2(clamp(this.position.x, this.hitbox.comparable, world.size.x - this.hitbox.comparable), clamp(this.position.y, this.hitbox.comparable, world.size.y - this.hitbox.comparable));
 
 		if (this.animation.name) {
 			if (this.animation.duration > 0) this.animation.duration--;

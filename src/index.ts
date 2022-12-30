@@ -1,14 +1,12 @@
 import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
-import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket } from "./types/packets";
-import { Entity } from "./types/entities";
+import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket } from "./types/packets";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/maths";
-import { GameObject } from "./types/objects";
-import { Tree, Bush, Crate } from "./store/objects";
 import { Player } from "./store/entities";
 import { Particle } from "./types/particles";
+import { World } from "./types/terrain";
 
 export var ticksElapsed = 0;
 
@@ -16,13 +14,9 @@ const server = new ws.Server({ port: 8080 });
 server.once("listening", () => console.log(`WebSocket Server listening at port ${server.options.port}`));
 
 const sockets = new Map<string, ws.WebSocket>();
-const entities: Entity[] = [];
-const objects: GameObject[] = [];
 
 // Initialize the map
-for (let ii = 0; ii < 50; ii++) objects.push(new Tree(objects));
-for (let ii = 0; ii < 50; ii++) objects.push(new Bush(objects));
-for (let ii = 0; ii < 50; ii++) objects.push(new Crate(objects));
+export const world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]));
 
 server.on("connection", async socket => {
 	console.log("Received a connection request");
@@ -44,7 +38,7 @@ server.on("connection", async socket => {
 	var username = "";
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
-		socket.send(encode({ id, size: MAP_SIZE }).buffer);
+		socket.send(encode({ id, size: Object.values(world.size.minimize()) }).buffer);
 		socket.once("message", (msg: ArrayBuffer) => {
 			const decoded = decode(new Uint8Array(msg));
 			if (decoded.id == id && decoded.username) {
@@ -59,10 +53,10 @@ server.on("connection", async socket => {
 
 	// Create the new player and add it to the entity list.
 	const player = new Player(id, username);
-	entities.push(player);
+	world.entities.push(player);
 
 	// Send the player the entire map
-	socket.send(encode(new MapPacket(objects)).buffer);
+	socket.send(encode(world.packetize()).buffer);
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
@@ -119,42 +113,15 @@ var pendingParticles: Particle[] = [];
 export function addParticles(...particles: Particle[]) {
 	pendingParticles.push(...particles);
 }
-export function addEntities(...e: Entity[]) {
-	entities.push(...e);
-}
-export function addObjects(...o: GameObject[]) {
-	objects.push(...o);
-}
 
 setInterval(() => {
-	ticksElapsed++;
-	// Tick every entity and object.
-	let ii: number;
-	var removable: number[] = [];
-	for (ii = 0; ii < entities.length; ii++) {
-		const entity = entities[ii];
-		entity.tick(entities, objects);
-		// Mark entity for removal
-		if (entity.despawn && entity.discardable) removable.push(ii);
-	}
-	// Remove all discardable entities
-	for (ii = 0; ii < removable.length; ii++) entities.splice(removable[ii] - ii, 1);
-
-	removable = [];
-	for (ii = 0; ii < objects.length; ii++) {
-		const object = objects[ii];
-		object.tick(entities, objects);
-		// Mark object for removal
-		if (object.despawn && object.discardable) removable.push(ii);
-	}
-	// Remove all discardable objects
-	for (ii = 0; ii < removable.length; ii++) objects.splice(removable[ii] - ii, 1);
+	world.tick();
 	// Filter players from entities and send them packets
-	const players = <Player[]>entities.filter(entity => entity.type === "player");
+	const players = <Player[]>world.entities.filter(entity => entity.type === "player");
 	players.forEach(player => {
 		const socket = sockets.get(player.id);
 		if (!socket) return;
-		socket.send(encode(new GamePacket(entities, objects, player)).buffer);
+		socket.send(encode(new GamePacket(world.entities, world.obstacles, player)).buffer);
 		if (pendingParticles.length) socket.send(encode(new ParticlesPacket(pendingParticles, player)).buffer);
 	});
 	pendingParticles = [];

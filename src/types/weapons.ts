@@ -1,4 +1,4 @@
-import { addEntities } from "..";
+import { world } from "..";
 import { TICKS_PER_SECOND } from "../constants";
 import { Bullet } from "../store/entities";
 import { GunColor } from "./misc";
@@ -87,7 +87,7 @@ export abstract class GunWeapon extends Weapon {
 				const position = attacker.position.addVec(this.distance.addAngle(angles));
 				const bullet = new Bullet(attacker, this.damage, Vec2.ONE.addAngle(angles).scaleAll(this.speed), this.ticks);
 				bullet.position = position;
-				addEntities(bullet);
+				world.entities.push(bullet);
 			}
 		}, this.delay * 1000 / TICKS_PER_SECOND);
 	}
