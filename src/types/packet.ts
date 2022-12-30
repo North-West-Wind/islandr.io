@@ -1,11 +1,11 @@
 import { BASE_RADIUS } from "../constants";
 import { Player } from "../store/entities";
-import { Entity } from "./entities";
-import { Vec2 } from "./maths";
-import { MinEntity, MinGameObject, MinParticle } from "./minimized";
+import { Entity } from "./entity";
+import { Vec2 } from "./math";
+import { MinEntity, MinObstacle, MinParticle } from "./minimized";
 import { MovementDirection } from "./misc";
-import { GameObject } from "./objects";
-import { Particle } from "./particles";
+import { Obstacle } from "./obstacle";
+import { Particle } from "./particle";
 
 interface IPacket {
 	type: string;
@@ -56,22 +56,22 @@ export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleas
 export class GamePacket implements IPacket {
 	type = "game";
 	entities: MinEntity[];
-	objects: MinGameObject[];
+	obstacles: MinObstacle[];
 	player: Player;
 
-	constructor(entities: Entity[], objects: GameObject[], player: Player) {
+	constructor(entities: Entity[], obstacles: Obstacle[], player: Player) {
 		this.entities = entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(entity => entity.minimize());
-		this.objects = objects.filter(object => object.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(object => object.minimize());
+		this.obstacles = obstacles.filter(obstacle => obstacle.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(obstacle => obstacle.minimize());
 		this.player = player;
 	}
 }
 
 export class MapPacket implements IPacket {
 	type = "map";
-	objects: { type: string, position: Vec2 }[];
+	obstacles: { type: string, position: Vec2 }[];
 
-	constructor(objects: GameObject[]) {
-		this.objects = objects.map(object => ({ type: object.type, position: object.position }));
+	constructor(obstacles: Obstacle[]) {
+		this.obstacles = obstacles.map(obstacle => ({ type: obstacle.type, position: obstacle.position }));
 	}
 }
 

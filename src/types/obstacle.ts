@@ -1,71 +1,47 @@
-import { clamp, ID } from "../utils";
-import { CircleHitbox, Hitbox, Line, RectHitbox, Vec2 } from "./maths";
-import { GameObject } from "./objects";
-import { Weapon } from "./weapons";
-import { Fists } from "../store/weapons";
-import { MinEntity, MinInventory } from "./minimized";
+import { ID } from "../utils";
+import { Entity } from "./entity";
+import { Vec2, Hitbox, CircleHitbox, RectHitbox, CommonAngles, Line } from "./math";
+import { MinObstacle } from "./minimized";
 import { Animation, CollisionType } from "./misc";
-import { world } from "..";
+import { World } from "./terrain";
 
-export class Inventory {
-	holding: number;
-	weapons: Weapon[];
-	slots: number;
-
-	constructor(holding: number, slots: number, weapons?: Weapon[]) {
-		this.holding = holding;
-		this.slots = slots;
-		this.weapons = weapons || Array(slots);
-	}
-
-	minimize() {
-		return <MinInventory> { holding: this.weapons[this.holding].minimize() };
-	}
-}
-
-export const DEFAULT_EMPTY_INVENTORY = new Inventory(2, 4);
-DEFAULT_EMPTY_INVENTORY.weapons[2] = new Fists();
-
-export class Entity {
+export class Obstacle {
 	id: string;
 	type = "";
 	position: Vec2;
-	velocity: Vec2 = Vec2.ZERO;
-	direction: Vec2 = Vec2.ONE;
-	hitbox: Hitbox = CircleHitbox.ZERO;
+	direction: Vec2;
+	baseHitbox: Hitbox;
+	minHitbox: Hitbox;
+	hitbox: Hitbox;
+	noCollision = false;
 	vulnerable = true;
-	health = 100;
-	maxHealth = 100;
+	health: number;
+	maxHealth: number;
 	discardable = false;
 	despawn = false;
-	// Tells the client which animation is going on
 	animation: Animation = { name: "", duration: 0 };
 
-	constructor() {
+	constructor(world: World, baseHitbox: Hitbox, minHitbox: Hitbox, health: number, maxHealth: number) {
+		if (baseHitbox.type !== minHitbox.type) throw new Error("Hitboxes are not the same type!");
 		this.id = ID();
-		// Currently selects a random position to spawn. Will change in the future.
 		this.position = world.size.scale(Math.random(), Math.random());
+		this.direction = Vec2.ONE.addAngle(Math.random() * CommonAngles.TWO_PI);
+		this.baseHitbox = this.hitbox = baseHitbox;
+		this.minHitbox = minHitbox;
+		this.health = health;
+		this.maxHealth = maxHealth;
 	}
 
-	tick(_entities: Entity[], _objects: GameObject[]) {
-		// Add the velocity to the position, and cap it at map size.
-		this.position = this.position.addVec(this.velocity);
-		this.position = new Vec2(clamp(this.position.x, this.hitbox.comparable, world.size.x - this.hitbox.comparable), clamp(this.position.y, this.hitbox.comparable, world.size.y - this.hitbox.comparable));
-
-		if (this.animation.name) {
-			if (this.animation.duration > 0) this.animation.duration--;
-			else this.animation.name = "";
-		}
-
-		if (this.vulnerable && this.health <= 0) this.die();
+	damage(dmg: number) {
+		if (this.despawn || this.health <= 0 || !this.vulnerable) return;
+		this.health -= dmg;
+		if (this.health <= 0) this.die();
+		this.hitbox = this.baseHitbox.scaleAll(this.minHitbox.comparable / this.baseHitbox.comparable + (this.health / this.maxHealth) * (1 - this.minHitbox.comparable / this.baseHitbox.comparable));
 	}
 
-	setVelocity(velocity: Vec2) {
-		this.velocity = velocity;
-	}
-
-	setDirection(direction: Vec2) {
-		this.direction = direction.unit();
+	die() {
+		this.despawn = true;
+		this.health = 0;
 	}
 
 	// Hitbox collision check
@@ -156,25 +132,26 @@ export class Entity {
 		}
 	}
 
-	damage(dmg: number) {
-		if (!this.vulnerable) return;
-		this.health -= dmg;
+	// No implementation by default
+	onCollision(_thing: Entity | Obstacle) { }
+
+	tick(_entities: Entity[], _obstacles: Obstacle[]) {
+		if (this.vulnerable && this.health <= 0 && !this.despawn) this.die();
 	}
 
-	die() {
-		this.despawn = true;
-		this.health = 0;
+	rotateAround(pivot: Vec2, angle: number) {
+		this.direction = this.direction.addAngle(angle);
+		this.position = pivot.addVec(this.position.addVec(pivot.inverse()).addAngle(angle));
 	}
 
 	minimize() {
-		return <MinEntity> {
+		return <MinObstacle>{
 			type: this.type,
 			position: this.position.minimize(),
 			direction: this.direction.minimize(),
 			hitbox: this.hitbox.minimize(),
-			animation: this.animation,
 			despawn: this.despawn
-		}
+		};
 	}
 
 	private isLeft(a: Vec2, b: Vec2, c: Vec2) {
@@ -185,4 +162,3 @@ export class Entity {
 		return (this.isLeft(a, b, p) > 0 && this.isLeft(b, c, p) > 0 && this.isLeft(c, d, p) > 0 && this.isLeft(d, a, p) > 0);
 	}
 }
-

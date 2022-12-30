@@ -1,8 +1,8 @@
-import { CircleHitbox } from "../../types/maths";
-import { GameObject } from "../../types/objects";
+import { CircleHitbox } from "../../types/math";
+import { Obstacle } from "../../types/obstacle";
 import { World } from "../../types/terrain";
 
-export default class Bush extends GameObject {
+export default class Bush extends Obstacle {
 	type = "bush";
 	noCollision = true;
 

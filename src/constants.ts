@@ -1,4 +1,4 @@
-import { CommonAngles, Vec2 } from "./types/maths";
+import { CommonAngles, Vec2 } from "./types/math";
 import * as fs from "fs";
 
 export const MAP_SIZE = [200, 200];

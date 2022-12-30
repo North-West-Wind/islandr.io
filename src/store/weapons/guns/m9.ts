@@ -1,4 +1,4 @@
-import { GunWeapon } from "../../../types/weapons";
+import { GunWeapon } from "../../../types/weapon";
 import { GunColor } from "../../../types/misc";
 
 export default class M9 extends GunWeapon {

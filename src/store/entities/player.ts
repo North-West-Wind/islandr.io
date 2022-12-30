@@ -1,9 +1,9 @@
 import { PUSH_THRESHOLD } from "../../constants";
-import { DEFAULT_EMPTY_INVENTORY, Entity, Inventory } from "../../types/entities";
-import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/maths";
+import { DEFAULT_EMPTY_INVENTORY, Entity, Inventory } from "../../types/entity";
+import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/math";
 import { CollisionType } from "../../types/misc";
-import { GameObject } from "../../types/objects";
-import { GunWeapon, WeaponType } from "../../types/weapons";
+import { Obstacle } from "../../types/obstacle";
+import { GunWeapon, WeaponType } from "../../types/weapon";
 
 export default class Player extends Entity {
 	type = "player";
@@ -27,7 +27,7 @@ export default class Player extends Entity {
 		super.setVelocity(velocity.scaleAll(this.boost));
 	}
 
-	tick(entities: Entity[], objects: GameObject[]) {
+	tick(entities: Entity[], obstacles: Obstacle[]) {
 		// When the player dies, don't tick anything
 		if (this.despawn) return;
 		const oriVel = this.velocity;
@@ -35,25 +35,25 @@ export default class Player extends Entity {
 		this.velocity = this.velocity.scaleAll(this.boost);
 		const weapon = this.inventory.weapons[this.inventory.holding];
 		if (weapon.type === WeaponType.GUN) this.velocity = this.velocity.scaleAll((<GunWeapon>weapon).weight);
-		super.tick(entities, objects);
+		super.tick(entities, obstacles);
 		// Restore the original velocity
 		if (this.velocity.equals(oriVel.scaleAll(this.boost))) this.velocity = oriVel;
 		// Only attack when trying + no animation is playing
 		if (this.tryAttacking && this.animation.duration <= 0) {
 			if (weapon) {
-				weapon.attack(this, entities, objects);
+				weapon.attack(this, entities, obstacles);
 				if (!weapon.continuous) this.tryAttacking = false;
 			}
 		}
-		for (const object of objects) {
-			const collisionType = object.collided(this.hitbox, this.position, this.direction);
+		for (const obstacle of obstacles) {
+			const collisionType = obstacle.collided(this.hitbox, this.position, this.direction);
 			if (collisionType) {
-				object.onCollision(this);
-				if (!object.noCollision) {
-					if (collisionType == CollisionType.CIRCLE_CIRCLE) this.handleCircleCircleCollision(object);
-					else if (collisionType == CollisionType.CIRCLE_RECT_CENTER_INSIDE) this.handleCircleRectCenterCollision(object);
-					else if (collisionType == CollisionType.CIRCLE_RECT_POINT_INSIDE) this.handleCircleRectPointCollision(object);
-					else if (collisionType == CollisionType.CIRCLE_RECT_LINE_INSIDE) this.handleCircleRectLineCollision(object);
+				obstacle.onCollision(this);
+				if (!obstacle.noCollision) {
+					if (collisionType == CollisionType.CIRCLE_CIRCLE) this.handleCircleCircleCollision(obstacle);
+					else if (collisionType == CollisionType.CIRCLE_RECT_CENTER_INSIDE) this.handleCircleRectCenterCollision(obstacle);
+					else if (collisionType == CollisionType.CIRCLE_RECT_POINT_INSIDE) this.handleCircleRectPointCollision(obstacle);
+					else if (collisionType == CollisionType.CIRCLE_RECT_LINE_INSIDE) this.handleCircleRectLineCollision(obstacle);
 				}
 			}
 		}
@@ -64,17 +64,17 @@ export default class Player extends Entity {
 		return Object.assign(min, { username: this.username, boost: this.boost, inventory: this.inventory.minimize() })
 	}
 
-	private handleCircleCircleCollision(object: GameObject) {
-		const relative = this.position.addVec(object.position.inverse());
-		this.position = object.position.addVec(relative.scaleAll((object.hitbox.comparable + this.hitbox.comparable) / relative.magnitude()));
+	private handleCircleCircleCollision(obstacle: Obstacle) {
+		const relative = this.position.addVec(obstacle.position.inverse());
+		this.position = obstacle.position.addVec(relative.scaleAll((obstacle.hitbox.comparable + this.hitbox.comparable) / relative.magnitude()));
 	}
 
-	private handleCircleRectCenterCollision(object: GameObject) {
+	private handleCircleRectCenterCollision(obstacle: Obstacle) {
 		const rectVecs = [
-			new Vec2((<RectHitbox>object.hitbox).width, 0).addAngle(object.direction.angle()),
-			new Vec2(0, (<RectHitbox>object.hitbox).height).addAngle(object.direction.angle())
+			new Vec2((<RectHitbox>obstacle.hitbox).width, 0).addAngle(obstacle.direction.angle()),
+			new Vec2(0, (<RectHitbox>obstacle.hitbox).height).addAngle(obstacle.direction.angle())
 		];
-		const centerToCenter = this.position.addVec(object.position.inverse());
+		const centerToCenter = this.position.addVec(obstacle.position.inverse());
 		/* In the order of right up left down
 		 * Think of the rectangle as vectors
 		 *       up vec0
@@ -102,13 +102,13 @@ export default class Player extends Entity {
 		this.position = this.position.addVec(distances[shortestIndex]).addVec(distances[shortestIndex].unit().scaleAll(this.hitbox.comparable));
 	}
 
-	private handleCircleRectPointCollision(object: GameObject) {
-		const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height / 2).addAngle(object.direction.angle()));
+	private handleCircleRectPointCollision(obstacle: Obstacle) {
+		const rectStartingPoint = obstacle.position.addVec(new Vec2(-(<RectHitbox>obstacle.hitbox).width / 2, -(<RectHitbox>obstacle.hitbox).height / 2).addAngle(obstacle.direction.angle()));
 		const rectPoints = [
 			rectStartingPoint,
-			rectStartingPoint.addVec(new Vec2((<RectHitbox>object.hitbox).width, 0).addAngle(object.direction.angle())),
-			rectStartingPoint.addVec(new Vec2((<RectHitbox>object.hitbox).width, (<RectHitbox>object.hitbox).height).addAngle(object.direction.angle())),
-			rectStartingPoint.addVec(new Vec2(0, (<RectHitbox>object.hitbox).height).addAngle(object.direction.angle()))
+			rectStartingPoint.addVec(new Vec2((<RectHitbox>obstacle.hitbox).width, 0).addAngle(obstacle.direction.angle())),
+			rectStartingPoint.addVec(new Vec2((<RectHitbox>obstacle.hitbox).width, (<RectHitbox>obstacle.hitbox).height).addAngle(obstacle.direction.angle())),
+			rectStartingPoint.addVec(new Vec2(0, (<RectHitbox>obstacle.hitbox).height).addAngle(obstacle.direction.angle()))
 		];
 		const intersections = Array(rectPoints.length).fill(false);
 		var counts = 0
@@ -117,7 +117,7 @@ export default class Player extends Entity {
 				intersections[ii] = true;
 				counts++;
 			}
-		if (counts == 2) return this.handleCircleRectLineCollision(object);
+		if (counts == 2) return this.handleCircleRectLineCollision(obstacle);
 		var sum = 0;
 		for (let ii = 0; ii < intersections.length; ii++)
 			if (intersections[ii])
@@ -139,13 +139,13 @@ export default class Player extends Entity {
 		}
 	}
 
-	private handleCircleRectLineCollision(object: GameObject) {
-		const rectStartingPoint = object.position.addVec(new Vec2(-(<RectHitbox>object.hitbox).width / 2, -(<RectHitbox>object.hitbox).height / 2).addAngle(object.direction.angle()));
+	private handleCircleRectLineCollision(obstacle: Obstacle) {
+		const rectStartingPoint = obstacle.position.addVec(new Vec2(-(<RectHitbox>obstacle.hitbox).width / 2, -(<RectHitbox>obstacle.hitbox).height / 2).addAngle(obstacle.direction.angle()));
 		const rectPoints = [
 			rectStartingPoint,
-			rectStartingPoint.addVec(new Vec2((<RectHitbox>object.hitbox).width, 0).addAngle(object.direction.angle())),
-			rectStartingPoint.addVec(new Vec2((<RectHitbox>object.hitbox).width, (<RectHitbox>object.hitbox).height).addAngle(object.direction.angle())),
-			rectStartingPoint.addVec(new Vec2(0, (<RectHitbox>object.hitbox).height).addAngle(object.direction.angle()))
+			rectStartingPoint.addVec(new Vec2((<RectHitbox>obstacle.hitbox).width, 0).addAngle(obstacle.direction.angle())),
+			rectStartingPoint.addVec(new Vec2((<RectHitbox>obstacle.hitbox).width, (<RectHitbox>obstacle.hitbox).height).addAngle(obstacle.direction.angle())),
+			rectStartingPoint.addVec(new Vec2(0, (<RectHitbox>obstacle.hitbox).height).addAngle(obstacle.direction.angle()))
 		];
 		const distances: number[] = Array(rectPoints.length);
 		const vecs: Vec2[] = Array(rectPoints.length);

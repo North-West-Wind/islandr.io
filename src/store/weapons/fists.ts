@@ -1,7 +1,7 @@
-import { Entity } from "../../types/entities";
-import { RectHitbox, Vec2 } from "../../types/maths";
-import { GameObject } from "../../types/objects";
-import { MeleeWeapon } from "../../types/weapons";
+import { Entity } from "../../types/entity";
+import { RectHitbox, Vec2 } from "../../types/math";
+import { Obstacle } from "../../types/obstacle";
+import { MeleeWeapon } from "../../types/weapon";
 
 export default class Fists extends MeleeWeapon {
 	id = "fists";
@@ -15,11 +15,11 @@ export default class Fists extends MeleeWeapon {
 	rotation = Vec2.ONE;
 	delay = 25;
 	
-	attack(attacker: Entity, entities: Entity[], objects: GameObject[]) {
+	attack(attacker: Entity, entities: Entity[], obstacles: Obstacle[]) {
 		const index = Math.floor(Math.random() * this.animations.length);
 		attacker.animation.name = this.animations[index];
 		attacker.animation.duration = this.durations[index];
 
-		this.damageThing(attacker, entities, objects);
+		this.damageThing(attacker, entities, obstacles);
 	}
 }

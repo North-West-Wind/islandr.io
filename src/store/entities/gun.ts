@@ -1,9 +1,9 @@
 // Note: This is the gun item
 
-import { Entity } from "../../types/entities";
-import { CircleHitbox } from "../../types/maths";
+import { Entity } from "../../types/entity";
+import { CircleHitbox } from "../../types/math";
 import { GunColor } from "../../types/misc";
-import { GameObject } from "../../types/objects";
+import { Obstacle } from "../../types/obstacle";
 
 export default class Gun extends Entity {
 	type = "gun";
@@ -18,8 +18,8 @@ export default class Gun extends Entity {
 		this.color = color;
 	}
 
-	tick(entities: Entity[], objects: GameObject[]) {
-		super.tick(entities, objects);
+	tick(entities: Entity[], obstacles: Obstacle[]) {
+		super.tick(entities, obstacles);
 		this.velocity = this.velocity.scaleAll(1 - this.friction);
 	}
 

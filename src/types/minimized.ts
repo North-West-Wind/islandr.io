@@ -31,7 +31,7 @@ export interface MinInventory {
 	holding: MinWeapon;
 }
 
-export interface MinGameObject {
+export interface MinObstacle {
 	type: string;
 	position: MinVec2;
 	direction: MinVec2;

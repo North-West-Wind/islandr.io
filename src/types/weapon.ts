@@ -3,10 +3,10 @@ import { TICKS_PER_SECOND } from "../constants";
 import { Bullet } from "../store/entities";
 import { GunColor } from "./misc";
 import { clamp } from "../utils";
-import { Entity } from "./entities";
-import { CommonAngles, Hitbox, Vec2 } from "./maths";
+import { Entity } from "./entity";
+import { CommonAngles, Hitbox, Vec2 } from "./math";
 import { MinWeapon } from "./minimized";
-import { GameObject } from "./objects";
+import { Obstacle } from "./obstacle";
 
 export enum WeaponType {
 	MELEE = "melee",
@@ -27,7 +27,7 @@ export abstract class Weapon {
 	distance!: Vec2;
 	rotation!: Vec2;
 
-	abstract attack(attacker: Entity, entities: Entity[], objects: GameObject[]): void;
+	abstract attack(attacker: Entity, entities: Entity[], obstacles: Obstacle[]): void;
 
 	minimize() {
 		return <MinWeapon> { id: this.id, name: this.name };
@@ -41,11 +41,11 @@ export abstract class MeleeWeapon extends Weapon {
 	single = true;
 
 	// Do damage to thing. Delay handled.
-	damageThing(attacker: Entity, entities: Entity[], objects: GameObject[]) {
+	damageThing(attacker: Entity, entities: Entity[], obstacles: Obstacle[]) {
 		setTimeout(() => {
 			if (attacker.despawn) return;
-			var combined: (Entity | GameObject)[] = [];
-			combined = combined.concat(entities, objects);
+			var combined: (Entity | Obstacle)[] = [];
+			combined = combined.concat(entities, obstacles);
 			const angles = this.rotation.angle() + attacker.direction.angle();
 			const position = attacker.position.addVec(this.distance.addAngle(angles));
 
@@ -74,7 +74,7 @@ export abstract class GunWeapon extends Weapon {
 	// For client side animation, calculated in in-game units
 	recoil!: number;
 
-	attack(attacker: Entity, _entities: Entity[], _objects: GameObject[]) {
+	attack(attacker: Entity, _entities: Entity[], _obstacles: Obstacle[]) {
 		this.shoot(attacker);
 	}
 

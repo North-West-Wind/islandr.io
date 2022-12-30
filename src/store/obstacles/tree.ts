@@ -1,8 +1,8 @@
-import { CircleHitbox } from "../../types/maths";
-import { GameObject } from "../../types/objects";
+import { CircleHitbox } from "../../types/math";
+import { Obstacle } from "../../types/obstacle";
 import { World } from "../../types/terrain";
 
-export default class Tree extends GameObject {
+export default class Tree extends Obstacle {
 	type = "tree";
 
 	constructor(world: World) {

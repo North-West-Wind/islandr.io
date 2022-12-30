@@ -1,11 +1,11 @@
 import { world } from "../..";
-import { CommonAngles, RectHitbox, Vec2 } from "../../types/maths";
-import { GameObject } from "../../types/objects";
+import { CommonAngles, RectHitbox, Vec2 } from "../../types/math";
+import { Obstacle } from "../../types/obstacle";
 import { GunColor } from "../../types/misc";
 import { Gun } from "../entities";
 import { World } from "../../types/terrain";
 
-export default class Crate extends GameObject {
+export default class Crate extends Obstacle {
 	type = "crate";
 
 	constructor(world: World) {

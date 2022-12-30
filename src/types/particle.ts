@@ -1,4 +1,4 @@
-import { Vec2 } from "./maths";
+import { Vec2 } from "./math";
 import { MinParticle } from "./minimized";
 
 export class Particle {

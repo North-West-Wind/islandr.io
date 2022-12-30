@@ -1,14 +1,14 @@
 import { Tree, Bush, Crate } from "../store/objects";
-import { Entity } from "./entities";
-import { Vec2 } from "./maths";
-import { GameObject } from "./objects";
-import { MapPacket } from "./packets";
+import { Entity } from "./entity";
+import { Vec2 } from "./math";
+import { Obstacle } from "./obstacle";
+import { MapPacket } from "./packet";
 
 export class World {
 	ticks = 0;
 	size: Vec2;
 	entities: Entity[] = [];
-	obstacles: GameObject[] = [];
+	obstacles: Obstacle[] = [];
 
 	constructor(size: Vec2) {
 		// Set the size of map
@@ -22,7 +22,7 @@ export class World {
 
 	tick() {
 		this.ticks++;
-		// Tick every entity and object.
+		// Tick every entity and obstacle.
 		let ii: number;
 		var removable: number[] = [];
 		for (ii = 0; ii < this.entities.length; ii++) {
@@ -38,7 +38,7 @@ export class World {
 		for (ii = 0; ii < this.obstacles.length; ii++) {
 			const obstacle = this.obstacles[ii];
 			obstacle.tick(this.entities, this.obstacles);
-			// Mark object for removal
+			// Mark obstacle for removal
 			if (obstacle.despawn && obstacle.discardable) removable.push(ii);
 		}
 		// Remove all discardable obstacles

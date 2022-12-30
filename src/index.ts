@@ -1,11 +1,11 @@
 import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
-import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket } from "./types/packets";
+import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket } from "./types/packet";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
-import { Vec2 } from "./types/maths";
+import { Vec2 } from "./types/math";
 import { Player } from "./store/entities";
-import { Particle } from "./types/particles";
+import { Particle } from "./types/particle";
 import { World } from "./types/terrain";
 
 export var ticksElapsed = 0;

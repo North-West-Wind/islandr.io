@@ -1,18 +1,18 @@
 import { addParticles } from "../..";
-import { Entity } from "../../types/entities";
-import { CircleHitbox, Line, Vec2 } from "../../types/maths";
-import { GameObject } from "../../types/objects";
-import { Particle } from "../../types/particles";
+import { Entity } from "../../types/entity";
+import { CircleHitbox, Line, Vec2 } from "../../types/math";
+import { Obstacle } from "../../types/obstacle";
+import { Particle } from "../../types/particle";
 
 export default class Bullet extends Entity {
 	type = "bullet";
 	hitbox = new CircleHitbox(0.1);
 	discardable = true;
-	shooter: Entity | GameObject;
+	shooter: Entity | Obstacle;
 	dmg: number;
 	despawning = false;
 
-	constructor(shooter: Entity | GameObject, dmg: number, velocity: Vec2, ticks: number) {
+	constructor(shooter: Entity | Obstacle, dmg: number, velocity: Vec2, ticks: number) {
 		super();
 		this.shooter = shooter;
 		this.dmg = dmg;
@@ -21,10 +21,10 @@ export default class Bullet extends Entity {
 		this.vulnerable = false;
 	}
 
-	tick(entities: Entity[], objects: GameObject[]) {
-		super.tick(entities, objects);
-		var combined: (Entity | GameObject)[] = [];
-		combined = combined.concat(entities, objects);
+	tick(entities: Entity[], obstacles: Obstacle[]) {
+		super.tick(entities, obstacles);
+		var combined: (Entity | Obstacle)[] = [];
+		combined = combined.concat(entities, obstacles);
 		if (!this.despawn)
 			for (const thing of combined)
 				if (thing.collided(this.hitbox, this.position, this.direction)) {
