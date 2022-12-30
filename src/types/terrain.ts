@@ -1,4 +1,4 @@
-import { Tree, Bush, Crate } from "../store/objects";
+import { Tree, Bush, Crate } from "../store/obstacles";
 import { Entity } from "./entity";
 import { Vec2 } from "./math";
 import { Obstacle } from "./obstacle";
