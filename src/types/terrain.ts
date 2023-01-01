@@ -1,6 +1,6 @@
-import { Tree, Bush, Crate } from "../store/obstacles";
 import { Entity } from "./entity";
 import { Vec2 } from "./math";
+import { MinTerrain } from "./minimized";
 import { Obstacle } from "./obstacle";
 
 export class World {
@@ -9,7 +9,7 @@ export class World {
 	entities: Entity[] = [];
 	obstacles: Obstacle[] = [];
 	defaultTerrain: Terrain;
-	terrains: Terrain[] = [];
+	terrains: Terrain[];
 
 	constructor(size: Vec2, defaultTerrain: Terrain, ...terrains: Terrain[]) {
 		// Set the size of map
@@ -18,11 +18,6 @@ export class World {
 		// Set the terrains
 		this.defaultTerrain = defaultTerrain;
 		this.terrains = terrains;
-
-		// Add random obstacles
-		for (let ii = 0; ii < 50; ii++) this.obstacles.push(new Tree(this));
-		for (let ii = 0; ii < 50; ii++) this.obstacles.push(new Bush(this));
-		for (let ii = 0; ii < 50; ii++) this.obstacles.push(new Crate(this));
 	}
 
 	terrainAtPos(position: Vec2) {
@@ -82,6 +77,10 @@ export class Terrain {
 		this.damage = damage;
 		this.interval = interval;
 	}
+
+	minimize() {
+		return <MinTerrain> { id: this.id, type: this.type };
+	}
 }
 
 export class DotTerrain extends Terrain {
@@ -94,5 +93,9 @@ export class DotTerrain extends Terrain {
 		super(speed, damage, interval);
 		this.position = position;
 		this.radius = radius;
+	}
+
+	minimize() {
+		return Object.assign(super.minimize(), { position: this.position, radius: this.radius });
 	}
 }

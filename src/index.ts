@@ -7,7 +7,8 @@ import { Vec2 } from "./types/math";
 import { Player } from "./store/entities";
 import { Particle } from "./types/particle";
 import { World } from "./types/terrain";
-import { Plain } from "./store/terrains";
+import { Plain, Pond } from "./store/terrains";
+import { Tree, Bush, Crate } from "./store/obstacles";
 
 export var ticksElapsed = 0;
 
@@ -18,6 +19,18 @@ const sockets = new Map<string, ws.WebSocket>();
 
 // Initialize the map
 export const world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]), new Plain());
+
+// Start of testing section
+
+// Let's add some ponds
+for (let ii = 0; ii < 5; ii++) world.terrains.push(new Pond());
+
+// Add random obstacles
+for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Tree());
+for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Bush());
+for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Crate());
+
+// End of testing section
 
 server.on("connection", async socket => {
 	console.log("Received a connection request");
@@ -57,7 +70,7 @@ server.on("connection", async socket => {
 	world.entities.push(player);
 
 	// Send the player the entire map
-	socket.send(encode(new MapPacket(world.obstacles)).buffer);
+	socket.send(encode(new MapPacket(world.obstacles, world.terrains)).buffer);
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {

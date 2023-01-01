@@ -39,6 +39,11 @@ export interface MinObstacle {
 	despawn: boolean;
 }
 
+export interface MinMinObstacle {
+	type: string;
+	position: MinVec2;
+}
+
 export interface MinWeapon {
 	id: string;
 	name: string;
@@ -47,4 +52,9 @@ export interface MinWeapon {
 export interface MinParticle {
 	id: string;
 	position: MinVec2;
+}
+
+export interface MinTerrain {
+	id: string;
+	type: string;
 }

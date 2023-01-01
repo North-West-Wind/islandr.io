@@ -13,3 +13,7 @@ export function clamp(val: number, min: number, max: number) {
     if (val > max) return max;
     return val;
 }
+// Random between numbers
+export function randomBetween(min: number, max: number) {
+    return (Math.random() * (max - min)) + min;
+}

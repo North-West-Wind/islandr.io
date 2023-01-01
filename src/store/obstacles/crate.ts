@@ -3,16 +3,15 @@ import { CommonAngles, RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { GunColor } from "../../types/misc";
 import { Gun } from "../entities";
-import { World } from "../../types/terrain";
 
 export default class Crate extends Obstacle {
 	type = "crate";
 
-	constructor(world: World) {
+	constructor() {
 		const hitbox = new RectHitbox(4, 4);
 		super(world, hitbox, hitbox.scaleAll(0.75), 80, 80);
 		this.direction = Vec2.ONE;
-		while (world.obstacles.find(obstacle => obstacle.collided(this.hitbox, this.position, this.direction))) this.position = world.size.scale(Math.random(), Math.random());
+		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this.hitbox, this.position, this.direction))) this.position = world.size.scale(Math.random(), Math.random());
 	}
 
 	die() {

@@ -2,7 +2,7 @@ import { BASE_RADIUS } from "../constants";
 import { Player } from "../store/entities";
 import { Entity } from "./entity";
 import { Vec2 } from "./math";
-import { MinEntity, MinObstacle, MinParticle } from "./minimized";
+import { MinEntity, MinMinObstacle, MinObstacle, MinParticle, MinTerrain } from "./minimized";
 import { MovementDirection } from "./misc";
 import { Obstacle } from "./obstacle";
 import { Particle } from "./particle";
@@ -82,10 +82,12 @@ export class GamePacket implements IPacket {
 
 export class MapPacket implements IPacket {
 	type = "map";
-	obstacles: { type: string, position: Vec2 }[];
+	obstacles: MinMinObstacle[];
+	terrains: MinTerrain[]
 
-	constructor(obstacles: Obstacle[]) {
+	constructor(obstacles: Obstacle[], terrains: Terrain[]) {
 		this.obstacles = obstacles.map(obstacle => ({ type: obstacle.type, position: obstacle.position }));
+		this.terrains = terrains.map(terrain => terrain.minimize());
 	}
 }
 
