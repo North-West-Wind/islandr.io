@@ -1,12 +1,13 @@
 import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
-import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket } from "./types/packet";
+import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket } from "./types/packet";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/math";
 import { Player } from "./store/entities";
 import { Particle } from "./types/particle";
 import { World } from "./types/terrain";
+import { Plain } from "./store/terrains";
 
 export var ticksElapsed = 0;
 
@@ -16,7 +17,7 @@ server.once("listening", () => console.log(`WebSocket Server listening at port $
 const sockets = new Map<string, ws.WebSocket>();
 
 // Initialize the map
-export const world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]));
+export const world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]), new Plain());
 
 server.on("connection", async socket => {
 	console.log("Received a connection request");
@@ -38,7 +39,7 @@ server.on("connection", async socket => {
 	var username = "";
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
-		socket.send(encode({ id, size: Object.values(world.size.minimize()) }).buffer);
+		socket.send(encode(new AckPacket(id, world.size, world.defaultTerrain)).buffer);
 		socket.once("message", (msg: ArrayBuffer) => {
 			const decoded = decode(new Uint8Array(msg));
 			if (decoded.id == id && decoded.username) {
@@ -56,7 +57,7 @@ server.on("connection", async socket => {
 	world.entities.push(player);
 
 	// Send the player the entire map
-	socket.send(encode(world.packetize()).buffer);
+	socket.send(encode(new MapPacket(world.obstacles)).buffer);
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {

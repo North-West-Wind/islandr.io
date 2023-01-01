@@ -36,6 +36,9 @@ export class Entity {
 	vulnerable = true;
 	health = 100;
 	maxHealth = 100;
+	// If airborne, no effect from terrain
+	airborne = false;
+	// If discardable, will be removed from memory when despawn
 	discardable = false;
 	despawn = false;
 	// Tells the client which animation is going on
@@ -49,14 +52,24 @@ export class Entity {
 
 	tick(_entities: Entity[], _obstacles: Obstacle[]) {
 		// Add the velocity to the position, and cap it at map size.
-		this.position = this.position.addVec(this.velocity);
+		if (this.airborne)
+			this.position = this.position.addVec(this.velocity);
+		else {
+			const terrain = world.terrainAtPos(this.position);
+			this.position = this.position.addVec(this.velocity.scaleAll(terrain.speed));
+			// Also handle terrain damage
+			if (terrain.damage != 0 && !(world.ticks % terrain.interval))
+				this.damage(terrain.damage);
+		}
 		this.position = new Vec2(clamp(this.position.x, this.hitbox.comparable, world.size.x - this.hitbox.comparable), clamp(this.position.y, this.hitbox.comparable, world.size.y - this.hitbox.comparable));
 
+		// Manage the animation timer
 		if (this.animation.name) {
 			if (this.animation.duration > 0) this.animation.duration--;
 			else this.animation.name = "";
 		}
 
+		// Check health and maybe call death
 		if (this.vulnerable && this.health <= 0) this.die();
 	}
 

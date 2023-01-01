@@ -6,6 +6,7 @@ import { MinEntity, MinObstacle, MinParticle } from "./minimized";
 import { MovementDirection } from "./misc";
 import { Obstacle } from "./obstacle";
 import { Particle } from "./particle";
+import { Terrain } from "./terrain";
 
 interface IPacket {
 	type: string;
@@ -52,6 +53,19 @@ export class MouseMovePacket implements IPacket {
 }
 
 export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket;
+
+export class AckPacket implements IPacket {
+	type = "ack";
+	id: string;
+	size: number[];
+	terrain: string;
+
+	constructor(id: string, size: Vec2, terrain: Terrain) {
+		this.id = id;
+		this.size = Object.values(size);
+		this.terrain = terrain.id;
+	}
+}
 
 export class GamePacket implements IPacket {
 	type = "game";
