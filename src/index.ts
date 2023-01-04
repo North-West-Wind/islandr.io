@@ -7,7 +7,7 @@ import { Vec2 } from "./types/math";
 import { Player } from "./store/entities";
 import { Particle } from "./types/particle";
 import { World } from "./types/terrain";
-import { Plain, Pond } from "./store/terrains";
+import { Plain, Pond, River } from "./store/terrains";
 import { Tree, Bush, Crate } from "./store/obstacles";
 
 export var ticksElapsed = 0;
@@ -24,6 +24,8 @@ export const world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]), new Plain());
 
 // Let's add some ponds
 for (let ii = 0; ii < 5; ii++) world.terrains.push(new Pond());
+// And a river
+world.terrains.push(new River());
 
 // Add random obstacles
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Tree());

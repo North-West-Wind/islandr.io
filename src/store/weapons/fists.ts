@@ -12,7 +12,7 @@ export default class Fists extends MeleeWeapon {
 	damage = 24;
 	hitbox = new RectHitbox(1, 1);
 	distance = new Vec2(1.5, 0);
-	rotation = Vec2.ONE;
+	rotation = Vec2.UNIT_X;
 	delay = 25;
 	
 	attack(attacker: Entity, entities: Entity[], obstacles: Obstacle[]) {

@@ -17,3 +17,9 @@ export function clamp(val: number, min: number, max: number) {
 export function randomBetween(min: number, max: number) {
     return (Math.random() * (max - min)) + min;
 }
+export function randomBoolean() {
+    return !!Math.floor(Math.random() * 2);
+}
+export function toRadians(degree: number) {
+    return degree * Math.PI / 180;
+}

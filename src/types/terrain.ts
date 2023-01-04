@@ -1,5 +1,5 @@
 import { Entity } from "./entity";
-import { Vec2 } from "./math";
+import { Line, Vec2 } from "./math";
 import { MinTerrain } from "./minimized";
 import { Obstacle } from "./obstacle";
 
@@ -24,12 +24,7 @@ export class World {
 		// Loop from last to first
 		for (let ii = this.terrains.length - 1; ii >= 0; ii--) {
 			const terrain = this.terrains[ii];
-			switch (terrain.type) {
-				case "dot":
-					if (position.distanceSqrTo((<DotTerrain> terrain).position) <= Math.pow((<DotTerrain> terrain).radius, 2))
-						return terrain;
-					break;
-			}
+			if (terrain.inside(position)) return terrain;
 		}
 		return this.defaultTerrain;
 	}
@@ -71,6 +66,7 @@ export class Terrain {
 	interval: number;
 	// If the terrain fills the map
 	full = false;
+	border = 0;
 
 	constructor(speed: number, damage: number, interval: number) {
 		this.speed = speed;
@@ -78,8 +74,12 @@ export class Terrain {
 		this.interval = interval;
 	}
 
+	inside(_position: Vec2) {
+		return this.full;
+	}
+
 	minimize() {
-		return <MinTerrain> { id: this.id, type: this.type };
+		return <MinTerrain> { id: this.id, border: this.border };
 	}
 }
 
@@ -95,7 +95,60 @@ export class DotTerrain extends Terrain {
 		this.radius = radius;
 	}
 
+	inside(position: Vec2) {
+		return position.distanceSqrTo(this.position) <= this.radius * this.radius;
+	}
+
 	minimize() {
 		return Object.assign(super.minimize(), { position: this.position, radius: this.radius });
+	}
+}
+
+export class LineTerrain extends Terrain {
+	type = "line";
+	// The line and its range
+	line: Line;
+	range: number;
+	// The boundary lines. Position does not matter so Vec2 is enough.
+	boundary: { start: Vec2, end: Vec2 };
+
+	constructor(speed: number, damage: number, interval: number, line: Line, range: number) {
+		super(speed, damage, interval);
+		line.segment = false;
+		this.line = line;
+		this.range = range;
+
+		// Default boundary: perpendicular to the line
+		const pab = this.line.toVec().perpendicular();
+		this.boundary = { start: pab, end: pab };
+	}
+
+	inside(position: Vec2) {
+		if (this.line.distanceSqrTo(position) > this.range * this.range) return false;
+		const startLine = new Line(this.line.a, this.line.a.addVec(this.boundary.start.inverse()));
+		const endLine = new Line(this.line.b, this.line.b.addVec(this.boundary.end.inverse()));
+		return startLine.rightTo(position) && endLine.leftTo(position);
+	}
+
+	minimize() {
+		return Object.assign(super.minimize(), { line: this.line.minimize(), range: this.range, boundary: [this.boundary.start.minimize(), this.boundary.end.minimize()] });
+	}
+}
+
+// Multiple lines
+export class PiecewiseTerrain extends Terrain {
+	type = "piecewise";
+	// All the lines
+	lines: LineTerrain[] = [];
+
+	inside(position: Vec2) {
+		for (const terrain of this.lines) {
+			if (terrain.inside(position)) return true;
+		}
+		return false;
+	}
+
+	minimize() {
+		return Object.assign(super.minimize(), { lines: this.lines.map(l => l.minimize()) });
 	}
 }

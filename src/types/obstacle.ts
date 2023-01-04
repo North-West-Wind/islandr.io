@@ -25,7 +25,7 @@ export class Obstacle {
 		if (baseHitbox.type !== minHitbox.type) throw new Error("Hitboxes are not the same type!");
 		this.id = ID();
 		this.position = world.size.scale(Math.random(), Math.random());
-		this.direction = Vec2.ONE.addAngle(Math.random() * CommonAngles.TWO_PI);
+		this.direction = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI);
 		this.baseHitbox = this.hitbox = baseHitbox;
 		this.minHitbox = minHitbox;
 		this.health = health;

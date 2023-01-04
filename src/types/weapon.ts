@@ -50,7 +50,7 @@ export abstract class MeleeWeapon extends Weapon {
 			const position = attacker.position.addVec(this.distance.addAngle(angles));
 
 			for (const thing of combined)
-				if (thing.collided(this.hitbox, position, Vec2.ONE.addAngle(angles)) && thing.id != attacker.id) {
+				if (thing.collided(this.hitbox, position, Vec2.UNIT_X.addAngle(angles)) && thing.id != attacker.id) {
 					thing.damage(this.damage);
 					if (this.single) break;
 				}
@@ -85,7 +85,7 @@ export abstract class GunWeapon extends Weapon {
 				var angles = this.rotation.angle() + attacker.direction.angle();
 				angles += CommonAngles.PI_TWO * (Math.random() * (1 - clamp(this.accuracy - this.inaccuracy, 0, 1))) - CommonAngles.PI_FOUR;
 				const position = attacker.position.addVec(this.distance.addAngle(angles));
-				const bullet = new Bullet(attacker, this.damage, Vec2.ONE.addAngle(angles).scaleAll(this.speed), this.ticks);
+				const bullet = new Bullet(attacker, this.damage, Vec2.UNIT_X.addAngle(angles).scaleAll(this.speed), this.ticks);
 				bullet.position = position;
 				world.entities.push(bullet);
 			}

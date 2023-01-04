@@ -1,9 +1,10 @@
-import { MinCircleHitbox, MinHitbox, MinRectHitbox, MinVec2 } from "./minimized";
+import { MinCircleHitbox, MinHitbox, MinLine, MinRectHitbox, MinVec2 } from "./minimized";
 
 // Calculus paid off!
 export class Vec2 {
 	static readonly ZERO = new Vec2(0, 0);
-	static readonly ONE = new Vec2(1, 0);
+	static readonly UNIT_X = new Vec2(1, 0);
+	static readonly UNIT_Y = new Vec2(0, 1);
 
 	readonly x: number;
 	readonly y: number;
@@ -98,19 +99,27 @@ export class Vec2 {
 }
 
 export class Line {
-	readonly a: Vec2;
-	readonly b: Vec2;
-
-	constructor(a: Vec2, b: Vec2) {
-		this.a = a;
-		this.b = b;
+	static fromPointSlope(p: Vec2, m: number) {
+		const c = p.y - p.x * m;
+		const b = new Vec2(p.x + 1, (p.x + 1) * m + c);
+		return new Line(p, b, false);
 	}
 
-	passthrough(point: Vec2) {
-		return point.x <= Math.max(this.a.x, this.b.x)
-			&& point.x <= Math.min(this.a.x, this.b.x)
-			&& (point.y <= Math.max(this.a.y, this.b.y)
-				&& point.y <= Math.min(this.a.y, this.b.y));
+	readonly a: Vec2;
+	readonly b: Vec2;
+	segment: boolean;
+
+	constructor(a: Vec2, b: Vec2, segment?: boolean) {
+		// Making sure b is always right of a
+		if (a.x < b.x) {
+			this.a = a;
+			this.b = b;
+		} else {
+			this.a = b;
+			this.b = a;
+		}
+		if (segment === undefined) this.segment = true;
+		else this.segment = segment;
 	}
 
 	direction(point: Vec2) {
@@ -118,20 +127,22 @@ export class Line {
 	}
 
 	distanceSqrTo(point: Vec2) {
-		const ab = this.b.addVec(this.a.inverse());
-		const be = point.addVec(this.b.inverse());
+		const ab = this.toVec();
 		const ae = point.addVec(this.a.inverse());
-
-		const abbe = ab.dot(be);
-		const abae = ab.dot(ae);
-		if (abbe > 0) return be.magnitude();
-		if (abae < 0) return ae.magnitude();
-
-		const a = this.b.y - this.a.y;
-		const b = this.a.x - this.b.x;
-		const c = (this.b.x - this.a.x) * this.a.y - (this.b.y - this.a.y) * this.a.x;
-
-		return Math.pow(a * point.x + b * point.y + c, 2) / (a * a + b * b);
+		if (this.segment) {
+			const be = point.addVec(this.b.inverse());
+	
+			const abbe = ab.dot(be);
+			const abae = ab.dot(ae);
+			if (abbe > 0) return be.magnitude();
+			if (abae < 0) return ae.magnitude();
+	
+			const a = this.b.y - this.a.y;
+			const b = this.a.x - this.b.x;
+			const c = (this.b.x - this.a.x) * this.a.y - (this.b.y - this.a.y) * this.a.x;
+	
+			return Math.pow(a * point.x + b * point.y + c, 2) / (a * a + b * b);
+		} else return ae.projectTo(ab.perpendicular()).magnitudeSqr();
 	}
 
 	distanceTo(point: Vec2) {
@@ -151,6 +162,82 @@ export class Line {
 		if (dir4 == 0 && line.passthrough(line.b)) return true;
 
 		return false;
+	}
+
+	passthrough(point: Vec2) {
+		const m = this.slope();
+		// This is a vertical line
+		if (m === undefined) {
+			if (point.x != this.a.x) return false;
+			if (this.segment && (point.y < Math.min(this.a.y, this.b.y) || point.y > Math.max(this.a.y, this.b.y))) return false;
+			return true;
+		}
+		// y = mx + c
+		const c = this.a.y - m * this.a.x;
+		if (point.y != m * point.x + c) return false;
+		if (this.segment && (point.x < this.a.x || point.x > this.b.x || point.y < Math.min(this.a.y, this.b.y) || point.y > Math.max(this.a.y, this.b.y))) return false;
+		return true;
+	}
+
+	leftTo(point: Vec2) {
+		const m = this.slope();
+		if (m === undefined)
+			return point.x < this.a.x;
+		if (m == 0)
+			return true;
+		// x = (y - c) / m
+		const c = this.a.y - m * this.a.x;
+		return point.x < (point.y - c) / m;
+	}
+
+	rightTo(point: Vec2) {
+		const m = this.slope();
+		if (m === undefined)
+			return point.x > this.a.x;
+		if (m == 0)
+			return true;
+		// x = (y - c) / m
+		const c = this.a.y - m * this.a.x;
+		return point.x > (point.y - c) / m;
+	}
+
+	slope(): number | undefined {
+		if (this.b.x - this.a.x == 0) return undefined;
+		return (this.b.y - this.a.y) / (this.b.x - this.a.x);
+	}
+
+	yIntercept() {
+		const m = this.slope();
+		if (m === undefined) return undefined;
+		return this.a.y - m * this.a.x;
+	}
+
+	toVec() {
+		return this.b.addVec(this.a.inverse());
+	}
+
+	toParallel(distance: number, overrideSegment?: boolean) {
+		if (overrideSegment === undefined) overrideSegment = this.segment;
+		var per = this.toVec().perpendicular().unit().scaleAll(distance);
+		const line1 = new Line(this.a.addVec(per), this.b.addVec(per), overrideSegment);
+		per = per.inverse();
+		const line2 = new Line(this.a.addVec(per), this.b.addVec(per), overrideSegment);
+		return [line1, line2];
+	}
+
+	intersection(line: Line) {
+		if (this.a.equals(line.a) && this.b.equals(line.b)) return undefined;
+		if (this.yIntercept() === undefined && line.yIntercept() === undefined) return undefined;
+		else if (this.yIntercept() === undefined) return new Vec2(this.a.x, line.slope()! * this.a.x + line.yIntercept()!);
+		else if (line.yIntercept() === undefined) return new Vec2(line.a.x, this.slope()! * line.a.x + this.yIntercept()!);
+		const x = (line.yIntercept()! - this.yIntercept()!) / (this.slope()! - line.slope()!);
+		const point = new Vec2(x, this.slope()! * x + this.yIntercept()!);
+		if (this.segment && !this.passthrough(point) || line.segment && !line.passthrough(point)) return undefined;
+		return point;
+	}
+
+	minimize() {
+		return <MinLine> { a: this.a.minimize(), b: this.b.minimize(), segment: this.segment };
 	}
 }
 

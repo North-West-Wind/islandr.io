@@ -31,7 +31,7 @@ export class Entity {
 	type = "";
 	position: Vec2;
 	velocity: Vec2 = Vec2.ZERO;
-	direction: Vec2 = Vec2.ONE;
+	direction: Vec2 = Vec2.UNIT_X;
 	hitbox: Hitbox = CircleHitbox.ZERO;
 	vulnerable = true;
 	health = 100;
