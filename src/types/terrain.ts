@@ -66,7 +66,6 @@ export class Terrain {
 	interval: number;
 	// If the terrain fills the map
 	full = false;
-	border = 0;
 
 	constructor(speed: number, damage: number, interval: number) {
 		this.speed = speed;
@@ -79,7 +78,7 @@ export class Terrain {
 	}
 
 	minimize() {
-		return <MinTerrain> { id: this.id, border: this.border };
+		return <MinTerrain> { id: this.id };
 	}
 }
 

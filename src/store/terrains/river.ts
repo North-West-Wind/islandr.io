@@ -1,14 +1,19 @@
 import { world } from "../..";
+import { BorderedTerrain } from "../../types/extensions";
 import { Line, Vec2 } from "../../types/math";
 import { LineTerrain, PiecewiseTerrain } from "../../types/terrain";
 import { randomBetween, randomBoolean, toRadians } from "../../utils";
 
-class RiverSegment extends LineTerrain {
+class RiverSegment extends LineTerrain implements BorderedTerrain {
 	id = "river_segment";
 	border = 2;
+
+	minimize() {
+		return Object.assign(super.minimize(), { border: this.border });
+	}
 }
 
-export default class River extends PiecewiseTerrain {
+export default class River extends PiecewiseTerrain implements BorderedTerrain {
 	id = "river";
 	border = 2;
 
@@ -61,5 +66,9 @@ export default class River extends PiecewiseTerrain {
 		else terrain.boundary.end = Vec2.UNIT_Y;
 
 		this.lines.push(terrain);
+	}
+
+	minimize() {
+		return Object.assign(super.minimize(), { border: this.border });
 	}
 }

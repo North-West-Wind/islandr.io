@@ -11,4 +11,8 @@ export default class Pond extends DotTerrain {
 		const radius = randomBetween(10, 20);
 		super(0.6, 0, 0, new Vec2(randomBetween(radius + 2, world.size.x - radius), randomBetween(radius + 2, world.size.y - radius)), radius);
 	}
+
+	minimize() {
+		return Object.assign(super.minimize(), { border: this.border });
+	}
 }

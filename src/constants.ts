@@ -1,7 +1,7 @@
 import { CommonAngles, Vec2 } from "./types/math";
 import * as fs from "fs";
 
-export const MAP_SIZE = [200, 200];
+export const MAP_SIZE = [400, 400];
 export const TICKS_PER_SECOND = 100;
 // Radius of 1x scope
 export const BASE_RADIUS = 50;
