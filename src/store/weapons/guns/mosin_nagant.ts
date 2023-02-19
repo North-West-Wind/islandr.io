@@ -13,4 +13,6 @@ export default class mosin_nagant extends GunWeapon {
 	ticks = 50;
 	delay = 50;
 	recoil = 1.0;
+	spread = 1;
+	bullets = 5;
 }

@@ -1,9 +1,9 @@
 import { GunWeapon } from "../../../types/weapon";
 import { GunColor } from "../../../types/misc";
 
-export default class M870 extends GunWeapon {
-	id = "M870";
-	name = "M870";
+export default class M1100 extends GunWeapon {
+	id = "M1100";
+	name = "M1100";
 	continuous = false;
 	ammo = GunColor.RED;
 	speed = 0.8;
@@ -11,8 +11,8 @@ export default class M870 extends GunWeapon {
 	inaccuracy = 0.05;
 	weight = 1.0;
 	ticks = 50;
-	delay = 50;
-	recoil = 1.0;
-	spread = 6;
-	bullets = 5;
+	delay = 20;
+	recoil = 0.4;
+	spread = 9;
+	bullets = 4;
 }
