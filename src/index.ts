@@ -12,7 +12,7 @@ import { Tree, Bush, Crate, Stone, mosin_Tree, soviet_Crate } from "./store/obst
 
 export var ticksElapsed = 0;
 
-const server = new ws.Server({ port: 8080 });
+const server = new ws.Server({ port: 80 });
 server.once("listening", () => console.log(`WebSocket Server listening at port ${server.options.port}`));
 
 const sockets = new Map<string, ws.WebSocket>();
