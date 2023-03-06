@@ -17,6 +17,12 @@ Install [Node.js](https://nodejs.org) before hand.
 
 Note: Once the project is finished, it will be published in `npm`. Instructions will be different after that.
 
+## Developer Guidelines
+If you want to contribute to the project, you should create a fork and make PRs. Here are some notes to you:
+
+1. Use `PascalCase` for naming classes and `camelCase` for naming variables. This is done to stay consistent with my code. Sorry if you don't like these naming conventions. Commit messages need not be consistent, but should be readable.
+2. Add comments. It's good to be detailed.
+
 ## The Story Behind
 [surviv.io](https://surviv.io) has existed since 2017. It was at first quite popular, and really fun, until the initial developers, Justin Kim and Nick Clark, sold it to Kongregate (Kong) in March 2020. Unfortunately, Kong did not pay enough attention to their acquisition, and ended up just squeezing profits from [surviv.io](https://surviv.io) in the mobile market.
 
