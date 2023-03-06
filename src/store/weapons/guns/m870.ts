@@ -2,7 +2,7 @@ import { GunWeapon } from "../../../types/weapon";
 import { GunColor } from "../../../types/misc";
 
 export default class M870 extends GunWeapon {
-	id = "M870";
+	id = "m870";
 	name = "M870";
 	continuous = false;
 	color = GunColor.RED;

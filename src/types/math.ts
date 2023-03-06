@@ -131,16 +131,16 @@ export class Line {
 		const ae = point.addVec(this.a.inverse());
 		if (this.segment) {
 			const be = point.addVec(this.b.inverse());
-	
+
 			const abbe = ab.dot(be);
 			const abae = ab.dot(ae);
 			if (abbe > 0) return be.magnitude();
 			if (abae < 0) return ae.magnitude();
-	
+
 			const a = this.b.y - this.a.y;
 			const b = this.a.x - this.b.x;
 			const c = (this.b.x - this.a.x) * this.a.y - (this.b.y - this.a.y) * this.a.x;
-	
+
 			return Math.pow(a * point.x + b * point.y + c, 2) / (a * a + b * b);
 		} else return ae.projectTo(ab.perpendicular()).magnitudeSqr();
 	}
@@ -161,6 +161,13 @@ export class Line {
 		if (dir3 == 0 && line.passthrough(line.a)) return true;
 		if (dir4 == 0 && line.passthrough(line.b)) return true;
 
+		return false;
+	}
+
+	on(p: Vec2) {
+		if (p.x <= Math.max(this.a.x, this.b.x) && p.x <= Math.min(this.a.x, this.b.x) &&
+			(p.y <= Math.max(this.a.y, this.b.y) && p.y <= Math.min(this.a.y, this.b.y)))
+			return true;
 		return false;
 	}
 
@@ -237,7 +244,7 @@ export class Line {
 	}
 
 	minimize() {
-		return <MinLine> { a: this.a.minimize(), b: this.b.minimize(), segment: this.segment };
+		return <MinLine>{ a: this.a.minimize(), b: this.b.minimize(), segment: this.segment };
 	}
 }
 
@@ -247,6 +254,7 @@ export interface Hitbox {
 
 	scaleAll(ratio: number): Hitbox;
 	lineIntersects(line: Line, position: Vec2, direction: Vec2): boolean;
+	inside(point: Vec2, position: Vec2, direction: Vec2): boolean;
 	minimize(): MinHitbox;
 }
 
@@ -288,6 +296,18 @@ export class RectHitbox implements Hitbox {
 		return false;
 	}
 
+	inside(point: Vec2, position: Vec2, direction: Vec2) {
+		const startingPoint = position.addVec(new Vec2(-this.width / 2, -this.height / 2));
+		const points = [
+			startingPoint,
+			startingPoint.addX(this.width),
+			startingPoint.addY(this.height),
+			startingPoint.addX(this.width).addY(this.height)
+		].map(point => point.addAngle(direction.angle()));
+
+		return new Polygon(points).inside(point);
+	}
+
 	minimize() {
 		return <MinRectHitbox>{ type: this.type, width: this.width, height: this.height };
 	}
@@ -314,6 +334,10 @@ export class CircleHitbox implements Hitbox {
 		return line.distanceSqrTo(center) < Math.pow(this.radius, 2);
 	}
 
+	inside(point: Vec2, position: Vec2, direction: Vec2) {
+		return position.addVec(point.inverse()).magnitudeSqr() < this.radius * this.radius;
+	}
+
 	minimize() {
 		return <MinCircleHitbox>{ type: this.type, radius: this.radius };
 	}
@@ -323,4 +347,31 @@ export enum CommonAngles {
 	PI_FOUR = Math.PI / 4,
 	PI_TWO = Math.PI / 2,
 	TWO_PI = Math.PI * 2
+}
+
+export class Polygon {
+	points: Vec2[];
+
+	constructor(points: Vec2[], position = Vec2.ZERO) {
+		if (points.length < 3) throw new Error("Polygon must have at least 3 points");
+		this.points = points.map(p => p.addVec(position));
+	}
+
+	inside(p: Vec2) {
+		const n = this.points.length;
+		const exline = new Line(p, new Vec2(9999, p.y)); // Create a point at infinity, y is same as point p
+		var count = 0;
+		var i = 0;
+		do {
+			const side = new Line(this.points[i], this.points[(i + 1) % n]); // Forming a line from two consecutive points of poly
+			if (side.intersects(exline)) {
+				// If side is intersects exline
+				if (new Line(side.a, p).direction(side.b) == 0)
+					return side.on(p);
+				count++;
+			}
+			i = (i + 1) % n;
+		} while (i != 0);
+		return !!(count & 1); // When count is odd
+	}
 }

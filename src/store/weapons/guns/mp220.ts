@@ -2,7 +2,7 @@ import { GunWeapon } from "../../../types/weapon";
 import { GunColor } from "../../../types/misc";
 
 export default class MP220 extends GunWeapon {
-	id = "MP220";
+	id = "mp220";
 	name = "MP220";
 	continuous = true;
 	color = GunColor.RED;
