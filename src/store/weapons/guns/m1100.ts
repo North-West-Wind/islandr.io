@@ -5,7 +5,7 @@ export default class M1100 extends GunWeapon {
 	id = "M1100";
 	name = "M1100";
 	continuous = false;
-	ammo = GunColor.RED;
+	color = GunColor.RED;
 	speed = 0.8;
 	accuracy = 1.0;
 	inaccuracy = 0.05;

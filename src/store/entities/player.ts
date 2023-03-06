@@ -1,5 +1,6 @@
 import { PUSH_THRESHOLD } from "../../constants";
 import { DEFAULT_EMPTY_INVENTORY, Entity, Inventory } from "../../types/entity";
+import { PickupableEntity } from "../../types/extensions";
 import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/math";
 import { CollisionType } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
@@ -13,6 +14,7 @@ export default class Player extends Entity {
 	boost = 1;
 	scope = 2;
 	tryAttacking = false;
+	tryInteracting = false;
 	inventory: Inventory;
 
 	constructor(id: string, username: string) {
@@ -38,6 +40,15 @@ export default class Player extends Entity {
 		super.tick(entities, obstacles);
 		// Restore the original velocity
 		if (this.velocity.equals(oriVel.scaleAll(this.boost))) this.velocity = oriVel;
+		// Only interact when trying
+		if (this.tryInteracting) {
+			this.tryInteracting = false;
+			for (const entity of entities) {
+				// Check if we can pick it up
+				if ((<any>entity)['picked'] && (<PickupableEntity> <unknown>entity).picked(this))
+					entity.die();
+			}
+		}
 		// Only attack when trying + no animation is playing
 		if (this.tryAttacking && this.animation.duration <= 0) {
 			if (weapon) {

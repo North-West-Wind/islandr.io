@@ -60,7 +60,7 @@ export abstract class MeleeWeapon extends Weapon {
 
 export abstract class GunWeapon extends Weapon {
 	type = WeaponType.GUN;
-	ammo!: GunColor;
+	color!: GunColor;
 	// Bullet speed. Unit: x units/tick
 	speed!: number;
 	// Accuracy: 0 to 1, where 1 means most accurate (straight line shot)
@@ -75,6 +75,10 @@ export abstract class GunWeapon extends Weapon {
 	recoil!: number;
 	// Number of bullets
 	bullets = 1;
+	// Bullets left in the gun barrel
+	barrel = 0;
+	// Whether the gun is in dual state. -1: Never be dual, 0: Can be dual, but not now, 1: Dual gun
+	dual = -1;
 
 	attack(attacker: Entity, _entities: Entity[], _obstacles: Obstacle[]) {
 		this.shoot(attacker);
@@ -83,7 +87,8 @@ export abstract class GunWeapon extends Weapon {
 	// Spawn the bullet(s)
 	shoot(attacker: Entity) {
 		setTimeout(() => {
-			if (!attacker.despawn) {
+			if (!attacker.despawn && this.barrel > 0) {
+				this.barrel--;
 				for (let ii = 0; ii <= this.bullets; ii++) {
 					var angles = this.rotation.angle() + attacker.direction.angle();
 					angles += CommonAngles.PI_TWO * (Math.random() * (1 - clamp(this.accuracy - this.inaccuracy, 0, 1))) - CommonAngles.PI_FOUR;

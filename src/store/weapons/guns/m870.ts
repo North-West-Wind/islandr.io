@@ -5,7 +5,7 @@ export default class M870 extends GunWeapon {
 	id = "M870";
 	name = "M870";
 	continuous = false;
-	ammo = GunColor.RED;
+	color = GunColor.RED;
 	speed = 0.8;
 	accuracy = 1.0;
 	inaccuracy = 0.05;

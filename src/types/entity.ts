@@ -4,18 +4,25 @@ import { Obstacle } from "./obstacle";
 import { Weapon } from "./weapon";
 import { Fists } from "../store/weapons";
 import { MinEntity, MinInventory } from "./minimized";
-import { Animation, CollisionType } from "./misc";
+import { Animation, CollisionType, GunColor } from "./misc";
 import { world } from "..";
 
 export class Inventory {
 	holding: number;
 	weapons: Weapon[];
-	slots: number;
+	// Array of 2 numbers. Order: gun slots, melee slots
+	slots: number[];
+	// Indices are colors. Refer to GunColor
+	ammos: number[];
+	// Utilities. Similar working to ammos, but yet to be implemented
+	utilities: number[];
 
-	constructor(holding: number, slots: number, weapons?: Weapon[]) {
+	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities?: number[]) {
 		this.holding = holding;
 		this.slots = slots;
-		this.weapons = weapons || Array(slots);
+		this.weapons = weapons || Array(slots.reduce((a, b) => a + b));
+		this.ammos = ammos || Array(Object.keys(GunColor).length).fill(0);
+		this.utilities = utilities || []; // TODO: Use a utility enum to generate 0s
 	}
 
 	minimize() {
@@ -23,7 +30,7 @@ export class Inventory {
 	}
 }
 
-export const DEFAULT_EMPTY_INVENTORY = new Inventory(2, 4);
+export const DEFAULT_EMPTY_INVENTORY = new Inventory(2, [2, 1]);
 DEFAULT_EMPTY_INVENTORY.weapons[2] = new Fists();
 
 export class Entity {

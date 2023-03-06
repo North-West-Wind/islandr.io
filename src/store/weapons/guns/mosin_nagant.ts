@@ -5,7 +5,7 @@ export default class MosinNagant extends GunWeapon {
 	id = "mosin_nagant";
 	name = "Mosin Nagant";
 	continuous = false;
-	ammo = GunColor.BLUE;
+	color = GunColor.BLUE;
 	speed = 1.0;
 	accuracy = 1.0;
 	inaccuracy = 0.05;

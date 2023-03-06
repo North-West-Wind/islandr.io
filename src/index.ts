@@ -126,6 +126,8 @@ server.on("connection", async socket => {
 				// { x, y } will be x and y offset of the client from the centre of the screen.
 				player.setDirection(new Vec2(mMvPacket.x, mMvPacket.y));
 				break;
+			case "interact":
+				player.tryInteracting = true;
 		}
 	});
 });

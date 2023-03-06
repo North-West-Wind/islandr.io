@@ -52,7 +52,11 @@ export class MouseMovePacket implements IPacket {
 	y!: number;
 }
 
-export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket;
+export class InteractPacket implements IPacket {
+	type = "interact";
+}
+
+export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket;
 
 export class AckPacket implements IPacket {
 	type = "ack";
