@@ -16,8 +16,8 @@ export { default as M1100 } from "./guns/m1100";
 export { default as MP5 } from "./guns/mp5";
 
 // If you have an idea how to avoid hardcoding this please tell me
-export function castCorrectWeapon(id: string): Weapon {
-	switch (id) {
+export function castCorrectWeapon(name: string): Weapon {
+	switch (name) {
 		case "m9":
 			return new M9();
 		case "mosin_nagant":

@@ -1,5 +1,5 @@
 import { PUSH_THRESHOLD } from "../../constants";
-import { DEFAULT_EMPTY_INVENTORY, Entity, Inventory } from "../../types/entity";
+import { Entity, Inventory } from "../../types/entity";
 import { PickupableEntity } from "../../types/extensions";
 import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/math";
 import { CollisionType } from "../../types/misc";
@@ -15,18 +15,23 @@ export default class Player extends Entity {
 	scope = 2;
 	tryAttacking = false;
 	tryInteracting = false;
+	canInteract = false;
 	inventory: Inventory;
+	// Last held weapon. Used for tracking weapon change
+	lastHolding = "fists";
 
 	constructor(id: string, username: string) {
 		super();
 		this.id = id;
 		this.username = username;
-		this.inventory = DEFAULT_EMPTY_INVENTORY;
+		this.inventory = Inventory.defaultEmptyInventory();
 	}
 
 	setVelocity(velocity: Vec2) {
-		// Also scale the velocity to boost by soda and pills
+		// Also scale the velocity to boost by soda and pills, and weight by gun
 		super.setVelocity(velocity.scaleAll(this.boost));
+		const weapon = this.inventory.weapons[this.inventory.holding];
+		if (weapon.type === WeaponType.GUN) this.velocity = this.velocity.scaleAll((<GunWeapon>weapon).weight);
 	}
 
 	tick(entities: Entity[], obstacles: Obstacle[]) {
@@ -36,19 +41,29 @@ export default class Player extends Entity {
 		// Scale the velocity before ticking
 		this.velocity = this.velocity.scaleAll(this.boost);
 		const weapon = this.inventory.weapons[this.inventory.holding];
-		if (weapon.type === WeaponType.GUN) this.velocity = this.velocity.scaleAll((<GunWeapon>weapon).weight);
+		if (weapon.name != this.lastHolding) {
+			this.lastHolding = weapon.name;
+			if (weapon.type === WeaponType.GUN) this.velocity = this.velocity.scaleAll((<GunWeapon>weapon).weight);
+		}
 		super.tick(entities, obstacles);
 		// Restore the original velocity
 		if (this.velocity.equals(oriVel.scaleAll(this.boost))) this.velocity = oriVel;
-		// Only interact when trying
-		if (this.tryInteracting) {
-			this.tryInteracting = false;
-			for (const entity of entities) {
-				// Check if we can pick it up
-				if ((<any>entity)['picked'] && (<PickupableEntity> <unknown>entity).picked(this))
-					entity.die();
+		// Check for entity hitbox intersection
+		let breaked = false;
+		for (const entity of entities) {
+			if (entity.hitbox.inside(this.position, entity.position, entity.direction) && (<any>entity)['picked']) {
+				this.canInteract = true;
+				// Only interact when trying
+				if (this.tryInteracting) {
+					this.tryInteracting = false;
+					this.canInteract = false;
+					if ((<PickupableEntity> <unknown>entity).picked(this)) entity.die();
+				}
+				breaked = true;
+				break;
 			}
 		}
+		if (!breaked) this.canInteract = false;
 		// Only attack when trying + no animation is playing
 		if (this.tryAttacking && this.animation.duration <= 0) {
 			if (weapon) {

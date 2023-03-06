@@ -28,10 +28,13 @@ export class Inventory {
 	minimize() {
 		return <MinInventory> { holding: this.weapons[this.holding].minimize() };
 	}
-}
 
-export const DEFAULT_EMPTY_INVENTORY = new Inventory(2, [2, 1]);
-DEFAULT_EMPTY_INVENTORY.weapons[2] = new Fists();
+	static defaultEmptyInventory() {
+		const inv = new Inventory(2, [2, 1]);
+		inv.weapons[2] = new Fists();
+		return inv;
+	}
+}
 
 export class Entity {
 	id: string;
