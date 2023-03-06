@@ -1,7 +1,7 @@
 import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
-import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket } from "./types/packet";
+import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket } from "./types/packet";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/math";
 import { Player } from "./store/entities";
@@ -128,6 +128,17 @@ server.on("connection", async socket => {
 				break;
 			case "interact":
 				player.tryInteracting = true;
+				break;
+			case "switchweapon":
+				const swPacket = <SwitchWeaponPacket>decoded;
+				const unitDelta = swPacket.delta < 0 ? -1 : 1;
+				var holding = player.inventory.holding + swPacket.delta;
+				if (holding < 0) holding += player.inventory.weapons.length;
+				else holding %= player.inventory.weapons.length;
+				while (!player.inventory.weapons[holding])
+					holding += unitDelta;
+				player.inventory.holding = holding;
+				break;
 		}
 	});
 });

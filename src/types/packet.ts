@@ -56,7 +56,12 @@ export class InteractPacket implements IPacket {
 	type = "interact";
 }
 
-export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket;
+export class SwitchWeaponPacket {
+	type = "switchweapon";
+	delta!: number;
+}
+
+export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket;
 
 export class AckPacket implements IPacket {
 	type = "ack";

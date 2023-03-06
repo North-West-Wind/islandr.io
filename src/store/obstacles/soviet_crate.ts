@@ -2,7 +2,7 @@ import { world } from "../..";
 import { CommonAngles, RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { GunColor } from "../../types/misc";
-import { Gun } from "../entities";
+import { Ammo, Gun } from "../entities";
 
 export default class SovietCrate extends Obstacle {
 	type = "soviet_crate";
@@ -25,5 +25,17 @@ export default class SovietCrate extends Obstacle {
 		gun2.position = this.position;
 		gun2.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
 		world.entities.push(gun2);
+		for (let ii = 0; ii < 2; ii++) {
+			const ammo = new Ammo(5, GunColor.RED);
+			ammo.position = this.position;
+			ammo.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
+			world.entities.push(ammo);
+		}
+		for (let ii = 0; ii < 2; ii++) {
+			const ammo = new Ammo(45, GunColor.YELLOW);
+			ammo.position = this.position;
+			ammo.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
+			world.entities.push(ammo);
+		}
 	}
 }

@@ -17,7 +17,7 @@ export default class Crate extends Obstacle {
 	die() {
 		super.die();
 		// TODO: Spawn loots
-		const gun = new Gun("m9", GunColor.YELLOW);
+		const gun = new Gun("M9", GunColor.YELLOW);
 		gun.position = this.position;
 		gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
 		world.entities.push(gun);
