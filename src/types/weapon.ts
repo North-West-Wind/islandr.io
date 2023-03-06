@@ -30,7 +30,7 @@ export abstract class Weapon {
 	abstract attack(attacker: Entity, entities: Entity[], obstacles: Obstacle[]): void;
 
 	minimize() {
-		return <MinWeapon> { id: this.id, name: this.name };
+		return <MinWeapon>{ id: this.id, name: this.name };
 	}
 }
 
@@ -73,21 +73,25 @@ export abstract class GunWeapon extends Weapon {
 	ticks!: number;
 	// For client side animation, calculated in in-game units
 	recoil!: number;
+	// Number of bullets
+	bullets = 1;
 
 	attack(attacker: Entity, _entities: Entity[], _obstacles: Obstacle[]) {
 		this.shoot(attacker);
 	}
 
-	// Spawn the bullet
+	// Spawn the bullet(s)
 	shoot(attacker: Entity) {
 		setTimeout(() => {
 			if (!attacker.despawn) {
-				var angles = this.rotation.angle() + attacker.direction.angle();
-				angles += CommonAngles.PI_TWO * (Math.random() * (1 - clamp(this.accuracy - this.inaccuracy, 0, 1))) - CommonAngles.PI_FOUR;
-				const position = attacker.position.addVec(this.distance.addAngle(angles));
-				const bullet = new Bullet(attacker, this.damage, Vec2.UNIT_X.addAngle(angles).scaleAll(this.speed), this.ticks);
-				bullet.position = position;
-				world.entities.push(bullet);
+				for (let ii = 0; ii <= this.bullets; ii++) {
+					var angles = this.rotation.angle() + attacker.direction.angle();
+					angles += CommonAngles.PI_TWO * (Math.random() * (1 - clamp(this.accuracy - this.inaccuracy, 0, 1))) - CommonAngles.PI_FOUR;
+					const position = attacker.position.addVec(this.distance.addAngle(angles));
+					const bullet = new Bullet(attacker, this.damage, Vec2.UNIT_X.addAngle(angles).scaleAll(this.speed), this.ticks);
+					bullet.position = position;
+					world.entities.push(bullet);
+				}
 			}
 		}, this.delay * 1000 / TICKS_PER_SECOND);
 	}
