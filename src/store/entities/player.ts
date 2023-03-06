@@ -19,6 +19,7 @@ export default class Player extends Entity {
 	inventory: Inventory;
 	// Last held weapon. Used for tracking weapon change
 	lastHolding = "fists";
+	normalVelocity = Vec2.ZERO;
 
 	constructor(id: string, username: string) {
 		super();
@@ -27,27 +28,24 @@ export default class Player extends Entity {
 		this.inventory = Inventory.defaultEmptyInventory();
 	}
 
-	setVelocity(velocity: Vec2) {
+	setVelocity(velocity?: Vec2) {
+		if (!velocity) velocity = this.normalVelocity;
+		else this.normalVelocity = velocity;
 		// Also scale the velocity to boost by soda and pills, and weight by gun
-		super.setVelocity(velocity.scaleAll(this.boost));
+		var scale = this.boost;
 		const weapon = this.inventory.weapons[this.inventory.holding];
-		if (weapon.type === WeaponType.GUN) this.velocity = this.velocity.scaleAll((<GunWeapon>weapon).weight);
+		if (weapon.type === WeaponType.GUN) scale *= (<GunWeapon>weapon).weight;
+		super.setVelocity(velocity.scaleAll(scale));
 	}
 
 	tick(entities: Entity[], obstacles: Obstacle[]) {
 		// When the player dies, don't tick anything
 		if (this.despawn) return;
-		const oriVel = this.velocity;
-		// Scale the velocity before ticking
-		this.velocity = this.velocity.scaleAll(this.boost);
+		// If weapon changed, re-calculate the velocity
 		const weapon = this.inventory.weapons[this.inventory.holding];
-		if (weapon.name != this.lastHolding) {
-			this.lastHolding = weapon.name;
-			if (weapon.type === WeaponType.GUN) this.velocity = this.velocity.scaleAll((<GunWeapon>weapon).weight);
-		}
+		if (weapon.name != this.lastHolding)
+			this.setVelocity();
 		super.tick(entities, obstacles);
-		// Restore the original velocity
-		if (this.velocity.equals(oriVel.scaleAll(this.boost))) this.velocity = oriVel;
 		// Check for entity hitbox intersection
 		let breaked = false;
 		for (const entity of entities) {
