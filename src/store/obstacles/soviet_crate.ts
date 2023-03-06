@@ -4,7 +4,7 @@ import { Obstacle } from "../../types/obstacle";
 import { GunColor } from "../../types/misc";
 import { Gun } from "../entities";
 
-export default class soviet_Crate extends Obstacle {
+export default class SovietCrate extends Obstacle {
 	type = "soviet_crate";
 
 	constructor() {

@@ -1,7 +1,7 @@
 import { GunWeapon } from "../../../types/weapon";
 import { GunColor } from "../../../types/misc";
 
-export default class mosin_nagant extends GunWeapon {
+export default class MosinNagant extends GunWeapon {
 	id = "mosin_nagant";
 	name = "Mosin Nagant";
 	continuous = false;
@@ -13,6 +13,4 @@ export default class mosin_nagant extends GunWeapon {
 	ticks = 50;
 	delay = 50;
 	recoil = 1.0;
-	spread = 1;
-	bullets = 5;
 }

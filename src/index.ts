@@ -8,11 +8,11 @@ import { Player } from "./store/entities";
 import { Particle } from "./types/particle";
 import { World } from "./types/terrain";
 import { Plain, Pond, River, Sea } from "./store/terrains";
-import { Tree, Bush, Crate, Stone, mosin_Tree, soviet_Crate } from "./store/obstacles";
+import { Tree, Bush, Crate, Stone, MosinTree, SovietCrate } from "./store/obstacles";
 
 export var ticksElapsed = 0;
 
-const server = new ws.Server({ port: 80 });
+const server = new ws.Server({ port: 8080 });
 server.once("listening", () => console.log(`WebSocket Server listening at port ${server.options.port}`));
 
 const sockets = new Map<string, ws.WebSocket>();
@@ -31,8 +31,8 @@ for (let ii = 0; ii < 4; ii++) world.terrains.push(new Sea(ii));
 
 // Add random obstacles
 for (let ii = 0; ii < 46; ii++) world.obstacles.push(new Tree());
-for (let ii = 0; ii < 16; ii++) world.obstacles.push(new mosin_Tree());
-for (let ii = 0; ii < 16; ii++) world.obstacles.push(new soviet_Crate());
+for (let ii = 0; ii < 16; ii++) world.obstacles.push(new MosinTree());
+for (let ii = 0; ii < 16; ii++) world.obstacles.push(new SovietCrate());
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Bush());
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Crate());
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Stone());

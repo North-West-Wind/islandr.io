@@ -5,7 +5,7 @@ import { randomBetween } from "../../utils";
 import { GunColor } from "../../types/misc";
 import { Gun} from "../entities";
 
-export default class mosin_Tree extends Obstacle {
+export default class MosinTree extends Obstacle {
 	type = "tree";
 
 	constructor() {
