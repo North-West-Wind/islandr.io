@@ -20,7 +20,7 @@ Note: Once the project is finished, it will be published in `npm`. Instructions 
 ## Developer Guidelines
 If you want to contribute to the project, you should create a fork and make PRs. Here are some notes to you:
 
-1. Use `PascalCase` for naming classes and `camelCase` for naming variables. This is done to stay consistent with my code. Sorry if you don't like these naming conventions. Commit messages need not be consistent, but should be readable.
+1. Use `PascalCase` for naming classes, `camelCase` for naming variables and `snake_case` for files. This is done to stay consistent with my code. Sorry if you don't like these naming conventions. Commit messages need not be consistent, but should be readable.
 2. Add comments. It's good to be detailed.
 
 ## The Story Behind
