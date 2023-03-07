@@ -4,7 +4,7 @@ import { Obstacle } from "./obstacle";
 import { Weapon } from "./weapon";
 import { Fists } from "../store/weapons";
 import { MinEntity, MinInventory } from "./minimized";
-import { Animation, CollisionType, GunColor } from "./misc";
+import { CollisionType, GunColor } from "./misc";
 import { world } from "..";
 
 export class Inventory {
@@ -51,8 +51,8 @@ export class Entity {
 	// If discardable, will be removed from memory when despawn
 	discardable = false;
 	despawn = false;
-	// Tells the client which animation is going on
-	animation: Animation = { name: "", duration: 0 };
+	// Tells the client what animation should play
+	animations: string[] = [];
 
 	constructor() {
 		this.id = ID();
@@ -72,12 +72,6 @@ export class Entity {
 				this.damage(terrain.damage);
 		}
 		this.position = new Vec2(clamp(this.position.x, this.hitbox.comparable, world.size.x - this.hitbox.comparable), clamp(this.position.y, this.hitbox.comparable, world.size.y - this.hitbox.comparable));
-
-		// Manage the animation timer
-		if (this.animation.name) {
-			if (this.animation.duration > 0) this.animation.duration--;
-			else this.animation.name = "";
-		}
 
 		// Check health and maybe call death
 		if (this.vulnerable && this.health <= 0) this.die();
@@ -191,11 +185,12 @@ export class Entity {
 
 	minimize() {
 		return <MinEntity> {
+			id: this.id,
 			type: this.type,
 			position: this.position.minimize(),
 			direction: this.direction.minimize(),
 			hitbox: this.hitbox.minimize(),
-			animation: this.animation,
+			animations: this.animations,
 			despawn: this.despawn
 		}
 	}

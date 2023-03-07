@@ -21,11 +21,6 @@ export enum MovementDirection {
 	DOWN = 3
 }
 
-export interface Animation {
-	name: string;
-	duration: number;
-}
-
 export enum GunColor {
 	YELLOW = 0,
 	RED = 1,

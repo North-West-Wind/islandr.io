@@ -17,7 +17,7 @@ export default class Fists extends MeleeWeapon {
 	name = "Fists";
 	continuous = false;
 	animations = ["left_fist", "right_fist"];
-	durations = [50, 50];
+	duration = 50;
 	damage = 24;
 	hitbox = new RectHitbox(1, 1);
 	distance = new Vec2(1.5, 0);
@@ -30,8 +30,7 @@ export default class Fists extends MeleeWeapon {
 	
 	attack(attacker: Entity, entities: Entity[], obstacles: Obstacle[]) {
 		const index = Math.floor(Math.random() * this.animations.length);
-		attacker.animation.name = this.animations[index];
-		attacker.animation.duration = this.durations[index];
+		attacker.animations.push(this.animations[index]);
 
 		this.damageThing(attacker, entities, obstacles);
 	}

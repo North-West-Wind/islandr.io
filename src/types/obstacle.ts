@@ -2,7 +2,7 @@ import { ID } from "../utils";
 import { Entity } from "./entity";
 import { Vec2, Hitbox, CircleHitbox, RectHitbox, CommonAngles, Line } from "./math";
 import { MinObstacle } from "./minimized";
-import { Animation, CollisionType } from "./misc";
+import { CollisionType } from "./misc";
 import { World } from "./terrain";
 
 export class Obstacle {
@@ -19,7 +19,7 @@ export class Obstacle {
 	maxHealth: number;
 	discardable = false;
 	despawn = false;
-	animation: Animation = { name: "", duration: 0 };
+	animations: string[] = [];
 
 	constructor(world: World, baseHitbox: Hitbox, minHitbox: Hitbox, health: number, maxHealth: number) {
 		if (baseHitbox.type !== minHitbox.type) throw new Error("Hitboxes are not the same type!");
@@ -146,11 +146,13 @@ export class Obstacle {
 
 	minimize() {
 		return <MinObstacle>{
+			id: this.id,
 			type: this.type,
 			position: this.position.minimize(),
 			direction: this.direction.minimize(),
 			hitbox: this.hitbox.minimize(),
-			despawn: this.despawn
+			despawn: this.despawn,
+			animations: this.animations
 		};
 	}
 

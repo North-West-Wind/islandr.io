@@ -18,10 +18,8 @@ export abstract class Weapon {
 	id!: string;
 	name!: string;
 	continuous!: boolean;
-	// This is handled client-side, but still needs to be sent from server
-	animations!: string[];
-	// Each element corresponds to an animation
-	durations!: number[];
+	// Duration of an attack
+	duration!: number;
 	damage!: number;
 	type!: WeaponType;
 	distance!: Vec2;
@@ -71,7 +69,7 @@ export abstract class GunWeapon extends Weapon {
 	// A movement multiplier, should be within 0 and 1 for most cases
 	weight!: number;
 	ticks!: number;
-	// For client side animation, calculated in in-game units
+	// For client side animation. 0: small, 1: medium, 2: large
 	recoil!: number;
 	// Number of bullets
 	bullets = 1;

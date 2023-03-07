@@ -66,11 +66,13 @@ export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleas
 export class AckPacket implements IPacket {
 	type = "ack";
 	id: string;
+	tps: number;
 	size: number[];
 	terrain: string;
 
-	constructor(id: string, size: Vec2, terrain: Terrain) {
+	constructor(id: string, tps: number, size: Vec2, terrain: Terrain) {
 		this.id = id;
+		this.tps = tps;
 		this.size = Object.values(size);
 		this.terrain = terrain.id;
 	}
