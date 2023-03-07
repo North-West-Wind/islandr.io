@@ -75,8 +75,8 @@ export abstract class GunWeapon extends Weapon {
 	recoil!: number;
 	// Number of bullets
 	bullets = 1;
-	// Bullets left in the gun barrel
-	barrel = 0;
+	// Bullets left in the gun magazine
+	magazine = 0;
 	// Whether the gun is in dual state. -1: Never be dual, 0: Can be dual, but not now, 1: Dual gun
 	dual = -1;
 
@@ -87,8 +87,8 @@ export abstract class GunWeapon extends Weapon {
 	// Spawn the bullet(s)
 	shoot(attacker: Entity) {
 		setTimeout(() => {
-			if (!attacker.despawn && this.barrel > 0) {
-				this.barrel--;
+			if (!attacker.despawn && this.magazine > 0) {
+				this.magazine--;
 				for (let ii = 0; ii <= this.bullets; ii++) {
 					var angles = this.rotation.angle() + attacker.direction.angle();
 					angles += CommonAngles.PI_TWO * (Math.random() * (1 - clamp(this.accuracy - this.inaccuracy, 0, 1))) - CommonAngles.PI_FOUR;
