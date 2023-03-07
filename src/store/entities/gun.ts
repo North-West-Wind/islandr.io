@@ -8,19 +8,20 @@ import { CircleHitbox, CommonAngles, Line, RectHitbox, Vec2 } from "../../types/
 import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { GunWeapon } from "../../types/weapon";
-import { castCorrectWeapon } from "../weapons";
+import { castCorrectWeapon, WEAPON_SUPPLIERS } from "../weapons";
 import Player from "./player";
 
 export default class Gun extends Entity implements PickupableEntity {
 	type = "gun";
 	hitbox = new CircleHitbox(2);
-	name: string;
+	name: string; // Gun ID, but id was taken for entity already
 	discardable = true;
 	color: GunColor;
 	friction = 0.02; // frictional acceleration, not force
 
 	constructor(name: string, color: GunColor) {
 		super();
+		if (!WEAPON_SUPPLIERS.has(name)) console.warn("Creating a gun entity that doesn't have a supplier for its type");
 		this.name = name;
 		this.color = color;
 	}
@@ -46,7 +47,7 @@ export default class Gun extends Entity implements PickupableEntity {
 		gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
 		world.entities.push(gun);
 		// Swap the player's weapon on hand with the one on ground
-		player.inventory.weapons[player.inventory.holding] = castCorrectWeapon(this.id);
+		player.inventory.weapons[player.inventory.holding] = castCorrectWeapon(this.name);
 		return true;
 	}
 

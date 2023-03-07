@@ -17,11 +17,11 @@ export default class SovietCrate extends Obstacle {
 	die() {
 		super.die();
 		// TODO: Spawn loots
-		const gun = new Gun("M870", GunColor.RED);
+		const gun = new Gun("m870", GunColor.RED);
 		gun.position = this.position;
 		gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
 		world.entities.push(gun);
-		const gun2 = new Gun("MP5", GunColor.YELLOW);
+		const gun2 = new Gun("mp5", GunColor.YELLOW);
 		gun2.position = this.position;
 		gun2.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
 		world.entities.push(gun2);
