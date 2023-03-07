@@ -21,7 +21,6 @@ export default class M870 extends GunWeapon {
 	weight = 0.9;
 	ticks = 50;
 	delay = 50;
-	recoil = 1.0;
 	bullets = 6;
 
 	static {

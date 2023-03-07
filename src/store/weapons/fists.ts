@@ -23,6 +23,7 @@ export default class Fists extends MeleeWeapon {
 	distance = new Vec2(1.5, 0);
 	rotation = Vec2.UNIT_X;
 	delay = 25;
+	droppable = false;
 
 	static {
 		WEAPON_SUPPLIERS.set(Fists.ID, new FistsSupplier());

@@ -3,6 +3,7 @@ import { CommonAngles, RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { GunColor } from "../../types/misc";
 import { Gun } from "../entities";
+import { spawnAmmo, spawnGun } from "../../utils";
 
 export default class Crate extends Obstacle {
 	type = "crate";
@@ -17,9 +18,8 @@ export default class Crate extends Obstacle {
 	die() {
 		super.die();
 		// TODO: Spawn loots
-		const gun = new Gun("m9", GunColor.YELLOW);
-		gun.position = this.position;
-		gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
-		world.entities.push(gun);
+		spawnGun("m9", GunColor.YELLOW, this.position);
+		spawnAmmo(22, GunColor.YELLOW, this.position);
+		spawnAmmo(23, GunColor.YELLOW, this.position);
 	}
 }

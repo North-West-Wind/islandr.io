@@ -21,7 +21,6 @@ export default class MP5 extends GunWeapon {
 	weight = 0.9;
 	ticks = 50;
 	delay = 12;
-	recoil = 0.08;
 	spread = 1;
 	bullets = 30;
 

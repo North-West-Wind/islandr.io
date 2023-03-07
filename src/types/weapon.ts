@@ -24,6 +24,8 @@ export abstract class Weapon {
 	type!: WeaponType;
 	distance!: Vec2;
 	rotation!: Vec2;
+	// Whether the weapon can be dropped
+	droppable = true;
 
 	abstract attack(attacker: Entity, entities: Entity[], obstacles: Obstacle[]): void;
 
@@ -69,8 +71,6 @@ export abstract class GunWeapon extends Weapon {
 	// A movement multiplier, should be within 0 and 1 for most cases
 	weight!: number;
 	ticks!: number;
-	// For client side animation. 0: small, 1: medium, 2: large
-	recoil!: number;
 	// Number of bullets
 	bullets = 1;
 	// Bullets left in the gun magazine
