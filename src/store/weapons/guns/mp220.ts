@@ -21,7 +21,6 @@ export default class MP220 extends GunWeapon {
 	weight = 0.9;
 	ticks = 50;
 	delay = 10;
-	recoil = 0.01;
 	bullets = 8;
 
 	static {

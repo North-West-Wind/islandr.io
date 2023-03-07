@@ -21,7 +21,6 @@ export default class MosinNagant extends GunWeapon {
 	weight = 0.7;
 	ticks = 50;
 	delay = 50;
-	recoil = 1.0;
 
 	static {
 		WEAPON_SUPPLIERS.set(MosinNagant.ID, new MosinNagantSupplier());

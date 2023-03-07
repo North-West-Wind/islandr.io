@@ -2,9 +2,10 @@ import { PUSH_THRESHOLD } from "../../constants";
 import { Entity, Inventory } from "../../types/entity";
 import { PickupableEntity } from "../../types/extensions";
 import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/math";
-import { CollisionType } from "../../types/misc";
+import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
+import { spawnAmmo, spawnGun } from "../../utils";
 
 export default class Player extends Entity {
 	type = "player";
@@ -21,6 +22,7 @@ export default class Player extends Entity {
 	// Last held weapon. Used for tracking weapon change
 	lastHolding = "fists";
 	normalVelocity = Vec2.ZERO;
+	friction = 0.02; // frictional acceleration, not force
 
 	constructor(id: string, username: string) {
 		super();
@@ -55,12 +57,12 @@ export default class Player extends Entity {
 		super.tick(entities, obstacles);
 		// Check for entity hitbox intersection
 		let breaked = false;
+
 		for (const entity of entities) {
 			if (entity.hitbox.inside(this.position, entity.position, entity.direction) && (<any>entity)['picked']) {
 				this.canInteract = true;
 				// Only interact when trying
 				if (this.tryInteracting) {
-					this.tryInteracting = false;
 					this.canInteract = false;
 					if ((<PickupableEntity><unknown>entity).picked(this)) entity.die();
 				}
@@ -68,6 +70,7 @@ export default class Player extends Entity {
 				break;
 			}
 		}
+		this.tryInteracting = false;
 		if (!breaked) this.canInteract = false;
 		// Only attack when trying + not attacking + there's a weapon
 		if (this.tryAttacking && this.attackLock <= 0 && weapon) {
@@ -87,6 +90,21 @@ export default class Player extends Entity {
 				}
 			}
 		}
+	}
+
+	die() {
+		super.die();
+		for (const weapon of this.inventory.weapons) {
+			if (weapon?.droppable) {
+				if (weapon instanceof GunWeapon) {
+					spawnGun(weapon.id, weapon.color, this.position);
+					spawnAmmo(weapon.magazine, weapon.color, this.position);
+				}
+			}
+		}
+		for (let ii = 0; ii < Object.keys(GunColor).length / 2; ii++)
+			if (this.inventory.ammos[ii] > 0)
+				spawnAmmo(this.inventory.ammos[ii], ii, this.position);
 	}
 
 	minimize() {

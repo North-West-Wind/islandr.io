@@ -21,7 +21,7 @@ export class Inventory {
 		this.holding = holding;
 		this.slots = slots;
 		this.weapons = weapons || Array(slots.reduce((a, b) => a + b));
-		this.ammos = ammos || Array(Object.keys(GunColor).length).fill(0);
+		this.ammos = ammos || Array(Object.keys(GunColor).length / 2).fill(0);
 		this.utilities = utilities || []; // TODO: Use a utility enum to generate 0s
 	}
 

@@ -21,7 +21,6 @@ export default class M1100 extends GunWeapon {
 	weight = 0.9;
 	ticks = 50;
 	delay = 20;
-	recoil = 0.4;
 	bullets = 9;
 
 	static {

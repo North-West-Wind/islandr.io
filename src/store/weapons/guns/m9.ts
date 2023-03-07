@@ -21,7 +21,6 @@ export default class M9 extends GunWeapon {
 	weight = 0.95;
 	ticks = 50;
 	delay = 12;
-	recoil = 0.1;
 	dual = 0;
 
 	static {
