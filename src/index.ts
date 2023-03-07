@@ -59,7 +59,7 @@ server.on("connection", async socket => {
 	var username = "";
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
-		socket.send(encode(new AckPacket(id, world.size, world.defaultTerrain)).buffer);
+		socket.send(encode(new AckPacket(id, TICKS_PER_SECOND, world.size, world.defaultTerrain)).buffer);
 		socket.once("message", (msg: ArrayBuffer) => {
 			const decoded = decode(new Uint8Array(msg));
 			if (decoded.id == id && decoded.username) {
@@ -159,4 +159,5 @@ setInterval(() => {
 		if (pendingParticles.length) socket.send(encode(new ParticlesPacket(pendingParticles, player)).buffer);
 	});
 	pendingParticles = [];
+	world.postTick();
 }, 1000 / TICKS_PER_SECOND);

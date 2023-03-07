@@ -14,6 +14,7 @@ export default class Player extends Entity {
 	boost = 1;
 	scope = 2;
 	tryAttacking = false;
+	attackLock = 0;
 	tryInteracting = false;
 	canInteract = false;
 	inventory: Inventory;
@@ -41,10 +42,16 @@ export default class Player extends Entity {
 	tick(entities: Entity[], obstacles: Obstacle[]) {
 		// When the player dies, don't tick anything
 		if (this.despawn) return;
+		// Decrease attack locking timer
+		if (this.attackLock > 0) this.attackLock--;
 		// If weapon changed, re-calculate the velocity
 		const weapon = this.inventory.weapons[this.inventory.holding];
-		if (weapon.name != this.lastHolding)
+		if (weapon.name != this.lastHolding) {
+			this.lastHolding = weapon.name;
 			this.setVelocity();
+			// Allows sniper switching
+			this.attackLock = 0;
+		}
 		super.tick(entities, obstacles);
 		// Check for entity hitbox intersection
 		let breaked = false;
@@ -55,17 +62,19 @@ export default class Player extends Entity {
 				if (this.tryInteracting) {
 					this.tryInteracting = false;
 					this.canInteract = false;
-					if ((<PickupableEntity> <unknown>entity).picked(this)) entity.die();
+					if ((<PickupableEntity><unknown>entity).picked(this)) entity.die();
 				}
 				breaked = true;
 				break;
 			}
 		}
 		if (!breaked) this.canInteract = false;
-		// Only attack when trying + no animation is playing
-		if (this.tryAttacking && this.animation.duration <= 0) {
-			if (weapon) {
+		// Only attack when trying + not attacking
+		if (this.tryAttacking) {
+			if (this.attackLock > 0) this.tryAttacking = false;
+			else if (weapon) {
 				weapon.attack(this, entities, obstacles);
+				this.attackLock = weapon.duration;
 				if (!weapon.continuous) this.tryAttacking = false;
 			}
 		}
@@ -158,7 +167,7 @@ export default class Player extends Entity {
 		];
 
 		for (let ii = 0; ii < vecs.length; ii++) {
-			const distance = new Line(adjacents[ii], adjacents[ii+1]).distanceTo(this.position);
+			const distance = new Line(adjacents[ii], adjacents[ii + 1]).distanceTo(this.position);
 			this.position = this.position.addVec(vecs[ii].perpendicular().unit().scaleAll(this.hitbox.radius - distance));
 		}
 	}
@@ -182,7 +191,7 @@ export default class Player extends Entity {
 		for (let ii = 1; ii < distances.length; ii++)
 			if (distances[ii] < distances[shortestIndex])
 				shortestIndex = ii;
-		
+
 		const push = vecs[shortestIndex].perpendicular().unit().scaleAll(this.hitbox.radius - distances[shortestIndex]);
 		if (Math.abs(push.y) < PUSH_THRESHOLD && Math.abs(push.x) < PUSH_THRESHOLD) return;
 		this.position = this.position.addVec(push);

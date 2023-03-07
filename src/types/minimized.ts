@@ -1,5 +1,3 @@
-import { Animation } from "./misc";
-
 export interface MinVec2 {
 	x: number;
 	y: number;
@@ -25,11 +23,12 @@ export interface MinCircleHitbox {
 export type MinHitbox = MinRectHitbox | MinCircleHitbox;
 
 export interface MinEntity {
+	id: string;
 	type: string;
 	position: MinVec2;
 	direction: MinVec2;
 	hitbox: MinHitbox;
-	animation: Animation;
+	animations: string[];
 	despawn: boolean;
 }
 
@@ -38,11 +37,13 @@ export interface MinInventory {
 }
 
 export interface MinObstacle {
+	id: string;
 	type: string;
 	position: MinVec2;
 	direction: MinVec2;
 	hitbox: MinHitbox;
 	despawn: boolean;
+	animations: string[];
 }
 
 export interface MinMinObstacle {

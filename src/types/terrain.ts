@@ -53,6 +53,18 @@ export class World {
 		// Remove all discardable obstacles
 		for (ii = removable.length - 1; ii >= 0; ii--) this.obstacles.splice(removable[ii], 1);
 	}
+
+	// Called after data are sent to clients
+	postTick() {
+		this.entities = this.entities.map(entity => {
+			entity.animations = [];
+			return entity;
+		});
+		this.obstacles = this.obstacles.map(obstacle => {
+			obstacle.animations = [];
+			return obstacle;
+		});
+	}
 }
 
 export class Terrain {
