@@ -69,14 +69,11 @@ export default class Player extends Entity {
 			}
 		}
 		if (!breaked) this.canInteract = false;
-		// Only attack when trying + not attacking
-		if (this.tryAttacking) {
-			if (this.attackLock > 0) this.tryAttacking = false;
-			else if (weapon) {
-				weapon.attack(this, entities, obstacles);
-				this.attackLock = weapon.duration;
-				if (!weapon.continuous) this.tryAttacking = false;
-			}
+		// Only attack when trying + not attacking + there's a weapon
+		if (this.tryAttacking && this.attackLock <= 0 && weapon) {
+			weapon.attack(this, entities, obstacles);
+			this.attackLock = weapon.duration;
+			if (!weapon.continuous) this.tryAttacking = false;
 		}
 		for (const obstacle of obstacles) {
 			const collisionType = obstacle.collided(this.hitbox, this.position, this.direction);
