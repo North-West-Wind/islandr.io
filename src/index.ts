@@ -21,7 +21,7 @@ const sockets = new Map<string, ws.WebSocket>();
 export const world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]), new Plain());
 
 // Start of testing section
-
+let playerList  = new Array();
 // Let's add some ponds
 for (let ii = 0; ii < 5; ii++) world.terrains.push(new Pond());
 // And a river
@@ -47,10 +47,10 @@ server.on("connection", async socket => {
 	// Add socket to map with a generated ID.
 	const id = ID();
 	sockets.set(id, socket);
-
 	// Setup the close connection listener. Socket will be deleted from map.
 	var connected = false;
 	socket.on("close", () => {
+		playerList.splice(playerList.indexOf(username), 1);
 		console.log("Connection closed");
 		sockets.delete(id);
 		connected = false;
@@ -65,6 +65,7 @@ server.on("connection", async socket => {
 			if (decoded.id == id && decoded.username) {
 				connected = true;
 				username = decoded.username;
+				playerList.push(username);
 			} else try { socket.close(); } catch (err) { }
 			resolve();
 		})
