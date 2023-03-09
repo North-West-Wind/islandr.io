@@ -40,7 +40,7 @@ export default class Grenade extends Entity implements PickupableEntity {
 		if (player.inventory.holding >= player.inventory.slots[0]) return false;
 		// Spawn swapped weapon
 		const weapon = <GunWeapon>player.inventory.weapons[player.inventory.holding];
-		const grenade = new Grenade(weapon.id);
+		const grenade = new Grenade(weapon.name);
 		grenade.position = this.position;
 		grenade.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
 		world.entities.push(grenade);
