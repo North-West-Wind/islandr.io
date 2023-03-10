@@ -26,7 +26,7 @@ export function toRadians(degree: number) {
 
 // Things that require game object imports
 import { world } from ".";
-import { Ammo, Gun } from "./store/entities";
+import { Ammo, Gun, Grenade } from "./store/entities";
 import { CommonAngles, Vec2 } from "./types/math";
 import { GunColor } from "./types/misc";
 
@@ -42,4 +42,10 @@ export function spawnAmmo(amount: number, color: GunColor, position: Vec2) {
     ammo.position = position;
     ammo.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
     world.entities.push(ammo);
+}
+export function spawnGrenade(id: string, amount: number, position: Vec2){
+    const grenade = new Grenade(id, amount);
+    grenade.position = position;
+    grenade.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
+    world.entities.push(grenade);
 }

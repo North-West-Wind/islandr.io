@@ -8,7 +8,7 @@ import { Player } from "./store/entities";
 import { Particle } from "./types/particle";
 import { World } from "./types/terrain";
 import { Plain, Pond, River, Sea } from "./store/terrains";
-import { Tree, Bush, Crate, Stone, MosinTree, SovietCrate } from "./store/obstacles";
+import { Tree, Bush, Crate, Stone, MosinTree, SovietCrate, GrenadeCrate } from "./store/obstacles";
 
 export var ticksElapsed = 0;
 
@@ -36,6 +36,7 @@ for (let ii = 0; ii < 16; ii++) world.obstacles.push(new SovietCrate());
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Bush());
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Crate());
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Stone());
+for (let ii = 0; ii < 30; ii++) world.obstacles.push(new GrenadeCrate());
 
 // End of testing section
 

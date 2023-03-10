@@ -14,15 +14,15 @@ export class Inventory {
 	slots: number[];
 	// Indices are colors. Refer to GunColor
 	ammos: number[];
-	// Utilities. Similar working to ammos, but yet to be implemented
-	utilities: number[];
+	// Utilities. Maps ID to amount of util.
+	utilities: Map<string, number>;
 
-	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities?: number[]) {
+	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities?: Map<string, number>) {
 		this.holding = holding;
 		this.slots = slots;
 		this.weapons = weapons || Array(slots.reduce((a, b) => a + b));
 		this.ammos = ammos || Array(Object.keys(GunColor).length / 2).fill(0);
-		this.utilities = utilities || []; // TODO: Use a utility enum to generate 0s
+		this.utilities = utilities || new Map();
 	}
 
 	minimize() {
