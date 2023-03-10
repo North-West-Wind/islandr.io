@@ -12,7 +12,7 @@ export default class Player extends Entity {
 	hitbox = new CircleHitbox(1);
 	id: string;
 	username: string;
-	boost = 1;
+	boost = 2;
 	scope = 2;
 	tryAttacking = false;
 	attackLock = 0;

@@ -23,6 +23,7 @@ export default class MP5 extends GunWeapon {
 	delay = 12;
 	spread = 1;
 	bullets = 30;
+	dmg = 5;
 
 	static {
 		WEAPON_SUPPLIERS.set(MP5.ID, new MP5Supplier());

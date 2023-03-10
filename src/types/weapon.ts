@@ -61,6 +61,7 @@ export abstract class MeleeWeapon extends Weapon {
 export abstract class GunWeapon extends Weapon {
 	type = WeaponType.GUN;
 	color!: GunColor;
+	dmg!: number;
 	// Bullet speed. Unit: x units/tick
 	speed!: number;
 	// Accuracy: 0 to 1, where 1 means most accurate (straight line shot)
