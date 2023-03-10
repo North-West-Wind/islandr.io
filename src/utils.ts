@@ -43,9 +43,9 @@ export function spawnAmmo(amount: number, color: GunColor, position: Vec2) {
     ammo.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
     world.entities.push(ammo);
 }
-export function spawnGrenade(id: string, position: Vec2){
-    const grenade = new Grenade(id);
+export function spawnGrenade(id: string, amount: number, position: Vec2){
+    const grenade = new Grenade(id, amount);
     grenade.position = position;
     grenade.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
-    world.entities.push(grenade)
+    world.entities.push(grenade);
 }
