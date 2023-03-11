@@ -40,7 +40,7 @@ for (let ii = 0; ii < 30; ii++) world.obstacles.push(new GrenadeCrate());
 for (let ii = 0; ii < 3; ii++) world.obstacles.push(new AWMCrate());
 
 // End of testing section
-
+let numberOfPlayers = 0;
 server.on("connection", async socket => {
 	console.log("Received a connection request");
 	// Set the type for msgpack later.
@@ -56,6 +56,7 @@ server.on("connection", async socket => {
 		console.log("Connection closed");
 		sockets.delete(id);
 		connected = false;
+		numberOfPlayers --;
 	});
 
 	var username = "";
@@ -67,6 +68,7 @@ server.on("connection", async socket => {
 			if (decoded.id == id && decoded.username) {
 				connected = true;
 				username = decoded.username;
+				numberOfPlayers++ ;
 			} else try { socket.close(); } catch (err) { }
 			resolve();
 		})
