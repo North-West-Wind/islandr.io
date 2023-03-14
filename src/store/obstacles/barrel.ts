@@ -6,6 +6,7 @@ import { Entity } from "../../types/entity";
 import { Player } from "../entities";
 export default class Barrel extends Obstacle {
 	type = "barrel";
+	madePlayerDie = false;
 
 	constructor() {
 		const salt = randomBetween(0.9, 1.1);
@@ -16,9 +17,10 @@ export default class Barrel extends Obstacle {
 		// Iterate through entities
 		for (const entity of entities) {
 		  // Check for collision and type
-		  if (entity.collided(this.hitbox, this.position, this.direction) && entity.type === "player" && this.health === 0) {
+		  if (entity.collided(this.hitbox, this.position, this.direction) && entity.type === "player" && this.health === 0 && this.madePlayerDie == false) {
 			// Damage the entity
 			entity.damage(100);
+			this.madePlayerDie = true;
 		  }
 		}
 	  }
