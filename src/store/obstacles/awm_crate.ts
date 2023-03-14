@@ -8,8 +8,8 @@ export default class AWMCrate extends Obstacle {
 	type = "AWMCrate";
 
 	constructor() {
-		const hitbox = new RectHitbox(4, 4);
-		super(world, hitbox, hitbox.scaleAll(0.75), 80, 80);
+		const hitbox = new RectHitbox(4, 5);
+		super(world, hitbox, hitbox.scaleAll(0.75), 200, 200);
 		this.direction = Vec2.UNIT_X;
 		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this.hitbox, this.position, this.direction))) this.position = world.size.scale(Math.random(), Math.random());
 	}
