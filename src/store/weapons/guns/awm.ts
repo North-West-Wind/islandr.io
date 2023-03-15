@@ -18,7 +18,7 @@ export default class AWM extends GunWeapon {
 	speed = 0.9;
 	accuracy = 1.0;
 	inaccuracy = 0.0;
-	weight = 1.0;
+	weight = 0.7;
 	ticks = 50;
 	dmg = 200;
 	delay = 50;
