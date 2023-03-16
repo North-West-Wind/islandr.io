@@ -22,6 +22,7 @@ export default class M9 extends GunWeapon {
 	ticks = 50;
 	delay = 12;
 	dual = 0;
+	dmg = 5;
 
 	static {
 		WEAPON_SUPPLIERS.set(M9.ID, new M9Supplier());

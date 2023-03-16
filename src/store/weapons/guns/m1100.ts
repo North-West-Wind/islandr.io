@@ -22,6 +22,8 @@ export default class M1100 extends GunWeapon {
 	ticks = 50;
 	delay = 20;
 	bullets = 9;
+	dmg = 70;
+	
 
 	static {
 		WEAPON_SUPPLIERS.set(M1100.ID, new M1100Supplier());

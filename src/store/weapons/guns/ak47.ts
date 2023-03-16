@@ -3,29 +3,29 @@ import { GunColor } from "../../../types/misc";
 import { WeaponSupplier } from "../../../types/supplier";
 import { WEAPON_SUPPLIERS } from "..";
 
-class MP5Supplier implements WeaponSupplier {
+class AK47Supplier implements WeaponSupplier {
 	create() {
-		return new MP5();
+		return new AK47();
 	}
 }
 
-export default class MP5 extends GunWeapon {
-	static readonly ID = "mp5";
-	id = MP5.ID;
-	name = "MP5";
+export default class AK47 extends GunWeapon {
+	static readonly ID = "ak47";
+	id = AK47.ID;
+	name = "AK 47";
 	continuous = true;
-	color = GunColor.YELLOW;
-	speed = 0.6;
-	accuracy = 0.7;
-	inaccuracy = 0.3;
+	color = GunColor.BLUE;
+	speed = 0.8;
+	accuracy = 0.8;
+	inaccuracy = 0.2;
 	weight = 0.9;
 	ticks = 50;
 	delay = 12;
 	spread = 1;
 	bullets = 30;
-	dmg = 5;
+	dmg = 7;
 
 	static {
-		WEAPON_SUPPLIERS.set(MP5.ID, new MP5Supplier());
+		WEAPON_SUPPLIERS.set(AK47.ID, new AK47Supplier());
 	}
 }

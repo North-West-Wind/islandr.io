@@ -25,5 +25,7 @@ export enum GunColor {
 	YELLOW = 0,
 	RED = 1,
 	BLUE = 2,
-	GREEN = 3
+	GREEN = 3,
+	SUBSONIC = 4,
+	DEAGLE = 5
 }

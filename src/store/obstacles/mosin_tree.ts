@@ -3,8 +3,7 @@ import { CircleHitbox, CommonAngles, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { randomBetween } from "../../utils";
 import { GunColor } from "../../types/misc";
-import { Gun} from "../entities";
-
+import { spawnGun, spawnAmmo } from "../../utils";
 export default class MosinTree extends Obstacle {
 	type = "tree";
 
@@ -16,9 +15,8 @@ export default class MosinTree extends Obstacle {
 	die() {
 		super.die();
 		// TODO: Spawn loots
-		const gun = new Gun("mosin_nagant", GunColor.BLUE);
-		gun.position = this.position;
-		gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
-		world.entities.push(gun);
+		spawnGun("mosin_nagant", GunColor.BLUE, this.position);
+		spawnAmmo(15, GunColor.BLUE, this.position);
+		spawnAmmo(15, GunColor.BLUE, this.position);
 	}
 }

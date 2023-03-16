@@ -22,6 +22,7 @@ export default class M870 extends GunWeapon {
 	ticks = 50;
 	delay = 50;
 	bullets = 6;
+	dmg = 100;
 
 	static {
 		WEAPON_SUPPLIERS.set(M870.ID, new M870Supplier());

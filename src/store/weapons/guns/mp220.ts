@@ -22,6 +22,7 @@ export default class MP220 extends GunWeapon {
 	ticks = 50;
 	delay = 10;
 	bullets = 8;
+	dmg = 100;
 
 	static {
 		WEAPON_SUPPLIERS.set(MP220.ID, new MP220Supplier());
