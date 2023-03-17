@@ -2,7 +2,7 @@ import { clamp, ID } from "../utils";
 import { CircleHitbox, Hitbox, Line, RectHitbox, Vec2 } from "./math";
 import { Obstacle } from "./obstacle";
 import { Weapon } from "./weapon";
-import { Fists } from "../store/weapons";
+import { WEAPON_SUPPLIERS } from "../store/weapons";
 import { MinEntity, MinInventory } from "./minimized";
 import { CollisionType, GunColor } from "./misc";
 import { world } from "..";
@@ -31,7 +31,7 @@ export class Inventory {
 
 	static defaultEmptyInventory() {
 		const inv = new Inventory(2, [2, 1]);
-		inv.weapons[2] = new Fists();
+		inv.weapons[2] = WEAPON_SUPPLIERS.get("fists")!.create();
 		return inv;
 	}
 }

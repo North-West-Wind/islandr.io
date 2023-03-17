@@ -1,6 +1,6 @@
 import { Weapon } from "./weapon";
 
-interface Supplier<T> {
+export interface Supplier<T> {
 	create(...arg: any[]): T;
 }
 

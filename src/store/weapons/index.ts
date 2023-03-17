@@ -1,20 +1,51 @@
+import * as fs from "fs";
+import { GunData, MeleeData } from "../../types/data";
 import { WeaponSupplier } from "../../types/supplier";
-import { Weapon } from "../../types/weapon";
+import { GunWeapon, MeleeWeapon, Weapon } from "../../types/weapon";
 
 export const WEAPON_SUPPLIERS = new Map<string, WeaponSupplier>();
 
-import Fists from "./fists";
-
-export { default as Fists } from "./fists";
-export { default as M9 } from "./guns/m9";
-export { default as MosinNagant } from "./guns/mosin_nagant";
-export { default as M870 } from "./guns/m870";
-export { default as MP220 } from "./guns/mp220";
-export { default as M1100 } from "./guns/m1100";
-export { default as MP5 } from "./guns/mp5";
 export { default as FragGrenade } from "./grenades/frag_grenade";
-export { default as AWM} from "./guns/awm";
-export { default as AK47} from "./guns/ak47";
 export function castCorrectWeapon(id: string): Weapon {
-	return WEAPON_SUPPLIERS.get(id)?.create() || new Fists();
+	return WEAPON_SUPPLIERS.get(id)?.create() || WEAPON_SUPPLIERS.get("fists")!.create();
+}
+
+class MeleeSupplier implements WeaponSupplier {
+	id: string;
+	data: MeleeData;
+
+	constructor(id: string, data: MeleeData) {
+		this.id = id;
+		this.data = data;
+	}
+
+	create() {
+		return new MeleeWeapon(this.id, this.data);
+	}
+}
+
+class GunSupplier implements WeaponSupplier {
+	id: string;
+	data: GunData;
+
+	constructor(id: string, data: GunData) {
+		this.id = id;
+		this.data = data;
+	}
+
+	create() {
+		return new GunWeapon(this.id, this.data);
+	}
+}
+
+for (const file of fs.readdirSync("./opensurviv-data/data/weapons/melee/")) {
+	if (file.startsWith(".")) continue;
+	const data = <MeleeData> JSON.parse(fs.readFileSync("./opensurviv-data/data/weapons/melee/" + file, { encoding: "utf8" }));
+	WEAPON_SUPPLIERS.set(file.split(".")[0], new MeleeSupplier(file.split(".")[0], data));
+}
+
+for (const file of fs.readdirSync("./opensurviv-data/data/weapons/guns/")) {
+	if (file.startsWith(".")) continue;
+	const data = <GunData> JSON.parse(fs.readFileSync("./opensurviv-data/data/weapons/guns/" + file, { encoding: "utf8" }));
+	WEAPON_SUPPLIERS.set(file.split(".")[0], new GunSupplier(file.split(".")[0], data));
 }

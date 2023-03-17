@@ -11,18 +11,24 @@ export default class Bullet extends Entity {
 	shooter: Entity | Obstacle;
 	dmg: number;
 	despawning = false;
+	falloff: number;
+	distanceSqr = 0;
 
-	constructor(shooter: Entity | Obstacle, dmg: number, velocity: Vec2, ticks: number) {
+	constructor(shooter: Entity | Obstacle, dmg: number, velocity: Vec2, ticks: number, falloff: number) {
 		super();
 		this.shooter = shooter;
 		this.dmg = dmg;
 		this.velocity = velocity;
 		this.health = this.maxHealth = ticks;
 		this.vulnerable = false;
+		this.falloff = falloff;
 	}
 
 	tick(entities: Entity[], obstacles: Obstacle[]) {
+		const lastPos = this.position;
 		super.tick(entities, obstacles);
+		this.distanceSqr += this.position.addVec(lastPos.inverse()).magnitudeSqr();
+		if (this.distanceSqr >= 10000) this.dmg *= this.falloff;
 		var combined: (Entity | Obstacle)[] = [];
 		combined = combined.concat(entities, obstacles);
 		if (!this.despawn)
@@ -50,7 +56,8 @@ export default class Bullet extends Entity {
 
 	die() {
 		super.die();
-		addParticles(new Particle("blood", this.position));
+		// Needs a state marker to determine what particle gets played
+		//addParticles(new Particle("blood", this.position));
 	}
 
 	minimize() {

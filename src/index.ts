@@ -107,7 +107,7 @@ server.on("connection", async socket => {
 				// Add corresponding direction vector to a zero vector to determine the velocity and direction.
 				var angleVec = Vec2.ZERO;
 				for (let ii = 0; ii < movements.length; ii++) if (movements[ii]) angleVec = angleVec.addVec(DIRECTION_VEC[ii]);
-				player.setVelocity(angleVec.unit().scaleAll(0.1));
+				player.setVelocity(angleVec.unit());
 				break;
 			case "movementrelease":
 				// Make the direction false
@@ -116,7 +116,7 @@ server.on("connection", async socket => {
 				// Same as movementpress
 				var angleVec = Vec2.ZERO;
 				for (let ii = 0; ii < movements.length; ii++) if (movements[ii]) angleVec = angleVec.addVec(DIRECTION_VEC[ii]);
-				player.setVelocity(angleVec.unit().scaleAll(0.1));
+				player.setVelocity(angleVec.unit());
 				break;
 			// Very not-done. Will probably change to "attack" and "use" tracking.
 			case "mousepress":
