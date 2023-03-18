@@ -54,7 +54,7 @@ export class MeleeWeapon extends Weapon {
 	constructor(id: string, data: MeleeData) {
 		super(id, data.name, (data.normal.cooldown / 1000) * TICKS_PER_SECOND, data.normal.speed.equip, data.normal.speed.attack, data.auto || false, data.droppable);
 		this.offset = new Vec2(data.normal.offset.x, data.normal.offset.y).scaleAll(GLOBAL_UNIT_MULTIPLIER);
-		this.hitbox = new CircleHitbox(data.normal.radius * GLOBAL_UNIT_MULTIPLIER);
+		this.hitbox = new CircleHitbox(data.normal.radius);
 		this.damage = data.normal.damage;
 		this.delay = data.normal.damageDelay;
 		this.animations = data.visuals.animations;
