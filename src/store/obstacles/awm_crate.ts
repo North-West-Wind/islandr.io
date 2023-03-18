@@ -17,8 +17,8 @@ export default class AWMCrate extends Obstacle {
 	die() {
 		super.die();
 		// TODO: Spawn loots
-		spawnGun("awm", GunColor.SUBSONIC, this.position);
-		spawnAmmo(10, GunColor.SUBSONIC, this.position);
-		spawnAmmo(10, GunColor.SUBSONIC, this.position);
+		spawnGun("awm", GunColor.OLIVE, this.position);
+		spawnAmmo(10, GunColor.OLIVE, this.position);
+		spawnAmmo(10, GunColor.OLIVE, this.position);
 	}
 }

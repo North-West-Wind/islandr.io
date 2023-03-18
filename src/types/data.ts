@@ -36,6 +36,12 @@ interface GunStats {
 	bullet: BulletStats
 }
 
+export interface TracerData {
+	type: string
+	width: number
+	length: number
+}
+
 export type GunData = {
 	[key: string]: Partial<GunStats>
 } & {
@@ -48,16 +54,7 @@ export type GunData = {
 	droppable: boolean
 	normal: GunStats
 	visuals: {
-		tracer: {
-			type: number
-			width: number
-			length: number
-			color: {
-				regular: string
-				saturated: string
-				chambered: string
-			}
-		}
+		tracer: TracerData
 		animations: string[]
 		image: string
 	}
@@ -96,4 +93,14 @@ export type MeleeData = {
 	visuals: {
 		animations: string[]
 	}
+}
+
+interface TracerColor {
+	regular: string;
+	saturated: string;
+	chambered: string;
+}
+
+export type TracerColorData = {
+	[key: string]: TracerColor;
 }

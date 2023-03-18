@@ -15,12 +15,12 @@ export default class Barrel extends Obstacle {
 	tick(entities: Entity[]) {
 		// Iterate through entities
 		for (const entity of entities) {
-		  // Check for collision and type
-		  if (entity.collided(this.hitbox, this.position, this.direction) && entity.type === "player" && this.health === 0 && this.madePlayerDie === false) {
-			// Damage the entity
-			entity.damage(100);
-			this.madePlayerDie = true;
-		  }
+			// Check for collision and type
+			if (entity.collided(this.hitbox, this.position, this.direction) && entity.type === "player" && this.health === 0 && this.madePlayerDie === false) {
+				// Damage the entity
+				entity.damage(100);
+				this.madePlayerDie = true;
+			}
 		}
-	  }
+	}
 }

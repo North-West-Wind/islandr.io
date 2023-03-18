@@ -1,8 +1,7 @@
 import { world } from "../..";
-import { CommonAngles, RectHitbox, Vec2 } from "../../types/math";
+import { RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { GunColor } from "../../types/misc";
-import { Ammo, Gun } from "../entities";
 import { randomBetween, spawnAmmo, spawnGun } from "../../utils";
 
 export default class SovietCrate extends Obstacle {
@@ -24,11 +23,11 @@ export default class SovietCrate extends Obstacle {
 		// 	spawnAmmo(5, GunColor.RED, this.position);
 		// for (let ii = 0; ii < 2; ii++)
 		// 	spawnAmmo(45, GunColor.YELLOW, this.position);
-		let gunList = ["m9", "m870", "mp5", "m1100", "mp220", "ak47"];
-		let gunColorList = [GunColor.YELLOW, GunColor.RED, GunColor.YELLOW, GunColor.RED, GunColor.RED, GunColor.BLUE];
-		let gunNumAmmo = [[22, 23], [5, 5], [45, 45], [6, 6], [5, 5], [45, 45]];
+		const gunList = ["m9", "m870", "mp5", "m1100", "mp220", "ak47"];
+		const gunColorList = [GunColor.YELLOW, GunColor.RED, GunColor.YELLOW, GunColor.RED, GunColor.RED, GunColor.BLUE];
+		const gunNumAmmo = [[22, 23], [5, 5], [45, 45], [6, 6], [5, 5], [45, 45]];
 		for (let ii=0; ii<Math.floor(randomBetween(2, 4)); ii++){
-		let GunIndex = Math.floor(randomBetween(0, 6));
+			const GunIndex = Math.floor(randomBetween(0, 6));
 		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position);
 		for (let ii=0; ii<2; ii++ ){spawnAmmo(gunNumAmmo[GunIndex][ii], gunColorList[GunIndex], this.position);}
 	}}

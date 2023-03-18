@@ -1,4 +1,4 @@
-import { PUSH_THRESHOLD, TICKS_PER_SECOND } from "../../constants";
+import { GLOBAL_UNIT_MULTIPLIER, PUSH_THRESHOLD, TICKS_PER_SECOND } from "../../constants";
 import { Entity, Inventory } from "../../types/entity";
 import { PickupableEntity } from "../../types/extensions";
 import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/math";
@@ -15,7 +15,6 @@ export default class Player extends Entity {
 	boost = 1.5;
 	scope = 2;
 	tryAttacking = false;
-	attacking = false;
 	attackLock = 0;
 	tryInteracting = false;
 	canInteract = false;
@@ -38,7 +37,7 @@ export default class Player extends Entity {
 		// Also scale the velocity to boost by soda and pills, and weight by gun
 		var scale = this.boost;
 		const weapon = this.inventory.weapons[this.inventory.holding];
-		velocity = velocity.scaleAll((this.attacking ? weapon.attackSpeed : weapon.moveSpeed) / (2 * TICKS_PER_SECOND));
+		velocity = velocity.scaleAll((this.attackLock ? weapon.attackSpeed : weapon.moveSpeed) * GLOBAL_UNIT_MULTIPLIER / TICKS_PER_SECOND);
 		super.setVelocity(velocity.scaleAll(scale));
 	}
 
@@ -75,11 +74,10 @@ export default class Player extends Entity {
 		if (!breaked) this.canInteract = false;
 		// Only attack when trying + not attacking + there's a weapon
 		if (this.tryAttacking && this.attackLock <= 0 && weapon) {
-			this.attacking = true;
 			weapon.attack(this, entities, obstacles);
 			this.attackLock = weapon.lock;
 			if (!weapon.auto) this.tryAttacking = false;
-		} else if (!this.tryAttacking) this.attacking = false;
+		}
 		for (const obstacle of obstacles) {
 			const collisionType = obstacle.collided(this.hitbox, this.position, this.direction);
 			if (collisionType) {

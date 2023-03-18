@@ -1,22 +1,24 @@
-import { addParticles } from "../..";
+import { GLOBAL_UNIT_MULTIPLIER } from "../../constants";
+import { TracerData } from "../../types/data";
 import { Entity } from "../../types/entity";
 import { CircleHitbox, Line, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
-import { Particle } from "../../types/particle";
 
 export default class Bullet extends Entity {
 	type = "bullet";
-	hitbox = new CircleHitbox(0.1);
 	discardable = true;
 	shooter: Entity | Obstacle;
+	data: TracerData;
 	dmg: number;
 	despawning = false;
 	falloff: number;
 	distanceSqr = 0;
 
-	constructor(shooter: Entity | Obstacle, dmg: number, velocity: Vec2, ticks: number, falloff: number) {
+	constructor(shooter: Entity | Obstacle, dmg: number, velocity: Vec2, ticks: number, falloff: number, data: TracerData) {
 		super();
+		this.hitbox = new CircleHitbox(data.width * GLOBAL_UNIT_MULTIPLIER / 2);
 		this.shooter = shooter;
+		this.data = data;
 		this.dmg = dmg;
 		this.velocity = velocity;
 		this.health = this.maxHealth = ticks;
@@ -62,6 +64,6 @@ export default class Bullet extends Entity {
 
 	minimize() {
 		const min = super.minimize();
-		return Object.assign(min, { dmg: this.dmg });
+		return Object.assign(min, { tracer: this.data });
 	}
 }

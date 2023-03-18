@@ -1,5 +1,5 @@
 import { world } from "../..";
-import { CircleHitbox, CommonAngles, Vec2 } from "../../types/math";
+import { CircleHitbox } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { randomBetween } from "../../utils";
 import { GunColor } from "../../types/misc";

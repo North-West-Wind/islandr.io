@@ -22,10 +22,18 @@ export enum MovementDirection {
 }
 
 export enum GunColor {
-	YELLOW = 0,
-	RED = 1,
-	BLUE = 2,
-	GREEN = 3,
-	SUBSONIC = 4,
-	DEAGLE = 5
+	YELLOW = 0, // 9mm
+	RED = 1, // 12 gauge
+	BLUE = 2, // 7.62mm
+	GREEN = 3, // 5.56mm
+	BLACK = 4, // .50 AE
+	OLIVE = 5, // .308 Subsonic
+	ORANGE = 6, // Flare
+	PURPLE = 7, // .45 ACP
+	TEAL = 8, // 40mm
+	BROWN = 9, // potato
+	PINK = 10, // Heart
+	PURE_BLACK = 11, // Rainbow
+	CURSED = 12,
+	BUGLE = 13,
 }

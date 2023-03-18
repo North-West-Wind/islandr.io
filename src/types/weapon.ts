@@ -1,13 +1,13 @@
 import { world } from "..";
-import { TICKS_PER_SECOND } from "../constants";
+import { GLOBAL_UNIT_MULTIPLIER, TICKS_PER_SECOND } from "../constants";
 import { Bullet } from "../store/entities";
 import { GunColor } from "./misc";
-import { clamp, randomBetween, toRadians } from "../utils";
+import { randomBetween, toRadians } from "../utils";
 import { Entity } from "./entity";
-import { CircleHitbox, CommonAngles, Hitbox, Vec2 } from "./math";
+import { CircleHitbox, Hitbox, Vec2 } from "./math";
 import { MinWeapon } from "./minimized";
 import { Obstacle } from "./obstacle";
-import { BulletStats, GunData, MeleeData } from "./data";
+import { BulletStats, GunData, MeleeData, TracerData } from "./data";
 
 export enum WeaponType {
 	MELEE = "melee",
@@ -53,8 +53,8 @@ export class MeleeWeapon extends Weapon {
 
 	constructor(id: string, data: MeleeData) {
 		super(id, data.name, (data.normal.cooldown / 1000) * TICKS_PER_SECOND, data.normal.speed.equip, data.normal.speed.attack, data.auto || false, data.droppable);
-		this.offset = new Vec2(data.normal.offset.x, data.normal.offset.y);
-		this.hitbox = new CircleHitbox(data.normal.radius);
+		this.offset = new Vec2(data.normal.offset.x, data.normal.offset.y).scaleAll(GLOBAL_UNIT_MULTIPLIER);
+		this.hitbox = new CircleHitbox(data.normal.radius * GLOBAL_UNIT_MULTIPLIER);
 		this.damage = data.normal.damage;
 		this.delay = data.normal.damageDelay;
 		this.animations = data.visuals.animations;
@@ -93,7 +93,7 @@ export class GunWeapon extends Weapon {
 	moveSpread: number;
 	offset: Vec2;
 	bullet: BulletStats;
-	delay: number;
+	tracer: TracerData;
 
 	// Actual variables
 	magazine = 0;
@@ -104,9 +104,9 @@ export class GunWeapon extends Weapon {
 		this.bullets = data.normal.bullets;
 		this.spread = data.normal.spread.still;
 		this.moveSpread = data.normal.spread.still;
-		this.offset = new Vec2(data.length, 0);
+		this.offset = new Vec2(data.length * GLOBAL_UNIT_MULTIPLIER, 0);
 		this.bullet = data.normal.bullet;
-		this.delay = data.normal.delay.firing;
+		this.tracer = data.visuals.tracer;
 	}
 
 	attack(attacker: Entity, _entities: Entity[], _obstacles: Obstacle[]) {
@@ -115,18 +115,16 @@ export class GunWeapon extends Weapon {
 
 	// Spawn the bullet(s)
 	shoot(attacker: Entity) {
-		setTimeout(() => {
-			if (!attacker.despawn && this.magazine > 0) {
-				this.magazine--;
-				for (let ii = 0; ii <= this.bullets; ii++) {
-					var angles = attacker.direction.angle() + toRadians((Math.random() - 0.5) * (attacker.velocity.magnitudeSqr() != 0 ? this.moveSpread : this.spread));
-					const position = attacker.position.addVec(this.offset.addAngle(angles));
-					const bullet = new Bullet(attacker, this.bullet.damage, Vec2.UNIT_X.addAngle(angles).scaleAll(this.bullet.speed), randomBetween(this.bullet.range[0], this.bullet.range[1]) / (this.bullet.speed / TICKS_PER_SECOND), this.bullet.falloff);
-					bullet.position = position;
-					world.entities.push(bullet);
-				}
+		if (!attacker.despawn && this.magazine > 0) {
+			this.magazine--;
+			for (let ii = 0; ii <= this.bullets; ii++) {
+				var angles = attacker.direction.angle() + toRadians((Math.random() - 0.5) * (attacker.velocity.magnitudeSqr() != 0 ? this.moveSpread : this.spread));
+				const position = attacker.position.addVec(this.offset.addAngle(angles));
+				const bullet = new Bullet(attacker, this.bullet.damage, Vec2.UNIT_X.addAngle(angles).scaleAll(this.bullet.speed), randomBetween(this.bullet.range[0], this.bullet.range[1]) / (this.bullet.speed / TICKS_PER_SECOND), this.bullet.falloff, this.tracer);
+				bullet.position = position;
+				world.entities.push(bullet);
 			}
-		}, this.delay);
+		}
 	}
 }
 
