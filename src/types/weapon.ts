@@ -104,7 +104,7 @@ export class GunWeapon extends Weapon {
 		this.bullets = data.normal.bullets;
 		this.spread = data.normal.spread.still;
 		this.moveSpread = data.normal.spread.still;
-		this.offset = new Vec2(data.length * GLOBAL_UNIT_MULTIPLIER, 0);
+		this.offset = new Vec2(data.length, 0);
 		this.bullet = data.normal.bullet;
 		this.tracer = data.visuals.tracer;
 	}
