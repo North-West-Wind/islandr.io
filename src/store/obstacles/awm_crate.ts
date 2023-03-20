@@ -2,7 +2,7 @@ import { world } from "../..";
 import { RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { GunColor } from "../../types/misc";
-import { spawnAmmo, spawnGun } from "../../utils";
+import { randomBetween, spawnAmmo, spawnGun } from "../../utils";
 
 export default class AWMCrate extends Obstacle {
 	type = "AWMCrate";
@@ -17,8 +17,11 @@ export default class AWMCrate extends Obstacle {
 	die() {
 		super.die();
 		// TODO: Spawn loots
-		spawnGun("awm", GunColor.OLIVE, this.position);
-		spawnAmmo(10, GunColor.OLIVE, this.position);
-		spawnAmmo(10, GunColor.OLIVE, this.position);
+		const GunIndex = Math.floor(randomBetween(0, 2));
+		const gunNumAmmo = [[15, 20], [35, 35], [15, 15]];
+		const gunList = ["awm", "sv98", "mosin_nagant"];
+		const gunColorList = [GunColor.OLIVE, GunColor.BLUE, GunColor.BLUE];
+		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position);
+		for (let ii=0; ii<2; ii++ ){spawnAmmo(gunNumAmmo[GunIndex][ii], gunColorList[GunIndex], this.position);}
 	}
 }
