@@ -141,9 +141,12 @@ server.on("connection", async socket => {
 				var holding = player.inventory.holding + swPacket.delta;
 				if (holding < 0) holding += player.inventory.weapons.length;
 				else holding %= player.inventory.weapons.length;
-				while (!player.inventory.weapons[holding])
+				while (!player.inventory.getWeapon(holding))
 					holding += unitDelta;
 				player.inventory.holding = holding;
+				break;
+			case "reloadweapon":
+				player.reload();
 				break;
 		}
 	});

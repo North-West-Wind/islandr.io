@@ -25,6 +25,19 @@ export class Inventory {
 		this.utilities = utilities || new Map();
 	}
 
+	getWeapon(index = -1) {
+		if (index < 0) index = this.holding;
+		if (index < this.weapons.length) return this.weapons[index];
+		const util = Object.keys(this.utilities)[index - this.weapons.length];
+		if (this.utilities.get(util)) return WEAPON_SUPPLIERS.get(util)!.create();
+		return undefined;
+	}
+
+	setWeapon(weapon: Weapon, index = -1) {
+		if (index < 0) index = this.holding;
+		if (index < this.weapons.length) this.weapons[index] = weapon;
+	}
+
 	minimize() {
 		return <MinInventory> { holding: this.weapons[this.holding].minimize() };
 	}

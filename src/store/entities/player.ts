@@ -4,7 +4,7 @@ import { PickupableEntity } from "../../types/extensions";
 import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/math";
 import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
-import { GunWeapon } from "../../types/weapon";
+import { GunWeapon, WeaponType } from "../../types/weapon";
 import { spawnAmmo, spawnGun } from "../../utils";
 
 export default class Player extends Entity {
@@ -22,7 +22,10 @@ export default class Player extends Entity {
 	// Last held weapon. Used for tracking weapon change
 	lastHolding = "fists";
 	normalVelocity = Vec2.ZERO;
-	friction = 0.02; // frictional acceleration, not force
+
+	// Track reloading ticks
+	reloadTicks = 0;
+	maxReloadTicks = 0;
 
 	constructor(id: string, username: string) {
 		super();
@@ -36,7 +39,7 @@ export default class Player extends Entity {
 		else this.normalVelocity = velocity;
 		// Also scale the velocity to boost by soda and pills, and weight by gun
 		var scale = this.boost;
-		const weapon = this.inventory.weapons[this.inventory.holding];
+		const weapon = this.inventory.getWeapon()!;
 		velocity = velocity.scaleAll((this.attackLock ? weapon.attackSpeed : weapon.moveSpeed) * GLOBAL_UNIT_MULTIPLIER / TICKS_PER_SECOND);
 		super.setVelocity(velocity.scaleAll(scale));
 	}
@@ -47,7 +50,7 @@ export default class Player extends Entity {
 		// Decrease attack locking timer
 		if (this.attackLock > 0) this.attackLock--;
 		// If weapon changed, re-calculate the velocity
-		const weapon = this.inventory.weapons[this.inventory.holding];
+		const weapon = this.inventory.getWeapon()!;
 		if (weapon.name != this.lastHolding) {
 			this.lastHolding = weapon.name;
 			this.setVelocity();
@@ -90,6 +93,25 @@ export default class Player extends Entity {
 				}
 			}
 		}
+
+		if (this.reloadTicks) {
+			if (weapon.type != WeaponType.GUN) this.maxReloadTicks = this.reloadTicks = 0;
+			else {
+				this.reloadTicks--;
+				if (!this.reloadTicks) {
+					this.maxReloadTicks = 0;
+					const gun = <GunWeapon> weapon;
+					var delta = gun.magazine;
+					gun.magazine += Math.min(gun.reloadBullets, this.inventory.ammos[gun.color]);
+					if (gun.magazine > gun.capacity) gun.magazine = gun.capacity;
+					else if (gun.magazine < gun.capacity && gun.reloadBullets != gun.capacity && this.inventory.ammos[gun.color]) this.maxReloadTicks = this.reloadTicks = gun.reloadTicks;
+					delta -= gun.magazine;
+					this.inventory.setWeapon(gun);
+					this.inventory.ammos[gun.color] += delta;
+					console.log(this.inventory);
+				}
+			}
+		}
 	}
 
 	die() {
@@ -105,6 +127,14 @@ export default class Player extends Entity {
 		for (let ii = 0; ii < Object.keys(GunColor).length / 2; ii++)
 			if (this.inventory.ammos[ii] > 0)
 				spawnAmmo(this.inventory.ammos[ii], ii, this.position);
+	}
+
+	reload() {
+		const weapon = this.inventory.getWeapon();
+		if (weapon?.type != WeaponType.GUN) return;
+		const gun = <GunWeapon> weapon;
+		if (!this.inventory.ammos[gun.color] || gun.magazine == gun.capacity) return;
+		this.maxReloadTicks = this.reloadTicks = gun.reloadTicks;
 	}
 
 	minimize() {

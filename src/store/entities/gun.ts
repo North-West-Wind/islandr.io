@@ -29,8 +29,8 @@ export default class Gun extends Entity implements PickupableEntity {
 	picked(player: Player) {
 		// Loop through gun slots to see if there's an empty slot
 		for (let ii = 0; ii < player.inventory.slots[0]; ii++) {
-			if (!player.inventory.weapons[ii]) {
-				player.inventory.weapons[ii] = castCorrectWeapon(this.name);
+			if (!player.inventory.getWeapon(ii)) {
+				player.inventory.setWeapon(castCorrectWeapon(this.name), ii);
 				// If player is holding a melee weapon, automatically switch to the gun
 				if (player.inventory.holding >= player.inventory.slots[0] && player.inventory.holding < player.inventory.slots[0] + player.inventory.slots[1])
 					player.inventory.holding = ii;
@@ -41,13 +41,13 @@ export default class Gun extends Entity implements PickupableEntity {
 		// If player is holding melee weapon, don't switch
 		if (player.inventory.holding >= player.inventory.slots[0]) return false;
 		// Spawn swapped weapon
-		const weapon = <GunWeapon>player.inventory.weapons[player.inventory.holding];
+		const weapon = <GunWeapon>player.inventory.getWeapon();
 		const gun = new Gun(weapon.id, weapon.color);
 		gun.position = this.position;
 		gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
 		world.entities.push(gun);
 		// Swap the player's weapon on hand with the one on ground
-		player.inventory.weapons[player.inventory.holding] = castCorrectWeapon(this.name);
+		player.inventory.setWeapon(castCorrectWeapon(this.name));
 		return true;
 	}
 

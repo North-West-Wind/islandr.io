@@ -61,7 +61,11 @@ export class SwitchWeaponPacket {
 	delta!: number;
 }
 
-export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket;
+export class ReloadWeaponPacket {
+	type = "reloadweapon";
+}
+
+export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket | ReloadWeaponPacket;
 
 export class AckPacket implements IPacket {
 	type = "ack";

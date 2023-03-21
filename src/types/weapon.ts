@@ -94,6 +94,9 @@ export class GunWeapon extends Weapon {
 	offset: Vec2;
 	bullet: BulletStats;
 	tracer: TracerData;
+	reloadTicks: number;
+	reloadBullets: number;
+	capacity: number;
 
 	// Actual variables
 	magazine = 0;
@@ -107,6 +110,9 @@ export class GunWeapon extends Weapon {
 		this.offset = new Vec2(data.length, 0);
 		this.bullet = data.normal.bullet;
 		this.tracer = data.visuals.tracer;
+		this.reloadTicks = (data.normal.reload.time / 1000) * TICKS_PER_SECOND;
+		this.reloadBullets = data.normal.reload.bullets || data.normal.capacity;
+		this.capacity = data.normal.capacity;
 	}
 
 	attack(attacker: Entity, _entities: Entity[], _obstacles: Obstacle[]) {
