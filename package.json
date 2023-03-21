@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node lib/index.js",
     "build": "tsc",
-    "test": "npm run build && npm start"
+    "gameserv": "npm run build && npm start",
+    "webserv": "cd client && npm run build && cd .. && node lib/webserver.js"
   },
   "keywords": [
     "surviv.io"
