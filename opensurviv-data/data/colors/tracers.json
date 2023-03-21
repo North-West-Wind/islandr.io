@@ -1,0 +1,30 @@
+{
+	"9mm": {
+		"color": {
+			"regular": "FEE2C6",
+			"saturated": "FFD9B3",
+			"chambered": "FF7F00"
+		}
+	},
+	"12gauge": {
+		"color": {
+			"regular": "FEDCDC",
+			"saturated": "FEDCDC",
+			"chambered": "FF0000"
+		}
+	},
+	"308subsonic": {
+		"color": {
+			"regular": "252B00",
+			"saturated": "465000",
+			"chambered": "131600"
+		}
+	},
+	"762mm": {
+		"color": {
+			"regular": "C5D6FE",
+			"saturated": "ABC4FF",
+			"chambered": "004CFF"
+		}
+	}
+}
