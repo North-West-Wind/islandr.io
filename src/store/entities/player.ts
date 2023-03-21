@@ -108,7 +108,6 @@ export default class Player extends Entity {
 					delta -= gun.magazine;
 					this.inventory.setWeapon(gun);
 					this.inventory.ammos[gun.color] += delta;
-					console.log(this.inventory);
 				}
 			}
 		}

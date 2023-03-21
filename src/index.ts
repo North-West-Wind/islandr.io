@@ -125,7 +125,7 @@ server.on("connection", async socket => {
 				break;
 			case "mouserelease":
 				buttons.set((<MouseReleasePacket>decoded).button, false);
-				if (buttons.get(0)) player.tryAttacking = false;
+				if (!buttons.get(0)) player.tryAttacking = false;
 				break;
 			case "mousemove":
 				const mMvPacket = <MouseMovePacket>decoded;
