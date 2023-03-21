@@ -60,6 +60,7 @@ export default class Player extends Entity {
 			this.setVelocity();
 			// Allows sniper switching
 			this.attackLock = 0;
+			this.maxReloadTicks = this.reloadTicks = 0;
 		}
 		super.tick(entities, obstacles);
 		// Check for entity hitbox intersection
@@ -83,6 +84,7 @@ export default class Player extends Entity {
 		if (this.tryAttacking && this.attackLock <= 0 && weapon) {
 			weapon.attack(this, entities, obstacles);
 			this.attackLock = weapon.lock;
+			this.maxReloadTicks = this.reloadTicks = 0;
 			if (!weapon.auto) this.tryAttacking = false;
 		}
 		for (const obstacle of obstacles) {

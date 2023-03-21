@@ -14,7 +14,6 @@ export default class Grenade extends Entity implements PickupableEntity {
 	hitbox = new CircleHitbox(1);
 	name: string; // grenade ID, but id was taken for entity already
 	amount: number;
-	discardable = true;
 	friction = 0.02; // frictional acceleration, not force
 
 	constructor(name: string, amount: number) {
@@ -22,6 +21,9 @@ export default class Grenade extends Entity implements PickupableEntity {
 		if (!WEAPON_SUPPLIERS.has(name)) console.warn("Creating a grenade entity that doesn't have a supplier for its type");
 		this.name = name;
 		this.amount = amount;
+		this.discardable = true;
+		this.noCollision = true;
+		this.vulnerable = false;
 	}
 
 	picked(player: Player) {

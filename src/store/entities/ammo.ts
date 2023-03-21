@@ -10,7 +10,6 @@ export default class Ammo extends Entity implements PickupableEntity {
 	type = "ammo";
 	hitbox = new CircleHitbox(1);
 	amount: number;
-	discardable = true;
 	color: GunColor;
 	friction = 0.02; // frictional acceleration, not force
 
@@ -18,6 +17,9 @@ export default class Ammo extends Entity implements PickupableEntity {
 		super();
 		this.amount = amount;
 		this.color = color;
+		this.discardable = true;
+		this.noCollision = true;
+		this.vulnerable = false;
 	}
 
 	picked(player: Player) {

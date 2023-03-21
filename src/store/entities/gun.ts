@@ -24,6 +24,9 @@ export default class Gun extends Entity implements PickupableEntity {
 		if (!WEAPON_SUPPLIERS.has(name)) console.warn("Creating a gun entity that doesn't have a supplier for its type");
 		this.name = name;
 		this.color = color;
+		this.discardable = true;
+		this.noCollision = true;
+		this.vulnerable = false;
 	}
 
 	picked(player: Player) {
