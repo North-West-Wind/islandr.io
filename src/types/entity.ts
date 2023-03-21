@@ -56,6 +56,7 @@ export class Entity {
 	velocity: Vec2 = Vec2.ZERO;
 	direction: Vec2 = Vec2.UNIT_X;
 	hitbox: Hitbox = CircleHitbox.ZERO;
+	noCollision = false;
 	vulnerable = true;
 	health = 100;
 	maxHealth = 100;

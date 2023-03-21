@@ -150,18 +150,7 @@ export class Line {
 	}
 
 	intersects(line: Line) {
-		const dir1 = line.direction(this.a);
-		const dir2 = line.direction(this.b);
-		const dir3 = this.direction(line.a);
-		const dir4 = this.direction(line.b);
-
-		if (dir1 != dir2 && dir3 != dir4) return true;
-		if (dir1 == 0 && line.passthrough(this.a)) return true;
-		if (dir2 == 0 && line.passthrough(this.b)) return true;
-		if (dir3 == 0 && line.passthrough(line.a)) return true;
-		if (dir4 == 0 && line.passthrough(line.b)) return true;
-
-		return false;
+		return !!this.intersection(line);
 	}
 
 	on(p: Vec2) {

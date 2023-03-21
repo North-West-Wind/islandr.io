@@ -123,10 +123,10 @@ export class GunWeapon extends Weapon {
 	shoot(attacker: Entity) {
 		if (!attacker.despawn && this.magazine > 0) {
 			this.magazine--;
-			for (let ii = 0; ii <= this.bullets; ii++) {
+			for (let ii = 0; ii < this.bullets; ii++) {
 				var angles = attacker.direction.angle() + toRadians((Math.random() - 0.5) * (attacker.velocity.magnitudeSqr() != 0 ? this.moveSpread : this.spread));
-				const position = attacker.position.addVec(this.offset.addAngle(angles));
-				const bullet = new Bullet(attacker, this.bullet.damage, Vec2.UNIT_X.addAngle(angles).scaleAll(this.bullet.speed), randomBetween(this.bullet.range[0], this.bullet.range[1]) / (this.bullet.speed / TICKS_PER_SECOND), this.bullet.falloff, this.tracer);
+				const position = attacker.position.addVec(this.offset.addAngle(attacker.direction.angle()));
+				const bullet = new Bullet(attacker, this.bullet.damage, Vec2.UNIT_X.addAngle(angles).scaleAll(this.bullet.speed / TICKS_PER_SECOND), randomBetween(this.bullet.range[0], this.bullet.range[1]) / (this.bullet.speed / TICKS_PER_SECOND), this.bullet.falloff, this.tracer);
 				bullet.position = position;
 				world.entities.push(bullet);
 			}
