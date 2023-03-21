@@ -48,7 +48,11 @@ export default class Player extends Entity {
 		// When the player dies, don't tick anything
 		if (this.despawn) return;
 		// Decrease attack locking timer
-		if (this.attackLock > 0) this.attackLock--;
+		// While attacking, also set moving speed
+		if (this.attackLock > 0) {
+			this.attackLock--;
+			this.setVelocity();
+		}
 		// If weapon changed, re-calculate the velocity
 		const weapon = this.inventory.getWeapon()!;
 		if (weapon.name != this.lastHolding) {
