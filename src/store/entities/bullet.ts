@@ -33,6 +33,13 @@ export default class Bullet extends Entity {
 		if (this.distanceSqr >= 10000) this.dmg *= this.falloff;
 		var combined: (Entity | Obstacle)[] = [];
 		combined = combined.concat(entities, obstacles);
+		if (!this.despawn)
+			for (const thing of combined)
+				if (this.type != thing.type && thing.collided(this.hitbox, this.position, this.direction)) {
+					thing.damage(this.dmg);
+					if (!thing.noCollision) this.die();
+					break;
+				}
 		// In case the bullet is moving too fast, check for hitbox intersection
 		if (!this.despawn)
 			for (const thing of combined) {
