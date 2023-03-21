@@ -22,7 +22,6 @@ export default class Bullet extends Entity {
 		this.direction = this.velocity = velocity;
 		this.health = this.maxHealth = ticks;
 		this.discardable = true;
-		this.noCollision = true;
 		this.vulnerable = false;
 		this.falloff = falloff;
 	}
@@ -37,7 +36,7 @@ export default class Bullet extends Entity {
 		// In case the bullet is moving too fast, check for hitbox intersection
 		if (!this.despawn)
 			for (const thing of combined) {
-				if (!thing.despawn && thing.hitbox.lineIntersects(new Line(this.position, this.position.addVec(this.velocity)), thing.position, thing.direction)) {
+				if (this.type != thing.type && !thing.despawn && thing.hitbox.lineIntersects(new Line(this.position, this.position.addVec(this.velocity)), thing.position, thing.direction)) {
 					thing.damage(this.dmg);
 					if (!thing.noCollision) this.die();
 					break;
