@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333333 4.2333333"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="crate.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="22.627417"
+     inkscape:cx="10.16466"
+     inkscape:cy="8.4189901"
+     inkscape:window-width="1920"
+     inkscape:window-height="1004"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer4" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="圖層 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#4b2500;fill-opacity:0.988235;stroke-width:2.52393;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.4"
+       id="rect6831"
+       width="2.1166666"
+       height="2.1166666"
+       x="1.0583333"
+       y="1.0583333" />
+    <rect
+       style="fill:#000000;fill-opacity:0.988235;stroke-width:4.58651;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.4"
+       id="rect8341"
+       width="2.6458333"
+       height="0.26458332"
+       x="1.6664187"
+       y="-0.46905124"
+       transform="rotate(45)" />
+    <rect
+       style="fill:#000000;fill-opacity:0.988235;stroke-width:4.58651;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.4"
+       id="rect8343"
+       width="2.6458333"
+       height="0.26458332"
+       x="1.666419"
+       y="0.20446827"
+       transform="rotate(45)" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="圖層 4">
+    <rect
+       style="fill:#653200;fill-opacity:1;stroke-width:7.67036;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.4"
+       id="rect8351"
+       width="3.175"
+       height="0.52916664"
+       x="-1.5866705"
+       y="2.7266316"
+       transform="rotate(-45)" />
+    <rect
+       style="fill:#653200;fill-opacity:1;stroke-width:7.67036;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.4"
+       id="rect13171"
+       width="3.175"
+       height="0.52916664"
+       x="1.4037149"
+       y="-0.26541278"
+       transform="rotate(45)" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="圖層 2">
+    <path
+       id="rect1625"
+       style="fill:#000000;fill-opacity:0.988235;stroke-width:15.0715;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.4"
+       d="M 0 0 L 0 4.2333333 L 4.2333333 4.2333333 L 4.2333333 0 L 0 0 z M 0.26458333 0.26458333 L 3.96875 0.26458333 L 3.96875 3.96875 L 0.26458333 3.96875 L 0.26458333 0.26458333 z " />
+    <path
+       id="rect111"
+       style="fill:#663300;fill-opacity:0.988235;stroke-width:5.94015;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.4"
+       d="M 0.26458333 0.26458333 L 0.26458333 3.96875 L 3.96875 3.96875 L 3.96875 0.26458333 L 0.26458333 0.26458333 z M 0.79374999 0.79374999 L 3.4395833 0.79374999 L 3.4395833 3.4395833 L 0.79374999 3.4395833 L 0.79374999 0.79374999 z " />
+    <path
+       id="rect2461"
+       style="fill:#000000;fill-opacity:0.988235;stroke-width:6.64157;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.4"
+       d="M 0.79374999 0.79374999 L 0.79374999 3.4395833 L 3.4395833 3.4395833 L 3.4395833 0.79374999 L 0.79374999 0.79374999 z M 1.0583333 1.0583333 L 3.175 1.0583333 L 3.175 3.175 L 1.0583333 3.175 L 1.0583333 1.0583333 z " />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="圖層 3">
+    <rect
+       style="fill:#000000;fill-opacity:0.988235;stroke-width:4.58651;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.4"
+       id="rect13161"
+       width="2.6458333"
+       height="0.26458332"
+       x="-1.3229159"
+       y="2.4828649"
+       transform="rotate(-45)" />
+    <rect
+       style="fill:#000000;fill-opacity:0.988235;stroke-width:4.58651;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.4"
+       id="rect13163"
+       width="2.6458333"
+       height="0.26458332"
+       x="-1.3229159"
+       y="3.2312224"
+       transform="rotate(-45)" />
+  </g>
+</svg>

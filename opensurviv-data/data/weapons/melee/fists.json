@@ -1,0 +1,25 @@
+{
+	"name": "Fists",
+	"droppable": false,
+	"normal": {
+		"damage": 24,
+		"multiplier": {
+			"headshot": 1,
+			"obstacle": 1
+		},
+		"damageDelay": 100,
+		"cooldown": 250,
+		"offset": {
+			"x": 1.35,
+			"y": 0
+		},
+		"radius": 0.9,
+		"speed": {
+			"equip": 13,
+			"attack": 12
+		}
+	},
+	"visuals": {
+		"animations": ["left_fist", "right_fist"]
+	}
+}

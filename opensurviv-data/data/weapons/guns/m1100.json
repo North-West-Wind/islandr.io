@@ -1,0 +1,46 @@
+{
+	"name": "M1100",
+	"color": 1,
+	"ammo": 12,
+	"dual": false,
+	"auto": false,
+	"length": 3.0,
+	"droppable": true,
+	"normal": {
+		"capacity": 4,
+		"reload": {
+			"bullets": 1,
+			"time": 700
+		},
+		"delay": {
+			"switch": 900,
+			"firing": 300
+		},
+		"spread": {
+			"still": 25,
+			"move": 27
+		},
+		"bullets": 18,
+		"speed": {
+			"equip": 12,
+			"attack": 6
+		},
+		"headshot": 1.5,
+		"recoil": 1000,
+		"bullet": {
+			"damage": 4,
+			"falloff": 0.25,
+			"speed": 66,
+			"range": [25, 25],
+			"suppressed": false
+		}
+	},
+	"visuals": {
+		"tracer": {
+			"type": "12gauge",
+			"width": 0.1,
+			"length": 0.1
+		},
+		"animations": ["large_recoil"]
+	}
+}

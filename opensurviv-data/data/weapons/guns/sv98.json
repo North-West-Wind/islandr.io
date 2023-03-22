@@ -1,0 +1,43 @@
+{
+	"name": "SV 98",
+	"color": 2,
+	"ammo": 30,
+	"dual": false,
+	"length": 3.75,
+	"droppable": true,
+	"normal": {
+		"capacity": 10,
+		"reload": {
+			"time": 2700
+		},
+		"delay": {
+			"switch": 1000,
+			"firing": 1500
+		},
+		"spread": {
+			"still": 1,
+			"move": 3.5
+		},
+		"bullets": 1,
+		"speed": {
+			"equip": 12,
+			"attack": 6
+		},
+		"headshot": 1.5,
+		"bullet": {
+			"damage": 80,
+			"falloff": 0.96,
+			"speed": 182,
+			"range": [520, 520],
+			"suppressed": false
+		}
+	},
+	"visuals": {
+		"tracer": {
+			"type": "762mm",
+			"width": 0.2,
+			"length": 1
+		},
+		"animations": ["large_recoil"]
+	}
+}

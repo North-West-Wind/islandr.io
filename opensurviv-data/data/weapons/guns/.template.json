@@ -1,0 +1,63 @@
+{
+	"name": "String. Name of the gun.",
+	"color": "Number. Color of the gun and bullets.",
+	"ammo": "Number. Ammos to spawn when dropped from loot (crates, trees, etc.).",
+	"dual": "Boolean. Whether or not the gun can be used in dual.",
+	"auto": "Boolean. Whether or not the gun can fire continuously. Defaults to false.",
+	"length": "Number. Gun length in game units.",
+	"droppable": "Boolean. Whether the item can be dropped upon death,",
+	"normal": {
+		"__comment": "Default stats when no perks are active.",
+		"capacity": "Number. Magazine capacity.",
+		"reload": {
+			"bullets": "Number. Bullets per reload. 0 or omitted to reload all.",
+			"time": "Number. Reload time in milliseconds."
+		},
+		"delay": {
+			"switch": "Number. Switch delay in milliseconds.",
+			"firing": "Number. Delay between shots in milliseconds.",
+			"burst": "Number. Delay between secondary burst shots in milliseconds. If bursts is 0 or omitted, we don't care about this."
+		},
+		"spread": {
+			"still": "Number. Degrees of spread when standing still.",
+			"move": "Number. Degrees of spread when moving."
+		},
+		"bullets": "Number. Bullets per shot.",
+		"bursts": "Number. Bullets per burst.",
+		"speed": {
+			"equip": "Number. Speed when equipped.",
+			"attack": "Number. Speed when firing."
+		},
+		"headshot": "Number. Headshot damage multiplier.",
+		"recoil": "Number. Time required to get an accurate shot again. 0 or omitted to never.",
+		"bullet": {
+			"__comment": "Bullet stats",
+			"damage": "Number. Damage done by a bullet.",
+			"objDamage": "Number. Damage done to obstacles. If omitted, defaults to 'damage'.",
+			"falloff": "Number. Damage multiplier for every 100 units travelled.",
+			"speed": "Number. Speed of bullet in units per second.",
+			"range": "Array of 2 numbers. Minimum range and maximum range. 1 unit is radius of a player.",
+			"suppressed": "Boolean. Whether bullet fades over time.",
+			"noClip": "Boolean. Whether the bullet collides with stuff. Defaults to be false."
+		}
+	},
+	"<perk_id>": {
+		"__comment": "Overriden stats with perks."
+	},
+	"visuals": {
+		"__comment": "Data for client side rendering.",
+		"tracer": {
+			"__comment": "Bullet tracer data.",
+			"type": "Number. Type of tracer, similar to color.",
+			"width": "Number. Width of tracer in game units.",
+			"length": "Number. Similar to width.",
+			"color": {
+				"regular": "String. Hex color of regular tracer.",
+				"saturated": "String. Hex color of saturated tracer.",
+				"chambered": "String. Hex color of chambered tracer."
+			}
+		},
+		"animations": "Array of string. Animation ID to play when shot.",
+		"image": "String. Path to barrel image."
+	}
+}

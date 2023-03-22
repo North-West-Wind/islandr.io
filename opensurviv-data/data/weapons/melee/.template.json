@@ -1,0 +1,35 @@
+{
+	"name": "String. Name of the melee weapon.",
+	"reflective": "Boolean. Whether or not the weapon can reflect bullets.",
+	"auto": "Boolean. Whether the weapon fires continuously.",
+	"droppable": "Boolean. Whether the item can be dropped upon death,",
+	"normal": {
+		"__comment": "Default stats when no perks are active.",
+		"noArmor": "Boolean. Whether or not the weapon ignores armor.",
+		"noStone": "Boolean. Whether or not the weapon ignores stone.",
+		"cleave": "Boolean. Whether or not the weapon can hit multiple things at once.",
+		"damage": "Number.",
+		"multiplier": {
+			"headshot": "Number. Damage multiplier to headshots.",
+			"obstacle": "Number. Damage multiplier to obstacles."
+		},
+		"damageDelay": "Number. Delay of damage in milliseconds.",
+		"cooldown": "Number. Delay between attacks in milliseconds.",
+		"offset": {
+			"__comment": "To make sense of offsets, we assume to player is facing right.",
+			"x": "Number. Forward offset.",
+			"y": "Number. Up/Down offset. Note that y is positive downwards."
+		},
+		"radius": "Number. Attack radius in game units.",
+		"speed": {
+			"equip": "Number. Speed when equipped.",
+			"attack": "Number. Speed when attacking."
+		}
+	},
+	"<perk_id>": {
+		"__comment": "Overriden stats with perks."
+	},
+	"visuals": {
+		"animation": "Array of string. All possible animations."
+	}
+}
