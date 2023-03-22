@@ -24,8 +24,8 @@ http.createServer(function(req, res){
             res.writeHead(308, {"Location": "https://discord.gg/jKQEVT7Vd3"});
             res.end()
         }
-        //prevent null chars
-        else if(req.url.indexOf("\0") == -1){
+        //prevent null chars & path traversal with ..
+        else if(req.url.indexOf("\0") == -1 && !req.url.includes("..")){
             whitelist_dirs = ["assets", "scripts", "tmp", "favicon.ico"];
             try{
                 isWhitelist = false;
