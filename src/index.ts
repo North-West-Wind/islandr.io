@@ -57,8 +57,10 @@ server.on("connection", async socket => {
 	socket.on("close", () => {
 		console.log("Connection closed");
 		sockets.delete(id);
+		if(connected){
+			numberOfPlayers --;
+		}
 		connected = false;
-		numberOfPlayers --;
 	});
 
 	var username = "";

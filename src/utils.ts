@@ -34,18 +34,24 @@ import { GunColor } from "./types/misc";
 export function spawnGun(id: string, color: GunColor, position: Vec2) {
     const gun = new Gun(id, color);
     gun.position = position;
-    gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
+    gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.0001);
     world.entities.push(gun);
 }
 export function spawnAmmo(amount: number, color: GunColor, position: Vec2) {
     const ammo = new Ammo(amount, color);
     ammo.position = position;
-    ammo.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
+    ammo.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.0001);
     world.entities.push(ammo);
 }
 export function spawnGrenade(id: string, amount: number, position: Vec2){
     const grenade = new Grenade(id, amount);
     grenade.position = position;
-    grenade.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
+    grenade.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.0001);
     world.entities.push(grenade);
+}
+//Overall spawner to spawn any type of loot
+export function spawnLoot(type: string, id: string, color: GunColor, position: Vec2, amount: number){
+    if(type == "ammo"){
+        spawnAmmo(amount, color, position)
+    }
 }

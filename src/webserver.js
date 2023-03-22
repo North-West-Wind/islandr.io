@@ -5,7 +5,8 @@ const path = require("path");
 console.log("http server on port 8000");
 const defaultHeaders = {
     "X-XSS-Protection": "1; mode=block",
-    "X-Frame-Options": "SAMEORIGIN"
+    "X-Frame-Options": "SAMEORIGIN",
+    "Referrer-Policy": "same-origin"
 }
 http.createServer(function(req, res){
     var index = fs.readFileSync("client/index.html");
