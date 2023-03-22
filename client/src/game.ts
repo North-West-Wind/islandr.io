@@ -72,7 +72,7 @@ async function init(address: string) {
 						world.terrains = mapPkt.terrains.map(ter => castCorrectTerrain(ter));
 						initMap(mapPkt.obstacles.map(obs => castCorrectObstacle(castMinObstacle(obs))));
 						//Show player count once game starts
-						(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block"
+						(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block";
 						break;
 				}
 			}
@@ -83,12 +83,14 @@ async function init(address: string) {
 			connected = false;
 			setRunning(false);
 			document.getElementById("menu")?.classList.remove("hidden");
+			(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "none";
 			id = null;
 			tps = 1;
 			username = null;
 			player = null;
 			world = new World();
 			res(undefined);
+			//remove playercount
 		}
 	
 		ws.onerror = (err) => {

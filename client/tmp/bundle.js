@@ -149,12 +149,14 @@ function init(address) {
                 connected = false;
                 (0, renderer_1.setRunning)(false);
                 (_a = document.getElementById("menu")) === null || _a === void 0 ? void 0 : _a.classList.remove("hidden");
+                document.querySelector("#playercountcontainer").style.display = "none";
                 id = null;
                 tps = 1;
                 username = null;
                 player = null;
                 exports.world = new terrain_1.World();
                 res(undefined);
+                //remove playercount
             };
             ws.onerror = (err) => {
                 console.error(err);
