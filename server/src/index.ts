@@ -1,3 +1,4 @@
+import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
 import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket } from "./types/packet";
@@ -56,10 +57,8 @@ server.on("connection", async socket => {
 	socket.on("close", () => {
 		console.log("Connection closed");
 		sockets.delete(id);
-		if(connected){
-			numberOfPlayers --;
-		}
 		connected = false;
+		numberOfPlayers --;
 	});
 
 	var username = "";
@@ -157,3 +156,18 @@ server.on("connection", async socket => {
 var pendingParticles: Particle[] = [];
 export function addParticles(...particles: Particle[]) {
 	pendingParticles.push(...particles);
+}
+
+setInterval(() => {
+	world.tick();
+	// Filter players from entities and send them packets
+	const players = <Player[]>world.entities.filter(entity => entity.type === "player");
+	players.forEach(player => {
+		const socket = sockets.get(player.id);
+		if (!socket) return;
+		socket.send(encode(new GamePacket(world.entities, world.obstacles, player, numberOfPlayers)).buffer);
+		if (pendingParticles.length) socket.send(encode(new ParticlesPacket(pendingParticles, player)).buffer);
+	});
+	pendingParticles = [];
+	world.postTick();
+}, 1000 / TICKS_PER_SECOND);
