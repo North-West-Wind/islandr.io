@@ -37,5 +37,4 @@ Another thing I believe that can keep a game alive, are mods. There are plenty o
 Same thing goes with [surviv.io](https://surviv.io). Once this project is finished, you will be able to fork this project and put your own codes into it. Custom game modes with more variety will appear and keep the game fun.
 
 ## License
-GPL v3  
-for both server and client
+GPL v3
