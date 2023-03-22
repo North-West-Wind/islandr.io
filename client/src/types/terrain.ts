@@ -14,6 +14,7 @@ export class World {
 	obstacles: Obstacle[] = [];
 	defaultTerrain: Terrain;
 	terrains: Terrain[] = [];
+	aliveCount: Number = 0;
 
 	constructor(size?: Vec2, defaultTerrain?: Terrain) {
 		if (!size) size = Vec2.ZERO;
@@ -44,6 +45,11 @@ export class World {
 			} else pending.push(castCorrectObstacle(obstacle));
 		}
 		this.obstacles = pending;
+	}
+
+	updateLiveCount(count: Number) {
+		this.aliveCount = count;
+		(document.getElementById("playercount") as HTMLInputElement).innerText = this.aliveCount.toString();
 	}
 }
 

@@ -126,6 +126,7 @@ function init(address) {
                             const gamePkt = data;
                             exports.world.updateEntities(gamePkt.entities);
                             exports.world.updateObstacles(gamePkt.obstacles);
+                            exports.world.updateLiveCount(gamePkt.alivecount);
                             if (!player)
                                 player = new entities_1.FullPlayer(gamePkt.player);
                             else
@@ -136,6 +137,8 @@ function init(address) {
                             const mapPkt = data;
                             exports.world.terrains = mapPkt.terrains.map(ter => (0, terrains_1.castCorrectTerrain)(ter));
                             (0, map_1.initMap)(mapPkt.obstacles.map(obs => (0, obstacles_1.castCorrectObstacle)((0, obstacles_1.castMinObstacle)(obs))));
+                            //Show player count once game starts
+                            document.querySelector("#playercountcontainer").style.display = "block";
                             break;
                     }
                 };
@@ -2365,6 +2368,7 @@ class World {
         this.entities = [];
         this.obstacles = [];
         this.terrains = [];
+        this.aliveCount = 0;
         if (!size)
             size = math_1.Vec2.ZERO;
         this.size = size;
@@ -2397,6 +2401,10 @@ class World {
                 pending.push((0, obstacles_1.castCorrectObstacle)(obstacle));
         }
         this.obstacles = pending;
+    }
+    updateLiveCount(count) {
+        this.aliveCount = count;
+        document.getElementById("playercount").innerText = this.aliveCount.toString();
     }
 }
 exports.World = World;

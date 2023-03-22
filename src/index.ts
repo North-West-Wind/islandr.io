@@ -37,14 +37,14 @@ for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Bush());
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Crate());
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Stone());
 for (let ii = 0; ii < 30; ii++) world.obstacles.push(new GrenadeCrate());
-for (let ii = 0; ii < 1; ii++) world.obstacles.push(new AWMCrate());
+//crashing server
+//for (let ii = 0; ii < 1; ii++) world.obstacles.push(new AWMCrate());
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Barrel());
 for (let ii = 0; ii < 15; ii++) world.obstacles.push(new AK47Stone());
 // End of testing section
-let numberOfPlayers = 1;
+let numberOfPlayers = 0;
 server.on("connection", async socket => {
 	console.log("Received a connection request");
-	console.log(`Number of players are: ${numberOfPlayers}`);
 	// Set the type for msgpack later.
 	socket.binaryType = "arraybuffer";
 
@@ -77,6 +77,7 @@ server.on("connection", async socket => {
 	if (!connected) return;
 	numberOfPlayers++ ;
 	console.log(`A new player with ID ${id} connected!`);
+	console.log(`Number of players are: ${numberOfPlayers}`);
 
 	// Create the new player and add it to the entity list.
 	const player = new Player(id, username);
@@ -164,7 +165,7 @@ setInterval(() => {
 	players.forEach(player => {
 		const socket = sockets.get(player.id);
 		if (!socket) return;
-		socket.send(encode(new GamePacket(world.entities, world.obstacles, player)).buffer);
+		socket.send(encode(new GamePacket(world.entities, world.obstacles, player, numberOfPlayers)).buffer);
 		if (pendingParticles.length) socket.send(encode(new ParticlesPacket(pendingParticles, player)).buffer);
 	});
 	pendingParticles = [];

@@ -62,6 +62,7 @@ async function init(address: string) {
 						const gamePkt = <GamePacket>data;
 						world.updateEntities(gamePkt.entities);
 						world.updateObstacles(gamePkt.obstacles);
+						world.updateLiveCount(gamePkt.alivecount);
 						if (!player) player = new FullPlayer(gamePkt.player);
 						else player.copy(gamePkt.player);
 						break;
@@ -70,6 +71,8 @@ async function init(address: string) {
 						const mapPkt = <MapPacket>data;
 						world.terrains = mapPkt.terrains.map(ter => castCorrectTerrain(ter));
 						initMap(mapPkt.obstacles.map(obs => castCorrectObstacle(castMinObstacle(obs))));
+						//Show player count once game starts
+						(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block"
 						break;
 				}
 			}

@@ -52,6 +52,7 @@ export declare class GamePacket {
     entities: MinEntity[];
     obstacles: MinObstacle[];
     player: any;
+    alivecount: Number;
 }
 export declare class MapPacket {
     type: string;

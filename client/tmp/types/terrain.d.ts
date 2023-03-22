@@ -10,9 +10,11 @@ export declare class World {
     obstacles: Obstacle[];
     defaultTerrain: Terrain;
     terrains: Terrain[];
+    aliveCount: Number;
     constructor(size?: Vec2, defaultTerrain?: Terrain);
     updateEntities(entities: MinEntity[]): void;
     updateObstacles(obstacles: MinObstacle[]): void;
+    updateLiveCount(count: Number): void;
 }
 export declare abstract class Terrain implements Renderable, RenderableMap {
     id: string;

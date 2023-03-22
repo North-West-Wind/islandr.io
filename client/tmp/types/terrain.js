@@ -11,6 +11,7 @@ class World {
         this.entities = [];
         this.obstacles = [];
         this.terrains = [];
+        this.aliveCount = 0;
         if (!size)
             size = math_1.Vec2.ZERO;
         this.size = size;
@@ -43,6 +44,10 @@ class World {
                 pending.push((0, obstacles_1.castCorrectObstacle)(obstacle));
         }
         this.obstacles = pending;
+    }
+    updateLiveCount(count) {
+        this.aliveCount = count;
+        document.getElementById("playercount").innerText = this.aliveCount.toString();
     }
 }
 exports.World = World;
