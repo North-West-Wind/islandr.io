@@ -11,7 +11,8 @@ You will be able to host a server with this repository.
 Install [Node.js](https://nodejs.org) before hand.
 
 ### Instructions
-1. Clone this repository by either `git clone` or downloading as ZIP and extracting it.
+1. Clone this repository by either running the command 
+`git clone --recurse-submodules -j8 https://github.com/North-West-Wind/opensurviv-server.git` or downloading as ZIP and extracting it.
 2. Open your terminal and `cd` into the directory it is cloned.
 3. Run `npm install` and `npm test`.
 
