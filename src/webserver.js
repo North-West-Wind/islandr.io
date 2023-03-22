@@ -3,6 +3,10 @@ const fs = require("fs");
 const mimetypes = require("mime-types");
 const path = require("path");
 console.log("http server on port 8000");
+const defaultHeaders = {
+    "X-XSS-Protection": "1; mode=block",
+    "X-Frame-Options": "SAMEORIGIN"
+}
 http.createServer(function(req, res){
     var index = fs.readFileSync("client/index.html");
     var blacklist = fs.readFileSync("src/BLACKLIST.csv").toString();
@@ -11,7 +15,8 @@ http.createServer(function(req, res){
         var d = new Date();
         console.log(`[${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} ${("00" + d.getHours().toString()).slice(-2)}:${("00" + d.getMinutes().toString()).slice(-2)}:${("00" + d.getSeconds().toString()).slice(-2)}.${d.getMilliseconds()}][${req.socket.remoteAddress}] Incoming request to ${req.url}`)
         if(req.url == "/"){
-            res.writeHead(200, {'Content-Type': 'text/html'});
+            //default headers should include headers to prevent hijacking etc
+            res.writeHead(200, {...{'Content-Type': 'text/html'}, ...defaultHeaders});
             res.write(index);
             res.end()
         }
@@ -45,7 +50,6 @@ http.createServer(function(req, res){
                 }
             }
             catch(e){
-                console.log(e)
                 res.writeHead(404, {'Content-Type': "text/plain"});
                 res.end();
             }
