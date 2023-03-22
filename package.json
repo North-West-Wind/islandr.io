@@ -7,7 +7,7 @@
     "start": "node lib/index.js",
     "build": "tsc",
     "gameserv": "npm run build && npm start",
-    "webserv": "cd client && npm run build && cd .. && node lib/webserver.js"
+    "webserv": "cd client && npm run build && cd .. && node src/webserver.js"
   },
   "keywords": [
     "surviv.io"
@@ -23,7 +23,9 @@
     "@typescript-eslint/parser": "^5.46.1",
     "eslint": "^8.28.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "typescript": "^4.7.2"
+    "browserify": "^17.0.0",
+    "typescript": "^4.7.2",
+    "uglify-js": "^3.17.4"
   },
   "dependencies": {
     "msgpack-lite": "^0.1.26",
