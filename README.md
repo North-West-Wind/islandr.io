@@ -1,8 +1,6 @@
 # Open Surviv.io
-An open-source implementation of [surviv.io](https://surviv.io), a 2D battle royale game available online for free.
-
-### Server
-This repository is the server side code of Open Surviv.io. All entity and object updates happen here.
+An open-source implementation of [surviv.io](https://surviv.io), a 2D battle royale game available online for free.  
+This repository contains both the server's and client's code.
 
 ## Usage
 You will be able to host a server with this repository.
@@ -11,10 +9,10 @@ You will be able to host a server with this repository.
 Install [Node.js](https://nodejs.org) before hand.
 
 ### Instructions
-1. Clone this repository by either running the command 
-`git clone --recurse-submodules -j8 https://github.com/North-West-Wind/opensurviv-server.git` or downloading as ZIP and extracting it.
+1. Clone this repository by either running the command `git clone https://github.com/North-West-Wind/opensurviv.git` or downloading as ZIP and extracting it.
 2. Open your terminal and `cd` into the directory it is cloned.
-3. Run `npm install` and `npm test`.
+3. Run `npm run deep-install`.
+4. Run `npm run gameserv` to launch the server at port 8080. Run `npm run webserv` to launch the client at port 8000.
 
 Note: Once the project is finished, it will be published in `npm`. Instructions will be different after that.
 

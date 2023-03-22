@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/North-West-Wind/opensurviv-client.git"
+    "url": "git+https://github.com/North-West-Wind/opensurviv.git"
   },
   "keywords": [
     "surviv.io"
@@ -17,9 +17,9 @@
   "author": "NorthWestWind",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/North-West-Wind/opensurviv-client/issues"
+    "url": "https://github.com/North-West-Wind/opensurviv/issues"
   },
-  "homepage": "https://github.com/North-West-Wind/opensurviv-client#readme",
+  "homepage": "https://github.com/North-West-Wind/opensurviv#readme",
   "devDependencies": {
     "@eslint/create-config": "^0.4.1",
     "@types/msgpack-lite": "^0.1.8",
