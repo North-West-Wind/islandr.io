@@ -1,0 +1,44 @@
+{
+	"name": "M870",
+	"color": 1,
+	"ammo": 10,
+	"dual": false,
+	"length": 3.15,
+	"droppable": true,
+	"normal": {
+		"capacity": 5,
+		"reload": {
+			"bullets": 1,
+			"time": 750
+		},
+		"delay": {
+			"switch": 900,
+			"firing": 500
+		},
+		"spread": {
+			"still": 10,
+			"move": 12
+		},
+		"bullets": 9,
+		"speed": {
+			"equip": 12,
+			"attack": 6
+		},
+		"headshot": 1.5,
+		"bullet": {
+			"damage": 12.5,
+			"falloff": 0.3,
+			"speed": 66,
+			"range": [27, 27],
+			"suppressed": false
+		}
+	},
+	"visuals": {
+		"tracer": {
+			"type": "12gauge",
+			"width": 0.1,
+			"length": 0.8
+		},
+		"animations": ["large_recoil"]
+	}
+}

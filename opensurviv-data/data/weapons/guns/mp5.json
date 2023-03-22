@@ -1,0 +1,44 @@
+{
+	"name": "MP5",
+	"color": 0,
+	"ammo": 90,
+	"dual": false,
+	"auto": true,
+	"length": 2.625,
+	"droppable": true,
+	"normal": {
+		"capacity": 30,
+		"reload": {
+			"time": 2000
+		},
+		"delay": {
+			"switch": 750,
+			"firing": 90
+		},
+		"spread": {
+			"still": 3,
+			"move": 7
+		},
+		"bullets": 1,
+		"speed": {
+			"equip": 12,
+			"attack": 6
+		},
+		"headshot": 2,
+		"bullet": {
+			"damage": 11,
+			"falloff": 0.8,
+			"speed": 85,
+			"range": [100, 100],
+			"suppressed": false
+		}
+	},
+	"visuals": {
+		"tracer": {
+			"type": "9mm",
+			"width": 0.1,
+			"length": 0.7
+		},
+		"animations": ["small_recoil"]
+	}
+}

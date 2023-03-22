@@ -1,0 +1,44 @@
+{
+	"name": "AWM-S",
+	"color": 5,
+	"ammo": 20,
+	"dual": false,
+	"length": 3.8,
+	"droppable": true,
+	"normal": {
+		"capacity": 5,
+		"reload": {
+			"time": 3500
+		},
+		"delay": {
+			"switch": 1000,
+			"firing": 1500
+		},
+		"spread": {
+			"still": 0.5,
+			"move": 4.5
+		},
+		"bullets": 1,
+		"speed": {
+			"equip": 12,
+			"attack": 6
+		},
+		"headshot": 1,
+		"bullet": {
+			"damage": 180,
+			"objDamage": 270,
+			"falloff": 0.94,
+			"speed": 136,
+			"range": [300, 300],
+			"suppressed": true
+		}
+	},
+	"visuals": {
+		"tracer": {
+			"type": "308subsonic",
+			"width": 0.2,
+			"length": 1
+		},
+		"animations": ["large_recoil"]
+	}
+}

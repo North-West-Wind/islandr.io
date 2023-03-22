@@ -1,0 +1,44 @@
+{
+	"name": "AK47",
+	"color": 2,
+	"ammo": 90,
+	"dual": false,
+	"auto": true,
+	"length": 3.0,
+	"droppable": true,
+	"normal": {
+		"capacity": 30,
+		"reload": {
+			"time": 2500
+		},
+		"delay": {
+			"switch": 750,
+			"firing": 100
+		},
+		"spread": {
+			"still": 2.5,
+			"move": 10
+		},
+		"bullets": 1,
+		"speed": {
+			"equip": 12,
+			"attack": 6
+		},
+		"headshot": 2,
+		"bullet": {
+			"damage": 13.5,
+			"falloff": 0.9,
+			"speed": 100,
+			"range": [200, 200],
+			"suppressed": false
+		}
+	},
+	"visuals": {
+		"tracer": {
+			"type": "762mm",
+			"width": 0.1,
+			"length": 0.9
+		},
+		"animations": ["medium_recoil"]
+	}
+}
