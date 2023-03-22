@@ -25,6 +25,10 @@
 			<div class="error-div hidden no-margin red" id="error-div">Hey</div>
 			<input type="text" id="username" form="hidden-form" placeholder="Username..." class="input" /><br>
 			<input type="text" id="address" form="hidden-form" placeholder="Server Address..." class="input" /><br>
+			<!--autofill-->
+			<script>
+				document.querySelector("#address").defaultValue = "opensurviv.run.place:8000";
+			</script>
 			<input type="button" id="connect" form="hidden-form" value="Connect" class="button purple" />
 		</div>
 	</div>

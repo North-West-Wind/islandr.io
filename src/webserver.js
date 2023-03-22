@@ -10,14 +10,31 @@ http.createServer(function(req, res){
         res.write(index);
         res.end()
     }
+    else if(req.url == "/discord"){
+        res.writeHead(308, {"Location": "https://discord.gg/jKQEVT7Vd3"});
+        res.end()
+    }
     else{
+        whitelist_dirs = ["assets", "scripts", "tmp"];
         try{
-            var data = fs.readFileSync("client" + req.url);
-            var ext = req.url.split(".");
-            ext = ext[ext.length-1];
-            res.writeHead(200, {'Content-Type': mimetypes.lookup(ext)});
-            res.write(data);
-            res.end()
+            isWhitelist = false;
+            for(var i = 0; i<whitelist_dirs.length; i++){
+                if(req.url.startsWith("/" + whitelist_dirs[i])){
+                    isWhitelist = true;
+                }
+            }
+            if(isWhitelist){
+                var data = fs.readFileSync("client" + req.url);
+                var ext = req.url.split(".");
+                ext = ext[ext.length-1];
+                res.writeHead(200, {'Content-Type': mimetypes.lookup(ext)});
+                res.write(data);
+                res.end()
+            }
+            else{
+                res.writeHead(404, {'Content-Type': "text/plain"});
+                res.end();
+            }
         }
         catch(e){
             res.writeHead(404, {'Content-Type': "text/plain"});
