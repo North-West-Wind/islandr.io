@@ -15,7 +15,7 @@ http.createServer(function(req, res){
         res.end()
     }
     else{
-        whitelist_dirs = ["assets", "scripts", "tmp"];
+        whitelist_dirs = ["assets", "scripts", "tmp", "favicon.ico"];
         try{
             isWhitelist = false;
             for(var i = 0; i<whitelist_dirs.length; i++){
