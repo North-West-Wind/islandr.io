@@ -124,8 +124,8 @@ export default class Player extends Entity {
 		for (const weapon of this.inventory.weapons) {
 			if (weapon?.droppable) {
 				if (weapon instanceof GunWeapon) {
-					spawnGun(weapon.id, weapon.color, this.position);
-					spawnAmmo(weapon.magazine, weapon.color, this.position);
+					spawnGun(weapon.id, weapon.color, this.position, weapon.magazine);
+					// spawnAmmo(weapon.magazine, weapon.color, this.position);
 				}
 			}
 		}
