@@ -6,14 +6,21 @@
   "scripts": {
     "start": "node lib/index.js",
     "build": "tsc",
-    "gameserv": "npm run build && npm start",
-    "webserv": "cd client && npm run build && cd .. && node src/webserver.js"
+    "test": "npm run build && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/North-West-Wind/opensurviv.git"
   },
   "keywords": [
     "surviv.io"
   ],
   "author": "NorthWestWind",
   "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/North-West-Wind/opensurviv/issues"
+  },
+  "homepage": "https://github.com/North-West-Wind/opensurviv#readme",
   "devDependencies": {
     "@eslint/create-config": "^0.4.1",
     "@types/msgpack-lite": "^0.1.8",
