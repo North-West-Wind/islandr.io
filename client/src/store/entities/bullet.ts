@@ -43,13 +43,14 @@ export default class Bullet extends Entity {
 		ctx.rotate(this.direction.angle());
 		ctx.scale(scale, scale);
 		ctx.fillStyle = `#${getTracerColor(this.tracer.type)?.color.regular || "000"}`;
-		const gradient = ctx.createLinearGradient(0, 0, -this.tracer.length * 2, 0);
+		const gradient = ctx.createLinearGradient(this.tracer.length * 20, 0, 0, 0);
 		gradient.addColorStop(0, ctx.fillStyle + "ff");
 		gradient.addColorStop(1, ctx.fillStyle + "00");
 		ctx.strokeStyle = gradient;
 		ctx.lineWidth = this.tracer.width * 2;
-		lineBetween(ctx, -this.tracer.length * 2, 0, 0, 0);
-		circleFromCenter(ctx, 0, 0, this.tracer.width, true);
+		lineBetween(ctx, 0, 0, this.tracer.length * 20, 0);
+		//what da circle for??
+		//circleFromCenter(ctx, 0, 0, this.tracer.width, true);
 		ctx.resetTransform();
 	}
 }
