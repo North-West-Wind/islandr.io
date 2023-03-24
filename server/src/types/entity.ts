@@ -39,7 +39,12 @@ export class Inventory {
 	}
 
 	minimize() {
+		if(!this.getWeapon()){
+			console.log(this.weapons)
+			//this.holding = 0;
+		}
 		return <MinInventory> { holding: this.weapons[this.holding].minimize() };
+		//If the player isn't holding anything no need to minimize it
 	}
 
 	static defaultEmptyInventory() {
