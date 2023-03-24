@@ -30,6 +30,7 @@ world.terrains.push(new River());
 for (let ii = 0; ii < 4; ii++) world.terrains.push(new Sea(ii));
 
 // Add random obstacles
+/*
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Tree());
 for (let ii = 0; ii < 10; ii++) world.obstacles.push(new MosinTree());
 for (let ii = 0; ii < 20; ii++) world.obstacles.push(new SovietCrate());
@@ -41,6 +42,19 @@ for (let ii = 0; ii < 30; ii++) world.obstacles.push(new GrenadeCrate());
 //for (let ii = 0; ii < 1; ii++) world.obstacles.push(new AWMCrate());
 for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Barrel());
 for (let ii = 0; ii < 15; ii++) world.obstacles.push(new AK47Stone());
+*/
+//smaller map
+for (let ii = 0; ii < 25; ii++) world.obstacles.push(new Tree());
+for (let ii = 0; ii < 1; ii++) world.obstacles.push(new MosinTree());
+for (let ii = 0; ii < 10; ii++) world.obstacles.push(new SovietCrate());
+for (let ii = 0; ii < 25; ii++) world.obstacles.push(new Bush());
+for (let ii = 0; ii < 25; ii++) world.obstacles.push(new Crate());
+for (let ii = 0; ii < 25; ii++) world.obstacles.push(new Stone());
+for (let ii = 0; ii < 15; ii++) world.obstacles.push(new GrenadeCrate());
+//crashing server
+//for (let ii = 0; ii < 1; ii++) world.obstacles.push(new AWMCrate());
+for (let ii = 0; ii < 25; ii++) world.obstacles.push(new Barrel());
+for (let ii = 0; ii < 1; ii++) world.obstacles.push(new AK47Stone());
 // End of testing section
 let numberOfPlayers = 0;
 server.on("connection", async socket => {
@@ -57,8 +71,10 @@ server.on("connection", async socket => {
 	socket.on("close", () => {
 		console.log("Connection closed");
 		sockets.delete(id);
+		if(connected){
+			numberOfPlayers--;
+		}
 		connected = false;
-		numberOfPlayers --;
 	});
 
 	var username = "";

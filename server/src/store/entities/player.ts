@@ -55,12 +55,15 @@ export default class Player extends Entity {
 		}
 		// If weapon changed, re-calculate the velocity
 		const weapon = this.inventory.getWeapon()!;
-		if (weapon.name != this.lastHolding) {
-			this.lastHolding = weapon.name;
-			this.setVelocity();
-			// Allows sniper switching
-			this.attackLock = 0;
-			this.maxReloadTicks = this.reloadTicks = 0;
+		//if weapon == undef then do not reset speed
+		if(weapon){
+			if (weapon.name != this.lastHolding) {
+				this.lastHolding = weapon.name;
+				this.setVelocity();
+				// Allows sniper switching
+				this.attackLock = 0;
+				this.maxReloadTicks = this.reloadTicks = 0;
+			}
 		}
 		super.tick(entities, obstacles);
 		// Check for entity hitbox intersection
@@ -124,8 +127,8 @@ export default class Player extends Entity {
 		for (const weapon of this.inventory.weapons) {
 			if (weapon?.droppable) {
 				if (weapon instanceof GunWeapon) {
-					spawnGun(weapon.id, weapon.color, this.position);
-					spawnAmmo(weapon.magazine, weapon.color, this.position);
+					spawnGun(weapon.id, weapon.color, this.position, weapon.magazine);
+					// spawnAmmo(weapon.magazine, weapon.color, this.position);
 				}
 			}
 		}

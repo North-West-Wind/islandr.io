@@ -3,7 +3,7 @@ import { CircleHitbox } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { randomBetween } from "../../utils";
 import { GunColor } from "../../types/misc";
-import { spawnGun, spawnAmmo } from "../../utils";
+import { spawnGun } from "../../utils";
 export default class MosinTree extends Obstacle {
 	type = "tree";
 
@@ -15,8 +15,8 @@ export default class MosinTree extends Obstacle {
 	die() {
 		super.die();
 		// TODO: Spawn loots
-		spawnGun("mosin_nagant", GunColor.BLUE, this.position);
-		spawnAmmo(15, GunColor.BLUE, this.position);
-		spawnAmmo(15, GunColor.BLUE, this.position);
+		spawnGun("mosin_nagant", GunColor.BLUE, this.position, 10);
+		// spawnAmmo(15, GunColor.BLUE, this.position);
+		// spawnAmmo(15, GunColor.BLUE, this.position);
 	}
 }

@@ -12,20 +12,26 @@ export function drawHud(player: FullPlayer, canvas: HTMLCanvasElement, ctx: Canv
 
 // Draws the player's health
 function drawHealth(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
-	const width = canvas.width / 4;
+	//fixed height:width ratio
 	const height = canvas.height / 20;
+	const width = height * 10;
 	const padding = Math.min(canvas.width, canvas.height) / 100;
 	const innerWidth = width - padding * 2;
 	const innerHeight = height - padding * 2;
 	ctx.fillStyle = "#000000";
 	ctx.globalAlpha = 0.2;
 	roundRect(ctx, (canvas.width - width) / 2, canvas.height - height - padding, width, height, padding / 2);
+	//can change these later
 	if (player.health == player.maxHealth) ctx.fillStyle = "#ccc";
-	else if (player.health / player.maxHealth < 0.8) ctx.fillStyle = "#fdd";
-	else if (player.health / player.maxHealth < 0.25) ctx.fillStyle = "#daa";
-	else ctx.fillStyle = "#fff";
+	else if (player.health / player.maxHealth > 0.8) ctx.fillStyle = "#ffffff";
+	else if (player.health / player.maxHealth > 0.5) ctx.fillStyle = "#ffabab";
+	else if (player.health / player.maxHealth > 0.25) ctx.fillStyle = "#ad5555";
+	else if (player.health / player.maxHealth > 0.1) ctx.fillStyle = "#751212";
+	else ctx.fillStyle = "#751212";
 	ctx.globalAlpha = 1;
-	roundRect(ctx, (canvas.width - innerWidth) / 2, canvas.height - height, innerWidth * player.health / player.maxHealth, innerHeight, padding / 2);
+	if(player.health > 0){
+		roundRect(ctx, (canvas.width - innerWidth) / 2, canvas.height - height, innerWidth * player.health / player.maxHealth, innerHeight, padding / 2);
+	}
 }
 
 // Draws the player's inventory (temporary)

@@ -3,7 +3,7 @@ import { CircleHitbox } from "../../types/math";
 import { GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { randomBetween } from "../../utils";
-import { spawnGun, spawnAmmo} from "../../utils";
+import { spawnGun } from "../../utils";
 
 export default class Stone extends Obstacle {
 	type = "stone";
@@ -15,9 +15,7 @@ export default class Stone extends Obstacle {
 	}
 	die(): void {
 		super.die();
-		spawnGun("ak47", GunColor.BLUE, this.position);
-		spawnAmmo(45, GunColor.BLUE, this.position);
-		spawnAmmo(45, GunColor.BLUE, this.position);
+		spawnGun("ak47", GunColor.BLUE, this.position, 60);
 
 	}
 }
