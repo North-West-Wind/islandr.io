@@ -19,7 +19,7 @@ interface AdditionalEntity {
 	canInteract?: boolean;
 	reloadTicks: number;
 	maxReloadTicks: number;
-	health: number
+	health: number;
 }
 
 class PlayerSupplier implements EntitySupplier {
@@ -44,7 +44,6 @@ export default class Player extends Entity {
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
 		this.username = minEntity.username;
-		this.health = minEntity.health;
 		if (typeof minEntity.inventory.holding === "number") {
 			const inventory = <Inventory>minEntity.inventory;
 			this.inventory = new Inventory(inventory.holding, inventory.slots, inventory.weapons.map(w => w ? castCorrectWeapon(w, w.type == WeaponType.GUN ? (<GunWeapon>w).magazine : 0) : w), inventory.ammos, inventory.utilities);
@@ -100,6 +99,7 @@ export class FullPlayer extends Player {
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
+		this.health = minEntity.health;
 		this.boost = minEntity.boost;
 		this.scope = minEntity.scope;
 		this.canInteract = minEntity.canInteract || false;
