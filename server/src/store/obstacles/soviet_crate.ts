@@ -2,7 +2,7 @@ import { world } from "../..";
 import { RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { GunColor } from "../../types/misc";
-import { randomBetween, spawnAmmo, spawnGun } from "../../utils";
+import { randomBetween, spawnGun } from "../../utils";
 
 export default class SovietCrate extends Obstacle {
 	type = "soviet_crate";
@@ -28,7 +28,7 @@ export default class SovietCrate extends Obstacle {
 		const gunNumAmmo = [60, 10, 90, 12, 90];
 		for (let ii=0; ii<Math.floor(randomBetween(2, 4)); ii++){
 			const GunIndex = Math.floor(randomBetween(0, 5));
-		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position);
+		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position, gunNumAmmo[GunIndex]);
 		// for (let ii=0; ii<2; ii++ ){spawnAmmo(gunNumAmmo[GunIndex], gunColorList[GunIndex], this.position);}
 	}}
 }

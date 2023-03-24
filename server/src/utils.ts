@@ -31,11 +31,14 @@ import { CommonAngles, Vec2 } from "./types/math";
 import { GunColor } from "./types/misc";
 
 // Spawners
-export function spawnGun(id: string, color: GunColor, position: Vec2) {
+export function spawnGun(id: string, color: GunColor, position: Vec2, ammoAmount: number) {
     const gun = new Gun(id, color);
     gun.position = position;
     gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.0001);
     world.entities.push(gun);
+    var halfAmmo = Math.round(ammoAmount/2)
+    spawnAmmo(halfAmmo, color, position);
+    spawnAmmo(ammoAmount - halfAmmo, color, position)
 }
 export function spawnAmmo(amount: number, color: GunColor, position: Vec2) {
     const ammo = new Ammo(amount, color);
