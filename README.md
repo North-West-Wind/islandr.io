@@ -3,7 +3,7 @@ An open-source implementation of [surviv.io](https://surviv.io), a 2D battle roy
 This repository contains both the server's and client's code.
 
 ## Usage
-You will be able to host a server with this repository.
+You will be able to host a game server and a web server with this repository.
 
 ### Requirements
 Install [Node.js](https://nodejs.org) before hand.
@@ -21,6 +21,8 @@ If you want to contribute to the project, you should create a fork and make PRs.
 
 1. Use `PascalCase` for naming classes, `camelCase` for naming variables and `snake_case` for files. This is done to stay consistent with my code. Sorry if you don't like these naming conventions. Commit messages need not be consistent, but should be readable.
 2. Add comments. It's good to be detailed.
+
+You may also join the [OpenSurviv.io Discord Server](https://discord.gg/jKQEVT7Vd3)
 
 ## The Story Behind
 [surviv.io](https://surviv.io) has existed since 2017. It was at first quite popular, and really fun, until the initial developers, Justin Kim and Nick Clark, sold it to Kongregate (Kong) in March 2020. Unfortunately, Kong did not pay enough attention to their acquisition, and ended up just squeezing profits from [surviv.io](https://surviv.io) in the mobile market.
