@@ -29,7 +29,8 @@ function drawHealth(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRe
 	else if (player.health / player.maxHealth > 0.1) ctx.fillStyle = "#751212";
 	else ctx.fillStyle = "#751212";
 	ctx.globalAlpha = 1;
-	roundRect(ctx, (canvas.width - innerWidth) / 2, canvas.height - height, innerWidth * player.health / player.maxHealth, innerHeight, padding / 2);
+	if player.health > 0:
+		roundRect(ctx, (canvas.width - innerWidth) / 2, canvas.height - height, innerWidth * player.health / player.maxHealth, innerHeight, padding / 2);
 }
 
 // Draws the player's inventory (temporary)
