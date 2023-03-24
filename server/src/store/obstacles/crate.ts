@@ -21,7 +21,7 @@ export default class Crate extends Obstacle {
 		const gunColorList = [GunColor.YELLOW, GunColor.RED, GunColor.YELLOW, GunColor.RED, GunColor.BLUE];
 		const gunNumAmmo = [60, 10, 90, 12, 90,];
 		const GunIndex = Math.floor(randomBetween(0, 5));
-		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position, gunNumAmmo[GunIndex]);
+		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position);
 		// for (let ii=0; ii<2; ii++ ){spawnAmmo(gunNumAmmo[GunIndex][ii], gunColorList[GunIndex], this.position);}
 		// spawnAmmo(22, GunColor.YELLOW, this.position);
 		// spawnAmmo(23, GunColor.YELLOW, this.position);

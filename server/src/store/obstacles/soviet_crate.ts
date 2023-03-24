@@ -28,7 +28,7 @@ export default class SovietCrate extends Obstacle {
 		const gunNumAmmo = [60, 10, 90, 12, 90];
 		for (let ii=0; ii<Math.floor(randomBetween(2, 4)); ii++){
 			const GunIndex = Math.floor(randomBetween(0, 5));
-		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position, gunNumAmmo[GunIndex]);
+		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position);
 		// for (let ii=0; ii<2; ii++ ){spawnAmmo(gunNumAmmo[GunIndex], gunColorList[GunIndex], this.position);}
 	}}
 }

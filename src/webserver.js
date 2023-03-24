@@ -27,7 +27,7 @@ http.createServer(function(req, res){
         }
         //prevent null chars & path traversal with ..
         else if(req.url.indexOf("\0") == -1 && !req.url.includes("..")){
-            whitelist_dirs = ["assets", "scripts", "tmp", "favicon.ico"];
+            whitelist_dirs = ["assets", "scripts", "tmp", "favicon.ico", "abuseipdb-verification.html"];
             try{
                 isWhitelist = false;
                 for(var i = 0; i<whitelist_dirs.length; i++){

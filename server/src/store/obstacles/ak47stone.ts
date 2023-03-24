@@ -15,7 +15,7 @@ export default class Stone extends Obstacle {
 	}
 	die(): void {
 		super.die();
-		spawnGun("ak47", GunColor.BLUE, this.position, 90);
+		spawnGun("ak47", GunColor.BLUE, this.position);
 
 	}
 }

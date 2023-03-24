@@ -21,6 +21,6 @@ export default class AWMCrate extends Obstacle {
 		const gunNumAmmo = [15, 35, 30];
 		const gunList = ["awm", "sv98", "mosin_nagant"];
 		const gunColorList = [GunColor.OLIVE, GunColor.BLUE, GunColor.BLUE];
-		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position, gunNumAmmo[GunIndex]);
+		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position);
 	}
 }

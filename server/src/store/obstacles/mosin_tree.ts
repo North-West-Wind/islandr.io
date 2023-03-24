@@ -15,7 +15,7 @@ export default class MosinTree extends Obstacle {
 	die() {
 		super.die();
 		// TODO: Spawn loots
-		spawnGun("mosin_nagant", GunColor.BLUE, this.position, 30);
+		spawnGun("mosin_nagant", GunColor.BLUE, this.position);
 		// spawnAmmo(15, GunColor.BLUE, this.position);
 		// spawnAmmo(15, GunColor.BLUE, this.position);
 	}
