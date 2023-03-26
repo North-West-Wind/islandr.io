@@ -6,6 +6,7 @@ import { Obstacle } from "../../types/obstacle";
 
 export default class Bullet extends Entity {
 	type = "bullet";
+	collisionLayers = [0];
 	shooter: Entity | Obstacle;
 	data: TracerData;
 	dmg: number;
@@ -35,7 +36,7 @@ export default class Bullet extends Entity {
 		combined = combined.concat(entities, obstacles);
 		if (!this.despawn)
 			for (const thing of combined)
-				if (this.type != thing.type && thing.collided(this.hitbox, this.position, this.direction)) {
+				if (this.type != thing.type && thing.collided(this)) {
 					thing.damage(this.dmg);
 					if (!thing.noCollision) this.die();
 					break;

@@ -10,13 +10,13 @@ export default class Barrel extends Obstacle {
 	constructor() {
 		const salt = randomBetween(0.9, 1.1);
 		super(world, new CircleHitbox(2).scaleAll(salt), new CircleHitbox(1.5).scaleAll(salt), 250, 250);
-		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this.hitbox, this.position, this.direction))) this.position = world.size.scale(Math.random(), Math.random());
+		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this))) this.position = world.size.scale(Math.random(), Math.random());
 	}
 	tick(entities: Entity[]) {
 		// Iterate through entities
 		for (const entity of entities) {
 			// Check for collision and type
-			if (entity.collided(this.hitbox, this.position, this.direction) && entity.type === "player" && this.health === 0 && this.madePlayerDie === false) {
+			if (entity.collided(this) && entity.type === "player" && this.health === 0 && this.madePlayerDie === false) {
 				// Damage the entity
 				entity.damage(100);
 				this.madePlayerDie = true;

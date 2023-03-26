@@ -10,7 +10,7 @@ export default class GrenadeCrate extends Obstacle {
 		const hitbox = new RectHitbox(3, 3);
 		super(world, hitbox, hitbox.scaleAll(0.75), 100, 100);
 		this.direction = Vec2.UNIT_X;
-		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this.hitbox, this.position, this.direction))) this.position = world.size.scale(Math.random(), Math.random());
+		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this))) this.position = world.size.scale(Math.random(), Math.random());
 	}
 
 	die() {

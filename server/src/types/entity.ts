@@ -22,6 +22,7 @@ export class Inventory {
 	ammos: number[];
 	// Utilities. Maps ID to amount of util.
 	utilities: Map<string, number>;
+	backpackLevel = 0;
 
 	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities?: Map<string, number>) {
 		this.holding = holding;
@@ -73,6 +74,7 @@ export class Entity {
 	direction: Vec2 = Vec2.UNIT_X;
 	hitbox: Hitbox = CircleHitbox.ZERO;
 	noCollision = false;
+	collisionLayers = [-1]; // -1 means on all layers
 	vulnerable = true;
 	health = 100;
 	maxHealth = 100;
@@ -116,16 +118,17 @@ export class Entity {
 	}
 
 	// Hitbox collision check
-	collided(hitbox: Hitbox, position: Vec2, direction: Vec2) {
-		if (this.despawn) return CollisionType.NONE;
-		if (this.position.distanceTo(position) > this.hitbox.comparable + hitbox.comparable) return CollisionType.NONE;
+	collided(thing: Entity | Obstacle) {
+		if (this.id == thing.id || this.despawn) return CollisionType.NONE;
+		if (!this.collisionLayers.includes(-1) && !thing.collisionLayers.includes(-1) && !this.collisionLayers.some(layer => thing.collisionLayers.includes(layer))) return CollisionType.NONE;
+		if (this.position.distanceTo(thing.position) > this.hitbox.comparable + thing.hitbox.comparable) return CollisionType.NONE;
 		// For circle it is distance < sum of radii
-		if (this.hitbox.type === "circle" && hitbox.type === "circle") return this.position.addVec(position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>this.hitbox).radius + (<CircleHitbox>hitbox).radius, 2) ? CollisionType.CIRCLE_CIRCLE : CollisionType.NONE;
-		else if (this.hitbox.type === "rect" && hitbox.type === "rect") {
+		if (this.hitbox.type === "circle" && thing.hitbox.type === "circle") return this.position.addVec(thing.position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>this.hitbox).radius + (<CircleHitbox>thing.hitbox).radius, 2) ? CollisionType.CIRCLE_CIRCLE : CollisionType.NONE;
+		else if (this.hitbox.type === "rect" && thing.hitbox.type === "rect") {
 			// https://math.stackexchange.com/questions/1278665/how-to-check-if-two-rectangles-intersect-rectangles-can-be-rotated
 			// Using the last answer
 			const thisStartingPoint = this.position.addVec(new Vec2(-(<RectHitbox>this.hitbox).width / 2, -(<RectHitbox>this.hitbox).height / 2).addAngle(this.direction.angle()));
-			const thingStartingPoint = this.position.addVec(new Vec2(-(<RectHitbox>hitbox).width / 2, -(<RectHitbox>hitbox).height / 2).addAngle(direction.angle()));
+			const thingStartingPoint = this.position.addVec(new Vec2(-(<RectHitbox>thing.hitbox).width / 2, -(<RectHitbox>thing.hitbox).height / 2).addAngle(thing.direction.angle()));
 			const thisPoints = [
 				thisStartingPoint,
 				thisStartingPoint.addVec(new Vec2((<RectHitbox>this.hitbox).width, 0).addAngle(this.direction.angle())),
@@ -134,9 +137,9 @@ export class Entity {
 			];
 			const thingPoints = [
 				thingStartingPoint,
-				thingStartingPoint.addVec(new Vec2((<RectHitbox>hitbox).width, 0).addAngle(direction.angle())),
-				thingStartingPoint.addVec(new Vec2(0, (<RectHitbox>hitbox).height).addAngle(direction.angle())),
-				thingStartingPoint.addVec(new Vec2((<RectHitbox>hitbox).width, (<RectHitbox>hitbox).height).addAngle(direction.angle()))
+				thingStartingPoint.addVec(new Vec2((<RectHitbox>thing.hitbox).width, 0).addAngle(thing.direction.angle())),
+				thingStartingPoint.addVec(new Vec2(0, (<RectHitbox>thing.hitbox).height).addAngle(thing.direction.angle())),
+				thingStartingPoint.addVec(new Vec2((<RectHitbox>thing.hitbox).width, (<RectHitbox>thing.hitbox).height).addAngle(thing.direction.angle()))
 			];
 			var results: boolean[] = Array(4);
 			var ii: number;
@@ -147,8 +150,8 @@ export class Entity {
 			];
 
 			const thingVecs = [
-				new Vec2((<RectHitbox>hitbox).width, 0).addAngle(direction.angle()),
-				new Vec2(0, (<RectHitbox>hitbox).height).addAngle(direction.angle())
+				new Vec2((<RectHitbox>thing.hitbox).width, 0).addAngle(thing.direction.angle()),
+				new Vec2(0, (<RectHitbox>thing.hitbox).height).addAngle(thing.direction.angle())
 			];
 
 			for (const mainVec of thisVecs) {
@@ -174,9 +177,9 @@ export class Entity {
 			var rect: { hitbox: RectHitbox, position: Vec2, direction: Vec2 };
 			if (this.hitbox.type === "circle") {
 				circle = { hitbox: <CircleHitbox>this.hitbox, position: this.position, direction: this.direction };
-				rect = { hitbox: <RectHitbox>hitbox, position, direction };
+				rect = { hitbox: <RectHitbox>thing.hitbox, position: thing.position, direction: thing.direction };
 			} else {
-				circle = { hitbox: <CircleHitbox>hitbox, position, direction };
+				circle = { hitbox: <CircleHitbox>thing.hitbox, position: thing.position, direction: thing.direction };
 				rect = { hitbox: <RectHitbox>this.hitbox, position: this.position, direction: this.direction };
 			}
 			const rectStartingPoint = rect.position.addVec(new Vec2(-rect.hitbox.width / 2, -rect.hitbox.height / 2).addAngle(rect.direction.angle()));

@@ -12,6 +12,7 @@ export default class Player extends Entity {
 	hitbox = new CircleHitbox(1);
 	id: string;
 	username: string;
+	collisionLayers = [0];
 	boost = 1.5;
 	scope = 2;
 	tryAttacking = false;
@@ -91,7 +92,7 @@ export default class Player extends Entity {
 			if (!weapon.auto) this.tryAttacking = false;
 		}
 		for (const obstacle of obstacles) {
-			const collisionType = obstacle.collided(this.hitbox, this.position, this.direction);
+			const collisionType = obstacle.collided(this);
 			if (collisionType) {
 				obstacle.onCollision(this);
 				if (!obstacle.noCollision) {
