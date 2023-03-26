@@ -38,14 +38,14 @@ class GunSupplier implements WeaponSupplier {
 	}
 }
 
-for (const file of fs.readdirSync("../opensurviv-data/data/weapons/melee/")) {
+for (const file of fs.readdirSync("../data/weapons/melee/")) {
 	if (file.startsWith(".")) continue;
-	const data = <MeleeData> JSON.parse(fs.readFileSync("../opensurviv-data/data/weapons/melee/" + file, { encoding: "utf8" }));
+	const data = <MeleeData> JSON.parse(fs.readFileSync("../data/weapons/melee/" + file, { encoding: "utf8" }));
 	WEAPON_SUPPLIERS.set(file.split(".")[0], new MeleeSupplier(file.split(".")[0], data));
 }
 
-for (const file of fs.readdirSync("../opensurviv-data/data/weapons/guns/")) {
+for (const file of fs.readdirSync("../data/weapons/guns/")) {
 	if (file.startsWith(".")) continue;
-	const data = <GunData> JSON.parse(fs.readFileSync("../opensurviv-data/data/weapons/guns/" + file, { encoding: "utf8" }));
+	const data = <GunData> JSON.parse(fs.readFileSync("../data/weapons/guns/" + file, { encoding: "utf8" }));
 	WEAPON_SUPPLIERS.set(file.split(".")[0], new GunSupplier(file.split(".")[0], data));
 }

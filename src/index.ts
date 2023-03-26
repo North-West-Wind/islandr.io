@@ -27,32 +27,34 @@ http.createServer(function(req, res){
         }
         //prevent null chars & path traversal with ..
         else if(req.url?.indexOf("\0") == -1 && !req.url.includes("..")){
-            const whitelist_dirs = ["assets", "scripts", "tmp", "favicon.ico", "abuseipdb-verification.html"];
+            if (req.url?.startsWith("/data")) {
+                const filePath = path.join(__dirname, "../", req.url);
+
+                const data = fs.readFileSync(filePath);
+                const ext = req.url.split(".").pop()!;
+                res.writeHead(200, {'Content-Type': <string>mimetypes.lookup(ext)});
+                res.write(data);
+                return res.end();
+            }
+            const whitelist_dirs = ["assets", "scripts", "favicon.ico", "abuseipdb-verification.html"];
             try{
-                var isWhitelist = false;
-                for(var i = 0; i<whitelist_dirs.length; i++){
-                    if(req.url.startsWith("/" + whitelist_dirs[i])){
-                        isWhitelist = true;
-                    }
-                }
-                if(isWhitelist){
-                    var baseDir = path.join(__dirname, "../client");
-                    var filePath = path.join(baseDir, req.url);
-                    var data = fs.readFileSync(filePath);
+                var filePath: string = "";
+                if(whitelist_dirs.some(dir => req.url?.startsWith("/" + dir)))
+                    filePath = path.join(__dirname, "../client", req.url);
+                else if (req.url?.startsWith("/data"))
+                    filePath = path.join(__dirname, "../", req.url);
+
+                if (filePath) {
+                    const data = fs.readFileSync(filePath);
                     const ext = req.url.split(".").pop()!;
                     res.writeHead(200, {'Content-Type': <string>mimetypes.lookup(ext)});
                     res.write(data);
-                    res.end()
-                }
-                else{
-                    res.writeHead(404, {'Content-Type': "text/plain"});
-                    res.end();
-                }
+                } else throw new Error("No filePath");
             }
             catch(e){
                 res.writeHead(404, {'Content-Type': "text/plain"});
-                res.end();
             }
+            res.end();
         }
     }
     //leave them hanging if they're blacklisted

@@ -48,5 +48,3 @@ export enum GunColor {
 	CURSED = 12,
 	BUGLE = 13,
 }
-
-export const OPENSURVIV_DATA = "https://raw.githubusercontent.com/North-West-Wind/opensurviv-data/main";

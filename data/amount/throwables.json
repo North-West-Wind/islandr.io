@@ -1,0 +1,50 @@
+[
+	{
+		"frag_grenade": 3,
+		"smoke_grenade": 3,
+		"mirv_grenade": 2,
+		"strobe": 2,
+		"snowball": 10,
+		"potato": 10,
+		"heart_frag": 3,
+		"mine": 3,
+		"water_balloon": 10,
+		"skittrnade": 10
+	},
+	{
+		"frag_grenade": 6,
+		"smoke_grenade": 6,
+		"mirv_grenade": 4,
+		"strobe": 3,
+		"snowball": 20,
+		"potato": 20,
+		"heart_frag": 6,
+		"mine": 6,
+		"water_balloon": 20,
+		"skittrnade": 20
+	},
+	{
+		"frag_grenade": 9,
+		"smoke_grenade": 9,
+		"mirv_grenade": 6,
+		"strobe": 4,
+		"snowball": 30,
+		"potato": 30,
+		"heart_frag": 9,
+		"mine": 9,
+		"water_balloon": 30,
+		"skittrnade": 30
+	},
+	{
+		"frag_grenade": 12,
+		"smoke_grenade": 12,
+		"mirv_grenade": 8,
+		"strobe": 5,
+		"snowball": 40,
+		"potato": 40,
+		"heart_frag": 12,
+		"mine": 12,
+		"water_balloon": 40,
+		"skittrnade": 40
+	}
+]

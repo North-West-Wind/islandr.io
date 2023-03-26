@@ -8,7 +8,7 @@
     "build": "tsc",
     "deep-install": "npm i && cd server && npm i && cd ../client && npm i",
     "gameserv": "cd server && npm run build && npm start",
-    "webserv": "cd client && npm run build && cd .. && node lib/index.js"
+    "webserv": "cd client && npm run build && cd .. && npm run build && node lib/index.js"
   },
   "repository": {
     "type": "git",

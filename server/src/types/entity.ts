@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import { clamp, ID } from "../utils";
 import { CircleHitbox, Hitbox, Line, RectHitbox, Vec2 } from "./math";
 import { Obstacle } from "./obstacle";
@@ -6,8 +7,13 @@ import { WEAPON_SUPPLIERS } from "../store/weapons";
 import { MinEntity, MinInventory } from "./minimized";
 import { CollisionType, GunColor } from "./misc";
 import { world } from "..";
+import { PUSH_THRESHOLD } from "../constants";
 
 export class Inventory {
+	// Maximum amount of things.
+	static maxAmmos: number[][];
+	static maxUtilities: Map<string, number>[];
+
 	holding: number;
 	weapons: Weapon[];
 	// Array of 2 numbers. Order: gun slots, melee slots
@@ -23,6 +29,11 @@ export class Inventory {
 		this.weapons = weapons || Array(slots.reduce((a, b) => a + b));
 		this.ammos = ammos || Array(Object.keys(GunColor).length / 2).fill(0);
 		this.utilities = utilities || new Map();
+	}
+
+	static {
+		this.maxAmmos = JSON.parse(fs.readFileSync("../data/amount/ammos.json", { encoding: "utf8" }));
+		this.maxUtilities = (<any[]>JSON.parse(fs.readFileSync("../data/amount/throwables.json", { encoding: "utf8" }))).map(x => new Map(Object.entries(x)));
 	}
 
 	getWeapon(index = -1) {
@@ -220,6 +231,106 @@ export class Entity {
 
 	private pointInRect(a: Vec2, b: Vec2, c: Vec2, d: Vec2, p: Vec2) {
 		return (this.isLeft(a, b, p) > 0 && this.isLeft(b, c, p) > 0 && this.isLeft(c, d, p) > 0 && this.isLeft(d, a, p) > 0);
+	}
+
+	protected handleCircleCircleCollision(obstacle: Obstacle) {
+		const relative = this.position.addVec(obstacle.position.inverse());
+		this.position = obstacle.position.addVec(relative.scaleAll((obstacle.hitbox.comparable + this.hitbox.comparable) / relative.magnitude()));
+	}
+
+	protected handleCircleRectCenterCollision(obstacle: Obstacle) {
+		const rectVecs = [
+			new Vec2((<RectHitbox>obstacle.hitbox).width, 0).addAngle(obstacle.direction.angle()),
+			new Vec2(0, (<RectHitbox>obstacle.hitbox).height).addAngle(obstacle.direction.angle())
+		];
+		const centerToCenter = this.position.addVec(obstacle.position.inverse());
+		/* In the order of right up left down
+		 * Think of the rectangle as vectors
+		 *       up vec0
+		 *      +------->
+		 *      |
+		 * left |        right
+		 * vec1 |
+		 *      v
+		 *         down
+		 */
+		const horiProject = centerToCenter.projectTo(rectVecs[0]);
+		const vertProject = centerToCenter.projectTo(rectVecs[1]);
+		// Distances between center and each side
+		const distances = [
+			rectVecs[0].scaleAll(0.5).addVec(horiProject.inverse()),
+			rectVecs[1].scaleAll(-0.5).addVec(vertProject.inverse()),
+			rectVecs[0].scaleAll(-0.5).addVec(horiProject.inverse()),
+			rectVecs[1].scaleAll(0.5).addVec(vertProject.inverse())
+		];
+		var shortestIndex = 0;
+		for (let ii = 1; ii < distances.length; ii++)
+			if (distances[ii].magnitudeSqr() < distances[shortestIndex].magnitudeSqr())
+				shortestIndex = ii;
+
+		this.position = this.position.addVec(distances[shortestIndex]).addVec(distances[shortestIndex].unit().scaleAll(this.hitbox.comparable));
+	}
+
+	protected handleCircleRectPointCollision(obstacle: Obstacle) {
+		const rectStartingPoint = obstacle.position.addVec(new Vec2(-(<RectHitbox>obstacle.hitbox).width / 2, -(<RectHitbox>obstacle.hitbox).height / 2).addAngle(obstacle.direction.angle()));
+		const rectPoints = [
+			rectStartingPoint,
+			rectStartingPoint.addVec(new Vec2((<RectHitbox>obstacle.hitbox).width, 0).addAngle(obstacle.direction.angle())),
+			rectStartingPoint.addVec(new Vec2((<RectHitbox>obstacle.hitbox).width, (<RectHitbox>obstacle.hitbox).height).addAngle(obstacle.direction.angle())),
+			rectStartingPoint.addVec(new Vec2(0, (<RectHitbox>obstacle.hitbox).height).addAngle(obstacle.direction.angle()))
+		];
+		const intersections = Array(rectPoints.length).fill(false);
+		var counts = 0
+		for (let ii = 0; ii < rectPoints.length; ii++)
+			if (rectPoints[ii].distanceSqrTo(this.position) <= this.hitbox.comparable) {
+				intersections[ii] = true;
+				counts++;
+			}
+		if (counts == 2) return this.handleCircleRectLineCollision(obstacle);
+		var sum = 0;
+		for (let ii = 0; ii < intersections.length; ii++)
+			if (intersections[ii])
+				sum += ii;
+		const index = sum / counts;
+		const adjacents = [
+			rectPoints[((index - 1) < 0 ? rectPoints.length : index) - 1],
+			rectPoints[index],
+			rectPoints[(index + 1) % rectPoints.length]
+		];
+		const vecs = [
+			adjacents[1].addVec(adjacents[0].inverse()),
+			adjacents[2].addVec(adjacents[1].inverse())
+		];
+
+		for (let ii = 0; ii < vecs.length; ii++) {
+			const distance = new Line(adjacents[ii], adjacents[ii+1]).distanceTo(this.position);
+			this.position = this.position.addVec(vecs[ii].perpendicular().unit().scaleAll(this.hitbox.comparable - distance));
+		}
+	}
+
+	protected handleCircleRectLineCollision(obstacle: Obstacle) {
+		const rectStartingPoint = obstacle.position.addVec(new Vec2(-(<RectHitbox>obstacle.hitbox).width / 2, -(<RectHitbox>obstacle.hitbox).height / 2).addAngle(obstacle.direction.angle()));
+		const rectPoints = [
+			rectStartingPoint,
+			rectStartingPoint.addVec(new Vec2((<RectHitbox>obstacle.hitbox).width, 0).addAngle(obstacle.direction.angle())),
+			rectStartingPoint.addVec(new Vec2((<RectHitbox>obstacle.hitbox).width, (<RectHitbox>obstacle.hitbox).height).addAngle(obstacle.direction.angle())),
+			rectStartingPoint.addVec(new Vec2(0, (<RectHitbox>obstacle.hitbox).height).addAngle(obstacle.direction.angle()))
+		];
+		const distances: number[] = Array(rectPoints.length);
+		const vecs: Vec2[] = Array(rectPoints.length);
+		for (let ii = 0; ii < rectPoints.length; ii++) {
+			const point1 = rectPoints[ii], point2 = rectPoints[(ii + 1) % rectPoints.length];
+			vecs[ii] = point2.addVec(point1.inverse());
+			distances[ii] = new Line(point1, point2).distanceTo(this.position);
+		}
+		var shortestIndex = 0;
+		for (let ii = 1; ii < distances.length; ii++)
+			if (distances[ii] < distances[shortestIndex])
+				shortestIndex = ii;
+		
+		const push = vecs[shortestIndex].perpendicular().unit().scaleAll(this.hitbox.comparable - distances[shortestIndex]);
+		if (Math.abs(push.y) < PUSH_THRESHOLD && Math.abs(push.x) < PUSH_THRESHOLD) return;
+		this.position = this.position.addVec(push);
 	}
 }
 
