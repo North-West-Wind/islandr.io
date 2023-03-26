@@ -38,7 +38,7 @@ http.createServer(function(req, res){
             }
             const whitelist_dirs = ["assets", "scripts", "favicon.ico", "abuseipdb-verification.html"];
             try{
-                var filePath: string = "";
+                var filePath = "";
                 if(whitelist_dirs.some(dir => req.url?.startsWith("/" + dir)))
                     filePath = path.join(__dirname, "../client", req.url);
                 else if (req.url?.startsWith("/data"))

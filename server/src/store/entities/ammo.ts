@@ -1,5 +1,5 @@
 import { Inventory } from "../../types/entity";
-import { CircleHitbox, CommonAngles, Vec2 } from "../../types/math";
+import { CircleHitbox, Vec2 } from "../../types/math";
 import { GunColor } from "../../types/misc";
 import Item from "./item";
 import Player from "./player";

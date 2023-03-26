@@ -8,7 +8,7 @@ import { Player } from "./store/entities";
 import { Particle } from "./types/particle";
 import { World } from "./types/terrain";
 import { Plain, Pond, River, Sea } from "./store/terrains";
-import { Tree, Bush, Crate, Stone, MosinTree, SovietCrate, GrenadeCrate, AWMCrate, Barrel, AK47Stone } from "./store/obstacles";
+import { Tree, Bush, Crate, Stone, MosinTree, SovietCrate, GrenadeCrate, Barrel, AK47Stone } from "./store/obstacles";
 
 export var ticksElapsed = 0;
 

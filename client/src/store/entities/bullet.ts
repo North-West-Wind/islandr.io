@@ -4,7 +4,7 @@ import { TracerData } from "../../types/data";
 import { Entity } from "../../types/entity";
 import { MinEntity } from "../../types/minimized";
 import { EntitySupplier } from "../../types/supplier";
-import { circleFromCenter, lineBetween } from "../../utils";
+import { lineBetween } from "../../utils";
 import Player from "./player";
 
 interface AdditionalEntity {

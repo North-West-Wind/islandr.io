@@ -1,5 +1,5 @@
 import { world } from "../..";
-import { CircleHitbox, Vec2 } from "../../types/math";
+import { CircleHitbox } from "../../types/math";
 import Item from "./item";
 import Player from "./player";
 

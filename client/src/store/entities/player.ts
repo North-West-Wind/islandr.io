@@ -58,6 +58,14 @@ export default class Player extends Entity {
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		if (!this.despawn) {
 			ctx.rotate(this.direction.angle());
+
+			if (this.inventory.backpackLevel) {
+				ctx.fillStyle = "#675230";
+				ctx.lineWidth = radius / 6;
+				ctx.strokeStyle = "#000000";
+				circleFromCenter(ctx, -radius * 0.4 * this.inventory.backpackLevel, 0, radius * 0.9, true, true);
+			}
+
 			ctx.fillStyle = "#F8C675";
 			circleFromCenter(ctx, 0, 0, radius);
 			// We will leave the transform for the weapon

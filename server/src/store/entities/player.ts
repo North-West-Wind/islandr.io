@@ -1,7 +1,7 @@
-import { GLOBAL_UNIT_MULTIPLIER, PUSH_THRESHOLD, TICKS_PER_SECOND } from "../../constants";
+import { GLOBAL_UNIT_MULTIPLIER, TICKS_PER_SECOND } from "../../constants";
 import { Entity, Inventory } from "../../types/entity";
 import { PickupableEntity } from "../../types/extensions";
-import { CircleHitbox, Line, RectHitbox, Vec2 } from "../../types/math";
+import { CircleHitbox, Vec2 } from "../../types/math";
 import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";

@@ -21,15 +21,10 @@
   },
   "homepage": "https://github.com/North-West-Wind/opensurviv#readme",
   "devDependencies": {
-    "@eslint/create-config": "^0.4.1",
     "@types/msgpack-lite": "^0.1.8",
     "@types/node": "^18.11.9",
     "@types/ws": "^8.5.3",
-    "@typescript-eslint/eslint-plugin": "^5.46.1",
-    "@typescript-eslint/parser": "^5.46.1",
     "browserify": "^17.0.0",
-    "eslint": "^8.28.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
     "typescript": "^4.7.2",
     "uglify-js": "^3.17.4"
   },

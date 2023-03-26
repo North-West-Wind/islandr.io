@@ -39,9 +39,11 @@ export class Inventory {
 // Inventory, mainly for players
 export class PartialInventory {
 	holding: Weapon;
+	backpackLevel: number;
 
 	constructor(minInv: MinInventory) {
 		this.holding = castCorrectWeapon(minInv.holding);
+		this.backpackLevel = minInv.backpackLevel;
 	}
 }
 
