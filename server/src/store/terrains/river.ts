@@ -35,7 +35,6 @@ export default class River extends PiecewiseTerrain implements BorderedTerrain {
 					a = new Vec2(0, randomBetween(5 + this.border, world.size.y / 10));
 			} else a = this.lines[this.lines.length - 1].line.b;
 			const b = a.addVec(Line.fromPointSlope(a, slope).toVec().unit().scaleAll(length));
-			if (b.y < a.y) console.log("by is < ay!");
 			this.addLine(new Line(a, b, true), 5);
 		}
 

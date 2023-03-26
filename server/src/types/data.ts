@@ -106,3 +106,19 @@ interface TracerColor {
 export type TracerColorData = {
 	[key: string]: TracerColor;
 }
+
+interface TypeLootTableEntry {
+	rarity: number;
+	weight: number;
+	amount?: number;
+}
+
+export type TypeLootTableData = {
+	[key: string]: TypeLootTableEntry;
+}
+
+export type LootTableData = {
+	rolls: number;
+	rarity: number;
+	entries: string[];
+}

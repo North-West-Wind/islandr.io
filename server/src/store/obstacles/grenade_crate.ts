@@ -1,9 +1,10 @@
 import { world } from "../..";
+import { LOOT_TABLES } from "../../types/loot_table";
 import { RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
-import { spawnGrenade } from "../../utils";
 
 export default class GrenadeCrate extends Obstacle {
+	static readonly LOOT_TABLE = "crate_grenade";
 	type = "grenade_crate";
 
 	constructor() {
@@ -15,8 +16,12 @@ export default class GrenadeCrate extends Obstacle {
 
 	die() {
 		super.die();
-		// Spawn 3 entities
-		for (let ii = 0; ii < 3; ii++)
-			spawnGrenade("frag_grenade", 2, this.position);
+		const entities = LOOT_TABLES.get(GrenadeCrate.LOOT_TABLE)?.roll();
+		if (entities) {
+			world.entities.push(...entities.map(e => {
+				e.position = this.position;
+				return e;
+			}));
+		}
 	}
 }

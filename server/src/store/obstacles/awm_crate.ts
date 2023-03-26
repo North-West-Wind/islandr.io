@@ -1,10 +1,10 @@
 import { world } from "../..";
 import { RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
-import { GunColor } from "../../types/misc";
-import { randomBetween, spawnGun } from "../../utils";
+import { LOOT_TABLES } from "../../types/loot_table";
 
 export default class AWMCrate extends Obstacle {
+	static readonly LOOT_TABLE = "crate_rare";
 	type = "AWMCrate";
 
 	constructor() {
@@ -16,11 +16,12 @@ export default class AWMCrate extends Obstacle {
 
 	die() {
 		super.die();
-		// TODO: Spawn loots
-		const GunIndex = Math.floor(randomBetween(0, 2));
-		const gunNumAmmo = [15, 35, 30];
-		const gunList = ["awm", "sv98", "mosin_nagant"];
-		const gunColorList = [GunColor.OLIVE, GunColor.BLUE, GunColor.BLUE];
-		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position, gunNumAmmo[GunIndex]);
+		const entities = LOOT_TABLES.get(AWMCrate.LOOT_TABLE)?.roll();
+		if (entities) {
+			world.entities.push(...entities.map(e => {
+				e.position = this.position;
+				return e;
+			}));
+		}
 	}
 }

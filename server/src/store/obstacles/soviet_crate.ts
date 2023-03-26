@@ -1,10 +1,10 @@
 import { world } from "../..";
 import { RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
-import { GunColor } from "../../types/misc";
-import { randomBetween, spawnGun } from "../../utils";
+import { LOOT_TABLES } from "../../types/loot_table";
 
 export default class SovietCrate extends Obstacle {
+	static readonly LOOT_TABLE = "crate_more";
 	type = "soviet_crate";
 
 	constructor() {
@@ -16,19 +16,12 @@ export default class SovietCrate extends Obstacle {
 
 	die() {
 		super.die();
-		// TODO: Spawn loots
-		// spawnGun("m870", GunColor.RED, this.position);
-		// spawnGun("mp5", GunColor.YELLOW, this.position);
-		// for (let ii = 0; ii < 2; ii++)
-		// 	spawnAmmo(5, GunColor.RED, this.position);
-		// for (let ii = 0; ii < 2; ii++)
-		// 	spawnAmmo(45, GunColor.YELLOW, this.position);
-		const gunList = ["m9", "m870", "mp5", "m1100", "ak47"];
-		const gunColorList = [GunColor.YELLOW, GunColor.RED, GunColor.YELLOW, GunColor.RED, GunColor.BLUE];
-		const gunNumAmmo = [60, 10, 90, 12, 90];
-		for (let ii=0; ii<Math.floor(randomBetween(2, 4)); ii++){
-			const GunIndex = Math.floor(randomBetween(0, 5));
-		spawnGun(gunList[GunIndex], gunColorList[GunIndex], this.position, gunNumAmmo[GunIndex]);
-		// for (let ii=0; ii<2; ii++ ){spawnAmmo(gunNumAmmo[GunIndex], gunColorList[GunIndex], this.position);}
-	}}
+		const entities = LOOT_TABLES.get(SovietCrate.LOOT_TABLE)?.roll();
+		if (entities) {
+			world.entities.push(...entities.map(e => {
+				e.position = this.position;
+				return e;
+			}));
+		}
+	}
 }

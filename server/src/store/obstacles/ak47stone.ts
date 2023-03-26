@@ -1,9 +1,10 @@
 import { world } from "../..";
 import { CircleHitbox } from "../../types/math";
-import { GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
+import { GunWeapon } from "../../types/weapon";
 import { randomBetween } from "../../utils";
 import { spawnGun } from "../../utils";
+import { WEAPON_SUPPLIERS } from "../weapons";
 
 export default class Stone extends Obstacle {
 	type = "stone";
@@ -15,7 +16,9 @@ export default class Stone extends Obstacle {
 	}
 	die(): void {
 		super.die();
-		spawnGun("ak47", GunColor.BLUE, this.position, 60);
+		const ak47 = <GunWeapon>WEAPON_SUPPLIERS.get("mosin_nagant")?.create();
+		if (ak47)
+			spawnGun(ak47.id, ak47.color, this.position, ak47.ammo);
 
 	}
 }

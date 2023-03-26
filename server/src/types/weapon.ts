@@ -92,6 +92,7 @@ export class GunWeapon extends Weapon {
 	// More like constants
 	type = WeaponType.GUN;
 	color: GunColor;
+	ammo: number; // Ammo spawn
 	bullets: number;
 	spread: number;
 	moveSpread: number;
@@ -108,6 +109,7 @@ export class GunWeapon extends Weapon {
 	constructor(id: string, data: GunData) {
 		super(id, data.name, (data.normal.delay.firing / 1000) * TICKS_PER_SECOND, data.normal.speed.equip, data.normal.speed.attack, data.auto || false, data.droppable);
 		this.color = data.color;
+		this.ammo = data.ammo;
 		this.bullets = data.normal.bullets;
 		this.spread = data.normal.spread.still;
 		this.moveSpread = data.normal.spread.still;

@@ -71,7 +71,6 @@ export default class Player extends Entity {
 			// We will leave the transform for the weapon
 			// If player is holding nothing, render fist
 			var weapon = WEAPON_SUPPLIERS.get("fists")!.create();
-			//console.log(this.inventory);
 			if (typeof this.inventory.holding === "number") weapon = (<Inventory>this.inventory).getWeapon()!;
 			else weapon = (<PartialInventory>this.inventory).holding;
 			weapon.render(this, canvas, ctx, scale);

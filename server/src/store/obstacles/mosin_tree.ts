@@ -2,8 +2,9 @@ import { world } from "../..";
 import { CircleHitbox } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { randomBetween } from "../../utils";
-import { GunColor } from "../../types/misc";
 import { spawnGun } from "../../utils";
+import { GunWeapon } from "../../types/weapon";
+import { WEAPON_SUPPLIERS } from "../weapons";
 export default class MosinTree extends Obstacle {
 	type = "tree";
 
@@ -14,9 +15,8 @@ export default class MosinTree extends Obstacle {
 	}
 	die() {
 		super.die();
-		// TODO: Spawn loots
-		spawnGun("mosin_nagant", GunColor.BLUE, this.position, 10);
-		// spawnAmmo(15, GunColor.BLUE, this.position);
-		// spawnAmmo(15, GunColor.BLUE, this.position);
+		const mosin = <GunWeapon>WEAPON_SUPPLIERS.get("mosin_nagant")?.create();
+		if (mosin)
+			spawnGun(mosin.id, mosin.color, this.position, mosin.ammo);
 	}
 }

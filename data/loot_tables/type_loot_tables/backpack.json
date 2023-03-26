@@ -1,0 +1,14 @@
+{
+	"1": {
+		"rarity": 0,
+		"weight": 10
+	},
+	"2": {
+		"rarity": 1,
+		"weight": 5
+	},
+	"3": {
+		"rarity": 2,
+		"weight": 2
+	}
+}
