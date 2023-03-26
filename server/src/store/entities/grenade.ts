@@ -1,6 +1,7 @@
 // Note: This is the grenade item
 
-import { CircleHitbox } from "../../types/math";
+import { Inventory } from "../../types/entity";
+import { CircleHitbox, Vec2 } from "../../types/math";
 import { WEAPON_SUPPLIERS } from "../weapons";
 import Item from "./item";
 import Player from "./player";
@@ -23,8 +24,14 @@ export default class Grenade extends Item {
 	}
 
 	picked(player: Player) {
-		// TODO: Check if there is enough space
-		player.inventory.utilities.set(this.name, (player.inventory.utilities.get(this.name) || 0) + this.amount);
+		const newAmount = Math.min(Inventory.maxUtilities[player.inventory.backpackLevel].get(this.name) || 0, (player.inventory.utilities.get(this.name) || 0) + this.amount);
+		const delta = newAmount - (player.inventory.utilities.get(this.name) || 0);
+		player.inventory.utilities.set(this.name, newAmount);
+		if (delta != this.amount) {
+			this.amount -= delta;
+			this.velocity = Vec2.UNIT_X.addAngle(this.position.addVec(player.position.inverse()).angle()).scaleAll(0.001);
+			return false;
+		}
 		return true;
 	}
 

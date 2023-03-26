@@ -12,7 +12,6 @@ export default class Gun extends Item {
 	type = "gun";
 	hitbox = new CircleHitbox(2);
 	name: string; // Gun ID, but id was taken for entity already
-	discardable = true;
 	color: GunColor;
 	friction = 0.02; // frictional acceleration, not force
 

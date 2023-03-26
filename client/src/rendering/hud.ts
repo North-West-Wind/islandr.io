@@ -1,4 +1,5 @@
 import { FullPlayer } from "../store/entities";
+import { getBackpackImage } from "../textures";
 import { Inventory } from "../types/entity";
 import { GunWeapon, WeaponType } from "../types/weapon";
 import { roundRect } from "../utils";
@@ -8,6 +9,7 @@ export function drawHud(player: FullPlayer, canvas: HTMLCanvasElement, ctx: Canv
 	drawHealth(player, canvas, ctx);
 	drawGunAmmo(player, canvas, ctx);
 	drawInventory(player, canvas, ctx);
+	drawBackpack(player, canvas, ctx);
 }
 
 // Draws the player's health
@@ -76,4 +78,23 @@ function drawGunAmmo(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasR
 	if (!ammos) ctx.fillStyle = "#ff0000";
 	else ctx.fillStyle = "#fff";
 	ctx.fillText(`${ammos}`, (canvas.width - width) / 2 + width * 1.5 + padding, canvas.height - yOffset - padding);
+}
+
+function drawBackpack(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+	if (player.inventory.backpackLevel == 0) return;
+	const size = canvas.height / 20;
+	const healthWidth = size * 10;
+	const padding = Math.min(canvas.width, canvas.height) / 100;
+	ctx.fillStyle = "#000000";
+	ctx.globalAlpha = 0.2;
+	roundRect(ctx, (canvas.width + healthWidth) / 2 + padding, canvas.height - size - padding, size, size, padding / 2);
+	ctx.globalAlpha = 1;
+	const img = getBackpackImage(player.inventory.backpackLevel);
+	ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 2, canvas.height - size, size - padding * 2, size - padding * 2);
+
+	ctx.fillStyle = "#fff";
+	ctx.font = `${canvas.height / 54}px Arial`;
+	ctx.textBaseline = "bottom";
+	ctx.textAlign = "center";
+	ctx.fillText(`Lv. ${player.inventory.backpackLevel}`, (canvas.width + healthWidth) / 2 + padding + size / 2, canvas.height - size - padding * 2);
 }

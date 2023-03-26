@@ -1,14 +1,27 @@
 import { TICKS_PER_SECOND } from "../../constants";
 import { Entity } from "../../types/entity";
 import { PickupableEntity } from "../../types/extensions";
+import { CommonAngles, Vec2 } from "../../types/math";
 import { CollisionType } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import Player from "./player";
 
 export default abstract class Item extends Entity implements PickupableEntity {
 	type = "item";
+	discardable = true;
 	friction = 0.02; // frictional acceleration, not force
 	collisionLayers = [1];
+
+	constructor() {
+		super();
+		this.randomVelocity();
+	}
+
+	// Terrible name lol
+	randomVelocity(direction = Vec2.ZERO) {
+		if (direction.magnitudeSqr() != 0) this.velocity = Vec2.UNIT_X.addAngle(direction.angle()).scaleAll(0.001);
+		else this.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.001);
+	}
 
 	tick(entities: Entity[], obstacles: Obstacle[]) {
 		super.tick(entities, obstacles);

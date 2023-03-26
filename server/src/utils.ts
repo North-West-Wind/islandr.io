@@ -27,14 +27,13 @@ export function toRadians(degree: number) {
 // Things that require game object imports
 import { world } from ".";
 import { Ammo, Gun, Grenade } from "./store/entities";
-import { CommonAngles, Vec2 } from "./types/math";
+import { Vec2 } from "./types/math";
 import { GunColor } from "./types/misc";
 
 // Spawners
 export function spawnGun(id: string, color: GunColor, position: Vec2, ammoAmount: number) {
     const gun = new Gun(id, color);
     gun.position = position;
-    gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.0001);
     world.entities.push(gun);
     var halfAmmo = Math.round(ammoAmount/2)
     spawnAmmo(halfAmmo, color, position);
@@ -43,13 +42,11 @@ export function spawnGun(id: string, color: GunColor, position: Vec2, ammoAmount
 export function spawnAmmo(amount: number, color: GunColor, position: Vec2) {
     const ammo = new Ammo(amount, color);
     ammo.position = position;
-    ammo.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.0001);
     world.entities.push(ammo);
 }
 export function spawnGrenade(id: string, amount: number, position: Vec2){
     const grenade = new Grenade(id, amount);
     grenade.position = position;
-    grenade.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.0001);
     world.entities.push(grenade);
 }
 //Overall spawner to spawn any type of loot

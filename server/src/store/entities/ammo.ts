@@ -1,4 +1,5 @@
-import { CircleHitbox } from "../../types/math";
+import { Inventory } from "../../types/entity";
+import { CircleHitbox, CommonAngles, Vec2 } from "../../types/math";
 import { GunColor } from "../../types/misc";
 import Item from "./item";
 import Player from "./player";
@@ -20,7 +21,14 @@ export default class Ammo extends Item {
 	}
 
 	picked(player: Player) {
-		player.inventory.ammos[this.color] += this.amount;
+		const newAmount = Math.min(Inventory.maxAmmos[player.inventory.backpackLevel][this.color], player.inventory.ammos[this.color] + this.amount);
+		const delta = newAmount - player.inventory.ammos[this.color];
+		player.inventory.ammos[this.color] = newAmount;
+		if (delta != this.amount) {
+			this.amount -= delta;
+			this.velocity = Vec2.UNIT_X.addAngle(this.position.addVec(player.position.inverse()).angle()).scaleAll(0.001);
+			return false;
+		}
 		return true;
 	}
 

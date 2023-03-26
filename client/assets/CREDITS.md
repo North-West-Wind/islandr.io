@@ -6,6 +6,8 @@
 ### [North-West-Wind (NorthWestWind)](https://github.com/North-West-Wind)
 - `images/game/entities/death.svg`
 
+- `iamges/game/loots/backpacks/1.svg`
+
 - `images/game/objects/bush.svg`
 - `images/game/objects/crate.svg`
 - `images/game/objects/stone.svg`
@@ -37,3 +39,7 @@
 - `images/objects/soviet_crate.png`
 
 - `images/objects/residues/barrel.png`
+
+### [Surviv.io Wiki](https://survivio.fandom.com/wiki/Surviv.io_Wiki)
+- `iamges/game/loots/backpacks/2.webp`
+- `iamges/game/loots/backpacks/3.webp`

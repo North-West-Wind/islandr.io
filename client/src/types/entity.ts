@@ -17,6 +17,7 @@ export class Inventory {
 	ammos: number[];
 	// Utilities. Maps ID to amount of util.
 	utilities: Map<string, number>;
+	backpackLevel!: number;
 
 	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities?: Map<string, number>) {
 		this.holding = holding;
