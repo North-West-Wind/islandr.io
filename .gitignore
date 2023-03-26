@@ -1,3 +1,7 @@
+# Common stuff
 **/node_modules
 **/lib
 **/tmp
+
+# Client stuff
+client/scripts/bundle.min.js
