@@ -4,6 +4,7 @@
   "description": "An open-source implementation of surviv.io",
   "main": "lib/index.js",
   "scripts": {
+    "start": "npm run webserv",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "build-server": "cd server && npm run build",
