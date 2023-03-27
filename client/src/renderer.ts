@@ -10,6 +10,8 @@ import { Terrain } from "./types/terrain";
 import { lineBetween } from "./utils";
 import { drawPrompt } from "./rendering/prompt";
 
+(<HTMLInputElement>document.querySelector("#address")).defaultValue = "opensurviv.run.place:8000";
+
 const canvas = <HTMLCanvasElement> document.getElementById("game");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
