@@ -1,6 +1,6 @@
 import { encode, decode } from "msgpack-lite";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
-import { animate, setRunning } from "./renderer";
+import { start, stop } from "./renderer";
 import { initMap } from "./rendering/map";
 import { addKeyPressed, addMousePressed, isKeyPressed, isMenuHidden, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap } from "./states";
 import { FullPlayer } from "./store/entities";
@@ -45,10 +45,8 @@ async function init(address: string) {
 			connected = true;
 			clearTimeout(timer);
 	
-			// Start animating after connection established
-			setRunning(true);
-			animate(0);
-			document.getElementById("menu")?.classList.add("hidden");
+			// Call renderer start to setup
+			start();
 	
 			const interval = setInterval(() => {
 				if (connected) ws.send(encode(new PingPacket()).buffer);
@@ -81,9 +79,7 @@ async function init(address: string) {
 		// Reset everything when connection closes
 		ws.onclose = () => {
 			connected = false;
-			setRunning(false);
-			document.getElementById("menu")?.classList.remove("hidden");
-			(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "none";
+			stop();
 			id = null;
 			tps = 1;
 			username = null;

@@ -10,8 +10,6 @@ import { Terrain } from "./types/terrain";
 import { lineBetween } from "./utils";
 import { drawPrompt } from "./rendering/prompt";
 
-(<HTMLInputElement>document.querySelector("#address")).defaultValue = "opensurviv.run.place:8000";
-
 const canvas = <HTMLCanvasElement> document.getElementById("game");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -22,12 +20,10 @@ window.onresize = () => {
 };
 
 var running = false;
-export function setRunning(r: boolean) { running = r; }
-
 var lastTime: number;
 
 const ctx = <CanvasRenderingContext2D> canvas.getContext("2d");
-export function animate(currentTime: number) {
+function animate(currentTime: number) {
 	if (!lastTime) lastTime = currentTime;
 	const elapsed = currentTime - lastTime;
 	lastTime = currentTime;
@@ -54,6 +50,7 @@ export function animate(currentTime: number) {
 			world.terrains.forEach(terrain => terrain.render(player, canvas, ctx, scale));
 
 			// Draw grid lines
+			ctx.lineWidth = 2;
 			ctx.globalAlpha = 0.2;
 			for (let ii = 0; ii <= size.x; ii += GRID_INTERVAL) lineBetween(ctx, canvas.width / 2 - (player.position.x - ii) * scale, Math.max(y, 0), canvas.width / 2 - (player.position.x - ii) * scale, Math.min(y + height, canvas.height));
 			for (let ii = 0; ii <= size.y; ii += GRID_INTERVAL) lineBetween(ctx, Math.max(x, 0), canvas.height / 2 - (player.position.y - ii) * scale, Math.min(x + width, canvas.width), canvas.height / 2 - (player.position.y - ii) * scale);
@@ -100,4 +97,23 @@ export function animate(currentTime: number) {
 	} catch (err) { console.error(err); }
 
 	if (running) requestAnimationFrame(animate);
+}
+
+export function start() {
+	running = true;
+	document.getElementById("menu")?.classList.add("hidden");
+	document.getElementById("hud")?.classList.remove("hidden");
+	animate(0);
+}
+
+export function stop() {
+	running = false;
+	document.getElementById("menu")?.classList.remove("hidden");
+	document.getElementById("hud")?.classList.add("hidden");
+	for (let ii = 0; ii < 4; ii++) {
+		const nameEle = document.getElementById("weapon-name-" + ii);
+		const imageEle = document.getElementById("weapon-image-" + ii);
+		if (nameEle) nameEle.innerHTML = "";
+		if (imageEle) (<HTMLImageElement>imageEle).src = "";
+	}
 }
