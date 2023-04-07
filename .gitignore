@@ -5,3 +5,4 @@
 
 # Client stuff
 client/scripts/bundle.min.js
+.vercel
