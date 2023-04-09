@@ -26,8 +26,11 @@ var ws: WebSocket;
 var connected = false;
 
 async function init(address: string) {
-	// Address for debugging
-	ws = new WebSocket("ws://" + address);
+	// Initialize the websocket
+	var protocol = "ws";
+	if ((<HTMLInputElement>document.getElementById("wss")).checked) protocol += "s";
+	console.log("using ", protocol)
+	ws = new WebSocket(`${protocol}://${address}`);
 	ws.binaryType = "arraybuffer";
 
 	await new Promise((res, rej) => {
