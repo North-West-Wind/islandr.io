@@ -30,7 +30,6 @@ async function init(address: string) {
 	// Initialize the websocket
 	var protocol = "ws";
 	if ((<HTMLInputElement>document.getElementById("wss")).checked) protocol += "s";
-	console.log("using ", protocol)
 	ws = new WebSocket(`${protocol}://${address}`);
 	ws.binaryType = "arraybuffer";
 

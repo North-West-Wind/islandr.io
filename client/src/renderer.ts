@@ -9,6 +9,20 @@ import { RenderableLayerN1 } from "./types/extenstions";
 import { Terrain } from "./types/terrain";
 import { lineBetween } from "./utils";
 import { drawPrompt } from "./rendering/prompt";
+import { cookieExists, setCookie } from "cookies-utils";
+
+if (!cookieExists("gave_me_cookies")) {
+	const button = document.getElementById("cookies-button")!;
+	button.scrollIntoView();
+	button.onclick = () => {
+		setCookie({ name: "gave_me_cookies", value: "1" });
+		button.classList.add("disabled");
+		document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
+	}
+} else {
+	document.getElementById("cookies-button")!.classList.add("disabled");
+	document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
+}
 
 const canvas = <HTMLCanvasElement> document.getElementById("game");
 canvas.width = window.innerWidth;

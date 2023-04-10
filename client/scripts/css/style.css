@@ -4,6 +4,8 @@ body {
     font-family: 'Jura', Arial, Helvetica, sans-serif;
     color: white;
     background-color: #80B251;
+    background-image: url("../../assets/images/menu/background.png");
+    background-size: cover;
 }
 
 canvas {
@@ -39,11 +41,10 @@ div#menu {
     position: fixed;
     left: 0;
     top: 0;
-    background-image: url("../../assets/images/menu/background.png");
-    background-size: cover;
     width: 100%;
     height: 100%;
     text-align: center;
+    overflow-y: scroll;
 }
 
 .hidden {
@@ -52,6 +53,13 @@ div#menu {
 
 .no-margin {
     margin: 0;
+}
+
+#logo-container {
+    top: 0;
+    left: 0;
+    margin: 0;
+    width: 100%;
 }
 
 #logo {
@@ -70,7 +78,7 @@ div#menu {
 
 .panel {
     position: relative;
-    margin: auto;
+    margin: 0 auto 5vh auto;
     padding: 3vw;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 2vw;
@@ -125,6 +133,24 @@ div#menu {
     color: red;
     font-weight: bold;
     font-size: 18px;
+}
+
+#cookies-button {
+    font-size: 5vh;
+    padding: 2vh;
+    margin-bottom: 1vh;
+    background-color: #66cc00;
+    border-radius: 1vh;
+    transition: all .5s ease;
+}
+
+#cookies-button:hover {
+    cursor: pointer;
+    background-color: #339900;
+}
+
+#cookies-button.disabled {
+    background-color: #999;
 }
 
 #hud {
