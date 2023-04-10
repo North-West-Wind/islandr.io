@@ -1,10 +1,20 @@
 import { ENTITY_SUPPLIERS } from ".";
+import { getWeaponImagePath } from "../../textures";
 import { Entity, Inventory, PartialInventory } from "../../types/entity";
 import { MinEntity, MinInventory } from "../../types/minimized";
 import { EntitySupplier } from "../../types/supplier";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { circleFromCenter } from "../../utils";
 import { castCorrectWeapon, WEAPON_SUPPLIERS } from "../weapons";
+
+const weaponPanelDivs: HTMLDivElement[] = [];
+const weaponNameDivs: HTMLDivElement[] = [];
+const weaponImages: HTMLImageElement[] = [];
+for (let ii = 0; ii < 4; ii++) {
+	weaponPanelDivs.push(<HTMLDivElement> document.getElementById("weapon-panel-" + ii));
+	weaponNameDivs.push(<HTMLDivElement> document.getElementById("weapon-name-" + ii));
+	weaponImages.push(<HTMLImageElement> document.getElementById("weapon-image-" + ii));
+}
 
 const deathImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 deathImg.onload = () => deathImg.loaded = true;
@@ -48,6 +58,12 @@ export default class Player extends Entity {
 			const inventory = <Inventory>minEntity.inventory;
 			this.inventory = new Inventory(inventory.holding, inventory.slots, inventory.weapons.map(w => w ? castCorrectWeapon(w, w.type == WeaponType.GUN ? (<GunWeapon>w).magazine : 0) : w), inventory.ammos, inventory.utilities);
 			this.inventory.backpackLevel = inventory.backpackLevel;
+			for (let ii = 0; ii < inventory.weapons.length; ii++) {
+				if (ii == inventory.holding) weaponPanelDivs[ii].classList.add("selected");
+				else weaponPanelDivs[ii].classList.remove("selected");
+				weaponNameDivs[ii].innerHTML = inventory.weapons[ii]?.name || "&nbsp;";
+				weaponImages[ii].src = getWeaponImagePath(inventory.weapons[ii]?.id);
+			}
 		} else this.inventory = new PartialInventory(<MinInventory>minEntity.inventory);
 		if (this.despawn) this.zIndex = 7;
 	}

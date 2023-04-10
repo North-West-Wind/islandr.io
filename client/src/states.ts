@@ -17,7 +17,11 @@ export function toggleMenu() { menuHidden = !menuHidden; }
 
 var hudHidden = false;
 export function isHudHidden() { return hudHidden; }
-export function toggleHud() { hudHidden = !hudHidden; }
+export function toggleHud() {
+	hudHidden = !hudHidden;
+	if (hudHidden) document.getElementById("hud")!.classList.add("hidden");
+	else document.getElementById("hud")!.classList.remove("hidden");
+}
 
 var mapOpened = false;
 export function isMapOpened() { return mapOpened; }

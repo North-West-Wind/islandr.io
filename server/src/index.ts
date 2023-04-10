@@ -1,7 +1,7 @@
 import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
-import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket } from "./types/packet";
+import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket } from "./types/packet";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/math";
 import { Player } from "./store/entities";
@@ -101,6 +101,8 @@ server.on("connection", async socket => {
 
 	// Send the player the entire map
 	socket.send(encode(new MapPacket(world.obstacles, world.terrains)).buffer);
+	// Send the player music
+	for (const sound of world.joinSounds) socket.send(encode(new SoundPacket(sound.path, sound.position)).buffer);
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
@@ -169,11 +171,6 @@ server.on("connection", async socket => {
 	});
 });
 
-var pendingParticles: Particle[] = [];
-export function addParticles(...particles: Particle[]) {
-	pendingParticles.push(...particles);
-}
-
 setInterval(() => {
 	world.tick();
 	// Filter players from entities and send them packets
@@ -182,8 +179,8 @@ setInterval(() => {
 		const socket = sockets.get(player.id);
 		if (!socket) return;
 		socket.send(encode(new GamePacket(world.entities, world.obstacles, player, numberOfPlayers)).buffer);
-		if (pendingParticles.length) socket.send(encode(new ParticlesPacket(pendingParticles, player)).buffer);
+		if (world.particles.length) socket.send(encode(new ParticlesPacket(world.particles, player)).buffer);
+		for (const sound of world.onceSounds) socket.send(encode(new SoundPacket(sound.path, sound.position)).buffer);
 	});
-	pendingParticles = [];
 	world.postTick();
 }, 1000 / TICKS_PER_SECOND);

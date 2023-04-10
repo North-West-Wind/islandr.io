@@ -297,10 +297,10 @@ export class Entity {
 			rectPoints[(index + 1) % rectPoints.length]
 		];
 		const vecs = [
-			adjacents[1].addVec(adjacents[0].inverse()),
-			adjacents[2].addVec(adjacents[1].inverse())
+			adjacents[1]?.addVec(adjacents[0].inverse()),
+			adjacents[2]?.addVec(adjacents[1].inverse())
 		];
-
+		if (vecs.some(x => !x)) return;
 		for (let ii = 0; ii < vecs.length; ii++) {
 			const distance = new Line(adjacents[ii], adjacents[ii+1]).distanceTo(this.position);
 			this.position = this.position.addVec(vecs[ii].perpendicular().unit().scaleAll(this.hitbox.comparable - distance));

@@ -5,11 +5,15 @@ const weapons = new Map<string, HTMLImageElement & { loaded: boolean }>();
 	for (const id of (await fetch(`data/weapons/guns/.list.json`).then(res => res.json())).concat(["frag_grenade"])) {
 		const img: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 		img.onload = () => img.loaded = true;
-		img.src = `assets/images/game/loots/weapons/${id}.png`;
+		img.src = getWeaponImagePath(id);
 	
 		weapons.set(id, img);
 	}
 })();
+
+export function getWeaponImagePath(id: string | undefined) {
+	return id ? `assets/images/game/loots/weapons/${id}.png` : "";
+}
 
 export function getWeaponImage(id: string) {
 	return weapons.get(id);

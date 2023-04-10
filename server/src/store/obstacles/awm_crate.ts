@@ -13,6 +13,11 @@ export default class AWMCrate extends Obstacle {
 		this.direction = Vec2.UNIT_X;
 		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this))) this.position = world.size.scale(Math.random(), Math.random());
 	}
+	
+	damage(dmg: number) {
+		super.damage(dmg);
+		world.onceSounds.push({ path: `obstacle/hit/wood/wood_hit_04.mp3`, position: this.position });
+	}
 
 	die() {
 		super.die();
@@ -23,5 +28,6 @@ export default class AWMCrate extends Obstacle {
 				return e;
 			}));
 		}
+		world.onceSounds.push({ path: "obstacle/break/crate/crate_break_01.mp3", position: this.position });
 	}
 }

@@ -4,6 +4,8 @@ body {
     font-family: 'Jura', Arial, Helvetica, sans-serif;
     color: white;
     background-color: #80B251;
+    background-image: url("../../assets/images/menu/background.png");
+    background-size: cover;
 }
 
 canvas {
@@ -39,11 +41,10 @@ div#menu {
     position: fixed;
     left: 0;
     top: 0;
-    background-image: url("../../assets/images/menu/background.png");
-    background-size: cover;
     width: 100%;
     height: 100%;
     text-align: center;
+    overflow-y: scroll;
 }
 
 .hidden {
@@ -52,6 +53,13 @@ div#menu {
 
 .no-margin {
     margin: 0;
+}
+
+#logo-container {
+    top: 0;
+    left: 0;
+    margin: 0;
+    width: 100%;
 }
 
 #logo {
@@ -70,7 +78,7 @@ div#menu {
 
 .panel {
     position: relative;
-    margin: auto;
+    margin: 0 auto 5vh auto;
     padding: 3vw;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 2vw;
@@ -127,37 +135,125 @@ div#menu {
     font-size: 18px;
 }
 
+#cookies-button {
+    font-size: 5vh;
+    padding: 2vh;
+    margin-bottom: 1vh;
+    background-color: #66cc00;
+    border-radius: 1vh;
+    transition: all .5s ease;
+}
+
+#cookies-button:hover {
+    cursor: pointer;
+    background-color: #339900;
+}
+
+#cookies-button.disabled {
+    background-color: #999;
+}
+
 #hud {
     width: 100%;
     height: 100%;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     position: fixed;
     pointer-events: none;
 }
 
 #playercount {
-    font-size: 26px;
+    font-size: 5vh;
     position: relative;
     font-weight: bold;
 }
 
 #playercountcontainer {
     position: inherit;
-    right: 10px;
-    top: 10px;
+    right: 2vh;
+    top: 2vh;
     border-radius: 20%;
-    border: solid 2px black;
-    width: 50px;
-    height: 50px;
+    border: solid 0.5vh black;
+    width: 10vh;
+    height: 10vh;
     vertical-align: middle;
     text-align: center;
     display: block;
     background-color: rgba(51, 51, 51, 0.5);
-    display: none;
 }
 
 #alive{
-    font-size: 12px;
+    font-size: 3vh;
     display: block;
+}
+
+.weapon-index {
+    font-size: 5vh;
+    position: relative;
+    font-weight: bold;
+}
+
+.weapon-name-container {
+    width: 60%;
+    position: relative;
+    height: 100%;
+    text-align: center;
+    display: block;
+}
+
+.weapon-name {
+    font-size: 3vh;
+    display: block;
+}
+
+#weapon-container {
+    position: inherit;
+    right: 2vh;
+    bottom: 2vh;
+    border-radius: 5%;
+    height: 30vh;
+    width: 15vw;
+    empty-cells: show;
+}
+
+.weapon-panel {
+    position: relative;
+    width: 100%;
+    max-height: 25%;
+    margin: 0;
+    padding: 0;
+    border-radius: 5%;
+    display: block;
+    background-color: transparent;
+    transition: all .2s ease;
+    pointer-events: all;
+    border: solid 0.5vh transparent;
+}
+
+.weapon-panel:hover {
+    background-color: rgba(51, 51, 51, 0.5);
+    transition: all .2s ease;
+    cursor: pointer;
+}
+
+.selected {
+    border: solid 0.5vh #7CFC00;
+    background-color: rgba(51, 51, 51, 0.5);
+}
+
+.weapon-image-container {
+    width: 40%;
+    position: absolute;
+    height: 100%;
+    display: block;
+    top: 0;
+    right: 0;
+}
+
+.weapon-image {
+    display: block;
+    position: absolute;
+    object-fit: cover;
+    max-height: 100%;
+    max-width: 100%;
 }

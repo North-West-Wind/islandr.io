@@ -90,6 +90,9 @@ export type MeleeData = {
 	auto?: boolean
 	droppable: boolean
 	normal: MeleeStats
+	sounds: {
+		swing: string
+	}
 	visuals: {
 		animations: string[]
 	}

@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/North-West-Wind/opensurviv#readme",
   "devDependencies": {
+    "@types/howler": "^2.2.7",
     "@types/msgpack-lite": "^0.1.8",
     "@types/node": "^18.11.9",
     "@types/ws": "^8.5.3",
@@ -29,6 +30,8 @@
     "uglify-js": "^3.17.4"
   },
   "dependencies": {
+    "cookies-utils": "^1.0.0",
+    "howler": "^2.2.3",
     "msgpack-lite": "^0.1.26",
     "ws": "^8.7.0"
   },

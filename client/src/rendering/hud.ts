@@ -8,7 +8,6 @@ import { roundRect } from "../utils";
 export function drawHud(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
 	drawHealth(player, canvas, ctx);
 	drawGunAmmo(player, canvas, ctx);
-	drawInventory(player, canvas, ctx);
 	drawBackpack(player, canvas, ctx);
 }
 
@@ -34,23 +33,6 @@ function drawHealth(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRe
 	if(player.health > 0){
 		roundRect(ctx, (canvas.width - innerWidth) / 2, canvas.height - height, innerWidth * player.health / player.maxHealth, innerHeight, padding / 2);
 	}
-}
-
-// Draws the player's inventory (temporary)
-function drawInventory(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
-	ctx.fillStyle = "#fff";
-	ctx.font = `${canvas.height / 27}px Arial`;
-	ctx.textBaseline = "bottom";
-	ctx.textAlign = "end";
-	const inventory = <Inventory>player.inventory;
-	var str = "";
-	for (let ii = 0; ii < inventory.weapons.length; ii++) {
-		if (!inventory.weapons[ii]) continue;
-		if (ii != 0) str += " ";
-		if (ii == inventory.holding) str += `[${inventory.weapons[ii].name}]`;
-		else str += inventory.weapons[ii].name;
-	}
-	ctx.fillText(str, canvas.width * 191/192, canvas.height - canvas.width / 192);
 }
 
 // Draws the ammo amount inside and outside the gun

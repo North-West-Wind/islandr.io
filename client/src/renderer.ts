@@ -9,8 +9,20 @@ import { RenderableLayerN1 } from "./types/extenstions";
 import { Terrain } from "./types/terrain";
 import { lineBetween } from "./utils";
 import { drawPrompt } from "./rendering/prompt";
+import { cookieExists, setCookie } from "cookies-utils";
 
-(<HTMLInputElement>document.querySelector("#address")).defaultValue = "opensurviv.run.place:8000";
+if (!cookieExists("gave_me_cookies")) {
+	const button = document.getElementById("cookies-button")!;
+	button.scrollIntoView();
+	button.onclick = () => {
+		setCookie({ name: "gave_me_cookies", value: "1" });
+		button.classList.add("disabled");
+		document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
+	}
+} else {
+	document.getElementById("cookies-button")!.classList.add("disabled");
+	document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
+}
 
 const canvas = <HTMLCanvasElement> document.getElementById("game");
 canvas.width = window.innerWidth;
@@ -22,12 +34,10 @@ window.onresize = () => {
 };
 
 var running = false;
-export function setRunning(r: boolean) { running = r; }
-
 var lastTime: number;
 
 const ctx = <CanvasRenderingContext2D> canvas.getContext("2d");
-export function animate(currentTime: number) {
+function animate(currentTime: number) {
 	if (!lastTime) lastTime = currentTime;
 	const elapsed = currentTime - lastTime;
 	lastTime = currentTime;
@@ -39,6 +49,9 @@ export function animate(currentTime: number) {
 		
 		const player = getPlayer();
 		if (player) {
+			// Client side ticking
+			world.clientTick(player);
+
 			// 1 unit to x pixels
 			const scale = Math.max(canvas.width, canvas.height) / (20 + 20 * player.scope);
 			const size = world.size;
@@ -54,6 +67,7 @@ export function animate(currentTime: number) {
 			world.terrains.forEach(terrain => terrain.render(player, canvas, ctx, scale));
 
 			// Draw grid lines
+			ctx.lineWidth = 2;
 			ctx.globalAlpha = 0.2;
 			for (let ii = 0; ii <= size.x; ii += GRID_INTERVAL) lineBetween(ctx, canvas.width / 2 - (player.position.x - ii) * scale, Math.max(y, 0), canvas.width / 2 - (player.position.x - ii) * scale, Math.min(y + height, canvas.height));
 			for (let ii = 0; ii <= size.y; ii += GRID_INTERVAL) lineBetween(ctx, Math.max(x, 0), canvas.height / 2 - (player.position.y - ii) * scale, Math.min(x + width, canvas.width), canvas.height / 2 - (player.position.y - ii) * scale);
@@ -100,4 +114,23 @@ export function animate(currentTime: number) {
 	} catch (err) { console.error(err); }
 
 	if (running) requestAnimationFrame(animate);
+}
+
+export function start() {
+	running = true;
+	document.getElementById("menu")?.classList.add("hidden");
+	document.getElementById("hud")?.classList.remove("hidden");
+	animate(0);
+}
+
+export function stop() {
+	running = false;
+	document.getElementById("menu")?.classList.remove("hidden");
+	document.getElementById("hud")?.classList.add("hidden");
+	for (let ii = 0; ii < 4; ii++) {
+		const nameEle = document.getElementById("weapon-name-" + ii);
+		const imageEle = document.getElementById("weapon-image-" + ii);
+		if (nameEle) nameEle.innerHTML = "";
+		if (imageEle) (<HTMLImageElement>imageEle).src = "";
+	}
 }
