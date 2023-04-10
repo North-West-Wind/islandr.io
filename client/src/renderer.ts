@@ -35,6 +35,9 @@ function animate(currentTime: number) {
 		
 		const player = getPlayer();
 		if (player) {
+			// Client side ticking
+			world.clientTick(player);
+
 			// 1 unit to x pixels
 			const scale = Math.max(canvas.width, canvas.height) / (20 + 20 * player.scope);
 			const size = world.size;

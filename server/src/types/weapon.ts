@@ -50,6 +50,7 @@ export class MeleeWeapon extends Weapon {
 	delay: number;
 	animations: string[];
 	cleave: boolean;
+	sounds: { swing: string };
 
 	constructor(id: string, data: MeleeData) {
 		super(id, data.name, (data.normal.cooldown / 1000) * TICKS_PER_SECOND, data.normal.speed.equip, data.normal.speed.attack, data.auto || false, data.droppable);
@@ -59,11 +60,13 @@ export class MeleeWeapon extends Weapon {
 		this.delay = data.normal.damageDelay;
 		this.animations = data.visuals.animations;
 		this.cleave = data.normal.cleave || false;
+		this.sounds = data.sounds;
 	}
 
 	attack(attacker: Entity, entities: Entity[], obstacles: Obstacle[]): void {
 		const index = Math.floor(Math.random() * this.animations.length);
 		attacker.animations.push(this.animations[index]);
+		world.onceSounds.push({ path: this.sounds.swing, position: attacker.position });
 
 		this.damageThing(attacker, entities, obstacles);
 	}

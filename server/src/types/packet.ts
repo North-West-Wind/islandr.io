@@ -126,3 +126,15 @@ export class ParticlesPacket implements IPacket {
 		this.particles = particles.filter(particle => particle.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(particle => particle.minimize());
 	}
 }
+
+export class SoundPacket implements IPacket {
+	type = "sound";
+	// No need to include "client/assets/sounds"
+	path: string;
+	position: Vec2;
+
+	constructor(path: string, position: Vec2) {
+		this.path = path;
+		this.position = position;
+	}
+}

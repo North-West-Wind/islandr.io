@@ -29,6 +29,9 @@
 	"<perk_id>": {
 		"__comment": "Overriden stats with perks."
 	},
+	"sounds": {
+		"swing": "String. Path to swinging sound."
+	},
 	"visuals": {
 		"animation": "Array of string. All possible animations."
 	}

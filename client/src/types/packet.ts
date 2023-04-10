@@ -1,5 +1,5 @@
 import { MovementDirection } from "./math";
-import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain } from "./minimized";
+import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2 } from "./minimized";
 
 // Packet to ping the server
 export class PingPacket {
@@ -101,4 +101,11 @@ export class MapPacket {
 	type = "map";
 	obstacles!: MinMinObstacle[];
 	terrains!: MinTerrain[];
+}
+
+/// Packet from server about sound and its location
+export class SoundPacket {
+	type = "sound";
+	path!: string;
+	position!: MinVec2;
 }

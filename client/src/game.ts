@@ -1,4 +1,5 @@
 import { encode, decode } from "msgpack-lite";
+import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
 import { initMap } from "./rendering/map";
@@ -8,7 +9,7 @@ import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
 import { castCorrectTerrain } from "./store/terrains";
 import { Inventory } from "./types/entity";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, SoundPacket } from "./types/packet";
 import { World } from "./types/terrain";
 
 export var world = new World();
@@ -59,7 +60,7 @@ async function init(address: string) {
 			ws.onmessage = (event) => {
 				const data = decode(new Uint8Array(event.data));
 				switch (data.type) {
-					case "game":
+					case "game": {
 						const gamePkt = <GamePacket>data;
 						world.updateEntities(gamePkt.entities);
 						world.updateObstacles(gamePkt.obstacles);
@@ -67,7 +68,8 @@ async function init(address: string) {
 						if (!player) player = new FullPlayer(gamePkt.player);
 						else player.copy(gamePkt.player);
 						break;
-					case "map":
+					}
+					case "map": {
 						// This should happen once only normally
 						const mapPkt = <MapPacket>data;
 						world.terrains = mapPkt.terrains.map(ter => castCorrectTerrain(ter));
@@ -75,6 +77,21 @@ async function init(address: string) {
 						//Show player count once game starts
 						(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block";
 						break;
+					}
+					case "sound": {
+						if (!player) break;
+						const soundPkt = <SoundPacket>data;
+						const howl = new Howl({
+							src: `assets/sounds/${soundPkt.path}`
+						});
+						const pos = Vec2.fromMinVec2(soundPkt.position);
+						const relative = pos.addVec(player.position.inverse()).scaleAll(1/60);
+						howl.pos(relative.x, relative.y);
+						const id = howl.play();
+						world.sounds.set(id, { howl, pos });
+						howl.on("end", () => world.sounds.delete(id));
+						break;
+					}
 				}
 			}
 		}
@@ -83,6 +100,7 @@ async function init(address: string) {
 		ws.onclose = () => {
 			connected = false;
 			stop();
+			Howler.stop();
 			id = null;
 			tps = 1;
 			username = null;

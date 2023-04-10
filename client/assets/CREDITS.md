@@ -19,6 +19,9 @@
 
 - `images/menu/background.png`
 
+### [Surviv.io All Sounds](https://docs.google.com/document/d/1HREjUYHoi-xxJ5NLmLegyldl3_fWKVUC4nyJrNHL4fg/edit)
+- `sounds/melee/punch_swing.mp3`
+
 ### [surviv.io Creator Kit](https://drive.google.com/drive/folders/1qhaDdNCsisBu_7gvMNmyn_zkG4kyAZix)
 - `images/game/loots/weapons/ak47.png`
 - `images/game/loots/weapons/awm.png`

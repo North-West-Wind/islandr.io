@@ -2,6 +2,7 @@ import { Entity } from "./entity";
 import { Line, Vec2 } from "./math";
 import { MinTerrain } from "./minimized";
 import { Obstacle } from "./obstacle";
+import { Particle } from "./particle";
 
 export class World {
 	ticks = 0;
@@ -10,6 +11,11 @@ export class World {
 	obstacles: Obstacle[] = [];
 	defaultTerrain: Terrain;
 	terrains: Terrain[];
+
+	// These should be sent once only to the client
+	particles: Particle[] = [];
+	onceSounds: { path: string, position: Vec2 }[] = []; // Sent when stuff happens, e.g. effect sounds
+	joinSounds: { path: string, position: Vec2 }[] = []; // Sent when player joins, e.g. music
 
 	constructor(size: Vec2, defaultTerrain: Terrain, ...terrains: Terrain[]) {
 		// Set the size of map
@@ -64,6 +70,8 @@ export class World {
 			obstacle.animations = [];
 			return obstacle;
 		});
+		this.particles = [];
+		this.onceSounds = [];
 	}
 }
 

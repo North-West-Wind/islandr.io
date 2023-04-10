@@ -1,4 +1,4 @@
-import { castCorrectEntity, Player } from "../store/entities";
+import { castCorrectEntity, FullPlayer, Player } from "../store/entities";
 import { castCorrectTerrain, Plain } from "../store/terrains";
 import { Entity } from "./entity";
 import { Line, Vec2 } from "./math";
@@ -7,6 +7,7 @@ import { Obstacle } from "./obstacle";
 import { Renderable, RenderableMap } from "./extenstions";
 import { circleFromCenter } from "../utils";
 import { castCorrectObstacle } from "../store/obstacles";
+import { Howl } from "howler";
 
 export class World {
 	size: Vec2;
@@ -15,12 +16,20 @@ export class World {
 	defaultTerrain: Terrain;
 	terrains: Terrain[] = [];
 	aliveCount: Number = 0;
+	sounds: Map<number, { howl: Howl, pos: Vec2 }> = new Map();
 
 	constructor(size?: Vec2, defaultTerrain?: Terrain) {
 		if (!size) size = Vec2.ZERO;
 		this.size = size;
 		if (!defaultTerrain) defaultTerrain = new Plain({ id: "plain", border: 0 });
 		this.defaultTerrain = defaultTerrain;
+	}
+
+	clientTick(player: FullPlayer) {
+		for (const sound of this.sounds.values()) {
+			const relative = sound.pos.addVec(player.position.inverse()).scaleAll(1/60);
+			sound.howl.pos(relative.x, relative.y);
+		}
 	}
 
 	updateEntities(entities: MinEntity[]) {
