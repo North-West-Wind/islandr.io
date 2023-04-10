@@ -12,6 +12,7 @@ export default class Barrel extends Obstacle {
 		super(world, new CircleHitbox(2).scaleAll(salt), new CircleHitbox(1.5).scaleAll(salt), 250, 250);
 		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this))) this.position = world.size.scale(Math.random(), Math.random());
 	}
+
 	tick(entities: Entity[]) {
 		// Iterate through entities
 		for (const entity of entities) {
@@ -22,5 +23,15 @@ export default class Barrel extends Obstacle {
 				this.madePlayerDie = true;
 			}
 		}
+	}
+
+	damage(dmg: number) {
+		super.damage(dmg);
+		world.onceSounds.push({ path: `obstacle/hit/metal/metal_hit_03.mp3`, position: this.position });
+	}
+
+	die() {
+		super.die();
+		world.onceSounds.push({ path: `obstacle/break/barrel/barrel_break.mp3`, position: this.position });
 	}
 }
