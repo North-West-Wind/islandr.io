@@ -1,6 +1,7 @@
 export enum CommonAngle {
 	PI_FOUR = Math.PI / 4,
-	PI_TWO = Math.PI / 2
+	PI_TWO = Math.PI / 2,
+	TWO_PI = Math.PI * 2
 }
 
 export enum CommonNumber {

@@ -1,3 +1,5 @@
+import { CommonAngle } from "./constants";
+
 // Promisified setTimeout
 export function wait(ms: number) { return new Promise(resolve => setTimeout(resolve, ms)); }
 // Capping value with limits
@@ -9,10 +11,16 @@ export function clamp(val: number, min: number, max: number) {
 // Draws circle with x, y center
 export function circleFromCenter(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, fill = true, stroke = false) {
 	ctx.beginPath();
-	ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+	ctx.arc(x, y, radius, 0, CommonAngle.TWO_PI, false);
 	ctx.closePath();
 	if (fill) ctx.fill();
 	if (stroke) ctx.stroke();
+}
+export function strokeArc(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, start = 0, end = CommonAngle.TWO_PI, counter = false) {
+	ctx.beginPath();
+	ctx.arc(x, y, radius, start, end, counter);
+	ctx.stroke();
+	ctx.closePath();
 }
 // Strokes a line between (x1, y1) and (x2, y2)
 export function lineBetween(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number, stroke = true) {

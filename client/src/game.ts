@@ -22,6 +22,7 @@ var player: FullPlayer | null;
 
 export function getId() { return id; }
 export function getPlayer() { return player; }
+export function getTPS() { return tps; }
 
 var ws: WebSocket;
 var connected = false;
