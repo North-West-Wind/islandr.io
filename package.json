@@ -1,7 +1,7 @@
 {
   "name": "opensurviv",
   "version": "1.0.0",
-  "description": "An open-source implementation of surviv.io",
+  "description": "An open-source 2D browser shooter game inspired by surviv.io",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
