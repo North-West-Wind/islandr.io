@@ -10,6 +10,7 @@
 
 - `images/game/objects/bush.svg`
 - `images/game/objects/crate.svg`
+- `images/game/objects/mosin_tree.svg`
 - `images/game/objects/stone.svg`
 - `images/game/objects/tree.svg`
 

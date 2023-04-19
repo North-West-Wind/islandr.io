@@ -12,7 +12,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#">
   <sodipodi:namedview
      id="namedview13331"
      pagecolor="#ffffff"
@@ -25,10 +27,10 @@
      inkscape:document-units="px"
      showgrid="false"
      inkscape:zoom="34.953455"
-     inkscape:cx="11.272133"
-     inkscape:cy="8.8260231"
+     inkscape:cx="10.885905"
+     inkscape:cy="8.8546325"
      inkscape:window-width="1920"
-     inkscape:window-height="1004"
+     inkscape:window-height="1002"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -94,4 +96,29 @@
        inkscape:transform-center-y="-0.0040864568"
        transform="matrix(0.26772461,0,0,0.27476938,1.5312104,1.5687548)" />
   </g>
+  <metadata
+     id="metadata637">
+    <rdf:RDF>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-nc/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:prohibits
+           rdf:resource="http://creativecommons.org/ns#CommercialUse" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-nc/4.0/" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
 </svg>
