@@ -1,7 +1,7 @@
 # Assets providers
 
 ### [hsanger](https://github.com/hsanger)
-- `images/menu/opensurviv-logo.svg`
+- `images/menu/opensurvive-logo.svg`
 
 ### [North-West-Wind (NorthWestWind)](https://github.com/North-West-Wind)
 - `images/game/entities/death.svg`

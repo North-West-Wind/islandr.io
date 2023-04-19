@@ -28,5 +28,5 @@ app.use((_req, res) => {
 const server = app.listen(process.env.PORT || 8000, async () => {
 	const info = <any>server.address();
 	const port = info.port;
-	console.log('OpenSurviv.io webserver listening at port %s', port);
+	console.log('OpenSurvive webserver listening at port %s', port);
 });

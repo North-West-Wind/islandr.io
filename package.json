@@ -1,5 +1,5 @@
 {
-  "name": "opensurviv",
+  "name": "opensurvive",
   "version": "1.0.0",
   "description": "An open-source 2D browser shooter game inspired by surviv.io",
   "main": "lib/index.js",
@@ -16,9 +16,6 @@
     "type": "git",
     "url": "git+https://github.com/North-West-Wind/opensurviv.git"
   },
-  "keywords": [
-    "surviv.io"
-  ],
   "author": "NorthWestWind",
   "license": "GPL-3.0-or-later",
   "bugs": {
