@@ -79,7 +79,7 @@ export default class Player extends Entity {
 				ctx.fillStyle = "#675230";
 				ctx.lineWidth = radius / 6;
 				ctx.strokeStyle = "#000000";
-				circleFromCenter(ctx, -radius * 0.4 * this.inventory.backpackLevel, 0, radius * 0.9, true, true);
+				circleFromCenter(ctx, -radius * 0.2 * (1 + this.inventory.backpackLevel), 0, radius * 0.9, true, true);
 			}
 
 			ctx.fillStyle = "#F8C675";

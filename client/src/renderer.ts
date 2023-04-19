@@ -67,6 +67,7 @@ function animate(currentTime: number) {
 			world.terrains.forEach(terrain => terrain.render(player, canvas, ctx, scale));
 
 			// Draw grid lines
+			ctx.strokeStyle = "#000";
 			ctx.lineWidth = 2;
 			ctx.globalAlpha = 0.2;
 			for (let ii = 0; ii <= size.x; ii += GRID_INTERVAL) lineBetween(ctx, canvas.width / 2 - (player.position.x - ii) * scale, Math.max(y, 0), canvas.width / 2 - (player.position.x - ii) * scale, Math.min(y + height, canvas.height));
@@ -109,7 +110,7 @@ function animate(currentTime: number) {
 			if (!isHudHidden()) drawHud(player, canvas, ctx);
 			if (isMapOpened()) drawMap(canvas, ctx);
 			else if (!isMapHidden()) drawMinimap(player, canvas, ctx);
-			if (player.canInteract) drawPrompt(canvas, ctx, scale);
+			drawPrompt(player, canvas, ctx, scale);
 		}
 	} catch (err) { console.error(err); }
 

@@ -114,7 +114,7 @@ export default class Player extends Entity {
 					var delta = gun.magazine;
 					gun.magazine += Math.min(gun.reloadBullets, this.inventory.ammos[gun.color]);
 					if (gun.magazine > gun.capacity) gun.magazine = gun.capacity;
-					else if (gun.magazine < gun.capacity && gun.reloadBullets != gun.capacity && this.inventory.ammos[gun.color]) this.maxReloadTicks = this.reloadTicks = gun.reloadTicks;
+					else if (gun.magazine < gun.capacity && gun.reloadBullets != gun.capacity && this.inventory.ammos[gun.color]) this.reload();
 					delta -= gun.magazine;
 					this.inventory.setWeapon(gun);
 					this.inventory.ammos[gun.color] += delta;
