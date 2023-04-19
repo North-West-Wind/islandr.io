@@ -12,7 +12,7 @@ const weapons = new Map<string, HTMLImageElement & { loaded: boolean }>();
 })();
 
 export function getWeaponImagePath(id: string | undefined) {
-	return id ? `assets/images/game/loots/weapons/${id}.png` : "";
+	return id ? `assets/images/game/loots/weapons/${id}.svg` : "";
 }
 
 export function getWeaponImage(id: string) {

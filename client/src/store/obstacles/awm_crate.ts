@@ -7,7 +7,8 @@ import { Player } from "../entities";
 
 const awmCrateImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 awmCrateImg.onload = () => awmCrateImg.loaded = true;
-awmCrateImg.src = "assets/images/game/objects/awm_crate.png";
+//awmCrateImg.src = "assets/images/game/objects/awm_crate.png";
+awmCrateImg.src = "assets/images/game/objects/crate.svg";
 
 const awmCrateResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 awmCrateResidueImg.onload = () => awmCrateResidueImg.loaded = true;

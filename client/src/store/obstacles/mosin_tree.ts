@@ -7,7 +7,7 @@ import { OBSTACLE_SUPPLIERS } from ".";
 
 const treeImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 treeImg.onload = () => treeImg.loaded = true;
-treeImg.src = "assets/images/game/objects/mosin_tree.png";
+treeImg.src = "assets/images/game/objects/mosin_tree.svg";
 
 const treeResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 treeResidueImg.onload = () => treeResidueImg.loaded = true;

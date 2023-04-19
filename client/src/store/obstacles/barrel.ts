@@ -7,11 +7,11 @@ import { OBSTACLE_SUPPLIERS } from ".";
 
 const barrelImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 barrelImg.onload = () => barrelImg.loaded = true;
-barrelImg.src = "assets/images/game/objects/barrel.png";
+barrelImg.src = "assets/images/game/objects/barrel.svg";
 
 const barrelResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 barrelResidueImg.onload = () => barrelResidueImg.loaded = true;
-barrelResidueImg.src = "assets/images/game/objects/residues/barrel.png";
+barrelResidueImg.src = "assets/images/game/objects/residues/barrel.svg";
 
 class BarrelSupplier implements ObstacleSupplier {
 	create(minObstacle: MinObstacle) {

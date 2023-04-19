@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333333 4.2333333"
+   version="1.1"
+   id="svg12497"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="barrel.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#">
+  <sodipodi:namedview
+     id="namedview12499"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="33.179577"
+     inkscape:cx="10.247267"
+     inkscape:cy="8.3033006"
+     inkscape:window-width="1920"
+     inkscape:window-height="1002"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs12494">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient14153">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop14149" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop14151" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient14153"
+       id="radialGradient14157"
+       cx="2.1906779"
+       cy="2.0492716"
+       fx="2.1906779"
+       fy="2.0492716"
+       r="1.0959707"
+       gradientTransform="matrix(1,0,0,0.99153172,0,0.0173538)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="圖層 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       sodipodi:type="star"
+       style="fill:url(#radialGradient14157);stroke-width:0.185208;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;paint-order:fill markers stroke;fill-opacity:1"
+       id="path13761"
+       inkscape:flatsided="false"
+       sodipodi:sides="16"
+       sodipodi:cx="2.2109416"
+       sodipodi:cy="2.0618193"
+       sodipodi:r1="1.1193612"
+       sodipodi:r2="0.48132533"
+       sodipodi:arg1="0.71300072"
+       sodipodi:arg2="0.90935026"
+       inkscape:rounded="1.7347235e-17"
+       inkscape:randomized="0.07"
+       d="M 3.0884304,2.8611794 2.5773573,2.4158508 2.7493577,3.0494419 2.3288932,2.5225921 2.2353499,3.1359613 2.2054,2.4709347 1.9210739,3.072196 2.0102489,2.4064993 1.4529347,2.8508466 1.8052395,2.353507 1.1938043,2.5522541 1.7031361,2.2131655 1.0947072,2.1023247 1.7195094,1.9863399 1.1064038,1.6743743 1.7870806,1.8283643 1.3634756,1.3219936 1.960709,1.6826924 1.6321542,1.0279357 2.0524625,1.575951 2.1460057,0.96258186 2.3326663,1.6276085 2.6171511,1.0225334 2.3711042,1.6746921 2.9284209,1.2476965 2.5761162,1.7450361 3.1875514,1.546289 2.74877,1.9700075 3.2866485,1.9962184 2.6618463,2.1122032 3.2749519,2.4241688 2.5942726,2.2528271 Z"
+       transform="matrix(1.5636609,0,0,1.5636609,-1.3088106,-1.0876992)" />
+  </g>
+  <metadata
+     id="metadata12981">
+    <rdf:RDF>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-nc/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:prohibits
+           rdf:resource="http://creativecommons.org/ns#CommercialUse" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-nc/4.0/" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
