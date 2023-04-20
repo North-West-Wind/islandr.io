@@ -106,9 +106,10 @@ export class Line {
 	static fromMinLine(minLine: MinLine) {
 		return new Line(Vec2.fromMinVec2(minLine.a), Vec2.fromMinVec2(minLine.b), minLine.segment);
 	}
-
+	
 	static fromPointSlope(p: Vec2, m: number) {
-		const b = new Vec2(p.x + 1, (p.y + 1) * m);
+		const c = p.y - p.x * m;
+		const b = new Vec2(p.x + 1, (p.x + 1) * m + c);
 		return new Line(p, b, false);
 	}
 
