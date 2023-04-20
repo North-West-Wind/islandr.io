@@ -37,7 +37,7 @@ export class MeleeWeapon extends Weapon {
 	render(player: Player, _canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
 		const radius = scale * (<CircleHitbox> player.hitbox).radius;
 		const fistScale = radius * 1.2 * CommonNumber.SIN45;
-		const fistExtend = Vec2.ONE.scaleAll(fistScale);
+		const fistExtend = Vec2.UNIT_X.scaleAll(fistScale);
 		const fists = [];
 		if (!MeleeWeapon.FIST_ANIMATIONS.some(a => player.animations.find(aa => aa.id == a))) {
 			fists.push(fistExtend.addVec(fistExtend.addAngle(CommonAngle.PI_TWO)));

@@ -1,5 +1,5 @@
-import { MovementDirection } from "./math";
 import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2 } from "./minimized";
+import { MovementDirection } from "./misc";
 
 // Packet to ping the server
 export class PingPacket {
