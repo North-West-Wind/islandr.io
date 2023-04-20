@@ -9,7 +9,7 @@
 - `images/menu/opensurvive-logo.svg`
 
 ### Leo. (from Discord)
-- `images/game/guns/ak47.svg` (edited by NorthWestWind)
+- `images/game/guns/ak47.svg` (modified by NorthWestWind: rotation)
 
 - `images/game/loots/weapons/ak47.svg`
 
@@ -41,7 +41,10 @@
 - `images/game/loots/weapons/sv98.svg`
 
 ## ur mom Gary (from Discord)
-- `images/game/loots/weapons/mosin_nagant.svg` (edited by NorthWestWind)
+- `images/game/loots/weapons/mosin_nagant.svg` (modified by NorthWestWind: rotation)
+
+- `images/game/objects/grenade_crate.svg` (modified by NorthWestWind: dimension)
+- `images/game/objects/soviet_crate.svg` (modified by NorthWestWind: dimension)
 
 ### xpayton (from Discord)
-- `images/game/loots/weapons/frag_grenade.svg` (edited by NorthWestWind)
+- `images/game/loots/weapons/frag_grenade.svg` (modified by NorthWestWind: color)

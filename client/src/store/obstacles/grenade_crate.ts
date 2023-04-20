@@ -7,8 +7,7 @@ import { Player } from "../entities";
 
 const grenadeCrateImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 grenadeCrateImg.onload = () => grenadeCrateImg.loaded = true;
-//grenadeCrateImg.src = "assets/images/game/objects/grenade_crate.png";
-grenadeCrateImg.src = "assets/images/game/objects/crate.svg";
+grenadeCrateImg.src = "assets/images/game/objects/grenade_crate.svg";
 
 const grenadeCrateResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 grenadeCrateResidueImg.onload = () => grenadeCrateResidueImg.loaded = true;
