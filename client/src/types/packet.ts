@@ -67,9 +67,13 @@ export class InteractPacket {
 export class SwitchWeaponPacket {
 	type = "switchweapon";
 	delta: number;
+	set: number;
+	setMode: boolean;
 
-	constructor(delta: number) {
+	constructor(delta: number, set = 0, setMode = false) {
 		this.delta = delta;
+		this.set = set;
+		this.setMode = setMode;
 	}
 }
 
