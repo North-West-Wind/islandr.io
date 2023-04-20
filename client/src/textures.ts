@@ -2,7 +2,9 @@ import { TracerColor, TracerColorData } from "./types/data";
 
 const weapons = new Map<string, HTMLImageElement & { loaded: boolean }>();
 (async() => {
-	for (const id of (await fetch(`data/weapons/guns/.list.json`).then(res => res.json())).concat(["frag_grenade"])) {
+	const gunList = await fetch(`data/weapons/guns/.list.json`).then(res => res.json());
+	const meleeList = await fetch(`data/weapons/melee/.list.json`).then(res => res.json());
+	for (const id of gunList.concat(meleeList).concat(["frag_grenade"])) {
 		const img: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 		img.onload = () => img.loaded = true;
 		img.src = getWeaponImagePath(id);
