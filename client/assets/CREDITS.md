@@ -1,5 +1,10 @@
 # Assets providers
 
+### Darkside (from Discord)
+- `images/game/loots/backpacks/1.svg`
+- `images/game/loots/backpacks/2.svg`
+- `images/game/loots/backpacks/3.svg`
+
 ### [hsanger](https://github.com/hsanger)
 - `images/menu/opensurvive-logo.svg`
 
@@ -10,8 +15,6 @@
 
 ### [North-West-Wind (NorthWestWind)](https://github.com/North-West-Wind)
 - `images/game/entities/death.svg`
-
-- `iamges/game/loots/backpacks/1.svg`
 
 - `images/game/objects/ak47_stone.svg`
 - `images/game/objects/barrel.svg`

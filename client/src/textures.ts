@@ -8,6 +8,10 @@ export function getBarrelImagePath(id: string) {
 	return `assets/images/game/guns/${id}.svg`;
 }
 
+export function getBackpackImagePath(level: number) {
+	return `assets/images/game/loots/backpacks/${level}.svg`;
+}
+
 const tracerColors = new Map<string, TracerColor>();
 (async() => {
 	const data = <TracerColorData> await fetch(`data/colors/tracers.json`).then(res => res.json());
@@ -18,21 +22,4 @@ const tracerColors = new Map<string, TracerColor>();
 
 export function getTracerColor(id: string) {
 	return tracerColors.get(id);
-}
-
-const backpacks: (HTMLImageElement & { loaded: boolean })[] = [];
-// We know there are only 3 tiers of backpacks
-(async() => {
-	const exts = ["svg", "webp", "webp"];
-	for (let ii = 0; ii < 3; ii++) {
-		const img: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-		img.onload = () => img.loaded = true;
-		img.src = `assets/images/game/loots/backpacks/${ii+1}.${exts[ii]}`;
-
-		backpacks[ii] = img;
-	}
-})();
-
-export function getBackpackImage(level: number) {
-	return backpacks[level - 1];
 }
