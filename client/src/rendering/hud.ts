@@ -72,7 +72,7 @@ function drawBackpack(player: FullPlayer, canvas: HTMLCanvasElement, ctx: Canvas
 	roundRect(ctx, (canvas.width + healthWidth) / 2 + padding, canvas.height - size - padding, size, size, padding / 2);
 	ctx.globalAlpha = 1;
 	const img = getBackpackImage(player.inventory.backpackLevel);
-	ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 2, canvas.height - size, size - padding * 2, size - padding * 2);
+	if (img.loaded) ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 2, canvas.height - size, size - padding * 2, size - padding * 2);
 
 	ctx.fillStyle = "#fff";
 	ctx.font = `${canvas.height / 54}px Arial`;

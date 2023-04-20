@@ -1,18 +1,19 @@
 {
-	"name": "MP220",
+	"name": "M960",
 	"color": 1,
 	"ammo": 10,
 	"dual": false,
-	"length": 2.7,
+	"length": 3.15,
 	"droppable": true,
 	"normal": {
-		"capacity": 2,
+		"capacity": 5,
 		"reload": {
-			"time": 2700
+			"bullets": 1,
+			"time": 750
 		},
 		"delay": {
-			"switch": 300,
-			"firing": 200
+			"switch": 900,
+			"firing": 500
 		},
 		"spread": {
 			"still": 10,
@@ -38,6 +39,6 @@
 			"width": 0.1,
 			"length": 0.8
 		},
-		"animations": ["medium_recoil"]
+		"animations": ["large_recoil"]
 	}
 }

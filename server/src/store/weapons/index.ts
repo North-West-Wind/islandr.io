@@ -41,11 +41,13 @@ class GunSupplier implements WeaponSupplier {
 for (const file of fs.readdirSync("../data/weapons/melee/")) {
 	if (file.startsWith(".")) continue;
 	const data = <MeleeData> JSON.parse(fs.readFileSync("../data/weapons/melee/" + file, { encoding: "utf8" }));
-	WEAPON_SUPPLIERS.set(file.split(".")[0], new MeleeSupplier(file.split(".")[0], data));
+	const id = file.split(".").slice(0, -1).join(" ");
+	WEAPON_SUPPLIERS.set(id, new MeleeSupplier(id, data));
 }
 
 for (const file of fs.readdirSync("../data/weapons/guns/")) {
 	if (file.startsWith(".")) continue;
 	const data = <GunData> JSON.parse(fs.readFileSync("../data/weapons/guns/" + file, { encoding: "utf8" }));
-	WEAPON_SUPPLIERS.set(file.split(".")[0], new GunSupplier(file.split(".")[0], data));
+	const id = file.split(".").slice(0, -1).join(" ");
+	WEAPON_SUPPLIERS.set(id, new GunSupplier(id, data));
 }

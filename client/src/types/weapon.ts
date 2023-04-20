@@ -6,6 +6,7 @@ import { CircleHitbox, Vec2 } from "./math";
 import { GunData, MeleeData } from "./data";
 import { CommonNumber, CommonAngle, GunColor } from "../constants";
 import { DEFINED_ANIMATIONS } from "../store/animations";
+import { getBarrelImagePath } from "../textures";
 
 export enum WeaponType {
 	MELEE = "melee",
@@ -71,15 +72,19 @@ export class MeleeWeapon extends Weapon {
 }
 
 export class GunWeapon extends Weapon {
+	static readonly barrelImages = new Map<string, HTMLImageElement & { loaded: boolean }>();
+
 	type = WeaponType.GUN;
 	color: GunColor;
 	length: number;
+	hasBarrelImage: boolean;
 	magazine: number;
 
 	constructor(id: string, data: GunData, magazine = 0) {
 		super(id, data.name);
 		this.color = data.color;
 		this.length = data.length;
+		this.hasBarrelImage = data.visuals.hasBarrelImage;
 		this.magazine = magazine;
 	}
 
@@ -91,8 +96,21 @@ export class GunWeapon extends Weapon {
 		ctx.fillStyle = "#222";
 		ctx.strokeStyle = "#000";
 		ctx.lineWidth = 0.025 * scale;
-		//ctx.fillRect(player.hitbox.comparable * scale, -0.15 * scale, 1.2 * scale, 0.3 * scale);
-		roundRect(ctx, player.hitbox.comparable * scale, -0.15 * scale, this.length * scale, 0.3 * scale, 0.15 * scale, true, true);
+		if (!this.hasBarrelImage)
+			roundRect(ctx, player.hitbox.comparable * scale, -0.15 * scale, this.length * scale, 0.3 * scale, 0.15 * scale, true, true);
+		else {
+			const img = GunWeapon.barrelImages.get(this.id);
+			if (!img?.loaded) {
+				if (!img) {
+					const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+					image.onload = () => image.loaded = true;
+					image.src = getBarrelImagePath(this.id);
+					GunWeapon.barrelImages.set(this.id, image);
+				}
+				roundRect(ctx, player.hitbox.comparable * scale, -0.15 * scale, this.length * scale, 0.3 * scale, 0.15 * scale, true, true);
+			} else
+				ctx.drawImage(img, player.hitbox.comparable * scale, - this.length * scale / 2, this.length * scale, this.length * scale)
+		}
 		ctx.fillStyle = "#F8C675";
 		ctx.lineWidth = fistRadius / 3;
 		ctx.strokeStyle = "#000000";

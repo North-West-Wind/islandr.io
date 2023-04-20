@@ -24,11 +24,6 @@ export default class MosinTree extends Obstacle {
 	type = MosinTree.TYPE;
 	zIndex = 1000;
 
-	copy(minObstacle: MinObstacle) {
-		super.copy(minObstacle);
-		if (this.despawn) this.zIndex = 0;
-	}
-
 	static {
 		OBSTACLE_SUPPLIERS.set(MosinTree.TYPE, new MosinTreeSupplier());
 	}

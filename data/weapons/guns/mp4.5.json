@@ -1,22 +1,23 @@
 {
-	"name": "M9",
+	"name": "MP4.5",
 	"color": 0,
-	"ammo": 45,
-	"dual": true,
-	"length": 2.2,
+	"ammo": 90,
+	"dual": false,
+	"auto": true,
+	"length": 2.625,
 	"droppable": true,
 	"normal": {
-		"capacity": 15,
+		"capacity": 30,
 		"reload": {
-			"time": 1600
+			"time": 2000
 		},
 		"delay": {
-			"switch": 250,
-			"firing": 120
+			"switch": 750,
+			"firing": 90
 		},
 		"spread": {
-			"still": 8,
-			"move": 16
+			"still": 3,
+			"move": 7
 		},
 		"bullets": 1,
 		"speed": {
@@ -25,8 +26,8 @@
 		},
 		"headshot": 2,
 		"bullet": {
-			"damage": 12,
-			"falloff": 0.7,
+			"damage": 11,
+			"falloff": 0.8,
 			"speed": 85,
 			"range": [100, 100],
 			"suppressed": false

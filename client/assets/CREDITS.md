@@ -3,6 +3,11 @@
 ### [hsanger](https://github.com/hsanger)
 - `images/menu/opensurvive-logo.svg`
 
+### Leo. (from Discord)
+- `images/game/guns/ak47.svg` (edited by NorthWestWind)
+
+- `images/game/loots/weapons/ak47.svg`
+
 ### [North-West-Wind (NorthWestWind)](https://github.com/North-West-Wind)
 - `images/game/entities/death.svg`
 
@@ -22,6 +27,18 @@
 - `images/game/objects/residues/tree.svg`
 
 - `images/menu/background.png`
+
+### SquareCube (from Discord)
+- `images/game/loots/weapons/awc.svg`
+- `images/game/loots/weapons/jm9.svg`
+- `images/game/loots/weapons/m960.svg`
+- `images/game/loots/weapons/m1120.svg`
+- `images/game/loots/weapons/mp4.5.svg`
+- `images/game/loots/weapons/mp222.svg`
+- `images/game/loots/weapons/sv98.svg`
+
+## ur mom Gary (from Discord)
+- `images/game/loots/weapons/mosin_nagant.svg` (edited by NorthWestWind)
 
 ### xpayton (from Discord)
 - `images/game/loots/weapons/frag_grenade.svg` (edited by NorthWestWind)
