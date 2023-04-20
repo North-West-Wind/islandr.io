@@ -1,5 +1,5 @@
-# Open Surviv.io
-An open-source implementation of [surviv.io](https://surviv.io), a 2D battle royale game available online for free.  
+# Open Survive
+An open-source 2D browser shooter game inspired by [surviv.io](https://surviv.io), a 2D battle royale game available online for free.  
 This repository contains both the server's and client's code.
 
 ## Usage

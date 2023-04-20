@@ -1,7 +1,7 @@
 {
-  "name": "opensurviv-server",
+  "name": "opensurvive-server",
   "version": "1.0.0",
-  "description": "An open-source implementation of surviv.io (server)",
+  "description": "An open-source 2D browser shooter game inspired by surviv.io (server)",
   "main": "lib/index.js",
   "scripts": {
     "start": "node lib/index.js",
@@ -10,17 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/North-West-Wind/opensurviv.git"
+    "url": "git+https://github.com/North-West-Wind/opensurvive.git"
   },
-  "keywords": [
-    "surviv.io"
-  ],
   "author": "NorthWestWind",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/North-West-Wind/opensurviv/issues"
+    "url": "https://github.com/North-West-Wind/opensurvive/issues"
   },
-  "homepage": "https://github.com/North-West-Wind/opensurviv#readme",
+  "homepage": "https://github.com/North-West-Wind/opensurvive#readme",
   "devDependencies": {
     "@types/msgpack-lite": "^0.1.8",
     "@types/node": "^17.0.38",

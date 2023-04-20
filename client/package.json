@@ -1,7 +1,7 @@
 {
-  "name": "opensurviv-client",
+  "name": "opensurvive-client",
   "version": "1.0.0",
-  "description": "An open-source implementation of surviv.io (client)",
+  "description": "An open-source 2D browser shooter game inspired by surviv.io (client)",
   "main": "index.html",
   "scripts": {
     "build": "tsc && browserify tmp/game.js -o tmp/bundle.js && uglifyjs tmp/bundle.js -m -c -o scripts/bundle.min.js",
@@ -9,17 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/North-West-Wind/opensurviv.git"
+    "url": "git+https://github.com/North-West-Wind/opensurvive.git"
   },
-  "keywords": [
-    "surviv.io"
-  ],
   "author": "NorthWestWind",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/North-West-Wind/opensurviv/issues"
+    "url": "https://github.com/North-West-Wind/opensurvive/issues"
   },
-  "homepage": "https://github.com/North-West-Wind/opensurviv#readme",
+  "homepage": "https://github.com/North-West-Wind/opensurvive#readme",
   "devDependencies": {
     "@types/howler": "^2.2.7",
     "@types/msgpack-lite": "^0.1.8",

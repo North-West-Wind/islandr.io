@@ -7,7 +7,7 @@ import { Player } from "../entities";
 
 const ak47stoneImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 ak47stoneImg.onload = () => ak47stoneImg.loaded = true;
-ak47stoneImg.src = "assets/images/game/objects/ak47stone.png";
+ak47stoneImg.src = "assets/images/game/objects/ak47_stone.svg";
 
 class AK47StoneSupplier implements ObstacleSupplier {
 	create(minObstacle: MinObstacle) {
