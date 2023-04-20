@@ -157,8 +157,8 @@ server.on("connection", async socket => {
 			case "switchweapon":
 				const swPacket = <SwitchWeaponPacket>decoded;
 				if (swPacket.setMode) {
-					if (player.inventory.getWeapon(swPacket.set))
-						player.inventory.holding = swPacket.set;
+					if (player.inventory.getWeapon(swPacket.delta))
+						player.inventory.holding = swPacket.delta;
 				} else {
 					const unitDelta = swPacket.delta < 0 ? -1 : 1;
 					var holding = player.inventory.holding + swPacket.delta;

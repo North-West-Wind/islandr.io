@@ -59,7 +59,6 @@ export class InteractPacket implements IPacket {
 export class SwitchWeaponPacket {
 	type = "switchweapon";
 	delta!: number;
-	set!: number;
 	setMode!: boolean;
 }
 
