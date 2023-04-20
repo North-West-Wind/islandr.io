@@ -9,11 +9,11 @@ import { castCorrectWeapon, WEAPON_SUPPLIERS } from "../weapons";
 
 const weaponPanelDivs: HTMLDivElement[] = [];
 const weaponNameDivs: HTMLDivElement[] = [];
-const weaponImages: HTMLImageElement[] = [];
+const weaponImages: (HTMLImageElement & { path: string })[] = [];
 for (let ii = 0; ii < 4; ii++) {
 	weaponPanelDivs.push(<HTMLDivElement> document.getElementById("weapon-panel-" + ii));
 	weaponNameDivs.push(<HTMLDivElement> document.getElementById("weapon-name-" + ii));
-	weaponImages.push(<HTMLImageElement> document.getElementById("weapon-image-" + ii));
+	weaponImages.push(<HTMLImageElement & { path: string }> document.getElementById("weapon-image-" + ii));
 }
 
 const deathImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
@@ -62,7 +62,11 @@ export default class Player extends Entity {
 				if (ii == inventory.holding) weaponPanelDivs[ii].classList.add("selected");
 				else weaponPanelDivs[ii].classList.remove("selected");
 				weaponNameDivs[ii].innerHTML = inventory.weapons[ii]?.name || "&nbsp;";
-				weaponImages[ii].src = getWeaponImagePath(inventory.weapons[ii]?.id);
+				const path = getWeaponImagePath(inventory.weapons[ii]?.id);
+				if (weaponImages[ii].path != path) {
+					weaponImages[ii].path = path;
+					weaponImages[ii].src = path;
+				}
 			}
 		} else this.inventory = new PartialInventory(<MinInventory>minEntity.inventory);
 		if (this.despawn) this.zIndex = 7;

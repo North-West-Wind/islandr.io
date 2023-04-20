@@ -5,7 +5,7 @@ import { Vec2 } from "../../types/math";
 const SMALL_RECOIL = new DefinedAnimation(
 	"small_recoil",
 	[new Vec2(-0.1, 0), Vec2.ZERO],
-	Array(2).fill(Vec2.ONE),
+	Array(2).fill(Vec2.UNIT_X),
 	[0, 1],
 	100
 );
@@ -13,7 +13,7 @@ const SMALL_RECOIL = new DefinedAnimation(
 const MEDIUM_RECOIL = new DefinedAnimation(
 	"medium_recoil",
 	[new Vec2(-0.25, 0), Vec2.ZERO],
-	Array(2).fill(Vec2.ONE),
+	Array(2).fill(Vec2.UNIT_X),
 	[0, 1],
 	150
 );
@@ -21,7 +21,7 @@ const MEDIUM_RECOIL = new DefinedAnimation(
 const LARGE_RECOIL = new DefinedAnimation(
 	"large_recoil",
 	[new Vec2(-0.5, 0), Vec2.ZERO],
-	Array(2).fill(Vec2.ONE),
+	Array(2).fill(Vec2.UNIT_X),
 	[0, 1],
 	200
 );

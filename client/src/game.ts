@@ -78,7 +78,8 @@ async function init(address: string) {
 						(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block";
 						break;
 					}
-					case "sound": {
+					// Temporarily disabled until we have sounds
+					/*case "sound": {
 						if (!player) break;
 						const soundPkt = <SoundPacket>data;
 						const howl = new Howl({
@@ -91,7 +92,7 @@ async function init(address: string) {
 						world.sounds.set(id, { howl, pos });
 						howl.on("end", () => world.sounds.delete(id));
 						break;
-					}
+					}*/
 				}
 			}
 		}

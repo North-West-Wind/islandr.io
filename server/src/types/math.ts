@@ -1,10 +1,14 @@
 import { MinCircleHitbox, MinHitbox, MinLine, MinRectHitbox, MinVec2 } from "./minimized";
 
-// Calculus paid off!
+// Linear algebra paid off! (2D vector)
 export class Vec2 {
 	static readonly ZERO = new Vec2(0, 0);
 	static readonly UNIT_X = new Vec2(1, 0);
 	static readonly UNIT_Y = new Vec2(0, 1);
+
+	static fromMinVec2(minVec2: MinVec2) {
+		return new Vec2(minVec2.x, minVec2.y);
+	}
 
 	readonly x: number;
 	readonly y: number;
@@ -52,7 +56,7 @@ export class Vec2 {
 		const mag = this.magnitude();
 		return new Vec2(mag * Math.cos(angle), mag * Math.sin(angle));
 	}
-
+	
 	addVec(vec: Vec2) {
 		return new Vec2(this.x + vec.x, this.y + vec.y);
 	}
@@ -99,6 +103,10 @@ export class Vec2 {
 }
 
 export class Line {
+	static fromMinLine(minLine: MinLine) {
+		return new Line(Vec2.fromMinVec2(minLine.a), Vec2.fromMinVec2(minLine.b), minLine.segment);
+	}
+	
 	static fromPointSlope(p: Vec2, m: number) {
 		const c = p.y - p.x * m;
 		const b = new Vec2(p.x + 1, (p.x + 1) * m + c);
@@ -131,16 +139,16 @@ export class Line {
 		const ae = point.addVec(this.a.inverse());
 		if (this.segment) {
 			const be = point.addVec(this.b.inverse());
-
+	
 			const abbe = ab.dot(be);
 			const abae = ab.dot(ae);
 			if (abbe > 0) return be.magnitude();
 			if (abae < 0) return ae.magnitude();
-
+	
 			const a = this.b.y - this.a.y;
 			const b = this.a.x - this.b.x;
 			const c = (this.b.x - this.a.x) * this.a.y - (this.b.y - this.a.y) * this.a.x;
-
+	
 			return Math.pow(a * point.x + b * point.y + c, 2) / (a * a + b * b);
 		} else return ae.projectTo(ab.perpendicular()).magnitudeSqr();
 	}

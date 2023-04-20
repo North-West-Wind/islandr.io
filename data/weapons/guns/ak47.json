@@ -39,6 +39,7 @@
 			"width": 0.1,
 			"length": 0.9
 		},
-		"animations": ["medium_recoil"]
+		"animations": ["medium_recoil"],
+		"hasBarrelImage": true
 	}
 }

@@ -1,5 +1,5 @@
 import { ENTITY_SUPPLIERS } from ".";
-import { getBackpackImage } from "../../textures";
+import { getBackpackImagePath } from "../../textures";
 import { Entity } from "../../types/entity";
 import { MinEntity } from "../../types/minimized";
 import { EntitySupplier } from "../../types/supplier";
@@ -17,6 +17,7 @@ class BackpackSupplier implements EntitySupplier {
 }
 
 export default class Backpack extends Entity {
+	static readonly backpackImages: (HTMLImageElement & { loaded: boolean })[] = Array(3).fill(undefined);
 	static readonly TYPE = "backpack";
 	type = Backpack.TYPE;
 	level!: number;
@@ -46,16 +47,21 @@ export default class Backpack extends Entity {
 		circleFromCenter(ctx, 0, 0, radius, false, true);
 		ctx.fillStyle = "#00000066"; // <- alpha/opacity
 		circleFromCenter(ctx, 0, 0, radius, true, false);
-		const img = getBackpackImage(this.level);
+		const img = Backpack.backpackImages[this.level - 1];
 		if (!img?.loaded) {
+			if (!img) {
+				const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+				image.onload = () => image.loaded = true;
+				image.src = getBackpackImagePath(this.level);
+				Backpack.backpackImages[this.level - 1] = image;
+			}
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
 			ctx.fillStyle = "#fff";
 			ctx.font = `${canvas.height / 54}px Arial`;
 			ctx.fillText(`BP Lv ${this.level}`, 0, 0);
-		} else {
+		} else
 			ctx.drawImage(img, -0.6*radius, -0.6*radius, 1.2*radius, 1.2*radius);
-		}
 		ctx.resetTransform();
 	}
 }

@@ -25,11 +25,6 @@ export default class Bush extends Obstacle {
 	type = Bush.TYPE;
 	zIndex = 10;
 
-	constructor(minObstacle: MinObstacle) {
-		super(minObstacle);
-		if (this.despawn) this.zIndex = 0;
-	}
-
 	static {
 		OBSTACLE_SUPPLIERS.set(Bush.TYPE, new BushSupplier());
 	}

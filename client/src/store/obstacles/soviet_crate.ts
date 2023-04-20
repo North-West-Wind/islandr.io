@@ -7,8 +7,7 @@ import { Player } from "../entities";
 
 const crateImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 crateImg.onload = () => crateImg.loaded = true;
-//crateImg.src = "assets/images/game/objects/soviet_crate.png";
-crateImg.src = "assets/images/game/objects/crate.svg";
+crateImg.src = "assets/images/game/objects/soviet_crate.svg";
 
 const crateResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 crateResidueImg.onload = () => crateResidueImg.loaded = true;
