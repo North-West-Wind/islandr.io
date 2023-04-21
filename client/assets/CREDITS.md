@@ -5,6 +5,8 @@
 - `images/game/loots/backpacks/2.svg`
 - `images/game/loots/backpacks/3.svg`
 
+- `images/game/objects/bush.svg` (modified by NorthWestWind: component positions)
+
 ### [hsanger](https://github.com/hsanger)
 - `images/menu/opensurvive-logo.svg`
 
@@ -18,7 +20,6 @@
 
 - `images/game/objects/ak47_stone.svg`
 - `images/game/objects/barrel.svg`
-- `images/game/objects/bush.svg`
 - `images/game/objects/crate.svg`
 - `images/game/objects/mosin_tree.svg`
 - `images/game/objects/stone.svg`
