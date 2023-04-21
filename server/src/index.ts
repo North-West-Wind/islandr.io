@@ -9,6 +9,7 @@ import { Particle } from "./types/particle";
 import { World } from "./types/terrain";
 import { Plain, Pond, River, Sea } from "./store/terrains";
 import { Tree, Bush, Crate, Stone, MosinTree, SovietCrate, GrenadeCrate, Barrel, AK47Stone } from "./store/obstacles";
+import { deflate, inflate } from "pako";
 
 export var ticksElapsed = 0;
 
@@ -80,9 +81,9 @@ server.on("connection", async socket => {
 	var username = "";
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
-		socket.send(encode(new AckPacket(id, TICKS_PER_SECOND, world.size, world.defaultTerrain)).buffer);
+		socket.send(deflate(encode(new AckPacket(id, TICKS_PER_SECOND, world.size, world.defaultTerrain)).buffer));
 		socket.once("message", (msg: ArrayBuffer) => {
-			const decoded = decode(new Uint8Array(msg));
+			const decoded = decode(inflate(new Uint8Array(msg)));
 			if (decoded.id == id && decoded.username) {
 				connected = true;
 				username = decoded.username;
@@ -100,9 +101,9 @@ server.on("connection", async socket => {
 	world.entities.push(player);
 
 	// Send the player the entire map
-	socket.send(encode(new MapPacket(world.obstacles, world.terrains)).buffer);
+	socket.send(deflate(encode(new MapPacket(world.obstacles, world.terrains)).buffer));
 	// Send the player music
-	for (const sound of world.joinSounds) socket.send(encode(new SoundPacket(sound.path, sound.position)).buffer);
+	for (const sound of world.joinSounds) socket.send(deflate(encode(new SoundPacket(sound.path, sound.position)).buffer));
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
@@ -114,7 +115,7 @@ server.on("connection", async socket => {
 	const buttons = new Map<number, boolean>();
 
 	socket.on("message", (msg: ArrayBuffer) => {
-		const decoded = <ClientPacketResolvable>decode(new Uint8Array(msg));
+		const decoded = <ClientPacketResolvable>decode(inflate(new Uint8Array(msg)));
 		switch (decoded.type) {
 			case "ping":
 				timeout.refresh();
@@ -186,9 +187,9 @@ setInterval(() => {
 	players.forEach(player => {
 		const socket = sockets.get(player.id);
 		if (!socket) return;
-		socket.send(encode(new GamePacket(world.entities, world.obstacles, player, numberOfPlayers)).buffer);
-		if (world.particles.length) socket.send(encode(new ParticlesPacket(world.particles, player)).buffer);
-		for (const sound of world.onceSounds) socket.send(encode(new SoundPacket(sound.path, sound.position)).buffer);
+		socket.send(deflate(encode(new GamePacket(world.entities, world.obstacles, player, numberOfPlayers)).buffer));
+		if (world.particles.length) socket.send(deflate(encode(new ParticlesPacket(world.particles, player)).buffer));
+		for (const sound of world.onceSounds) socket.send(deflate(encode(new SoundPacket(sound.path, sound.position)).buffer));
 	});
 	world.postTick();
 }, 1000 / TICKS_PER_SECOND);
