@@ -1,6 +1,4 @@
-import { FullPlayer } from "../store/entities";
-import { getBackpackImage } from "../textures";
-import { Inventory } from "../types/entity";
+import { Backpack, FullPlayer } from "../store/entities";
 import { GunWeapon, WeaponType } from "../types/weapon";
 import { roundRect } from "../utils";
 
@@ -71,8 +69,8 @@ function drawBackpack(player: FullPlayer, canvas: HTMLCanvasElement, ctx: Canvas
 	ctx.globalAlpha = 0.2;
 	roundRect(ctx, (canvas.width + healthWidth) / 2 + padding, canvas.height - size - padding, size, size, padding / 2);
 	ctx.globalAlpha = 1;
-	const img = getBackpackImage(player.inventory.backpackLevel);
-	ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 2, canvas.height - size, size - padding * 2, size - padding * 2);
+	const img = Backpack.backpackImages[player.inventory.backpackLevel - 1];
+	if (img?.loaded) ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 2, canvas.height - size, size - padding * 2, size - padding * 2);
 
 	ctx.fillStyle = "#fff";
 	ctx.font = `${canvas.height / 54}px Arial`;

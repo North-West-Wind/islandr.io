@@ -51,7 +51,8 @@ const TYPE_LOOT_TABLES = new Map<string, TypeLootTable>();
 for (const file of fs.readdirSync("../data/loot_tables/type_loot_tables")) {
 	if (file.startsWith(".") || !file.endsWith(".json")) continue;
 	const table = new TypeLootTable(<TypeLootTableData>JSON.parse(fs.readFileSync("../data/loot_tables/type_loot_tables/" + file, { encoding: "utf8" })));
-	TYPE_LOOT_TABLES.set(file.split(".")[0], table);
+	const id = file.split(".").slice(0, -1).join(" ");
+	TYPE_LOOT_TABLES.set(id, table);
 }
 
 class LootTable {
@@ -110,5 +111,6 @@ export const LOOT_TABLES = new Map<string, LootTable>();
 for (const file of fs.readdirSync("../data/loot_tables")) {
 	if (file.startsWith(".") || !file.endsWith(".json")) continue;
 	const table = new LootTable(<LootTableData>JSON.parse(fs.readFileSync("../data/loot_tables/" + file, { encoding: "utf8" })));
-	LOOT_TABLES.set(file.split(".")[0], table);
+	const id = file.split(".").slice(0, -1).join(" ");
+	LOOT_TABLES.set(id, table);
 }

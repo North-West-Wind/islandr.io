@@ -1,22 +1,22 @@
 {
 	"__comment": "Rarity can be filtered. For example, normal crate pulls rarity >= 0, while AWM crate only pulls rarity >= 3",
-	"m9": {
+	"jm9": {
 		"rarity": 0,
 		"weight": 10
 	},
-	"mp5": {
+	"mp4.5": {
 		"rarity": 0,
 		"weight": 9
 	},
-	"m870": {
+	"m960": {
 		"rarity": 0,
 		"weight": 8
 	},
-	"m1100": {
+	"m1120": {
 		"rarity": 0,
 		"weight": 8
 	},
-	"mp220": {
+	"mp222": {
 		"rarity": 0,
 		"weight": 7
 	},
@@ -32,7 +32,7 @@
 		"rarity": 2,
 		"weight": 4
 	},
-	"awm": {
+	"awc": {
 		"rarity": 5,
 		"weight": 1
 	}

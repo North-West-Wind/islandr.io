@@ -1,22 +1,15 @@
 import { TracerColor, TracerColorData } from "./types/data";
 
-const weapons = new Map<string, HTMLImageElement & { loaded: boolean }>();
-(async() => {
-	for (const id of (await fetch(`data/weapons/guns/.list.json`).then(res => res.json())).concat(["frag_grenade"])) {
-		const img: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-		img.onload = () => img.loaded = true;
-		img.src = getWeaponImagePath(id);
-	
-		weapons.set(id, img);
-	}
-})();
-
-export function getWeaponImagePath(id: string | undefined) {
+export function getWeaponImagePath(id: string) {
 	return id ? `assets/images/game/loots/weapons/${id}.svg` : "";
 }
 
-export function getWeaponImage(id: string) {
-	return weapons.get(id);
+export function getBarrelImagePath(id: string) {
+	return `assets/images/game/guns/${id}.svg`;
+}
+
+export function getBackpackImagePath(level: number) {
+	return `assets/images/game/loots/backpacks/${level}.svg`;
 }
 
 const tracerColors = new Map<string, TracerColor>();
@@ -29,21 +22,4 @@ const tracerColors = new Map<string, TracerColor>();
 
 export function getTracerColor(id: string) {
 	return tracerColors.get(id);
-}
-
-const backpacks: (HTMLImageElement & { loaded: boolean })[] = [];
-// We know there are only 3 tiers of backpacks
-(async() => {
-	const exts = ["svg", "webp", "webp"];
-	for (let ii = 0; ii < 3; ii++) {
-		const img: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-		img.onload = () => img.loaded = true;
-		img.src = `assets/images/game/loots/backpacks/${ii+1}.${exts[ii]}`;
-
-		backpacks[ii] = img;
-	}
-})();
-
-export function getBackpackImage(level: number) {
-	return backpacks[level - 1];
 }

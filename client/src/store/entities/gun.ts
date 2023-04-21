@@ -1,6 +1,6 @@
 import { ENTITY_SUPPLIERS } from ".";
 import { GunColor } from "../../constants";
-import { getWeaponImage } from "../../textures";
+import { getWeaponImagePath } from "../../textures";
 import { Entity } from "../../types/entity";
 import { MinEntity } from "../../types/minimized";
 import { EntitySupplier } from "../../types/supplier";
@@ -21,6 +21,7 @@ class GunSupplier implements EntitySupplier {
 const HEX_COLORS = ["#F2A500", "#F20000", "#0061F2", "#039700"];
 
 export default class Gun extends Entity {
+	static readonly gunImages = new Map<string, HTMLImageElement & { loaded: boolean }>();
 	static readonly TYPE = "gun";
 	type = Gun.TYPE;
 	name!: string;
@@ -52,16 +53,21 @@ export default class Gun extends Entity {
 		circleFromCenter(ctx, 0, 0, radius, false, true);
 		ctx.fillStyle = HEX_COLORS[this.color] + "66"; // <- alpha/opacity
 		circleFromCenter(ctx, 0, 0, radius, true, false);
-		const img = getWeaponImage(this.name);
+		const img = Gun.gunImages.get(this.name);
 		if (!img?.loaded) {
+			if (!img) {
+				const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+				image.onload = () => image.loaded = true;
+				image.src = getWeaponImagePath(this.name);
+				Gun.gunImages.set(this.name, image);
+			}
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
 			ctx.fillStyle = "#fff";
 			ctx.font = `${canvas.height / 54}px Arial`;
 			ctx.fillText(this.name, 0, 0);
-		} else {
+		} else
 			ctx.drawImage(img, -0.7*radius, -0.7*radius, 1.4*radius, 1.4*radius);
-		}
 		ctx.resetTransform();
 	}
 }

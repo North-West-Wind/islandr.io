@@ -56,7 +56,7 @@ export type GunData = {
 	visuals: {
 		tracer: TracerData
 		animations: string[]
-		image: string
+		hasBarrelImage: boolean
 	}
 }
 
@@ -98,7 +98,7 @@ export type MeleeData = {
 	}
 }
 
-interface TracerColor {
+export interface TracerColor {
 	color: {
 		regular: string;
 		saturated: string;

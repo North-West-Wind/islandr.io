@@ -1,5 +1,5 @@
-import { MovementDirection } from "./math";
 import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2 } from "./minimized";
+import { MovementDirection } from "./misc";
 
 // Packet to ping the server
 export class PingPacket {
@@ -67,9 +67,11 @@ export class InteractPacket {
 export class SwitchWeaponPacket {
 	type = "switchweapon";
 	delta: number;
+	setMode: boolean;
 
-	constructor(delta: number) {
+	constructor(delta: number, setMode = false) {
 		this.delta = delta;
+		this.setMode = setMode;
 	}
 }
 

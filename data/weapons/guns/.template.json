@@ -58,6 +58,6 @@
 			}
 		},
 		"animations": "Array of string. Animation ID to play when shot.",
-		"image": "String. Path to barrel image."
+		"hasBarrelImage": "Boolean. Whether a barrel image exists."
 	}
 }

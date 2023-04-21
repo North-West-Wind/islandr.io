@@ -1,9 +1,5 @@
 import express from "express";
 const app = express();
-app.use("/data", express.static("data", { dotfiles: "allow" }));
-app.use("/assets", express.static("client/assets"));
-app.use("/scripts", express.static("client/scripts"));
-app.use(express.static("client/public"));
 
 const defaultHeaders = {
 	"X-XSS-Protection": "1; mode=block",
@@ -20,6 +16,11 @@ app.get("/", (_req, res) => {
 app.get("/discord", (_req, res) => {
 	res.redirect(308, "https://discord.gg/jKQEVT7Vd3");
 });
+
+app.use("/data", express.static("data", { dotfiles: "allow", fallthrough: false }));
+app.use("/assets", express.static("client/assets", { fallthrough: false }));
+app.use("/scripts", express.static("client/scripts", { fallthrough: false }));
+app.use(express.static("client/public", { fallthrough: false }));
 
 app.use((_req, res) => {
 	res.status(404);

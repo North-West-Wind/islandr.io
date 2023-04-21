@@ -36,6 +36,7 @@ export abstract class Obstacle implements Renderable, RenderableMap {
 		for (const anim of minObstacle.animations)
 			if (DEFINED_ANIMATIONS.has(anim))
 				this.animations.push({ id: anim, duration: DEFINED_ANIMATIONS.get(anim)!.duration });
+		if (this.despawn) this.zIndex = 0;
 	}
 
 	abstract render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void;

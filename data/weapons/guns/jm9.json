@@ -1,23 +1,22 @@
 {
-	"name": "MP5",
+	"name": "JM9",
 	"color": 0,
-	"ammo": 90,
-	"dual": false,
-	"auto": true,
-	"length": 2.625,
+	"ammo": 45,
+	"dual": true,
+	"length": 2.2,
 	"droppable": true,
 	"normal": {
-		"capacity": 30,
+		"capacity": 15,
 		"reload": {
-			"time": 2000
+			"time": 1600
 		},
 		"delay": {
-			"switch": 750,
-			"firing": 90
+			"switch": 250,
+			"firing": 120
 		},
 		"spread": {
-			"still": 3,
-			"move": 7
+			"still": 8,
+			"move": 16
 		},
 		"bullets": 1,
 		"speed": {
@@ -26,8 +25,8 @@
 		},
 		"headshot": 2,
 		"bullet": {
-			"damage": 11,
-			"falloff": 0.8,
+			"damage": 12,
+			"falloff": 0.7,
 			"speed": 85,
 			"range": [100, 100],
 			"suppressed": false

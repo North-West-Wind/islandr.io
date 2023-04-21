@@ -34,3 +34,8 @@ export function toggleMinimap() { mapHidden = !mapHidden; }
 var bigMap = false;
 export function isBigMap() { return bigMap; }
 export function toggleBigMap() { bigMap = !bigMap; }
+
+
+var mouseDisabled = false;
+export function isMouseDisabled() { return mouseDisabled; }
+export function toggleMouseDisabled() { mouseDisabled = !mouseDisabled; }

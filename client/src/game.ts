@@ -3,7 +3,7 @@ import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
 import { initMap } from "./rendering/map";
-import { addKeyPressed, addMousePressed, isKeyPressed, isMenuHidden, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap } from "./states";
+import { addKeyPressed, addMousePressed, isKeyPressed, isMenuHidden, isMouseDisabled, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap, toggleMouseDisabled } from "./states";
 import { FullPlayer } from "./store/entities";
 import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
 import { castCorrectTerrain } from "./store/terrains";
@@ -78,7 +78,8 @@ async function init(address: string) {
 						(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block";
 						break;
 					}
-					case "sound": {
+					// Temporarily disabled until we have sounds
+					/*case "sound": {
 						if (!player) break;
 						const soundPkt = <SoundPacket>data;
 						const howl = new Howl({
@@ -91,7 +92,7 @@ async function init(address: string) {
 						world.sounds.set(id, { howl, pos });
 						howl.on("end", () => world.sounds.delete(id));
 						break;
-					}
+					}*/
 				}
 			}
 		}
@@ -170,7 +171,7 @@ window.onkeydown = (event) => {
 		else if (event.key == KeyBind.RELOAD)
 			ws.send(encode(new ReloadWeaponPacket()).buffer);
 		else if (!isNaN(parseInt(event.key)))
-			ws.send(encode(new SwitchWeaponPacket(parseInt(event.key) + 1 - ((<Inventory>player?.inventory).holding || 0))));
+			ws.send(encode(new SwitchWeaponPacket(parseInt(event.key) - 1, true)).buffer);
 	}
 }
 
@@ -190,27 +191,40 @@ window.onmousemove = (event) => {
 }
 
 window.onmousedown = (event) => {
-	if (!connected) return;
+	if (!connected || isMouseDisabled()) return;
 	event.stopPropagation();
 	addMousePressed(event.button);
-	ws.send(encode(new MousePressPacket(event.button)));
+	ws.send(encode(new MousePressPacket(event.button)).buffer);
 }
 
 window.onmouseup = (event) => {
 	if (!connected) return;
 	event.stopPropagation();
 	removeMousePressed(event.button);
-	ws.send(encode(new MouseReleasePacket(event.button)));
+	ws.send(encode(new MouseReleasePacket(event.button)).buffer);
 }
 
 window.onwheel = (event) => {
 	if (!connected || !player) return;
 	event.stopPropagation();
 	const delta = event.deltaY < 0 ? -1 : 1;
-	ws.send(encode(new SwitchWeaponPacket(delta)));
+	ws.send(encode(new SwitchWeaponPacket(delta)).buffer);
 }
-// /** @param {MouseEvent} event */
-// window.oncontextmenu = (event) => {
-// 	if (!connected) return;
-// 	ws.send(encode(new PingPacket(event.button)))
-// }
+
+window.oncontextmenu = (event) => {
+	if (connected) event.preventDefault();
+}
+
+window.ondblclick = (event) => {
+	if (connected) event.preventDefault();
+}
+
+// Because 4 is grenade and it's not done yet
+for (let ii = 0; ii < 3; ii++) {
+	const panel = <HTMLDivElement> document.getElementById("weapon-panel-" + ii);
+	panel.onmouseenter = panel.onmouseleave = () => toggleMouseDisabled();
+	panel.onclick = () => {
+		if (!connected || !player) return;
+		ws.send(encode(new SwitchWeaponPacket(ii, true)).buffer);
+	}
+}

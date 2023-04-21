@@ -24,11 +24,6 @@ export default class Tree extends Obstacle {
 	type = Tree.TYPE;
 	zIndex = 1000;
 
-	copy(minObstacle: MinObstacle) {
-		super.copy(minObstacle);
-		if (this.despawn) this.zIndex = 0;
-	}
-
 	static {
 		OBSTACLE_SUPPLIERS.set(Tree.TYPE, new TreeSupplier());
 	}

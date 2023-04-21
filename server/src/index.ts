@@ -156,13 +156,21 @@ server.on("connection", async socket => {
 				break;
 			case "switchweapon":
 				const swPacket = <SwitchWeaponPacket>decoded;
-				const unitDelta = swPacket.delta < 0 ? -1 : 1;
-				var holding = player.inventory.holding + swPacket.delta;
-				if (holding < 0) holding += player.inventory.weapons.length;
-				else holding %= player.inventory.weapons.length;
-				while (!player.inventory.getWeapon(holding))
-					holding += unitDelta;
-				player.inventory.holding = holding;
+				if (swPacket.setMode) {
+					if (player.inventory.getWeapon(swPacket.delta))
+						player.inventory.holding = swPacket.delta;
+				} else {
+					const unitDelta = swPacket.delta < 0 ? -1 : 1;
+					var holding = player.inventory.holding + swPacket.delta;
+					if (holding < 0) holding += player.inventory.weapons.length;
+					else holding %= player.inventory.weapons.length;
+					while (!player.inventory.getWeapon(holding)) {
+						holding += unitDelta;
+						if (holding < 0) holding += player.inventory.weapons.length;
+						else holding %= player.inventory.weapons.length;
+					}
+					player.inventory.holding = holding;
+				}
 				break;
 			case "reloadweapon":
 				player.reload();
