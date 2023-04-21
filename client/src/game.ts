@@ -13,6 +13,12 @@ import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket
 import { World } from "./types/terrain";
 import { deflate, inflate } from "pako";
 
+//handle users that tried to go to old domain name, or direct ip
+var urlargs = new URLSearchParams(window.location.search);
+if(urlargs.get("from")){
+	alert("We have moved from " + urlargs.get("from") + " to islandr.io!")
+}
+
 export var world = new World();
 
 var id: string | null;
