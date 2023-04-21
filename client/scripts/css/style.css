@@ -1,11 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Jura:wght@300;400;500;600;700&display=swap');
 
+html {
+    height: 100%;
+}
+
 body {
     font-family: 'Jura', Arial, Helvetica, sans-serif;
     color: white;
     background-color: #80B251;
     background-image: url("../../assets/images/menu/background.png");
+    height: 100%;
     background-size: cover;
+    background-repeat:   no-repeat;
+    background-position: center center;
 }
 
 canvas {
