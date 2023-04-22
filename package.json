@@ -1,5 +1,5 @@
 {
-  "name": "opensurvive",
+  "name": "islandr",
   "version": "1.0.0",
   "description": "An open-source 2D browser shooter game inspired by surviv.io",
   "main": "lib/index.js",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/North-West-Wind/opensurviv.git"
+    "url": "git+https://github.com/North-West-Wind/islandr.io.git"
   },
   "author": "NorthWestWind",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/North-West-Wind/opensurviv/issues"
+    "url": "https://github.com/North-West-Wind/islandr.io/issues"
   },
-  "homepage": "https://github.com/North-West-Wind/opensurviv#readme",
+  "homepage": "https://github.com/North-West-Wind/islandr.io#readme",
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/mime-types": "^2.1.1",

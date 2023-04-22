@@ -5,20 +5,21 @@
 - `images/game/loots/backpacks/2.svg`
 - `images/game/loots/backpacks/3.svg`
 
+- `images/game/objects/bush.svg` (modified by NorthWestWind: position)
+
 ### [hsanger](https://github.com/hsanger)
-- `images/menu/opensurvive-logo.svg`
+- `images/menu/islandr-logo.svg`
 
 ### Leo. (from Discord)
 - `images/game/guns/ak47.svg` (modified by NorthWestWind: rotation)
 
-- `images/game/loots/weapons/ak47.svg`
+- `images/game/loots/weapons/ak47.svg` (modified by NorthWestWind: mirror)
 
 ### [North-West-Wind (NorthWestWind)](https://github.com/North-West-Wind)
 - `images/game/entities/death.svg`
 
 - `images/game/objects/ak47_stone.svg`
 - `images/game/objects/barrel.svg`
-- `images/game/objects/bush.svg`
 - `images/game/objects/crate.svg`
 - `images/game/objects/mosin_tree.svg`
 - `images/game/objects/stone.svg`
@@ -32,13 +33,13 @@
 - `images/menu/background.png`
 
 ### SquareCube (from Discord)
-- `images/game/loots/weapons/awc.svg`
-- `images/game/loots/weapons/jm9.svg`
-- `images/game/loots/weapons/m960.svg`
-- `images/game/loots/weapons/m1120.svg`
-- `images/game/loots/weapons/mp4.5.svg`
-- `images/game/loots/weapons/mp222.svg`
-- `images/game/loots/weapons/sv98.svg`
+- `images/game/loots/weapons/awc.svg` (modified by NorthWestWind: mirror)
+- `images/game/loots/weapons/jm9.svg` (modified by NorthWestWind: mirror)
+- `images/game/loots/weapons/m960.svg` (modified by NorthWestWind: mirror)
+- `images/game/loots/weapons/m1120.svg` (modified by NorthWestWind: mirror)
+- `images/game/loots/weapons/mp4.5.svg` (modified by NorthWestWind: mirror)
+- `images/game/loots/weapons/mp222.svg` (modified by NorthWestWind: mirror)
+- `images/game/loots/weapons/sv98.svg` (modified by NorthWestWind: mirror)
 
 ## ur mom Gary (from Discord)
 - `images/game/loots/weapons/mosin_nagant.svg` (modified by NorthWestWind: rotation)

@@ -8,7 +8,7 @@
    version="1.1"
    id="svg12"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   sodipodi:docname="mosin_tree.svg"
+   sodipodi:docname="tree.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -27,8 +27,8 @@
      showgrid="false"
      inkscape:snap-global="true"
      inkscape:zoom="0.70710678"
-     inkscape:cx="-150.61374"
-     inkscape:cy="348.60364"
+     inkscape:cx="41.7193"
+     inkscape:cy="347.18943"
      inkscape:window-width="1920"
      inkscape:window-height="1002"
      inkscape:window-x="0"
@@ -45,7 +45,7 @@
      id="layer1">
     <path
        sodipodi:type="star"
-       style="fill:#0a390a;fill-opacity:0.89842707;stroke-width:2.04205;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;paint-order:fill markers stroke"
+       style="fill:#004300;fill-opacity:0.89697701;stroke-width:2.04205;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;paint-order:fill markers stroke"
        id="path899"
        inkscape:flatsided="false"
        sodipodi:sides="10"

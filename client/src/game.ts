@@ -11,6 +11,7 @@ import { Inventory } from "./types/entity";
 import { Vec2 } from "./types/math";
 import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, SoundPacket } from "./types/packet";
 import { World } from "./types/terrain";
+import { deflate, inflate } from "pako";
 
 export var world = new World();
 
@@ -41,11 +42,11 @@ async function init(address: string) {
 		}, TIMEOUT);
 
 		ws.onmessage = (event) => {
-			const data = <AckPacket>decode(new Uint8Array(event.data));
+			const data = <AckPacket>decode(inflate(new Uint8Array(event.data)));
 			id = data.id;
 			tps = data.tps;
 			world = new World(new Vec2(data.size[0], data.size[1]), castCorrectTerrain(data.terrain));
-			ws.send(encode({ username, id }).buffer);
+			ws.send(deflate(encode({ username, id }).buffer));
 			connected = true;
 			clearTimeout(timer);
 	
@@ -53,12 +54,12 @@ async function init(address: string) {
 			start();
 	
 			const interval = setInterval(() => {
-				if (connected) ws.send(encode(new PingPacket()).buffer);
+				if (connected) ws.send(deflate(encode(new PingPacket()).buffer));
 				else clearInterval(interval);
 			}, 1000);
 	
 			ws.onmessage = (event) => {
-				const data = decode(new Uint8Array(event.data));
+				const data = decode(inflate(new Uint8Array(event.data)));
 				switch (data.type) {
 					case "game": {
 						const gamePkt = <GamePacket>data;
@@ -165,13 +166,13 @@ window.onkeydown = (event) => {
 	if (isMenuHidden()) {
 		const index = movementKeys.indexOf(event.key);
 		if (index >= 0)
-			ws.send(encode(new MovementPressPacket(index)).buffer);
+			ws.send(deflate(encode(new MovementPressPacket(index)).buffer));
 		else if (event.key == KeyBind.INTERACT)
-			ws.send(encode(new InteractPacket()).buffer);
+			ws.send(deflate(encode(new InteractPacket()).buffer));
 		else if (event.key == KeyBind.RELOAD)
-			ws.send(encode(new ReloadWeaponPacket()).buffer);
+			ws.send(deflate(encode(new ReloadWeaponPacket()).buffer));
 		else if (!isNaN(parseInt(event.key)))
-			ws.send(encode(new SwitchWeaponPacket(parseInt(event.key) - 1, true)).buffer);
+			ws.send(deflate(encode(new SwitchWeaponPacket(parseInt(event.key) - 1, true)).buffer));
 	}
 }
 
@@ -181,34 +182,34 @@ window.onkeyup = (event) => {
 	removeKeyPressed(event.key);
 	const index = movementKeys.indexOf(event.key);
 	if (index >= 0)
-		ws.send(encode(new MovementReleasePacket(index)).buffer);
+		ws.send(deflate(encode(new MovementReleasePacket(index)).buffer));
 }
 
 window.onmousemove = (event) => {
 	if (!connected) return;
 	event.stopPropagation();
-	ws.send(encode(new MouseMovePacket(event.x - window.innerWidth / 2, event.y - window.innerHeight / 2)).buffer);
+	ws.send(deflate(encode(new MouseMovePacket(event.x - window.innerWidth / 2, event.y - window.innerHeight / 2)).buffer));
 }
 
 window.onmousedown = (event) => {
 	if (!connected || isMouseDisabled()) return;
 	event.stopPropagation();
 	addMousePressed(event.button);
-	ws.send(encode(new MousePressPacket(event.button)).buffer);
+	ws.send(deflate(encode(new MousePressPacket(event.button)).buffer));
 }
 
 window.onmouseup = (event) => {
 	if (!connected) return;
 	event.stopPropagation();
 	removeMousePressed(event.button);
-	ws.send(encode(new MouseReleasePacket(event.button)).buffer);
+	ws.send(deflate(encode(new MouseReleasePacket(event.button)).buffer));
 }
 
 window.onwheel = (event) => {
 	if (!connected || !player) return;
 	event.stopPropagation();
 	const delta = event.deltaY < 0 ? -1 : 1;
-	ws.send(encode(new SwitchWeaponPacket(delta)).buffer);
+	ws.send(deflate(encode(new SwitchWeaponPacket(delta)).buffer));
 }
 
 window.oncontextmenu = (event) => {
@@ -225,6 +226,6 @@ for (let ii = 0; ii < 3; ii++) {
 	panel.onmouseenter = panel.onmouseleave = () => toggleMouseDisabled();
 	panel.onclick = () => {
 		if (!connected || !player) return;
-		ws.send(encode(new SwitchWeaponPacket(ii, true)).buffer);
+		ws.send(deflate(encode(new SwitchWeaponPacket(ii, true)).buffer));
 	}
 }

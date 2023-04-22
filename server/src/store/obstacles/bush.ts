@@ -7,7 +7,7 @@ export default class Bush extends Obstacle {
 	noCollision = true;
 
 	constructor() {
-		const hitbox = new CircleHitbox(2);
+		const hitbox = new CircleHitbox(2.5);
 		super(world, hitbox, hitbox, 100, 100);
 		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this))) this.position = world.size.scale(Math.random(), Math.random());
 	}
