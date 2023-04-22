@@ -8,7 +8,7 @@
 - `images/game/objects/bush.svg` (modified by NorthWestWind: position)
 
 ### [hsanger](https://github.com/hsanger)
-- `images/menu/opensurvive-logo.svg`
+- `images/menu/islandr-logo.svg`
 
 ### Leo. (from Discord)
 - `images/game/guns/ak47.svg` (modified by NorthWestWind: rotation)
