@@ -3,8 +3,9 @@ import { Ammo, Grenade, Gun } from "../store/entities";
 import Backpack from "../store/entities/backpack";
 import { WEAPON_SUPPLIERS } from "../store/weapons";
 import { LootTableData, TypeLootTableData } from "./data";
-import { Entity } from "./entity";
+import { Entity, Inventory } from "./entity";
 import { GrenadeWeapon, GunWeapon, WeaponType } from "./weapon";
+import Healing from "../store/entities/healing";
 
 class TypeLootTable {
 	static readonly MAX_RARITY = 5;
@@ -100,6 +101,11 @@ class LootTable {
 						entities.push(new Grenade((<GrenadeWeapon>weapon).id, result.amount));
 						break;
 					}
+				}
+				case "healing": {
+					if (Inventory.maxHealings[0].has(result.id))
+						entities.push(new Healing(result.id, result.amount));
+					break;
 				}
 			}
 		}

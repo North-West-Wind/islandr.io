@@ -12,6 +12,10 @@ export function getBackpackImagePath(level: number) {
 	return `assets/images/game/loots/backpacks/${level}.svg`;
 }
 
+export function getHealingImagePath(id: string) {
+	return `assets/images/game/loots/healings/${id}.svg`;
+}
+
 const tracerColors = new Map<string, TracerColor>();
 (async() => {
 	const data = <TracerColorData> await fetch(`data/colors/tracers.json`).then(res => res.json());

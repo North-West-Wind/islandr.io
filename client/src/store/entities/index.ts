@@ -8,6 +8,7 @@ export { default as Ammo } from "./ammo";
 export { default as Bullet } from "./bullet";
 export { default as Grenade } from "./grenade";
 export { default as Gun } from "./gun";
+export { default as Healing } from "./healing";
 export { default as Player, PartialPlayer, FullPlayer } from "./player";
 export { default as Backpack } from "./backpack";
 

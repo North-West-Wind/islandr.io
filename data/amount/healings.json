@@ -1,0 +1,26 @@
+[
+	{
+		"toilet_paper": 5,
+		"butterscotch_pie": 1,
+		"coffee": 2,
+		"chocolate": 1
+	},
+	{
+		"toilet_paper": 10,
+		"butterscotch_pie": 2,
+		"coffee": 5,
+		"chocolate": 2
+	},
+	{
+		"toilet_paper": 15,
+		"butterscotch_pie": 3,
+		"coffee": 10,
+		"chocolate": 3
+	},
+	{
+		"toilet_paper": 30,
+		"butterscotch_pie": 4,
+		"coffee": 15,
+		"chocolate": 4
+	}
+]

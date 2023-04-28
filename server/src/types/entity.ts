@@ -13,6 +13,7 @@ export class Inventory {
 	// Maximum amount of things.
 	static maxAmmos: number[][];
 	static maxUtilities: Map<string, number>[];
+	static maxHealings: Map<string, number>[];
 
 	holding: number;
 	weapons: Weapon[];
@@ -22,19 +23,22 @@ export class Inventory {
 	ammos: number[];
 	// Utilities. Maps ID to amount of util.
 	utilities: Map<string, number>;
+	healings: Map<string, number>;
 	backpackLevel = 0;
 
-	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities?: Map<string, number>) {
+	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities?: Map<string, number>, healings?: Map<string, number>) {
 		this.holding = holding;
 		this.slots = slots;
 		this.weapons = weapons || Array(slots.reduce((a, b) => a + b));
 		this.ammos = ammos || Array(Object.keys(GunColor).length / 2).fill(0);
 		this.utilities = utilities || new Map();
+		this.healings = healings || new Map();
 	}
 
 	static {
 		this.maxAmmos = JSON.parse(fs.readFileSync("../data/amount/ammos.json", { encoding: "utf8" }));
 		this.maxUtilities = (<any[]>JSON.parse(fs.readFileSync("../data/amount/throwables.json", { encoding: "utf8" }))).map(x => new Map(Object.entries(x)));
+		this.maxHealings = (<any[]>JSON.parse(fs.readFileSync("../data/amount/healings.json", { encoding: "utf8" }))).map(x => new Map(Object.entries(x)));
 	}
 
 	getWeapon(index = -1) {

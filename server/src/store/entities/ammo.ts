@@ -9,15 +9,11 @@ export default class Ammo extends Item {
 	hitbox = new CircleHitbox(1);
 	amount: number;
 	color: GunColor;
-	friction = 0.02; // frictional acceleration, not force
 
 	constructor(amount: number, color: GunColor) {
 		super();
 		this.amount = amount;
 		this.color = color;
-		this.discardable = true;
-		this.noCollision = true;
-		this.vulnerable = false;
 	}
 
 	picked(player: Player) {

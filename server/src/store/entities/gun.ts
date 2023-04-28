@@ -13,16 +13,12 @@ export default class Gun extends Item {
 	hitbox = new CircleHitbox(2);
 	name: string; // Gun ID, but id was taken for entity already
 	color: GunColor;
-	friction = 0.02; // frictional acceleration, not force
 
 	constructor(name: string, color: GunColor) {
 		super();
 		if (!WEAPON_SUPPLIERS.has(name)) console.warn("Creating a gun entity that doesn't have a supplier for its type");
 		this.name = name;
 		this.color = color;
-		this.discardable = true;
-		this.noCollision = true;
-		this.vulnerable = false;
 	}
 
 	picked(player: Player) {

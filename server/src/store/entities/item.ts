@@ -15,6 +15,9 @@ export default abstract class Item extends Entity implements PickupableEntity {
 	constructor() {
 		super();
 		this.randomVelocity();
+		this.discardable = true;
+		this.noCollision = true;
+		this.vulnerable = false;
 	}
 
 	// Terrible name lol

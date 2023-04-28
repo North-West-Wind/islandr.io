@@ -1,0 +1,22 @@
+{
+	"toilet_paper": {
+		"rarity": 0,
+		"weight": 10,
+		"amount": 5
+	},
+	"butterscotch_pie": {
+		"rarity": 2,
+		"weight": 4,
+		"amount": 1
+	},
+	"coffee": {
+		"rarity": 1,
+		"weight": 8,
+		"amount": 1
+	},
+	"chocolate": {
+		"rarity": 2,
+		"weight": 5,
+		"amount": 1
+	}
+}
