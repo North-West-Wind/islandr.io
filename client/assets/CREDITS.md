@@ -7,8 +7,6 @@
 
 - `images/game/objects/bush.svg` (modified by NorthWestWind: position)
 
-### [hsanger](https://github.com/hsanger)
-- `images/menu/islandr-logo.svg`
 
 ### Leo. (from Discord)
 - `images/game/guns/ak47.svg` (modified by NorthWestWind: rotation)
@@ -19,7 +17,6 @@
 - `images/game/entities/death.svg`
 
 - `images/game/objects/ak47_stone.svg`
-- `images/game/objects/barrel.svg`
 - `images/game/objects/crate.svg`
 - `images/game/objects/mosin_tree.svg`
 - `images/game/objects/stone.svg`
@@ -41,11 +38,16 @@
 - `images/game/loots/weapons/mp222.svg` (modified by NorthWestWind: mirror)
 - `images/game/loots/weapons/sv98.svg` (modified by NorthWestWind: mirror)
 
-## ur mom Gary (from Discord)
+### ur mom Gary (from Discord)
 - `images/game/loots/weapons/mosin_nagant.svg` (modified by NorthWestWind: rotation)
 
 - `images/game/objects/grenade_crate.svg` (modified by NorthWestWind: dimension)
 - `images/game/objects/soviet_crate.svg` (modified by NorthWestWind: dimension)
+- `image/game/objects/barrel.svg`
+
+
+### piesimp (from Discord)
+- `images/menu/islandr-logo.svg `
 
 ### xpayton (from Discord)
 - `images/game/loots/weapons/frag_grenade.svg` (modified by NorthWestWind: color)
