@@ -49,3 +49,6 @@
 
 ### xpayton (from Discord)
 - `images/game/loots/weapons/frag_grenade.svg` (modified by NorthWestWind: color)
+
+### piesimp (from Discord)
+ - `images/menu/logo.png` (modified by hmm: dimension)

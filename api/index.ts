@@ -8,9 +8,14 @@ const defaultHeaders = {
 };
 
 app.get("/", (_req, res) => {
-	for (const [key, value] of Object.entries(defaultHeaders))
-		res.setHeader(key, value);
-	res.sendFile("index.html", { root: "client" });
+	if("islandr.io" == _req.headers.host || "192.168.10.33:8000" == _req.headers.host){
+		for (const [key, value] of Object.entries(defaultHeaders))
+			res.setHeader(key, value);
+		res.sendFile("index.html", { root: "client" });
+	}
+	else{
+		res.redirect(308, "http://islandr.io/?from=" + _req.headers.host)
+	}
 });
 
 app.get("/discord", (_req, res) => {
