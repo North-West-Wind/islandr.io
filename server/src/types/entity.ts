@@ -85,6 +85,7 @@ export class Entity {
 	despawn = false;
 	// Tells the client what animation should play
 	animations: string[] = [];
+	repelExplosions = false;
 
 	constructor() {
 		this.id = ID();
@@ -123,7 +124,7 @@ export class Entity {
 		if (!this.collisionLayers.includes(-1) && !thing.collisionLayers.includes(-1) && !this.collisionLayers.some(layer => thing.collisionLayers.includes(layer))) return CollisionType.NONE;
 		if (this.position.distanceTo(thing.position) > this.hitbox.comparable + thing.hitbox.comparable) return CollisionType.NONE;
 		// For circle it is distance < sum of radii
-		if (this.hitbox.type === "circle" && thing.hitbox.type === "circle") return this.position.addVec(thing.position.inverse()).magnitudeSqr() < Math.pow((<CircleHitbox>this.hitbox).radius + (<CircleHitbox>thing.hitbox).radius, 2) ? CollisionType.CIRCLE_CIRCLE : CollisionType.NONE;
+		if (this.hitbox.type === "circle" && thing.hitbox.type === "circle") return CollisionType.CIRCLE_CIRCLE;
 		else if (this.hitbox.type === "rect" && thing.hitbox.type === "rect") {
 			// https://math.stackexchange.com/questions/1278665/how-to-check-if-two-rectangles-intersect-rectangles-can-be-rotated
 			// Using the last answer

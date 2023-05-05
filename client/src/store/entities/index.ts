@@ -6,6 +6,7 @@ export const ENTITY_SUPPLIERS = new Map<string, EntitySupplier>();
 
 export { default as Ammo } from "./ammo";
 export { default as Bullet } from "./bullet";
+export { default as Explosion } from "./explosion";
 export { default as Grenade } from "./grenade";
 export { default as Gun } from "./gun";
 export { default as Healing } from "./healing";

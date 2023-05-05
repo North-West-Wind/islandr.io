@@ -1,5 +1,10 @@
 # Assets providers
 
+### [a-w-a-y (hmm)](https://github.com/a-w-a-y)
+- `images/game/objects/crate.svg` (modified by NorthWestWind: dimension)
+- `images/game/objects/stone.svg` (modified by NorthWestWind: svg attributes)
+- `images/game/objects/tree.svg` (modified by NorthWestWind: svg attributes)
+
 ### Darkside (from Discord)
 - `images/game/loots/backpacks/1.svg`
 - `images/game/loots/backpacks/2.svg`
@@ -17,10 +22,7 @@
 - `images/game/entities/death.svg`
 
 - `images/game/objects/ak47_stone.svg`
-- `images/game/objects/crate.svg`
 - `images/game/objects/mosin_tree.svg`
-- `images/game/objects/stone.svg`
-- `images/game/objects/tree.svg`
 
 - `images/game/objects/residues/barrel.svg`
 - `images/game/objects/residues/bush.svg`
@@ -43,8 +45,7 @@
 
 - `images/game/objects/grenade_crate.svg` (modified by NorthWestWind: dimension)
 - `images/game/objects/soviet_crate.svg` (modified by NorthWestWind: dimension)
-- `image/game/objects/barrel.svg`
-
+- `image/game/objects/barrel.svg` (modified by NorthWestWind: svg attributes)
 
 ### piesimp (from Discord)
 - `images/menu/islandr-logo.svg `

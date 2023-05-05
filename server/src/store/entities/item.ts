@@ -11,6 +11,7 @@ export default abstract class Item extends Entity implements PickupableEntity {
 	discardable = true;
 	friction = 0.02; // frictional acceleration, not force
 	collisionLayers = [1];
+	repelExplosions = true;
 
 	constructor() {
 		super();

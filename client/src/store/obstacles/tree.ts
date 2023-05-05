@@ -34,7 +34,7 @@ export default class Tree extends Obstacle {
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
 		const img = this.despawn ? treeResidueImg : treeImg;
-		const width = scale * this.hitbox.comparable * 2 * (this.despawn ? 1 : 3.6), height = width * img.naturalWidth / img.naturalHeight;
+		const width = scale * this.hitbox.comparable * 2 * (this.despawn ? 1 : 5), height = width * img.naturalWidth / img.naturalHeight;
 		ctx.drawImage(img, -width / 2, -height / 2, width, height);
 		ctx.resetTransform();
 	}
