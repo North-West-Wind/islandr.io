@@ -5,7 +5,7 @@ import { Obstacle } from "./obstacle";
 import { Weapon } from "./weapon";
 import { WEAPON_SUPPLIERS } from "../store/weapons";
 import { MinEntity, MinInventory } from "./minimized";
-import { CollisionType, GunColor } from "./misc";
+import { CollisionType, CountableString, GunColor } from "./misc";
 import { world } from "..";
 import { PUSH_THRESHOLD } from "../constants";
 
@@ -22,17 +22,17 @@ export class Inventory {
 	// Indices are colors. Refer to GunColor
 	ammos: number[];
 	// Utilities. Maps ID to amount of util.
-	utilities: Map<string, number>;
-	healings: Map<string, number>;
+	utilities: CountableString;
+	healings: CountableString;
 	backpackLevel = 0;
 
-	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities?: Map<string, number>, healings?: Map<string, number>) {
+	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities: CountableString = {}, healings: CountableString = {}) {
 		this.holding = holding;
 		this.slots = slots;
 		this.weapons = weapons || Array(slots.reduce((a, b) => a + b));
 		this.ammos = ammos || Array(Object.keys(GunColor).length / 2).fill(0);
-		this.utilities = utilities || new Map();
-		this.healings = healings || new Map();
+		this.utilities = utilities;
+		this.healings = healings;
 	}
 
 	static {
@@ -45,7 +45,7 @@ export class Inventory {
 		if (index < 0) index = this.holding;
 		if (index < this.weapons.length) return this.weapons[index];
 		const util = Object.keys(this.utilities)[index - this.weapons.length];
-		if (this.utilities.get(util)) return WEAPON_SUPPLIERS.get(util)!.create();
+		if (this.utilities[util]) return WEAPON_SUPPLIERS.get(util)!.create();
 		return undefined;
 	}
 

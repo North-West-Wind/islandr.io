@@ -80,6 +80,16 @@ export class ReloadWeaponPacket {
 	type = "reloadweapon";
 }
 
+// Packet to notify healing item usage
+export class UseHealingPacket {
+	type = "usehealing";
+	item: string;
+
+	constructor(item: string) {
+		this.item = item;
+	}
+}
+
 /// Packet from server acknowledgement
 export class AckPacket {
 	type = "ack";

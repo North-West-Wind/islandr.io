@@ -1,4 +1,4 @@
-import { ENTITY_SUPPLIERS } from ".";
+import { ENTITY_SUPPLIERS, Healing } from ".";
 import { getWeaponImagePath } from "../../textures";
 import { Entity, Inventory, PartialInventory } from "../../types/entity";
 import { MinEntity, MinInventory } from "../../types/minimized";
@@ -24,12 +24,16 @@ interface AdditionalEntity {
 	id: string;
 	username: string;
 	boost: number;
+	maxBoost: number;
 	scope: number;
 	inventory: MinInventory | Inventory;
 	canInteract?: boolean;
+	health: number;
+	maxHealth: number;
 	reloadTicks: number;
 	maxReloadTicks: number;
-	health: number;
+	healTicks: number;
+	maxHealTicks: number;
 }
 
 class PlayerSupplier implements EntitySupplier {
@@ -56,7 +60,7 @@ export default class Player extends Entity {
 		this.username = minEntity.username;
 		if (typeof minEntity.inventory.holding === "number") {
 			const inventory = <Inventory>minEntity.inventory;
-			this.inventory = new Inventory(inventory.holding, inventory.slots, inventory.weapons.map(w => w ? castCorrectWeapon(w, w.type == WeaponType.GUN ? (<GunWeapon>w).magazine : 0) : w), inventory.ammos, inventory.utilities);
+			this.inventory = new Inventory(inventory.holding, inventory.slots, inventory.weapons.map(w => w ? castCorrectWeapon(w, w.type == WeaponType.GUN ? (<GunWeapon>w).magazine : 0) : w), inventory.ammos, inventory.utilities, inventory.healings);
 			this.inventory.backpackLevel = inventory.backpackLevel;
 			for (let ii = 0; ii < inventory.weapons.length; ii++) {
 				if (ii == inventory.holding) weaponPanelDivs[ii].classList.add("selected");
@@ -67,6 +71,11 @@ export default class Player extends Entity {
 					weaponImages[ii].path = path;
 					weaponImages[ii].src = path;
 				}
+			}
+			for (const key of Object.keys(this.inventory.healings)) {
+				document.getElementById("healing-count-" + Healing.mapping.indexOf(key))!.innerHTML = `${this.inventory.healings[key]}`;
+				if (this.inventory.healings[key]) document.getElementById("healing-panel-" + Healing.mapping.indexOf(key))!.classList.add("enabled");
+				else document.getElementById("healing-panel-" + Healing.mapping.indexOf(key))!.classList.remove("enabled");
 			}
 		} else this.inventory = new PartialInventory(<MinInventory>minEntity.inventory);
 		if (this.despawn) this.zIndex = 7;
@@ -120,18 +129,25 @@ export class PartialPlayer extends Player {
 export class FullPlayer extends Player {
 	inventory!: Inventory;
 	boost!: number;
+	maxBoost!: number;
 	scope!: number;
 	canInteract?: boolean;
 	reloadTicks!: number;
 	maxReloadTicks!: number;
+	healTicks!: number;
+	maxHealTicks!: number;
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
 		this.health = minEntity.health;
+		this.maxHealth = minEntity.maxHealth;
 		this.boost = minEntity.boost;
+		this.maxBoost = minEntity.maxBoost;
 		this.scope = minEntity.scope;
 		this.canInteract = minEntity.canInteract || false;
 		this.reloadTicks = minEntity.reloadTicks;
 		this.maxReloadTicks = minEntity.maxReloadTicks;
+		this.healTicks = minEntity.healTicks;
+		this.maxHealTicks = minEntity.maxHealTicks;
 	}
 }

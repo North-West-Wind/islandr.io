@@ -18,7 +18,7 @@ export default class River extends PiecewiseTerrain implements BorderedTerrain {
 	border = 2;
 
 	constructor() {
-		super(0.6, 0, 0);
+		super(0.8, 0, 0);
 
 		// For testing purposes
 		const vertical = randomBoolean();

@@ -66,6 +66,11 @@ export class ReloadWeaponPacket {
 	type = "reloadweapon";
 }
 
+export class UseHealingPacket {
+	type = "usehealing";
+	item!: string;
+}
+
 export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket | ReloadWeaponPacket;
 
 export class AckPacket implements IPacket {

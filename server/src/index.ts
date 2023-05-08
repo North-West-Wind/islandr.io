@@ -1,7 +1,7 @@
 import * as ws from "ws";
 import { encode, decode } from "msgpack-lite";
 import { ID, wait } from "./utils";
-import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket } from "./types/packet";
+import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket } from "./types/packet";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/math";
 import { Player } from "./store/entities";
@@ -175,6 +175,9 @@ server.on("connection", async socket => {
 				break;
 			case "reloadweapon":
 				player.reload();
+				break;
+			case "usehealing":
+				player.heal((<UseHealingPacket>decoded).item);
 				break;
 		}
 	});

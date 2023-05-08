@@ -7,6 +7,7 @@ import {  Weapon } from "./weapon";
 import { GunColor } from "../constants";
 import { DEFINED_ANIMATIONS } from "../store/animations";
 import { Animation } from "./animation";
+import { CountableString } from "./misc";
 
 export class Inventory {
 	holding: number;
@@ -16,24 +17,24 @@ export class Inventory {
 	// Indices are colors. Refer to GunColor
 	ammos: number[];
 	// Utilities. Maps ID to amount of util.
-	utilities: Map<string, number>;
-	healings: Map<string, number>;
+	utilities: CountableString;
+	healings: CountableString;
 	backpackLevel!: number;
 
-	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities?: Map<string, number>, healings?: Map<string, number>) {
+	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities: CountableString = {}, healings: CountableString = {}) {
 		this.holding = holding;
 		this.slots = slots;
 		this.weapons = weapons || Array(slots.reduce((a, b) => a + b));
 		this.ammos = ammos || Array(Object.keys(GunColor).length / 2).fill(0);
-		this.utilities = utilities || new Map();
-		this.healings = healings || new Map();
+		this.utilities = utilities;
+		this.healings = healings;
 	}
 
 	getWeapon(index = -1) {
 		if (index < 0) index = this.holding;
 		if (this.holding < this.weapons.length) return this.weapons[this.holding];
 		const util = Object.keys(this.utilities)[this.holding - this.weapons.length];
-		if (this.utilities.get(util)) return WEAPON_SUPPLIERS.get(util)!.create();
+		if (this.utilities[util]) return WEAPON_SUPPLIERS.get(util)!.create();
 		return undefined;
 	}
 }

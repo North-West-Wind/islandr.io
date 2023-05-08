@@ -4,12 +4,12 @@ import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
 import { initMap } from "./rendering/map";
 import { addKeyPressed, addMousePressed, isKeyPressed, isMenuHidden, isMouseDisabled, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap, toggleMouseDisabled } from "./states";
-import { FullPlayer } from "./store/entities";
+import { FullPlayer, Healing } from "./store/entities";
 import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
 import { castCorrectTerrain } from "./store/terrains";
 import { Inventory } from "./types/entity";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, SoundPacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, SoundPacket, UseHealingPacket } from "./types/packet";
 import { World } from "./types/terrain";
 import { deflate, inflate } from "pako";
 
@@ -47,17 +47,30 @@ async function init(address: string) {
 			ws.close();
 		}, TIMEOUT);
 
-		ws.onmessage = (event) => {
+		ws.onmessage = async (event) => {
 			const data = <AckPacket>decode(inflate(new Uint8Array(event.data)));
 			id = data.id;
 			tps = data.tps;
 			world = new World(new Vec2(data.size[0], data.size[1]), castCorrectTerrain(data.terrain));
+	
+			// Call renderer start to setup
+			await start();
+
 			ws.send(deflate(encode({ username, id }).buffer));
 			connected = true;
 			clearTimeout(timer);
-	
-			// Call renderer start to setup
-			start();
+			
+			// Setup healing items click events
+			for (const element of document.getElementsByClassName("healing-panel")) {
+				const el = <HTMLElement> element;
+				console.log("Adding events for", el.id);
+				const ii = parseInt(<string>el.id.split("-").pop());
+				el.onmouseenter = el.onmouseleave = () => toggleMouseDisabled();
+				el.onclick = () => {
+					if (!el.classList.contains("enabled")) return;
+					ws.send(deflate(encode(new UseHealingPacket(Healing.mapping[ii])).buffer));
+				}
+			}
 	
 			const interval = setInterval(() => {
 				if (connected) ws.send(deflate(encode(new PingPacket()).buffer));
@@ -228,7 +241,7 @@ window.ondblclick = (event) => {
 
 // Because 4 is grenade and it's not done yet
 for (let ii = 0; ii < 3; ii++) {
-	const panel = <HTMLDivElement> document.getElementById("weapon-panel-" + ii);
+	const panel = <HTMLElement> document.getElementById("weapon-panel-" + ii);
 	panel.onmouseenter = panel.onmouseleave = () => toggleMouseDisabled();
 	panel.onclick = () => {
 		if (!connected || !player) return;

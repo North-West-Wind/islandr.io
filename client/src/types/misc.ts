@@ -37,3 +37,7 @@ export enum GunColor {
 	CURSED = 12,
 	BUGLE = 13,
 }
+
+export type CountableString = {
+	[key: string]: number;
+}

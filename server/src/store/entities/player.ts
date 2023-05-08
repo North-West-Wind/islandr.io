@@ -1,3 +1,4 @@
+import { world } from "../..";
 import { GLOBAL_UNIT_MULTIPLIER, TICKS_PER_SECOND } from "../../constants";
 import { Entity, Inventory } from "../../types/entity";
 import { PickupableEntity } from "../../types/extensions";
@@ -6,6 +7,7 @@ import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { spawnAmmo, spawnGun } from "../../utils";
+import Healing from "./healing";
 
 export default class Player extends Entity {
 	type = "player";
@@ -13,7 +15,8 @@ export default class Player extends Entity {
 	id: string;
 	username: string;
 	collisionLayers = [0];
-	boost = 1.5;
+	boost = 0;
+	maxBoost = 100;
 	scope = 2;
 	tryAttacking = false;
 	attackLock = 0;
@@ -27,6 +30,10 @@ export default class Player extends Entity {
 	// Track reloading ticks
 	reloadTicks = 0;
 	maxReloadTicks = 0;
+	// Tracking healing item usage ticks
+	healTicks = 0;
+	maxHealTicks = 0;
+	healItem: string | undefined = undefined;
 
 	constructor(id: string, username: string) {
 		super();
@@ -39,19 +46,33 @@ export default class Player extends Entity {
 		if (!velocity) velocity = this.normalVelocity;
 		else this.normalVelocity = velocity;
 		// Also scale the velocity to boost by soda and pills, and weight by gun
-		var scale = this.boost;
 		const weapon = this.inventory.getWeapon()!;
-		velocity = velocity.scaleAll((this.attackLock ? weapon.attackSpeed : weapon.moveSpeed) * GLOBAL_UNIT_MULTIPLIER / TICKS_PER_SECOND);
-		super.setVelocity(velocity.scaleAll(scale));
+		velocity = velocity.scaleAll((this.attackLock > 0 ? weapon.attackSpeed : weapon.moveSpeed) + (this.boost >= 50 ? 1.85 : 0));
+		if (this.healTicks) velocity = velocity.scaleAll(0.5);
+		velocity = velocity.scaleAll(GLOBAL_UNIT_MULTIPLIER / TICKS_PER_SECOND);
+		super.setVelocity(velocity);
 	}
 
 	tick(entities: Entity[], obstacles: Obstacle[]) {
 		// When the player dies, don't tick anything
 		if (this.despawn) return;
+		// Decrease boost over time
+		if (this.boost > 0) {
+			this.boost -= 0.375 / TICKS_PER_SECOND;
+			if (this.boost < 0) this.boost = 0;
+			else if (this.health < this.maxHealth) {
+				if (this.boost < 25) this.health += 1/TICKS_PER_SECOND;
+				else if (this.boost < 50) this.health += 3.75/TICKS_PER_SECOND;
+				else if (this.boost < 87.5) this.health += 4.75/TICKS_PER_SECOND;
+				else this.health += 5/TICKS_PER_SECOND;
+				this.health = Math.min(this.health, this.maxHealth);
+			}
+		}
 		// Decrease attack locking timer
 		// While attacking, also set moving speed
 		if (this.attackLock > 0) {
 			this.attackLock--;
+			if (this.attackLock <= 0) this.attackLock = 0;
 			this.setVelocity();
 		}
 		// If weapon changed, re-calculate the velocity
@@ -64,6 +85,7 @@ export default class Player extends Entity {
 				// Allows sniper switching
 				this.attackLock = 0;
 				this.maxReloadTicks = this.reloadTicks = 0;
+				this.maxHealTicks = this.healTicks = 0;
 			}
 		}
 		super.tick(entities, obstacles);
@@ -89,8 +111,10 @@ export default class Player extends Entity {
 			weapon.attack(this, entities, obstacles);
 			this.attackLock = weapon.lock;
 			this.maxReloadTicks = this.reloadTicks = 0;
+			this.maxHealTicks = this.healTicks = 0;
 			if (!weapon.auto) this.tryAttacking = false;
 		}
+		// Collision handling
 		for (const obstacle of obstacles) {
 			const collisionType = obstacle.collided(this);
 			if (collisionType) {
@@ -104,6 +128,7 @@ export default class Player extends Entity {
 			}
 		}
 
+		// Reloading check
 		if (this.reloadTicks) {
 			if (weapon.type != WeaponType.GUN) this.maxReloadTicks = this.reloadTicks = 0;
 			else {
@@ -121,6 +146,20 @@ export default class Player extends Entity {
 				}
 			}
 		}
+
+		// Healing check
+		if (this.healTicks) {
+			this.healTicks--;
+			this.setVelocity();
+			if (!this.healTicks) {
+				this.maxHealTicks = 0;
+				const data = Healing.healingData.get(this.healItem!)!;
+				this.health = Math.min(this.health + data.heal, this.maxHealth);
+				this.boost = Math.min(this.boost + data.boost, this.maxBoost);
+				this.inventory.healings[this.healItem!] = this.inventory.healings[this.healItem!] - 1;
+				this.healItem = undefined;
+			}
+		}
 	}
 
 	die() {
@@ -133,12 +172,22 @@ export default class Player extends Entity {
 				}
 			}
 		}
+
 		for (let ii = 0; ii < Object.keys(GunColor).length / 2; ii++)
 			if (this.inventory.ammos[ii] > 0)
 				spawnAmmo(this.inventory.ammos[ii], ii, this.position);
+
+		for (const healing of Object.keys(this.inventory.healings)) {
+			if (this.inventory.healings[healing]) {
+				const item = new Healing(healing, this.inventory.healings[healing]);
+				item.position = this.position;
+				world.entities.push(item);
+			}
+		}
 	}
 
 	reload() {
+		if (this.maxReloadTicks) return;
 		const weapon = this.inventory.getWeapon();
 		if (weapon?.type != WeaponType.GUN) return;
 		const gun = <GunWeapon> weapon;
@@ -146,8 +195,16 @@ export default class Player extends Entity {
 		this.maxReloadTicks = this.reloadTicks = gun.reloadTicks;
 	}
 
+	heal(item: string) {
+		if (this.maxHealTicks) return;
+		if (!this.inventory.healings[item]) return;
+		if (this.health >= this.maxHealth && !Healing.healingData.get(item)?.boost) return;
+		this.maxHealTicks = this.healTicks = Healing.healingData.get(item)!.time * TICKS_PER_SECOND / 1000;
+		this.healItem = item;
+	}
+
 	minimize() {
 		const min = super.minimize();
-		return Object.assign(min, { username: this.username, boost: this.boost, inventory: this.inventory.minimize() })
+		return Object.assign(min, { username: this.username, inventory: this.inventory.minimize() })
 	}
 }

@@ -23,8 +23,8 @@ export default abstract class Item extends Entity implements PickupableEntity {
 
 	// Terrible name lol
 	randomVelocity(direction = Vec2.ZERO) {
-		if (direction.magnitudeSqr() != 0) this.velocity = Vec2.UNIT_X.addAngle(direction.angle()).scaleAll(0.0025);
-		else this.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.0025);
+		if (direction.magnitudeSqr() != 0) this.velocity = Vec2.UNIT_X.addAngle(direction.angle()).scaleAll(0.01);
+		else this.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.01);
 	}
 
 	tick(entities: Entity[], obstacles: Obstacle[]) {
