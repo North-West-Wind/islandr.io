@@ -37,13 +37,13 @@ var connected = false;
 async function init(address: string) {
 	// Initialize the websocket
 	var protocol = "ws";
-	if ((<HTMLInputElement>document.getElementById("wss")).checked) protocol += "s";
+	// if ((<HTMLInputElement>document.getElementById("wss")).checked) protocol += "s";
 	ws = new WebSocket(`${protocol}://${address}`);
 	ws.binaryType = "arraybuffer";
 
 	await new Promise((res, rej) => {
 		const timer = setTimeout(() => {
-			rej(new Error("WebSocket timeout"));
+			rej(new Error("Failed finding game"));
 			ws.close();
 		}, TIMEOUT);
 
@@ -120,7 +120,7 @@ async function init(address: string) {
 	
 		ws.onerror = (err) => {
 			console.error(err);
-			rej(new Error("WebSocket error"));
+			rej(new Error("Failed joining game"));
 		};
 	});
 }
@@ -128,7 +128,7 @@ async function init(address: string) {
 document.getElementById("connect")?.addEventListener("click", async () => {
 	const errorText = <HTMLDivElement>document.getElementById("error-div");
 	username = (<HTMLInputElement>document.getElementById("username")).value;
-	address = (<HTMLInputElement>document.getElementById("address")).value;
+	address = "localhost:8080"
 	try {
 		check(username, address);
 		await init(address);

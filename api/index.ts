@@ -1,5 +1,5 @@
 import express from "express";
-const app = express();
+ const app = express();
 
 const defaultHeaders = {
 	"X-XSS-Protection": "1; mode=block",
@@ -12,6 +12,7 @@ app.get("/", (_req, res) => {
 		res.setHeader(key, value);
 	res.sendFile("index.html", { root: "client" });
 });
+
 
 app.get("/discord", (_req, res) => {
 	res.redirect(308, "https://discord.gg/jKQEVT7Vd3");

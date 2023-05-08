@@ -61,3 +61,4 @@ export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w
 export function toDegrees(radian: number) {
 	return radian * 180 / Math.PI;
 }
+export var addr = "islandr.io:8000"

@@ -26,6 +26,7 @@ export default class Healing extends Item {
 		}
 		return true;
 	}
+	
 
 	minimize() {
 		const min = super.minimize();
