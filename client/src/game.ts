@@ -1,4 +1,3 @@
-import { encode, decode } from "msgpack-lite";
 import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
@@ -7,11 +6,10 @@ import { addKeyPressed, addMousePressed, isKeyPressed, isMenuHidden, isMouseDisa
 import { FullPlayer, Healing } from "./store/entities";
 import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
 import { castCorrectTerrain } from "./store/terrains";
-import { Inventory } from "./types/entity";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, SoundPacket, UseHealingPacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
 import { World } from "./types/terrain";
-import { deflate, inflate } from "pako";
+import { receive, send } from "./utils";
 
 //handle users that tried to go to old domain name, or direct ip
 var urlargs = new URLSearchParams(window.location.search);
@@ -48,7 +46,7 @@ async function init(address: string) {
 		}, TIMEOUT);
 
 		ws.onmessage = async (event) => {
-			const data = <AckPacket>decode(inflate(new Uint8Array(event.data)));
+			const data = <AckPacket>receive(event.data);
 			id = data.id;
 			tps = data.tps;
 			world = new World(new Vec2(data.size[0], data.size[1]), castCorrectTerrain(data.terrain));
@@ -56,7 +54,7 @@ async function init(address: string) {
 			// Call renderer start to setup
 			await start();
 
-			ws.send(deflate(encode({ username, id }).buffer));
+			send(ws, new ResponsePacket(id, username!));
 			connected = true;
 			clearTimeout(timer);
 			
@@ -68,17 +66,17 @@ async function init(address: string) {
 				el.onmouseenter = el.onmouseleave = () => toggleMouseDisabled();
 				el.onclick = () => {
 					if (!el.classList.contains("enabled")) return;
-					ws.send(deflate(encode(new UseHealingPacket(Healing.mapping[ii])).buffer));
+					send(ws, new UseHealingPacket(Healing.mapping[ii]));
 				}
 			}
 	
 			const interval = setInterval(() => {
-				if (connected) ws.send(deflate(encode(new PingPacket()).buffer));
+				if (connected) send(ws, new PingPacket());
 				else clearInterval(interval);
 			}, 1000);
 	
 			ws.onmessage = (event) => {
-				const data = decode(inflate(new Uint8Array(event.data)));
+				const data = receive(event.data);
 				switch (data.type) {
 					case "game": {
 						const gamePkt = <GamePacket>data;
@@ -185,13 +183,13 @@ window.onkeydown = (event) => {
 	if (isMenuHidden()) {
 		const index = movementKeys.indexOf(event.key);
 		if (index >= 0)
-			ws.send(deflate(encode(new MovementPressPacket(index)).buffer));
+			send(ws, new MovementPressPacket(index));
 		else if (event.key == KeyBind.INTERACT)
-			ws.send(deflate(encode(new InteractPacket()).buffer));
+			send(ws, new InteractPacket());
 		else if (event.key == KeyBind.RELOAD)
-			ws.send(deflate(encode(new ReloadWeaponPacket()).buffer));
+			send(ws, new ReloadWeaponPacket());
 		else if (!isNaN(parseInt(event.key)))
-			ws.send(deflate(encode(new SwitchWeaponPacket(parseInt(event.key) - 1, true)).buffer));
+			send(ws, new SwitchWeaponPacket(parseInt(event.key) - 1, true));
 	}
 }
 
@@ -201,34 +199,34 @@ window.onkeyup = (event) => {
 	removeKeyPressed(event.key);
 	const index = movementKeys.indexOf(event.key);
 	if (index >= 0)
-		ws.send(deflate(encode(new MovementReleasePacket(index)).buffer));
+		send(ws, new MovementReleasePacket(index));
 }
 
 window.onmousemove = (event) => {
 	if (!connected) return;
 	event.stopPropagation();
-	ws.send(deflate(encode(new MouseMovePacket(event.x - window.innerWidth / 2, event.y - window.innerHeight / 2)).buffer));
+	send(ws, new MouseMovePacket(event.x - window.innerWidth / 2, event.y - window.innerHeight / 2));
 }
 
 window.onmousedown = (event) => {
 	if (!connected || isMouseDisabled()) return;
 	event.stopPropagation();
 	addMousePressed(event.button);
-	ws.send(deflate(encode(new MousePressPacket(event.button)).buffer));
+	send(ws, new MousePressPacket(event.button));
 }
 
 window.onmouseup = (event) => {
 	if (!connected) return;
 	event.stopPropagation();
 	removeMousePressed(event.button);
-	ws.send(deflate(encode(new MouseReleasePacket(event.button)).buffer));
+	send(ws, new MouseReleasePacket(event.button));
 }
 
 window.onwheel = (event) => {
 	if (!connected || !player) return;
 	event.stopPropagation();
 	const delta = event.deltaY < 0 ? -1 : 1;
-	ws.send(deflate(encode(new SwitchWeaponPacket(delta)).buffer));
+	send(ws, new SwitchWeaponPacket(delta));
 }
 
 window.oncontextmenu = (event) => {
@@ -245,6 +243,6 @@ for (let ii = 0; ii < 3; ii++) {
 	panel.onmouseenter = panel.onmouseleave = () => toggleMouseDisabled();
 	panel.onclick = () => {
 		if (!connected || !player) return;
-		ws.send(deflate(encode(new SwitchWeaponPacket(ii, true)).buffer));
+		send(ws, new SwitchWeaponPacket(ii, true));
 	}
 }

@@ -1,13 +1,29 @@
 import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2 } from "./minimized";
 import { MovementDirection } from "./misc";
 
+export interface IPacket {
+	type: string;
+}
+
+// Packet to respond the server Ack
+export class ResponsePacket implements IPacket {
+	type = "response";
+	id: string;
+	username: string;
+
+	constructor(id: string, username: string) {
+		this.id = id;
+		this.username = username;
+	}
+}
+
 // Packet to ping the server
-export class PingPacket {
+export class PingPacket implements IPacket {
 	type = "ping";
 }
 
 // Packet to notify movement key press
-export class MovementPressPacket {
+export class MovementPressPacket implements IPacket {
 	type = "movementpress";
 	direction: MovementDirection;
 
@@ -17,7 +33,7 @@ export class MovementPressPacket {
 }
 
 // Packet to notify movement key release
-export class MovementReleasePacket {
+export class MovementReleasePacket implements IPacket {
 	type = "movementrelease";
 	direction: MovementDirection;
 
@@ -27,7 +43,7 @@ export class MovementReleasePacket {
 }
 
 // Packet to notify mouse button press
-export class MousePressPacket {
+export class MousePressPacket implements IPacket {
 	type = "mousepress";
 	button: number;
 
@@ -37,7 +53,7 @@ export class MousePressPacket {
 }
 
 // Packet to notify mouse button release
-export class MouseReleasePacket {
+export class MouseReleasePacket implements IPacket {
 	type = "mouserelease";
 	button: number;
 
@@ -47,7 +63,7 @@ export class MouseReleasePacket {
 }
 
 // Packet to notify mouse movement
-export class MouseMovePacket {
+export class MouseMovePacket implements IPacket {
 	type = "mousemove";
 	x: number;
 	y: number;
@@ -59,12 +75,12 @@ export class MouseMovePacket {
 }
 
 // Packet to notify interaction (e.g. pickup)
-export class InteractPacket {
+export class InteractPacket implements IPacket {
 	type = "interact";
 }
 
 // Packet to notify weapon switching
-export class SwitchWeaponPacket {
+export class SwitchWeaponPacket implements IPacket {
 	type = "switchweapon";
 	delta: number;
 	setMode: boolean;
@@ -76,12 +92,12 @@ export class SwitchWeaponPacket {
 }
 
 // Packet to notify weapon reloading
-export class ReloadWeaponPacket {
+export class ReloadWeaponPacket implements IPacket {
 	type = "reloadweapon";
 }
 
 // Packet to notify healing item usage
-export class UseHealingPacket {
+export class UseHealingPacket implements IPacket {
 	type = "usehealing";
 	item: string;
 
@@ -91,7 +107,7 @@ export class UseHealingPacket {
 }
 
 /// Packet from server acknowledgement
-export class AckPacket {
+export class AckPacket implements IPacket {
 	type = "ack";
 	id!: string;
 	tps!: number;
@@ -100,7 +116,7 @@ export class AckPacket {
 }
 
 /// Packet from server containing game data
-export class GamePacket {
+export class GamePacket implements IPacket {
 	type = "game";
 	entities!: MinEntity[];
 	obstacles!: MinObstacle[];
@@ -109,15 +125,17 @@ export class GamePacket {
 }
 
 /// Packet from server containing map data
-export class MapPacket {
+export class MapPacket implements IPacket {
 	type = "map";
 	obstacles!: MinMinObstacle[];
 	terrains!: MinTerrain[];
 }
 
 /// Packet from server about sound and its location
-export class SoundPacket {
+export class SoundPacket implements IPacket {
 	type = "sound";
 	path!: string;
 	position!: MinVec2;
 }
+
+export type ServerPacketResolvable = AckPacket | GamePacket | MapPacket | SoundPacket;

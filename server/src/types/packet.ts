@@ -8,8 +8,14 @@ import { Obstacle } from "./obstacle";
 import { Particle } from "./particle";
 import { Terrain } from "./terrain";
 
-interface IPacket {
+export interface IPacket {
 	type: string;
+}
+
+export class ResponsePacket implements IPacket {
+	type = "response";
+	id!: string;
+	username!: string;
 }
 
 class PingPacket implements IPacket {
@@ -71,7 +77,7 @@ export class UseHealingPacket {
 	item!: string;
 }
 
-export type ClientPacketResolvable = PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket | ReloadWeaponPacket;
+export type ClientPacketResolvable = ResponsePacket | PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket | ReloadWeaponPacket;
 
 export class AckPacket implements IPacket {
 	type = "ack";

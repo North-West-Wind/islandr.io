@@ -7,6 +7,8 @@ export function ID() {
 
 // Promisified setTimeout
 export function wait(ms: number) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+// Maths
 // Capping value with limits
 export function clamp(val: number, min: number, max: number) {
     if (val < min) return min;
@@ -22,6 +24,22 @@ export function randomBoolean() {
 }
 export function toRadians(degree: number) {
     return degree * Math.PI / 180;
+}
+
+// Networking
+import { encode, decode } from "msgpack-lite";
+import { deflate, inflate } from "pako";
+import WebSocket = require("ws");
+import { ClientPacketResolvable, IPacket } from "./types/packet";
+// Send packet
+export function send(socket: WebSocket, packet: IPacket) {
+    //socket.send(deflate(deflate(encode(packet).buffer)));
+    socket.send(deflate(encode(packet).buffer));
+}
+// Receive packet
+export function receive(msg: ArrayBuffer) {
+    //return <ClientPacketResolvable>decode(inflate(inflate(new Uint8Array(msg))));
+    return <ClientPacketResolvable>decode(inflate(new Uint8Array(msg)));
 }
 
 // Things that require game object imports
