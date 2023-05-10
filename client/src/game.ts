@@ -128,7 +128,7 @@ async function init(address: string) {
 document.getElementById("connect")?.addEventListener("click", async () => {
 	const errorText = <HTMLDivElement>document.getElementById("error-div");
 	username = (<HTMLInputElement>document.getElementById("username")).value;
-	address = "localhost:8080"
+	address = (<HTMLInputElement>document.getElementById("address")).value;
 	try {
 		check(username, address);
 		await init(address);
