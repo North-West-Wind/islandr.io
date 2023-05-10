@@ -80,8 +80,8 @@ async function init(address: string) {
 				switch (data.type) {
 					case "game": {
 						const gamePkt = <GamePacket>data;
-						world.updateEntities(gamePkt.entities);
-						world.updateObstacles(gamePkt.obstacles);
+						world.updateEntities(gamePkt.entities, gamePkt.discardEntities);
+						world.updateObstacles(gamePkt.obstacles, gamePkt.discardObstacles);
 						world.updateLiveCount(gamePkt.alivecount);
 						if (!player) player = new FullPlayer(gamePkt.player);
 						else player.copy(gamePkt.player);

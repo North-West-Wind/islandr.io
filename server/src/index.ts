@@ -100,6 +100,8 @@ server.on("connection", async socket => {
 
 	// Send the player the entire map
 	send(socket, new MapPacket(world.obstacles, world.terrains));
+	// Send the player initial objects
+	send(socket, new GamePacket(world.entities, world.obstacles, player, numberOfPlayers, true));
 	// Send the player music
 	for (const sound of world.joinSounds) send(socket, new SoundPacket(sound.path, sound.position));
 
@@ -188,7 +190,7 @@ setInterval(() => {
 	players.forEach(player => {
 		const socket = sockets.get(player.id);
 		if (!socket) return;
-		send(socket, new GamePacket(world.entities, world.obstacles, player, numberOfPlayers));
+		send(socket, new GamePacket(world.dirtyEntities, world.dirtyObstacles, player, numberOfPlayers, false, world.discardEntities, world.discardObstacles));
 		if (world.particles.length) send(socket, new ParticlesPacket(world.particles, player));
 		for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
 	});

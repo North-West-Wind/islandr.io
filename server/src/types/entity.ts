@@ -86,6 +86,7 @@ export class Entity {
 	// Tells the client what animation should play
 	animations: string[] = [];
 	repelExplosions = false;
+	dirty = true;
 
 	constructor() {
 		this.id = ID();
@@ -94,6 +95,7 @@ export class Entity {
 	}
 
 	tick(_entities: Entity[], _obstacles: Obstacle[]) {
+		const lastPosition = this.position;
 		// Add the velocity to the position, and cap it at map size.
 		if (this.airborne)
 			this.position = this.position.addVec(this.velocity);
@@ -106,16 +108,20 @@ export class Entity {
 		}
 		this.position = new Vec2(clamp(this.position.x, this.hitbox.comparable, world.size.x - this.hitbox.comparable), clamp(this.position.y, this.hitbox.comparable, world.size.y - this.hitbox.comparable));
 
+		if (this.position != lastPosition) this.markDirty();
+
 		// Check health and maybe call death
 		if (this.vulnerable && this.health <= 0) this.die();
 	}
 
 	setVelocity(velocity: Vec2) {
 		this.velocity = velocity;
+		this.markDirty();
 	}
 
 	setDirection(direction: Vec2) {
 		this.direction = direction.unit();
+		this.markDirty();
 	}
 
 	// Hitbox collision check
@@ -210,11 +216,21 @@ export class Entity {
 	damage(dmg: number) {
 		if (!this.vulnerable) return;
 		this.health -= dmg;
+		this.markDirty();
 	}
 
 	die() {
 		this.despawn = true;
 		this.health = 0;
+		this.markDirty();
+	}
+
+	markDirty() {
+		this.dirty = true;
+	}
+	
+	unmarkDirty() {
+		this.dirty = false;
 	}
 
 	minimize() {

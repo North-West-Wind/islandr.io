@@ -25,7 +25,7 @@ export default class Grenade extends Item {
 		player.inventory.utilities[this.name] = newAmount;
 		if (delta != this.amount) {
 			this.amount -= delta;
-			this.velocity = Vec2.UNIT_X.addAngle(this.position.addVec(player.position.inverse()).angle()).scaleAll(0.001);
+			this.setVelocity(Vec2.UNIT_X.addAngle(this.position.addVec(player.position.inverse()).angle()).scaleAll(0.001));
 			return false;
 		}
 		return true;

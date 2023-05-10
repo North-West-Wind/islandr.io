@@ -122,6 +122,8 @@ export class GamePacket implements IPacket {
 	obstacles!: MinObstacle[];
 	player!: any;
 	alivecount!: number;
+	discardEntities?: string[];
+	discardObstacles?: string[];
 }
 
 /// Packet from server containing map data

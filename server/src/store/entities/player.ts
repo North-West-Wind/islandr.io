@@ -67,6 +67,7 @@ export default class Player extends Entity {
 				else this.health += 5/TICKS_PER_SECOND;
 				this.health = Math.min(this.health, this.maxHealth);
 			}
+			this.markDirty();
 		}
 		// Decrease attack locking timer
 		// While attacking, also set moving speed
@@ -81,11 +82,11 @@ export default class Player extends Entity {
 		if(weapon){
 			if (weapon.name != this.lastHolding) {
 				this.lastHolding = weapon.name;
-				this.setVelocity();
 				// Allows sniper switching
 				this.attackLock = 0;
 				this.maxReloadTicks = this.reloadTicks = 0;
 				this.maxHealTicks = this.healTicks = 0;
+				this.setVelocity();
 			}
 		}
 		super.tick(entities, obstacles);
@@ -98,7 +99,10 @@ export default class Player extends Entity {
 				// Only interact when trying
 				if (this.tryInteracting) {
 					this.canInteract = false;
-					if ((<PickupableEntity><unknown>entity).picked(this)) entity.die();
+					if ((<PickupableEntity><unknown>entity).picked(this)) {
+						entity.die();
+						this.markDirty();
+					}
 				}
 				breaked = true;
 				break;
@@ -113,6 +117,7 @@ export default class Player extends Entity {
 			this.maxReloadTicks = this.reloadTicks = 0;
 			this.maxHealTicks = this.healTicks = 0;
 			if (!weapon.auto) this.tryAttacking = false;
+			this.markDirty();
 		}
 		// Collision handling
 		for (const obstacle of obstacles) {
@@ -124,6 +129,7 @@ export default class Player extends Entity {
 					else if (collisionType == CollisionType.CIRCLE_RECT_CENTER_INSIDE) this.handleCircleRectCenterCollision(obstacle);
 					else if (collisionType == CollisionType.CIRCLE_RECT_POINT_INSIDE) this.handleCircleRectPointCollision(obstacle);
 					else if (collisionType == CollisionType.CIRCLE_RECT_LINE_INSIDE) this.handleCircleRectLineCollision(obstacle);
+					this.markDirty();
 				}
 			}
 		}
@@ -145,12 +151,13 @@ export default class Player extends Entity {
 					this.inventory.ammos[gun.color] += delta;
 				}
 			}
+			this.markDirty();
 		}
 
 		// Healing check
 		if (this.healTicks) {
 			this.healTicks--;
-			this.setVelocity();
+			this.setVelocity(); // markDirty
 			if (!this.healTicks) {
 				this.maxHealTicks = 0;
 				const data = Healing.healingData.get(this.healItem!)!;
@@ -193,6 +200,7 @@ export default class Player extends Entity {
 		const gun = <GunWeapon> weapon;
 		if (!this.inventory.ammos[gun.color] || gun.magazine == gun.capacity) return;
 		this.maxReloadTicks = this.reloadTicks = gun.reloadTicks;
+		this.markDirty();
 	}
 
 	heal(item: string) {
@@ -201,6 +209,7 @@ export default class Player extends Entity {
 		if (this.health >= this.maxHealth && !Healing.healingData.get(item)?.boost) return;
 		this.maxHealTicks = this.healTicks = Healing.healingData.get(item)!.time * TICKS_PER_SECOND / 1000;
 		this.healItem = item;
+		this.markDirty();
 	}
 
 	minimize() {

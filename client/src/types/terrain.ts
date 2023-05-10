@@ -32,26 +32,32 @@ export class World {
 		}
 	}
 
-	updateEntities(entities: MinEntity[]) {
+	updateEntities(entities: MinEntity[], discardEntities: string[] = []) {
 		const pending: Entity[] = [];
+		for (const entity of this.entities) {
+			if (discardEntities.includes(entity.id)) continue;
+			const newData = entities.find(e => e.id == entity.id);
+			if (newData) entity.copy(newData);
+			pending.push(entity);
+		}
 		for (const entity of entities) {
 			const existing = this.entities.find(e => e.id == entity.id);
-			if (existing) {
-				existing.copy(entity);
-				pending.push(existing);
-			} else pending.push(castCorrectEntity(entity));
+			if (!existing) pending.push(castCorrectEntity(entity));
 		}
 		this.entities = pending;
 	}
 
-	updateObstacles(obstacles: MinObstacle[]) {
+	updateObstacles(obstacles: MinObstacle[], discardObstacles: string[] = []) {
 		const pending: Obstacle[] = [];
+		for (const obstacle of this.obstacles) {
+			if (discardObstacles.includes(obstacle.id)) continue;
+			const newData = obstacles.find(o => o.id == obstacle.id);
+			if (newData) obstacle.copy(newData);
+			pending.push(obstacle);
+		}
 		for (const obstacle of obstacles) {
-			const existing = this.obstacles.find(e => e.id == obstacle.id);
-			if (existing) {
-				existing.copy(obstacle);
-				pending.push(existing);
-			} else pending.push(castCorrectObstacle(obstacle));
+			const existing = this.obstacles.find(o => o.id == obstacle.id);
+			if (!existing) pending.push(castCorrectObstacle(obstacle));
 		}
 		this.obstacles = pending;
 	}

@@ -9,8 +9,13 @@ export class World {
 	size: Vec2;
 	entities: Entity[] = [];
 	obstacles: Obstacle[] = [];
+	discardEntities: string[] = [];
+	discardObstacles: string[] = [];
+	dirtyEntities: Entity[] = [];
+	dirtyObstacles: Obstacle[] = [];
 	defaultTerrain: Terrain;
 	terrains: Terrain[];
+	lastSecond: number = 0;
 
 	// These should be sent once only to the client
 	particles: Particle[] = [];
@@ -37,6 +42,13 @@ export class World {
 
 	tick() {
 		this.ticks++;
+		// TPS observer
+		/*if (!this.lastSecond) this.lastSecond = Date.now();
+		else if (Date.now() - this.lastSecond >= 1000) {
+			console.log("TPS:", this.ticks);
+			this.lastSecond = Date.now();
+			this.ticks = 0;
+		}*/
 		// Tick every entity and obstacle.
 		let ii: number;
 		var removable: number[] = [];
@@ -44,7 +56,13 @@ export class World {
 			const entity = this.entities[ii];
 			entity.tick(this.entities, this.obstacles);
 			// Mark entity for removal
-			if (entity.despawn && entity.discardable) removable.push(ii);
+			if (entity.despawn && entity.discardable) {
+				removable.push(ii);
+				this.discardEntities.push(entity.id);
+			} else if (entity.dirty) {
+				entity.unmarkDirty();
+				this.dirtyEntities.push(entity);
+			}
 		}
 		// Remove all discardable entities
 		for (ii = removable.length - 1; ii >= 0; ii--) this.entities.splice(removable[ii], 1);
@@ -54,7 +72,13 @@ export class World {
 			const obstacle = this.obstacles[ii];
 			obstacle.tick(this.entities, this.obstacles);
 			// Mark obstacle for removal
-			if (obstacle.despawn && obstacle.discardable) removable.push(ii);
+			if (obstacle.despawn && obstacle.discardable) {
+				removable.push(ii);
+				this.discardObstacles.push(obstacle.id);
+			} else if (obstacle.dirty) {
+				obstacle.unmarkDirty();
+				this.dirtyObstacles.push(obstacle);
+			}
 		}
 		// Remove all discardable obstacles
 		for (ii = removable.length - 1; ii >= 0; ii--) this.obstacles.splice(removable[ii], 1);
@@ -72,6 +96,10 @@ export class World {
 		});
 		this.particles = [];
 		this.onceSounds = [];
+		this.discardEntities = [];
+		this.discardObstacles = [];
+		this.dirtyEntities = [];
+		this.dirtyObstacles = [];
 	}
 }
 

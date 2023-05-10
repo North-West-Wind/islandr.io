@@ -100,12 +100,16 @@ export class GamePacket implements IPacket {
 	obstacles: MinObstacle[];
 	player: Player;
 	alivecount: number;
+	discardEntities?: string[];
+	discardObstacles?: string[];
 
-	constructor(entities: Entity[], obstacles: Obstacle[], player: Player, alivecount: number) {
-		this.entities = entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(entity => entity.minimize());
-		this.obstacles = obstacles.filter(obstacle => obstacle.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2)).map(obstacle => obstacle.minimize());
+	constructor(entities: Entity[], obstacles: Obstacle[], player: Player, alivecount: number, sendAll = false, discardEntities: string[] = [], discardObstacles: string[] = []) {
+		this.entities = (sendAll ? entities : entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2))).map(entity => entity.minimize());
+		this.obstacles = (sendAll ? obstacles : obstacles.filter(obstacle => obstacle.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2))).map(obstacle => obstacle.minimize());
 		this.player = player;
 		this.alivecount = alivecount;
+		if (discardEntities.length) this.discardEntities = discardEntities;
+		if (discardObstacles.length) this.discardObstacles = discardObstacles;
 	}
 }
 
