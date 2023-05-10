@@ -125,3 +125,10 @@ export type LootTableData = {
 	rarity: number;
 	entries: string[];
 }
+
+export type HealingData = {
+	name: string;
+	heal: number;
+	boost: number;
+	time: number;
+}

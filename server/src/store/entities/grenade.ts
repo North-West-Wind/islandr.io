@@ -20,12 +20,12 @@ export default class Grenade extends Item {
 	}
 
 	picked(player: Player) {
-		const newAmount = Math.min(Inventory.maxUtilities[player.inventory.backpackLevel].get(this.name) || 0, (player.inventory.utilities.get(this.name) || 0) + this.amount);
-		const delta = newAmount - (player.inventory.utilities.get(this.name) || 0);
-		player.inventory.utilities.set(this.name, newAmount);
+		const newAmount = Math.min(Inventory.maxUtilities[player.inventory.backpackLevel].get(this.name) || 0, (player.inventory.utilities[this.name] || 0) + this.amount);
+		const delta = newAmount - (player.inventory.utilities[this.name] || 0);
+		player.inventory.utilities[this.name] = newAmount;
 		if (delta != this.amount) {
 			this.amount -= delta;
-			this.velocity = Vec2.UNIT_X.addAngle(this.position.addVec(player.position.inverse()).angle()).scaleAll(0.001);
+			this.setVelocity(Vec2.UNIT_X.addAngle(this.position.addVec(player.position.inverse()).angle()).scaleAll(0.001));
 			return false;
 		}
 		return true;

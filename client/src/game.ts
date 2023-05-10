@@ -1,17 +1,15 @@
-import { encode, decode } from "msgpack-lite";
 import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
 import { initMap } from "./rendering/map";
 import { addKeyPressed, addMousePressed, isKeyPressed, isMenuHidden, isMouseDisabled, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap, toggleMouseDisabled } from "./states";
-import { FullPlayer } from "./store/entities";
+import { FullPlayer, Healing } from "./store/entities";
 import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
 import { castCorrectTerrain } from "./store/terrains";
-import { Inventory } from "./types/entity";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, SoundPacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
 import { World } from "./types/terrain";
-import { deflate, inflate } from "pako";
+import { receive, send } from "./utils";
 
 //handle users that tried to go to old domain name, or direct ip
 var urlargs = new URLSearchParams(window.location.search);
@@ -47,30 +45,43 @@ async function init(address: string) {
 			ws.close();
 		}, TIMEOUT);
 
-		ws.onmessage = (event) => {
-			const data = <AckPacket>decode(inflate(new Uint8Array(event.data)));
+		ws.onmessage = async (event) => {
+			const data = <AckPacket>receive(event.data);
 			id = data.id;
 			tps = data.tps;
 			world = new World(new Vec2(data.size[0], data.size[1]), castCorrectTerrain(data.terrain));
-			ws.send(deflate(encode({ username, id }).buffer));
-			connected = true;
-			clearTimeout(timer);
 	
 			// Call renderer start to setup
-			start();
+			await start();
+
+			send(ws, new ResponsePacket(id, username!));
+			connected = true;
+			clearTimeout(timer);
+			
+			// Setup healing items click events
+			for (const element of document.getElementsByClassName("healing-panel")) {
+				const el = <HTMLElement> element;
+				console.log("Adding events for", el.id);
+				const ii = parseInt(<string>el.id.split("-").pop());
+				el.onmouseenter = el.onmouseleave = () => toggleMouseDisabled();
+				el.onclick = () => {
+					if (!el.classList.contains("enabled")) return;
+					send(ws, new UseHealingPacket(Healing.mapping[ii]));
+				}
+			}
 	
 			const interval = setInterval(() => {
-				if (connected) ws.send(deflate(encode(new PingPacket()).buffer));
+				if (connected) send(ws, new PingPacket());
 				else clearInterval(interval);
 			}, 1000);
 	
 			ws.onmessage = (event) => {
-				const data = decode(inflate(new Uint8Array(event.data)));
+				const data = receive(event.data);
 				switch (data.type) {
 					case "game": {
 						const gamePkt = <GamePacket>data;
-						world.updateEntities(gamePkt.entities);
-						world.updateObstacles(gamePkt.obstacles);
+						world.updateEntities(gamePkt.entities, gamePkt.discardEntities);
+						world.updateObstacles(gamePkt.obstacles, gamePkt.discardObstacles);
 						world.updateLiveCount(gamePkt.alivecount);
 						if (!player) player = new FullPlayer(gamePkt.player);
 						else player.copy(gamePkt.player);
@@ -172,13 +183,13 @@ window.onkeydown = (event) => {
 	if (isMenuHidden()) {
 		const index = movementKeys.indexOf(event.key);
 		if (index >= 0)
-			ws.send(deflate(encode(new MovementPressPacket(index)).buffer));
+			send(ws, new MovementPressPacket(index));
 		else if (event.key == KeyBind.INTERACT)
-			ws.send(deflate(encode(new InteractPacket()).buffer));
+			send(ws, new InteractPacket());
 		else if (event.key == KeyBind.RELOAD)
-			ws.send(deflate(encode(new ReloadWeaponPacket()).buffer));
+			send(ws, new ReloadWeaponPacket());
 		else if (!isNaN(parseInt(event.key)))
-			ws.send(deflate(encode(new SwitchWeaponPacket(parseInt(event.key) - 1, true)).buffer));
+			send(ws, new SwitchWeaponPacket(parseInt(event.key) - 1, true));
 	}
 }
 
@@ -188,34 +199,34 @@ window.onkeyup = (event) => {
 	removeKeyPressed(event.key);
 	const index = movementKeys.indexOf(event.key);
 	if (index >= 0)
-		ws.send(deflate(encode(new MovementReleasePacket(index)).buffer));
+		send(ws, new MovementReleasePacket(index));
 }
 
 window.onmousemove = (event) => {
 	if (!connected) return;
 	event.stopPropagation();
-	ws.send(deflate(encode(new MouseMovePacket(event.x - window.innerWidth / 2, event.y - window.innerHeight / 2)).buffer));
+	send(ws, new MouseMovePacket(event.x - window.innerWidth / 2, event.y - window.innerHeight / 2));
 }
 
 window.onmousedown = (event) => {
 	if (!connected || isMouseDisabled()) return;
 	event.stopPropagation();
 	addMousePressed(event.button);
-	ws.send(deflate(encode(new MousePressPacket(event.button)).buffer));
+	send(ws, new MousePressPacket(event.button));
 }
 
 window.onmouseup = (event) => {
 	if (!connected) return;
 	event.stopPropagation();
 	removeMousePressed(event.button);
-	ws.send(deflate(encode(new MouseReleasePacket(event.button)).buffer));
+	send(ws, new MouseReleasePacket(event.button));
 }
 
 window.onwheel = (event) => {
 	if (!connected || !player) return;
 	event.stopPropagation();
 	const delta = event.deltaY < 0 ? -1 : 1;
-	ws.send(deflate(encode(new SwitchWeaponPacket(delta)).buffer));
+	send(ws, new SwitchWeaponPacket(delta));
 }
 
 window.oncontextmenu = (event) => {
@@ -228,10 +239,10 @@ window.ondblclick = (event) => {
 
 // Because 4 is grenade and it's not done yet
 for (let ii = 0; ii < 3; ii++) {
-	const panel = <HTMLDivElement> document.getElementById("weapon-panel-" + ii);
+	const panel = <HTMLElement> document.getElementById("weapon-panel-" + ii);
 	panel.onmouseenter = panel.onmouseleave = () => toggleMouseDisabled();
 	panel.onclick = () => {
 		if (!connected || !player) return;
-		ws.send(deflate(encode(new SwitchWeaponPacket(ii, true)).buffer));
+		send(ws, new SwitchWeaponPacket(ii, true));
 	}
 }

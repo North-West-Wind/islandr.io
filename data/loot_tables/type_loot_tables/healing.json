@@ -1,10 +1,10 @@
 {
-	"toilet_paper": {
+	"swiss_roll": {
 		"rarity": 0,
 		"weight": 10,
 		"amount": 5
 	},
-	"butterscotch_pie": {
+	"pie": {
 		"rarity": 2,
 		"weight": 4,
 		"amount": 1

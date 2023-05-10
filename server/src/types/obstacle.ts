@@ -21,6 +21,7 @@ export class Obstacle {
 	discardable = false;
 	despawn = false;
 	animations: string[] = [];
+	dirty = true;
 
 	constructor(world: World, baseHitbox: Hitbox, minHitbox: Hitbox, health: number, maxHealth: number) {
 		if (baseHitbox.type !== minHitbox.type) throw new Error("Hitboxes are not the same type!");
@@ -38,11 +39,13 @@ export class Obstacle {
 		this.health -= dmg;
 		if (this.health <= 0) this.die();
 		this.hitbox = this.baseHitbox.scaleAll(this.minHitbox.comparable / this.baseHitbox.comparable + (this.health / this.maxHealth) * (1 - this.minHitbox.comparable / this.baseHitbox.comparable));
+		this.markDirty();
 	}
 
 	die() {
 		this.despawn = true;
 		this.health = 0;
+		this.markDirty();
 	}
 
 	// Hitbox collision check
@@ -144,6 +147,15 @@ export class Obstacle {
 	rotateAround(pivot: Vec2, angle: number) {
 		this.direction = this.direction.addAngle(angle);
 		this.position = pivot.addVec(this.position.addVec(pivot.inverse()).addAngle(angle));
+		this.markDirty();
+	}
+
+	markDirty() {
+		this.dirty = true;
+	}
+
+	unmarkDirty() {
+		this.dirty = false;
 	}
 
 	minimize() {

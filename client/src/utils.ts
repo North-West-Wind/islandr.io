@@ -2,12 +2,35 @@ import { CommonAngle } from "./constants";
 
 // Promisified setTimeout
 export function wait(ms: number) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+// Maths
 // Capping value with limits
 export function clamp(val: number, min: number, max: number) {
 	if (val < min) return min;
 	if (val > max) return max;
 	return val;
 }
+// Converts radian to degrees
+export function toDegrees(radian: number) {
+	return radian * 180 / Math.PI;
+}
+
+// Networking
+import { encode, decode } from "msgpack-lite";
+import { deflate, inflate } from "pako";
+import { ServerPacketResolvable, IPacket } from "./types/packet";
+// Send packet
+export function send(socket: WebSocket, packet: IPacket) {
+  //socket.send(deflate(deflate(encode(packet).buffer)));
+	socket.send(deflate(encode(packet).buffer));
+}
+// Receive packet
+export function receive(msg: ArrayBuffer) {
+  //return <ServerPacketResolvable>decode(inflate(inflate(new Uint8Array(msg))));
+	return <ServerPacketResolvable>decode(inflate(new Uint8Array(msg)));
+}
+
+// Rendering
 // Draws circle with x, y center
 export function circleFromCenter(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, fill = true, stroke = false) {
 	ctx.beginPath();
@@ -56,8 +79,4 @@ export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w
 	ctx.closePath();
 	if (fill) ctx.fill();
 	if (stroke) ctx.stroke();
-}
-// Converts radian to degrees
-export function toDegrees(radian: number) {
-	return radian * 180 / Math.PI;
 }

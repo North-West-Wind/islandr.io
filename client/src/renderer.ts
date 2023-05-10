@@ -10,6 +10,7 @@ import { Terrain } from "./types/terrain";
 import { lineBetween } from "./utils";
 import { drawPrompt } from "./rendering/prompt";
 // import { cookieExists, setCookie } from "cookies-utils";
+import { Healing } from "./store/entities";
 
 // if (!cookieExists("gave_me_cookies")) {
 // 	const button = document.getElementById("cookies-button")!;
@@ -117,10 +118,11 @@ function animate(currentTime: number) {
 	if (running) requestAnimationFrame(animate);
 }
 
-export function start() {
+export async function start() {
 	running = true;
 	document.getElementById("menu")?.classList.add("hidden");
 	document.getElementById("hud")?.classList.remove("hidden");
+	await Healing.setupHud();
 	animate(0);
 }
 

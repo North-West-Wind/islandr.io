@@ -5,7 +5,7 @@ import { Obstacle } from "./obstacle";
 import { Weapon } from "./weapon";
 import { WEAPON_SUPPLIERS } from "../store/weapons";
 import { MinEntity, MinInventory } from "./minimized";
-import { CollisionType, GunColor } from "./misc";
+import { CollisionType, CountableString, GunColor } from "./misc";
 import { world } from "..";
 import { PUSH_THRESHOLD } from "../constants";
 
@@ -22,17 +22,17 @@ export class Inventory {
 	// Indices are colors. Refer to GunColor
 	ammos: number[];
 	// Utilities. Maps ID to amount of util.
-	utilities: Map<string, number>;
-	healings: Map<string, number>;
+	utilities: CountableString;
+	healings: CountableString;
 	backpackLevel = 0;
 
-	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities?: Map<string, number>, healings?: Map<string, number>) {
+	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities: CountableString = {}, healings: CountableString = {}) {
 		this.holding = holding;
 		this.slots = slots;
 		this.weapons = weapons || Array(slots.reduce((a, b) => a + b));
 		this.ammos = ammos || Array(Object.keys(GunColor).length / 2).fill(0);
-		this.utilities = utilities || new Map();
-		this.healings = healings || new Map();
+		this.utilities = utilities;
+		this.healings = healings;
 	}
 
 	static {
@@ -45,7 +45,7 @@ export class Inventory {
 		if (index < 0) index = this.holding;
 		if (index < this.weapons.length) return this.weapons[index];
 		const util = Object.keys(this.utilities)[index - this.weapons.length];
-		if (this.utilities.get(util)) return WEAPON_SUPPLIERS.get(util)!.create();
+		if (this.utilities[util]) return WEAPON_SUPPLIERS.get(util)!.create();
 		return undefined;
 	}
 
@@ -86,6 +86,7 @@ export class Entity {
 	// Tells the client what animation should play
 	animations: string[] = [];
 	repelExplosions = false;
+	dirty = true;
 
 	constructor() {
 		this.id = ID();
@@ -94,6 +95,7 @@ export class Entity {
 	}
 
 	tick(_entities: Entity[], _obstacles: Obstacle[]) {
+		const lastPosition = this.position;
 		// Add the velocity to the position, and cap it at map size.
 		if (this.airborne)
 			this.position = this.position.addVec(this.velocity);
@@ -106,16 +108,20 @@ export class Entity {
 		}
 		this.position = new Vec2(clamp(this.position.x, this.hitbox.comparable, world.size.x - this.hitbox.comparable), clamp(this.position.y, this.hitbox.comparable, world.size.y - this.hitbox.comparable));
 
+		if (this.position != lastPosition) this.markDirty();
+
 		// Check health and maybe call death
 		if (this.vulnerable && this.health <= 0) this.die();
 	}
 
 	setVelocity(velocity: Vec2) {
 		this.velocity = velocity;
+		this.markDirty();
 	}
 
 	setDirection(direction: Vec2) {
 		this.direction = direction.unit();
+		this.markDirty();
 	}
 
 	// Hitbox collision check
@@ -210,11 +216,21 @@ export class Entity {
 	damage(dmg: number) {
 		if (!this.vulnerable) return;
 		this.health -= dmg;
+		this.markDirty();
 	}
 
 	die() {
 		this.despawn = true;
 		this.health = 0;
+		this.markDirty();
+	}
+
+	markDirty() {
+		this.dirty = true;
+	}
+	
+	unmarkDirty() {
+		this.dirty = false;
 	}
 
 	minimize() {

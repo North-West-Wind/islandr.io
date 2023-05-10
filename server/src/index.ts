@@ -1,7 +1,6 @@
 import * as ws from "ws";
-import { encode, decode } from "msgpack-lite";
-import { ID, wait } from "./utils";
-import { ClientPacketResolvable, MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket } from "./types/packet";
+import { ID, receive, send, wait } from "./utils";
+import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/math";
 import { Player } from "./store/entities";
@@ -9,7 +8,6 @@ import { Particle } from "./types/particle";
 import { World } from "./types/terrain";
 import { Plain, Pond, River, Sea } from "./store/terrains";
 import { Tree, Bush, Crate, Stone, MosinTree, SovietCrate, GrenadeCrate, Barrel, AK47Stone } from "./store/obstacles";
-import { deflate, inflate } from "pako";
 
 export var ticksElapsed = 0;
 
@@ -81,9 +79,9 @@ server.on("connection", async socket => {
 	var username = "";
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
-		socket.send(deflate(encode(new AckPacket(id, TICKS_PER_SECOND, world.size, world.defaultTerrain)).buffer));
+		send(socket, new AckPacket(id, TICKS_PER_SECOND, world.size, world.defaultTerrain));
 		socket.once("message", (msg: ArrayBuffer) => {
-			const decoded = decode(inflate(new Uint8Array(msg)));
+			const decoded = <ResponsePacket>receive(msg);
 			if (decoded.id == id && decoded.username) {
 				connected = true;
 				username = decoded.username;
@@ -101,9 +99,11 @@ server.on("connection", async socket => {
 	world.entities.push(player);
 
 	// Send the player the entire map
-	socket.send(deflate(encode(new MapPacket(world.obstacles, world.terrains)).buffer));
+	send(socket, new MapPacket(world.obstacles, world.terrains));
+	// Send the player initial objects
+	send(socket, new GamePacket(world.entities, world.obstacles, player, numberOfPlayers, true));
 	// Send the player music
-	for (const sound of world.joinSounds) socket.send(deflate(encode(new SoundPacket(sound.path, sound.position)).buffer));
+	for (const sound of world.joinSounds) send(socket, new SoundPacket(sound.path, sound.position));
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
@@ -115,7 +115,7 @@ server.on("connection", async socket => {
 	const buttons = new Map<number, boolean>();
 
 	socket.on("message", (msg: ArrayBuffer) => {
-		const decoded = <ClientPacketResolvable>decode(inflate(new Uint8Array(msg)));
+		const decoded = receive(msg);
 		switch (decoded.type) {
 			case "ping":
 				timeout.refresh();
@@ -176,6 +176,9 @@ server.on("connection", async socket => {
 			case "reloadweapon":
 				player.reload();
 				break;
+			case "usehealing":
+				player.heal((<UseHealingPacket>decoded).item);
+				break;
 		}
 	});
 });
@@ -187,9 +190,9 @@ setInterval(() => {
 	players.forEach(player => {
 		const socket = sockets.get(player.id);
 		if (!socket) return;
-		socket.send(deflate(encode(new GamePacket(world.entities, world.obstacles, player, numberOfPlayers)).buffer));
-		if (world.particles.length) socket.send(deflate(encode(new ParticlesPacket(world.particles, player)).buffer));
-		for (const sound of world.onceSounds) socket.send(deflate(encode(new SoundPacket(sound.path, sound.position)).buffer));
+		send(socket, new GamePacket(world.dirtyEntities, world.dirtyObstacles, player, numberOfPlayers, false, world.discardEntities, world.discardObstacles));
+		if (world.particles.length) send(socket, new ParticlesPacket(world.particles, player));
+		for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
 	});
 	world.postTick();
 }, 1000 / TICKS_PER_SECOND);

@@ -20,6 +20,6 @@ export default class Barrel extends Obstacle {
 	die() {
 		super.die();
 		world.onceSounds.push({ path: `obstacle/break/barrel/barrel_break.mp3`, position: this.position });
-		world.entities.push(new Explosion(this, 150, 50, this.position, this.hitbox.comparable, 4, 60));
+		world.entities.push(new Explosion(this, 150, 50, this.position, this.hitbox.comparable, 4, 20));
 	}
 }

@@ -5,6 +5,7 @@ import { roundRect } from "../utils";
 // Calls all the HUD related functions
 export function drawHud(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
 	drawHealth(player, canvas, ctx);
+	drawAdrenaline(player, canvas, ctx);
 	drawGunAmmo(player, canvas, ctx);
 	drawBackpack(player, canvas, ctx);
 }
@@ -33,16 +34,29 @@ function drawHealth(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRe
 	}
 }
 
+function drawAdrenaline(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+	if (!player.boost) return;
+	//fixed height:width ratio
+	const height = canvas.height / 80;
+	const width = canvas.height / 2;
+	const margin = Math.min(canvas.width, canvas.height) / 100;
+	const gradient = ctx.createLinearGradient((canvas.width - width) / 2, 0, (canvas.width + width) / 2, 0);
+	gradient.addColorStop(0, "#ff8d19");
+	gradient.addColorStop(1, "#ff5300");
+	ctx.fillStyle = gradient;
+	roundRect(ctx, (canvas.width - width) / 2, canvas.height - height - margin * 2 - canvas.height / 20, width * player.boost / player.maxBoost, height, margin / 2);
+}
+
 // Draws the ammo amount inside and outside the gun
 function drawGunAmmo(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
-	if (player.inventory.getWeapon()?.type != WeaponType.GUN) return;
+	if (player.despawn || player.inventory.getWeapon()?.type != WeaponType.GUN) return;
 	const weapon = <GunWeapon>player.inventory.getWeapon();
 	const size = canvas.height / 27;
 	const smallSize = size / 1.5;
 	ctx.font = `${size}px Arial bold`;
 	ctx.textBaseline = "bottom";
 	ctx.textAlign = "center";
-	const yOffset = canvas.height / 20 + Math.min(canvas.width, canvas.height) / 50;
+	const yOffset = canvas.height / 20 + Math.min(canvas.width, canvas.height) / 50 + canvas.height / 80 + Math.min(canvas.width, canvas.height) / 100;
 	const padding = Math.min(canvas.width, canvas.height) / 200;
 	const width = canvas.width / 20;
 	ctx.fillStyle = "#000";

@@ -1,5 +1,6 @@
 import { ENTITY_SUPPLIERS, Player } from ".";
 import { getHealingImagePath } from "../../textures";
+import { HealingData } from "../../types/data";
 import { Entity } from "../../types/entity";
 import { MinEntity } from "../../types/minimized";
 import { EntitySupplier } from "../../types/supplier";
@@ -17,6 +18,7 @@ class HealingSupplier implements EntitySupplier {
 
 export default class Healing extends Entity {
 	static readonly healingImages = new Map<string, HTMLImageElement & { loaded: boolean }>();
+	static mapping: string[];
 	static readonly TYPE = "healing";
 	type = Healing.TYPE;
 	// Used for rendering Grenade size
@@ -30,6 +32,17 @@ export default class Healing extends Entity {
 
 	static {
 		ENTITY_SUPPLIERS.set(Healing.TYPE, new HealingSupplier());
+	}
+
+	static async setupHud() {
+		const div = <HTMLDivElement> document.getElementById("healing-container");
+		div.innerHTML = "";
+		const list: string[] = await fetch(`data/healings/.list.json`).then(res => res.json());
+		this.mapping = list;
+		for (let ii = 0; ii < list.length; ii++) {
+			const file = list[ii];
+			div.innerHTML += `<tr class="healing-panel" id="healing-panel-${ii}"><td class="healing-image-container"><img class="healing-image" id="healing-image-${ii}" src="${getHealingImagePath(file)}" /></td><td class="healing-count-container"><span class="healing-count" id="healing-count-${ii}">0</span></td></tr>`;
+		}
 	}
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
