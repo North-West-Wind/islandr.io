@@ -1,0 +1,46 @@
+.panel .input {
+	background-color: #fff;
+	border-color: #ccc;
+	border-width: .25vw;
+	color: #000;
+}
+
+.panel .input::placeholder {
+	color: #999;
+}
+
+.purple {
+	background-color: #A761B2;
+	transition: all ease .25s;
+	color: #fff;
+}
+
+.purple:hover {
+	background-color: #6E3E76;
+	transition: all ease .25s;
+	cursor: pointer;
+}
+
+.red {
+	color: red;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+#cookies-button {
+	font-size: 5vh;
+	padding: 2vh;
+	margin-bottom: 1vh;
+	background-color: #66cc00;
+	border-radius: 1vh;
+	transition: all .5s ease;
+}
+
+#cookies-button:hover {
+	cursor: pointer;
+	background-color: #339900;
+}
+
+#cookies-button.disabled {
+	background-color: #999;
+}
