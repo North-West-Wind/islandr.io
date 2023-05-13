@@ -57,12 +57,13 @@ div#menu {
 
 .panel {
     position: relative;
-    margin: 0 auto 5vh auto;
+    margin: auto;
     padding: 3vw;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 2vw;
     text-align: center;
     width: fit-content;
+    color: #fff;
 }
 
 .ingame-panel {
@@ -442,11 +443,24 @@ div#menu {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 10%;
+    width: fit-content;
+    height: 500px;
     max-width: 600px;
-    background: #fff;
-    padding: 20px;
+    background-color: #fff;
+    padding: 1vw;
     z-index: 1000;
+    overflow-y: auto;
+    border-radius: 1vw;
+    color: #fff;
+
+    /* Hide scroll bar (Edge, Firefox) */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scroll bar (Chrome, Safari) */
+.boxers::-webkit-scrollbar {
+    display: none;
 }
 
 #loading {
@@ -625,6 +639,7 @@ c {
     margin-top: -50px;
 }
 
+/*
 #privacyBox {
     position: fixed;
     top: 50%;
@@ -639,6 +654,12 @@ c {
     flex-direction: column;
     justify-content: space-between;
     overflow: auto;
+}
+*/
+
+#privacy-box {
+    text-align: left;
+    color: #000;
 }
 
 h1 {

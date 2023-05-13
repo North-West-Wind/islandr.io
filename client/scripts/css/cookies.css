@@ -30,10 +30,10 @@
 #cookies-button {
 	font-size: 5vh;
 	padding: 2vh;
-	margin-bottom: 1vh;
 	background-color: #66cc00;
 	border-radius: 1vh;
 	transition: all .5s ease;
+	color: #fff;
 }
 
 #cookies-button:hover {

@@ -12,26 +12,11 @@
   <script src="https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js"></script>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="scripts/css/style.css" id="horizontal">
+  <link rel="stylesheet" href="scripts/css/cookies.css">
   <title>Islandr.io</title>
-  <script src="https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 </head>
 
 <body>
-  <script>
-    $(document).ready(function () { $('.arrow').click(function () { $('.box-selectable').toggle(); $(this).toggleClass('arrow-down'); }); $('.discord').click(function () { window.open('http://opensurviv.run.place/discord'); }); $('.info').click(function () { $('.info-box').toggle(); }); $('.close').click(function () { $('.info-box').hide(); $('.partner-box').hide(); }); $('.partner').click(function () { $('.partner-box').toggle(); }); }); 
-  </script>
-  <script>
-    window.onload = function () {
-      setTimeout(function () {
-        document.getElementById('loading').classList.add('zoom-out');
-        setTimeout(function () {
-          document.getElementById('loading').style.display = 'none';
-        }, 2000);
-      }, 3000);
-    };
-  </script>
-
   <div id="loading">
     <div class="loading-text">
       Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
@@ -48,35 +33,6 @@
     <source src="menu.wav" type="audio/wav">
   </audio>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var audio = document.getElementById('menu-audio');
-      var volumeIcon = document.getElementById('volume-icon');
-      var volumeSlider = document.getElementById('volume-slider');
-      var volumeRange = document.getElementById('volume-range');
-  
-      //heheboi420 (discord) if you want to change this "mousemove" with click function choose bro:
-      document.addEventListener('mousemove', function () {
-        audio.play();
-      });
-  
-  
-      volumeIcon.addEventListener('click', function () {
-        if (volumeSlider.style.display === 'none') {
-          volumeSlider.style.display = 'block';
-        } else {
-          volumeSlider.style.display = 'none';
-        }
-      });
-  
-  
-      volumeRange.addEventListener('input', function () {
-        var volume = volumeRange.value / 100;
-        audio.volume = volume;
-      });
-    });
-  </script>
-
   <div class="center"> <img
       src="https://svgtrace-upload-results-bucket.s3.amazonaws.com/2023-05-03/windows_273b5de6-0727-42a3-9469-544417294d54_1683141443489.svg"
       alt="Islandr Logo"> </div>
@@ -92,7 +48,7 @@
 
   <div class="overlays">
     <div class="boxers">
-      <div id="privacyBox">
+      <div id="privacy-box">
         <h1>Privacy Policy</h1>This privacy notice for islandr (Company, we, us, or our), describes how and why we might
         collect, store, use, and/or share (process) your information when you use our services (Services), such as when
         you: This summary provides key points from our privacy notice, but you can find out more details about any of
@@ -145,15 +101,17 @@
         Twitter). Where you choose to do this, we will receive certain profile information about you from your social
         mediaprovider. The profile information we receive may vary depending on the social media provider concerned.
         <div>
-          <button id="button-accept" onclick="showAds()">Accept</button> <button id="button-decline"
-            class="button-decline" onclick="hideAds()">Decline</button>
-        </div> <button id="button-close" class="button-close" onclick="closeBox()">X</button>
+          <button id="button-accept" onclick="showAds()">Accept</button>
+          <button id="button-decline" class="button-decline" onclick="hideAds()">Decline</button>
+        </div>
       </div>
-      <script> function showAds() { document.querySelectorAll('.ads').forEach(ad => { ad.style.visibility = "visible"; }); closeBox(); } function hideAds() { let allElements = document.getElementsByTagName("*"); for (let i = 0; i < allElements.length; i++) { if (allElements[i].tagName === "DIV" && allElements[i].hasAttribute("class") && allElements[i].getAttribute("class").includes("ads")) { allElements[i].style.display = "none"; } } closeBox(); } function closeBox() {
-          document.getElementById("privacyBox").style.display = "none";
-          document.querySelectorAll('.overlays').forEach(overlay => { overlay.style.display = "none"; });
-          document.querySelectorAll('.boxers').forEach(boxer => { boxer.style.display = "none"; });
-        } </script>
+      <button id="button-close" class="button-close" onclick="closeBox()">X</button>
+      <div class="panel">
+        <div id="cookies-button"><span id="cookies-span">Give me cookies</span></div>
+        <span>Cookies are used for storing settings and configurations.</span>
+        <blockquote class="reddit-embed-bq" style="height:500px" data-embed-theme="dark" data-embed-height="500">      <a href="https://www.reddit.com/r/splatoon/comments/121zoih/give_me_cookies/">Give me cookies</a><br> by      <a href="https://www.reddit.com/user/Giudicher4G">u/Giudicher4G</a> in      <a href="https://www.reddit.com/r/splatoon/">splatoon</a>    </blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
+      </div>
+      <script> </script>
     </div>
   </div>
 
