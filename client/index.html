@@ -33,17 +33,10 @@
     <source src="menu.wav" type="audio/wav">
   </audio>
 
-  <div class="center"> <img
+  <div class="center"> 
+    <img
       src="https://svgtrace-upload-results-bucket.s3.amazonaws.com/2023-05-03/windows_273b5de6-0727-42a3-9469-544417294d54_1683141443489.svg"
-      alt="Islandr Logo"> </div>
-  <div class="overlay">
-    <h1>Changelog</h1> New Home page update! (join discord for more!).
-  </div>
-  <div class="box">
-    <h1>Info:</h1>
-    <p>About islandr.io:</p>This is a 2D battle royale shooter game inspired from the recent death of surviv.io. If you
-    miss surviv.io and resurviv.io, well don't lose your hopes! islandr.io is here to bring you back the feel of
-    surviv.io as well as bringing you new more advanced features that even surviv.io didn't.
+      alt="Islandr Logo">
   </div>
 
   <div class="overlays">
@@ -118,29 +111,34 @@
   <canvas id="game"></canvas>
   <form id="hidden-form" class="hidden"></form>
   <div id="menu">
+    <div class="panel">
+      <h1>Info:</h1>
+      <p>About islandr.io:</p>This is a 2D battle royale shooter game inspired from the recent death of surviv.io. If you
+      miss surviv.io and resurviv.io, well don't lose your hopes! islandr.io is here to bring you back the feel of
+      surviv.io as well as bringing you new more advanced features that even surviv.io didn't.
+    </div>
     <div class="hidden" id="server-error-panel">
     </div>
-    <div id="panel">
+    <div class="panel" id="connection">
       <div class="error-div hidden no-margin red" id="error-div">Hey</div>
-      <div class="button" id="connect">
-        Play
-      </div>
-      <div class="arrow"></div>
-      <div class="box">
-        <div class="box-selectable">
-          <div class="box-squad">
-            Squad
-          </div>
-          <div class="box-duo">
-            Duo
-          </div>
-          <div class="box-solo">
-            Solo
-          </div>
+      <input type="text" id="username" placeholder="Insert Username"><br>
+      <input type="text" id="address" placeholder="Input Server Address" value="islandr:8000"><br>
+      <div class="button" id="connect">Play</div>
+      <div class="box-selectable">
+        <div class="box-squad">
+          Squad
+        </div>
+        <div class="box-duo">
+          Duo
+        </div>
+        <div class="box-solo">
+          Solo
         </div>
       </div>
-      <input type="text" class="username" id="username" placeholder="Insert Username">
-      <input type="text" class="address" id="address" placeholder="Input Server Address" value="islandr:8000">
+      <div class="arrow"></div>
+    </div>
+    <div class="panel">
+      <h1>Changelog</h1> New Home page update! (join discord for more!).
     </div>
     <div class="discord"><img src="https://logodownload.org/wp-content/uploads/2017/11/discord-logo-1-1.png"
         alt="discord-logo-1-1"></div>

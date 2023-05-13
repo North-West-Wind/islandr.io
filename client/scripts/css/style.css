@@ -1,7 +1,15 @@
+html {
+    height: 100%;
+}
+
 body {
     font-family: 'Jura', Arial, Helvetica, sans-serif;
-    background-image: url('https://github.com/North-West-Wind/islandr.io/blob/main/client/assets/images/menu/background.png?raw=true');
+    background-image: url('../../assets/images/menu/background.png');
     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+    overflow: hidden;
 }
 
 canvas {
@@ -33,13 +41,28 @@ div#scopes {
 }
 
 div#menu {
-    position: fixed;
-    left: 0;
-    top: 0;
     width: 100%;
-    height: 100%;
+    height: fit-content;
     text-align: center;
     overflow-y: scroll;
+    clear: both;
+    margin: auto;
+}
+
+div#menu:not(:is(.hidden)) {
+    display: table;
+}
+
+div#menu div.panel {
+    float: left;
+    width: 33%;
+    height: 40vh;
+    padding: 2vh 1vw;
+    margin: 1vw;
+}
+
+div#menu div#connection.panel {
+    width: 20%;
 }
 
 .hidden {
@@ -261,24 +284,22 @@ div#menu {
 }
 
 .button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-55%, -50%);
-    padding: 20px;
-    width: 55px;
+    padding: 2vh;
+    width: 10vw;
+    height: fit-content;
     background-color: rgb(34, 139, 34);
+    transition: all .5s ease;
     color: #fff;
     border: none;
-    border-radius: 15px;
+    border-radius: 1vh;
     cursor: pointer;
 }
 
+.button:hover {
+    background-color: rgb(21, 88, 21);
+}
+
 .arrow {
-    position: absolute;
-    top: 52%;
-    left: 55%;
-    transform: translate(-50%, -50%);
     border: solid white;
     border-width: 0 5px 5px 0;
     display: inline-block;
@@ -287,8 +308,8 @@ div#menu {
 }
 
 .arrow-down {
-    transform: translate(-50%, -50%) rotate(45deg);
-    -webkit-transform: translate(-50%, -50%) rotate(45deg);
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
 }
 
 .box {
@@ -305,55 +326,35 @@ div#menu {
 }
 
 .box-selectable {
-    position: absolute;
-    top: 70%;
-    left: 163%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
+    padding: 2vh;
     background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
     border: none;
-    border-radius: 12px;
+    border-radius: 1vh;
     display: none;
 }
 
-.username {
-    position: absolute;
-    top: 230px;
-    left: 50%;
-    transform: translate(-50%);
-    width: 200px;
-    padding: 10px;
+input[type="text"] {
+    position: relative;
+    width: 80%;
+    padding: 1vh;
     background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
     border: none;
-    border-radius: 10px;
+    border-radius: 1vw;
     text-align: center;
-}
-
-.address {
-    position: absolute;
-    top: 278px;
-    left: 50%;
-    transform: translate(-50%);
-    width: 200px;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    text-align: center;
+    margin: 1vh;
 }
 
 .discord {
     position: absolute;
-    top: 30px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
+    top: 1vh;
+    right: 1vh;
+    width: 5vh;
+    height: 5vh;
     background-color: rgba(0, 0, 0, 0.5);
     border: none;
-    border-radius: 10px;
+    border-radius: 1vh;
     cursor: pointer;
 }
 
@@ -402,28 +403,28 @@ div#menu {
 
 .partner {
     position: absolute;
-    top: 100px;
-    left: 20px;
+    top: 1vh;
+    left: 5vh;
     background-color: rgba(0, 255, 0, 0.5);
     color: #fff;
-    padding: 10px;
+    padding: 1vh;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 1vh;
     text-align: center;
 }
 
 .partner-box {
     position: absolute;
-    top: 195px;
-    left: 54%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    height: 340px;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: fit-content;
+    height: fit-content;
     background-color: rgba(2, 48, 32);
     color: #fff;
-    padding: 10px;
+    padding: 1vh;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 1vh;
     text-align: left-to-right;
     display: none;
 }
@@ -518,10 +519,10 @@ div#menu {
 
 #volume-icon {
     position: fixed;
-    top: 10px;
-    left: 10px;
-    width: 30px;
-    height: 30px;
+    top: 1vh;
+    left: 1vh;
+    width: 3vh;
+    height: 3vh;
     background-image: url('https://cdn-icons-png.flaticon.com/512/3524/3524659.png');
     background-repeat: no-repeat;
     background-size: contain;
@@ -571,7 +572,7 @@ div#menu {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 200px;
+    height: fit-content;
 }
 
 img {

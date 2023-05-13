@@ -198,6 +198,7 @@ function animate(currentTime: number) {
 
 export async function start() {
 	running = true;
+	(<HTMLAudioElement>document.getElementById("menu-audio")).pause();
 	document.getElementById("menu")?.classList.add("hidden");
 	document.getElementById("hud")?.classList.remove("hidden");
 	await Healing.setupHud();
@@ -206,6 +207,7 @@ export async function start() {
 
 export function stop() {
 	running = false;
+	(<HTMLAudioElement>document.getElementById("menu-audio")).play();
 	document.getElementById("menu")?.classList.remove("hidden");
 	document.getElementById("hud")?.classList.add("hidden");
 	for (let ii = 0; ii < 4; ii++) {
