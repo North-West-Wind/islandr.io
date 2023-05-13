@@ -6,7 +6,8 @@
         "declaration": true,
         "outDir": "./tmp",
         "strict": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "esModuleInterop": true
     },
     "include": [
         "src"

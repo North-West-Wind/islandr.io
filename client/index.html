@@ -2,62 +2,206 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<meta property="og:title" content="islandr.io" />
-	<meta property="og:type" content="website" />
-	<meta property="og:image" content="assets/favicon.png" />
-	<meta property="og:description" content="A 2D browser shooter game inspired by surviv.io" />
-	<meta name="theme-color" content="#80B251">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<title>islandr.io - 2d browser battle royale</title>
-	<link rel="stylesheet" href="scripts/css/style.css" id="horizontal">
-	<script src="https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js"></script>
-	<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta charset="utf-8">
+  <meta property="og:title" content="islandr.io" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/favicon.png" />
+  <meta property="og:description" content="A 2D browser shooter game inspired by surviv.io" />
+  <meta name="theme-color" content="#80B251">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <script src="https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js"></script>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="scripts/css/style.css" id="horizontal">
+  <link rel="stylesheet" href="scripts/css/cookies.css">
+  <title>Islandr.io</title>
 </head>
 
 <body>
-	<canvas id="game"></canvas>
-	<form id="hidden-form" class="hidden"></form>
-	<div id="menu">
-		<div id="logo-container">
-			<img src="assets/images/menu/logo.png" id="logo" />
-		</div>
-		<div class="hidden" id="server-error-panel">
-		</div>
-		<div class="panel">
-			<div class="error-div hidden no-margin red" id="error-div">Hey</div>
-			<input type="text" id="username" value="Player" form="hidden-form" placeholder="Username..." class="input" /><br>
-			<input type="text" id="address" value="islandr.io:8000" form="hidden-form" placeholder="Server Address..." class="input" /><br>
-			<input type="checkbox" id="wss" form="hidden-form" />
-			<label>Use WSS</label><br>
-			<input type="button" id="connect" form="hidden-form" value="Connect" class="button purple" />
-		</div>
-		<div class="panel">
-			<div id="cookies-button"><span id="cookies-span">Give me cookies</span></div>
-			<span>Cookies are used for storing settings and configurations.</span>
-			<blockquote class="reddit-embed-bq" style="height:500px" data-embed-theme="dark" data-embed-height="500">      <a href="https://www.reddit.com/r/splatoon/comments/121zoih/give_me_cookies/">Give me cookies</a><br> by      <a href="https://www.reddit.com/user/Giudicher4G">u/Giudicher4G</a> in      <a href="https://www.reddit.com/r/splatoon/">splatoon</a>    </blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
-		</div>
-	</div>
-	<div class="ingame-panel hidden" id="settings">
-		<input type="button" id="disconnect" form="hidden-form" value="Disconnect" class="button purple" />
-	</div>
-	<div id="hud" class="hidden">
-		<div id="playercountcontainer">
-			<span id="playercount">1</span>
-			<br />
-			<span id="alive">Alive</span>
-		</div>
-		<table id="healing-container">
-			<!-- We populate this with JS -->
-		</table>
-		<table id="weapon-container">
-			<tr class="weapon-panel" id="weapon-panel-0"><td class="weapon-name-container"><span class="weapon-index">1</span><span class="weapon-name" id="weapon-name-0">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-0" /></td></tr>
-			<tr class="weapon-panel" id="weapon-panel-1"><td class="weapon-name-container"><span class="weapon-index">2</span><span class="weapon-name" id="weapon-name-1">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-1" /></td></tr>
-			<tr class="weapon-panel" id="weapon-panel-2"><td class="weapon-name-container"><span class="weapon-index">3</span><span class="weapon-name" id="weapon-name-2">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-2" /></td></tr>
-			<tr class="weapon-panel" id="weapon-panel-3"><td class="weapon-name-container"><span class="weapon-index">4</span><span class="weapon-name" id="weapon-name-3">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-3" /></td></tr>
-		</table>
-	</div>
-	<script src="scripts/bundle.min.js"></script>
+  <div id="loading">
+    <div class="loading-text">
+      Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+    </div>
+  </div>
+  
+  <div id="volume-icon"></div>
+  
+  <div id="volume-slider">
+    <input type="range" min="0" max="100" value="50" step="1" id="volume-range">
+  </div>
+
+  <audio id="menu-audio" loop>
+    <source src="menu.wav" type="audio/wav">
+  </audio>
+
+  <div class="center"> <img
+      src="https://svgtrace-upload-results-bucket.s3.amazonaws.com/2023-05-03/windows_273b5de6-0727-42a3-9469-544417294d54_1683141443489.svg"
+      alt="Islandr Logo"> </div>
+  <div class="overlay">
+    <h1>Changelog</h1> New Home page update! (join discord for more!).
+  </div>
+  <div class="box">
+    <h1>Info:</h1>
+    <p>About islandr.io:</p>This is a 2D battle royale shooter game inspired from the recent death of surviv.io. If you
+    miss surviv.io and resurviv.io, well don't lose your hopes! islandr.io is here to bring you back the feel of
+    surviv.io as well as bringing you new more advanced features that even surviv.io didn't.
+  </div>
+
+  <div class="overlays">
+    <div class="boxers">
+      <div id="privacy-box">
+        <h1>Privacy Policy</h1>This privacy notice for islandr (Company, we, us, or our), describes how and why we might
+        collect, store, use, and/or share (process) your information when you use our services (Services), such as when
+        you: This summary provides key points from our privacy notice, but you can find out more details about any of
+        these topics by clicking the link following each key point or by using our table of contents below to find the
+        section you are looking for. When you visit, use, or navigate our Services, we may process personal information
+        depending on how you interact with islandr and the Services, the choices you make, and the products and features
+        you use.We process your information to provide, improve, and administer our Services, communicate with you, for
+        security and fraud prevention, and to comply with law. In what situations and with which parties do we share
+        personal information?Learn more about when and with whom we share your personal information.Depending on where
+        you
+        are located geographically, the applicable privacy law may mean you have certain rights regarding your personal
+        information.Learn more about your privacy rights. 3. WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL
+        INFORMATION?In Short: We collect personal information that you provide to us.We collect personal information
+        that
+        you voluntarily provide to us when you express an interest in obtaining information about us or our products and
+        Services, when you participate in activities on the Services, or otherwise when you contact us.Personal
+        Information Provided by You. The personal information that we collect depends on the context of your
+        interactions
+        with us and the Services, the choices you make, and the products and features you use.The personal information
+        we
+        collect may include the following:If you choose to register in this way, we will collect the information
+        described
+        in the section called HOW DO WE HANDLE YOUR SOCIAL LOGINS? below.In Short: We process your information to
+        provide,
+        improve, and administer our Services, communicate with you, for security and fraud prevention, and to comply
+        with
+        law.We process your personal information for a variety of reasons, depending on how you interact with our
+        Services, including:In Short: We only process your personal information when we believe it is necessary and we
+        have a valid legal reason (i. e. , legal basis) to do so under applicable law, like with your consent, to comply
+        with laws, to provide you with services to enter into or fulfill our contractual obligations, to protect your
+        rights, or to fulfill our legitimate business interests. General Data Protection Regulation (GDPR) and UK GDPR
+        require us to explain the valid legal bases we rely on in order to process your personal information.As such, we
+        may rely on the following legal bases to process your personal information:We may process your information if
+        you
+        have given us permission (i. e. , consent) to use your personal information for a specific purpose.We may
+        process
+        your information where we believe it is necessary to protect your vital interests or the vital interests of a
+        third party, such as situations involving potential threats to the safety of any person.In Short: We may share
+        information in specific situations described in this section and/or with the following third parties.We may need
+        to share your personal information in the following situations:In Short: We are not responsible for the safety
+        of
+        any information that you share with third parties that we may link to or who advertise on our Services, but are
+        not affiliated with, our Services.We cannot guarantee the safety and privacy of data you provide to any third
+        parties. Any data collected by third parties is not covered by this privacy notice.We are not responsible for
+        the
+        content or privacy and security practices and policies of any third parties, including other websites or
+        applications that may be linked to or from the Services.In Short: If you choose to register or log in to our
+        Services using a social media account, we may have access to certain information about youServices offer you the
+        ability to register and log in using your third-party social media account details (like your Facebook or
+        Twitter). Where you choose to do this, we will receive certain profile information about you from your social
+        mediaprovider. The profile information we receive may vary depending on the social media provider concerned.
+        <div>
+          <button id="button-accept" onclick="showAds()">Accept</button>
+          <button id="button-decline" class="button-decline" onclick="hideAds()">Decline</button>
+        </div>
+      </div>
+      <button id="button-close" class="button-close" onclick="closeBox()">X</button>
+      <div class="panel">
+        <div id="cookies-button"><span id="cookies-span">Give me cookies</span></div>
+        <span>Cookies are used for storing settings and configurations.</span>
+        <blockquote class="reddit-embed-bq" style="height:500px" data-embed-theme="dark" data-embed-height="500">      <a href="https://www.reddit.com/r/splatoon/comments/121zoih/give_me_cookies/">Give me cookies</a><br> by      <a href="https://www.reddit.com/user/Giudicher4G">u/Giudicher4G</a> in      <a href="https://www.reddit.com/r/splatoon/">splatoon</a>    </blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
+      </div>
+      <script> </script>
+    </div>
+  </div>
+
+  <canvas id="game"></canvas>
+  <form id="hidden-form" class="hidden"></form>
+  <div id="menu">
+    <div class="hidden" id="server-error-panel">
+    </div>
+    <div id="panel">
+      <div class="error-div hidden no-margin red" id="error-div">Hey</div>
+      <div class="button" id="connect">
+        Play
+      </div>
+      <div class="arrow"></div>
+      <div class="box">
+        <div class="box-selectable">
+          <div class="box-squad">
+            Squad
+          </div>
+          <div class="box-duo">
+            Duo
+          </div>
+          <div class="box-solo">
+            Solo
+          </div>
+        </div>
+      </div>
+      <input type="text" class="username" id="username" placeholder="Insert Username">
+      <input type="text" class="address" id="address" placeholder="Input Server Address" value="islandr:8000">
+    </div>
+    <div class="discord"><img src="https://logodownload.org/wp-content/uploads/2017/11/discord-logo-1-1.png"
+        alt="discord-logo-1-1"></div>
+    <div class="info">
+      info/news/changelog
+    </div>
+    <div class="info-box">
+      New home page updated v2!
+      <div class="close">
+        x
+      </div>
+    </div>
+    <div class="partner">
+      Credits/Partners
+    </div>
+    <div class="partner-box">
+      # Assets providers:<br>
+      NorthWestWind (project initiator/core developer)<br>
+      <br>
+      Darkside (from Discord) (assets/helper)<br>
+      <br>
+      Leo. (from Discord) (assets/helper)<br>
+      <br>
+      SquareCube (from Discord) (assets/helper)<br>
+      <br>
+      piesimp (from Discord) (assets/helper)<br>
+      <br>
+      xpayton (from Discord) (assets/helper)<br>
+      <br>
+      HeheBoi420 (from Discord) (co-developer)<br>
+      <br>
+      @hmm (co-developer)<br>
+      <br>
+      Wef324 (from Discord) (fellow developer)<br>
+      <br>
+      ur mom Gary (from discord) (assets)<br>
+      <div class="close">
+        x
+      </div>
+    </div>
+  </div>
+  <div class="ingame-panel hidden" id="settings">
+    <input type="button" id="disconnect" form="hidden-form" value="Disconnect" class="button purple" />
+  </div>
+  <div id="hud" class="hidden">
+    <div id="playercountcontainer">
+      <span id="playercount">1</span>
+      <br />
+      <span id="alive">Alive</span>
+    </div>
+    <table id="healing-container">
+      <!-- We populate this with JS -->
+    </table>
+    <table id="weapon-container">
+      <tr class="weapon-panel" id="weapon-panel-0"><td class="weapon-name-container"><span class="weapon-index">1</span><span class="weapon-name" id="weapon-name-0">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-0" /></td></tr>
+      <tr class="weapon-panel" id="weapon-panel-1"><td class="weapon-name-container"><span class="weapon-index">2</span><span class="weapon-name" id="weapon-name-1">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-1" /></td></tr>
+      <tr class="weapon-panel" id="weapon-panel-2"><td class="weapon-name-container"><span class="weapon-index">3</span><span class="weapon-name" id="weapon-name-2">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-2" /></td></tr>
+      <tr class="weapon-panel" id="weapon-panel-3"><td class="weapon-name-container"><span class="weapon-index">4</span><span class="weapon-name" id="weapon-name-3">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-3" /></td></tr>
+    </table>
+  </div>
+  <script src="scripts/bundle.min.js"></script>
 </body>
 
 </html>

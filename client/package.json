@@ -19,22 +19,33 @@
   "homepage": "https://github.com/North-West-Wind/islandr.io#readme",
   "devDependencies": {
     "@types/howler": "^2.2.7",
+    "@types/jquery": "^3.5.16",
     "@types/msgpack-lite": "^0.1.8",
     "@types/node": "^18.11.9",
     "@types/pako": "^2.0.0",
     "@types/ws": "^8.5.3",
     "browserify": "^17.0.0",
+    "browserify-shim": "^3.8.16",
     "typescript": "^4.7.2",
     "uglify-js": "^3.17.4"
   },
   "dependencies": {
     "cookies-utils": "^1.0.0",
     "howler": "^2.2.3",
+    "jquery": "^3.7.0",
     "msgpack-lite": "^0.1.26",
     "pako": "^2.1.0",
     "ws": "^8.7.0"
   },
   "browser": {
     "msgpack-lite": "msgpack-lite/global"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "node_modules/jquery/dist/jquery.js": "$"
   }
 }
