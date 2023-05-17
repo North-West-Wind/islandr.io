@@ -10,7 +10,7 @@ import { RenderableLayerN1 } from "./types/extenstions";
 import { Terrain } from "./types/terrain";
 import { lineBetween } from "./utils";
 import { drawPrompt } from "./rendering/prompt";
-import { cookieExists, setCookie } from "cookies-utils";
+import { cookieExists, getCookieValue, setCookie } from "cookies-utils";
 import { Healing } from "./store/entities";
 
 // HOMEPAGE STUFF STARTS
@@ -69,24 +69,35 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+var accepted = -1;
 document.getElementById("button-accept")!.onclick = () => {
-	document.querySelectorAll('.ads').forEach(ad => { (<HTMLElement>ad).style.visibility = "visible"; });
+	showAds();
+	accepted = 1;
 	closeBox();
 }
 document.getElementById("button-decline")!.onclick = () => {
+	hideAds();
+	accepted = 0;
+	closeBox();
+}
+document.getElementById("button-close")!.onclick = closeBox;
+function showAds() {
+	document.querySelectorAll('.ads').forEach(ad => { (<HTMLElement>ad).style.visibility = "visible"; });
+}
+function hideAds() {
 	let allElements = <HTMLCollectionOf<HTMLElement>> document.getElementsByTagName("*");
 	for (let i = 0; i < allElements.length; i++) {
 		if (allElements[i].tagName === "DIV" && allElements[i].hasAttribute("class") && allElements[i].getAttribute("class")!.includes("ads")) {
 			allElements[i].style.display = "none";
 		}
 	}
-	closeBox();
 }
-document.getElementById("button-close")!.onclick = closeBox;
 function closeBox() {
 	//document.getElementById("privacyBox").style.display = "none";
 	document.querySelectorAll('.overlays').forEach(overlay => { (<HTMLElement>overlay).style.display = "none"; });
 	//document.querySelectorAll('.boxers').forEach(boxer => { (<HTMLElement>boxer).style.display = "none"; });
+	if (cookieExists("gave_me_cookies") && !cookieExists("ads"))
+		setCookie({ name: "ads", value: accepted.toString() });
 }
 
 if (!cookieExists("gave_me_cookies")) {
@@ -96,10 +107,19 @@ if (!cookieExists("gave_me_cookies")) {
 		setCookie({ name: "gave_me_cookies", value: "1" });
 		button.classList.add("disabled");
  		document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
+
+		if (accepted >= 0)
+			setCookie({ name: "ads", value: accepted.toString() });
  	}
 } else {
  	document.getElementById("cookies-button")!.classList.add("disabled");
  	document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
+	if (cookieExists("ads")) {
+		const ads = getCookieValue("ads");
+		if (ads == "1") showAds();
+		else hideAds();
+		closeBox();
+	}
 }
 // HOMEPAGE STUFF ENDS
 
