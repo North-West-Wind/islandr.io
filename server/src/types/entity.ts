@@ -17,19 +17,18 @@ export class Inventory {
 
 	holding: number;
 	weapons: Weapon[];
-	// Array of 2 numbers. Order: gun slots, melee slots
-	slots: number[];
 	// Indices are colors. Refer to GunColor
 	ammos: number[];
 	// Utilities. Maps ID to amount of util.
 	utilities: CountableString;
+	utilOrder: Set<string> = new Set();
 	healings: CountableString;
 	backpackLevel = 0;
 
-	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities: CountableString = {}, healings: CountableString = {}) {
+	constructor(holding: number, weapons?: Weapon[], ammos?: number[], utilities: CountableString = {}, healings: CountableString = {}) {
 		this.holding = holding;
-		this.slots = slots;
-		this.weapons = weapons || Array(slots.reduce((a, b) => a + b));
+		// Hardcoding slots
+		this.weapons = weapons || Array(4);
 		this.ammos = ammos || Array(Object.keys(GunColor).length / 2).fill(0);
 		this.utilities = utilities;
 		this.healings = healings;
@@ -51,7 +50,12 @@ export class Inventory {
 
 	setWeapon(weapon: Weapon, index = -1) {
 		if (index < 0) index = this.holding;
-		if (index < this.weapons.length) this.weapons[index] = weapon;
+		if (index < 3) this.weapons[index] = weapon;
+	}
+
+	fourthSlot() {
+		const util = Array.from(this.utilOrder)[0];
+		if (this.utilities[util]) this.weapons[3] = WEAPON_SUPPLIERS.get(util)!.create();
 	}
 
 	minimize() {
@@ -60,7 +64,7 @@ export class Inventory {
 	}
 
 	static defaultEmptyInventory() {
-		const inv = new Inventory(2, [2, 1]);
+		const inv = new Inventory(2);
 		inv.weapons[2] = WEAPON_SUPPLIERS.get("fists")!.create();
 		return inv;
 	}

@@ -49,8 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
   var volumeSlider = <HTMLDivElement> document.getElementById('volume-slider');
   var volumeRange = <HTMLInputElement> document.getElementById('volume-range');
 
+	var started = false;
   document.addEventListener('click', function () {
-    audio.play();
+    if (!started) {
+			audio.play();
+			started = true;
+		}
   });
 
 

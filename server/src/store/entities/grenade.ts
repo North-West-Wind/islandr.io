@@ -28,6 +28,8 @@ export default class Grenade extends Item {
 			this.setVelocity(Vec2.UNIT_X.addAngle(this.position.addVec(player.position.inverse()).angle()).scaleAll(0.001));
 			return false;
 		}
+		player.inventory.utilOrder.add(this.name);
+		player.inventory.fourthSlot();
 		return true;
 	}
 
