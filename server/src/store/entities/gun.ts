@@ -27,14 +27,14 @@ export default class Gun extends Item {
 			if (!player.inventory.getWeapon(ii)) {
 				player.inventory.setWeapon(castCorrectWeapon(this.name), ii);
 				// If player is holding a melee weapon, automatically switch to the gun
-				if (player.inventory.holding == 3)
+				if (player.inventory.holding == 2)
 					player.inventory.holding = ii;
 				return true;
 			}
 		}
 		// There is no empty gun slot
 		// If player is holding melee weapon, don't switch
-		if (player.inventory.holding >= 3) return false;
+		if (player.inventory.holding >= 2) return false;
 		// Spawn swapped weapon
 		const weapon = <GunWeapon>player.inventory.getWeapon();
 		const gun = new Gun(weapon.id, weapon.color);
