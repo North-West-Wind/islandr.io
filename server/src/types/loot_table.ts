@@ -99,8 +99,8 @@ class LootTable {
 						const weapon = supplier.create();
 						if (weapon.type != WeaponType.GRENADE) break;
 						entities.push(new Grenade((<GrenadeWeapon>weapon).id, result.amount));
-						break;
 					}
+					break;
 				}
 				case "healing": {
 					if (Inventory.maxHealings[0].has(result.id))

@@ -119,7 +119,7 @@ export class MapPacket implements IPacket {
 	terrains: MinTerrain[]
 
 	constructor(obstacles: Obstacle[], terrains: Terrain[]) {
-		this.obstacles = obstacles.map(obstacle => ({ type: obstacle.type, position: obstacle.position }));
+		this.obstacles = obstacles.map(obstacle => obstacle.minmin());
 		this.terrains = terrains.map(terrain => terrain.minimize());
 	}
 }

@@ -1,15 +1,33 @@
+import { OBSTACLE_SUPPLIERS } from ".";
 import { world } from "../..";
+import { ObstacleData } from "../../types/data";
 import { CircleHitbox } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
-import { randomBetween } from "../../utils";
+import { ObstacleSupplier } from "../../types/supplier";
+import { GunWeapon } from "../../types/weapon";
+import { randomBetween, spawnGun } from "../../utils";
+import { WEAPON_SUPPLIERS } from "../weapons";
+
+class TreeSupplier extends ObstacleSupplier {
+	make(data: ObstacleData) {
+		return new Tree(data.special || "normal");
+	}
+}
 
 export default class Tree extends Obstacle {
-	type = "tree";
+	static readonly TYPE = "tree";
+	type = Tree.TYPE;
+	special: "normal" | "mosin";
 
-	constructor() {
+	constructor(special: "normal" | "mosin" = "normal") {
 		const salt = randomBetween(0.9, 1.1);
 		super(world, new CircleHitbox(1.5).scaleAll(salt), new CircleHitbox(0.8).scaleAll(salt), 180, 180);
 		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this))) this.position = world.size.scale(Math.random(), Math.random());
+		this.special = special;
+	}
+
+	static {
+		OBSTACLE_SUPPLIERS.set(Tree.TYPE, new TreeSupplier());
 	}
 	
 	damage(dmg: number) {
@@ -19,6 +37,22 @@ export default class Tree extends Obstacle {
 
 	die() {
 		super.die();
+		switch (this.special) {
+			case "mosin": {
+				const mosin = <GunWeapon>WEAPON_SUPPLIERS.get("mosin_nagant")?.create();
+				if (mosin)
+					spawnGun(mosin.id, mosin.color, this.position, mosin.ammo);
+				break;
+			}
+		}
 		world.onceSounds.push({ path: "obstacle/break/tree/tree_break.mp3", position: this.position });
+	}
+
+	minimize() {
+		return Object.assign(super.minimize(), { special: this.special });
+	}
+
+	minmin() {
+		return Object.assign(super.minmin(), { special: this.special });
 	}
 }

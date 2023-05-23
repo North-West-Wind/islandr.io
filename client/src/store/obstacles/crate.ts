@@ -13,8 +13,26 @@ const crateResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(ne
 crateResidueImg.onload = () => crateResidueImg.loaded = true;
 crateResidueImg.src = "assets/images/game/objects/residues/crate.svg";
 
+const grenadeCrateImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+grenadeCrateImg.onload = () => grenadeCrateImg.loaded = true;
+grenadeCrateImg.src = "assets/images/game/objects/grenade_crate.svg";
+
+const sovietCrateImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+sovietCrateImg.onload = () => sovietCrateImg.loaded = true;
+sovietCrateImg.src = "assets/images/game/objects/soviet_crate.svg";
+
+/*
+const awcCrateImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+awcCrateImg.onload = () => awcCrateImg.loaded = true;
+//awmCrateImg.src = "assets/images/game/objects/awm_crate.png";
+*/
+
+interface AdditionalObstacle {
+	special: "normal" | "grenade" | "soviet" | "awc";
+}
+
 class CrateSupplier implements ObstacleSupplier {
-	create(minObstacle: MinObstacle) {
+	create(minObstacle: MinObstacle & AdditionalObstacle) {
 		return new Crate(minObstacle);
 	}
 }
@@ -22,25 +40,51 @@ class CrateSupplier implements ObstacleSupplier {
 export default class Crate extends Obstacle {
 	static readonly TYPE = "crate";
 	type = Crate.TYPE;
+	special!: "normal" | "grenade" | "soviet" | "awc";
 
 	static {
 		OBSTACLE_SUPPLIERS.set(Crate.TYPE, new CrateSupplier());
 	}
 
+	copy(minObstacle: MinObstacle & AdditionalObstacle) {
+		super.copy(minObstacle);
+		this.special = minObstacle.special;
+	}
+
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
-		if (!crateImg.loaded || !crateResidueImg.loaded) return;
+		var img: HTMLImageElement & { loaded: boolean };
+		switch (this.special) {
+			case "grenade":
+				img = grenadeCrateImg;
+				break;
+			case "soviet":
+				img = sovietCrateImg;
+				break;
+			default:
+				img = crateImg;
+				break;
+		}
+		if (!img.loaded || !crateResidueImg.loaded) return;
 		const relative = this.position.addVec(you.position.inverse());
 		const width = scale * (<RectHitbox>this.hitbox).width * (this.despawn ? 0.5 : 1), height = width * crateImg.naturalWidth / crateImg.naturalHeight;
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
-		ctx.drawImage(this.despawn ? crateResidueImg : crateImg, -width / 2, -height / 2, width, height);
+		ctx.drawImage(this.despawn ? crateResidueImg : img, -width / 2, -height / 2, width, height);
 		ctx.resetTransform();
 	}
 
 	renderMap(_canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
 		ctx.translate(this.position.x * scale, this.position.y * scale);
-		ctx.fillStyle = "#683c05";
-		ctx.fillRect(-2 * scale, -2 * scale, 4 * scale, 4 * scale);
+		switch (this.special) {
+			case "grenade":
+				ctx.fillStyle = "#46502d";
+				ctx.fillRect(-1.5 * scale, -1.5 * scale, 3 * scale, 3 * scale);
+				break;
+			default:
+				ctx.fillStyle = "#683c05";
+				ctx.fillRect(-2 * scale, -2 * scale, 4 * scale, 4 * scale);
+				break;
+		}
 		ctx.resetTransform();
 	}
 }

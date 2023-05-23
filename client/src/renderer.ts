@@ -44,33 +44,33 @@ window.onload = function () {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-  var audio = <HTMLAudioElement> document.getElementById('menu-audio');
-  var volumeIcon = <HTMLDivElement> document.getElementById('volume-icon');
-  var volumeSlider = <HTMLDivElement> document.getElementById('volume-slider');
-  var volumeRange = <HTMLInputElement> document.getElementById('volume-range');
+	var audio = <HTMLAudioElement> document.getElementById('menu-audio');
+	var volumeIcon = <HTMLDivElement> document.getElementById('volume-icon');
+	var volumeSlider = <HTMLDivElement> document.getElementById('volume-slider');
+	var volumeRange = <HTMLInputElement> document.getElementById('volume-range');
 
 	var started = false;
-  document.addEventListener('click', function () {
-    if (!started) {
+	document.addEventListener('click', function () {
+		if (!started) {
 			audio.play();
 			started = true;
 		}
-  });
+	});
 
 
-  volumeIcon.addEventListener('click', function () {
-    if (volumeSlider.style.display === 'none') {
-      volumeSlider.style.display = 'block';
-    } else {
-      volumeSlider.style.display = 'none';
-    }
-  });
+	volumeIcon.addEventListener('click', function () {
+		if (volumeSlider.style.display === 'none') {
+			volumeSlider.style.display = 'block';
+		} else {
+			volumeSlider.style.display = 'none';
+		}
+	});
 
 
-  volumeRange.addEventListener('input', function () {
-    var volume = Number(volumeRange.value) / 100;
-    audio.volume = volume;
-  });
+	volumeRange.addEventListener('input', function () {
+		var volume = Number(volumeRange.value) / 100;
+		audio.volume = volume;
+	});
 });
 
 var accepted = -1;
@@ -89,7 +89,7 @@ function showAds() {
 	document.querySelectorAll('.ads').forEach(ad => { (<HTMLElement>ad).style.visibility = "visible"; });
 }
 function hideAds() {
-	let allElements = <HTMLCollectionOf<HTMLElement>> document.getElementsByTagName("*");
+	const allElements = <HTMLCollectionOf<HTMLElement>> document.getElementsByTagName("*");
 	for (let i = 0; i < allElements.length; i++) {
 		if (allElements[i].tagName === "DIV" && allElements[i].hasAttribute("class") && allElements[i].getAttribute("class")!.includes("ads")) {
 			allElements[i].style.display = "none";

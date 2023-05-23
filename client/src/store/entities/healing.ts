@@ -1,6 +1,5 @@
 import { ENTITY_SUPPLIERS, Player } from ".";
 import { getHealingImagePath } from "../../textures";
-import { HealingData } from "../../types/data";
 import { Entity } from "../../types/entity";
 import { MinEntity } from "../../types/minimized";
 import { EntitySupplier } from "../../types/supplier";

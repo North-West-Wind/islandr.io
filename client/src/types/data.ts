@@ -132,3 +132,14 @@ export type HealingData = {
 	boost: number;
 	time: number;
 }
+
+export type ObstacleData = {
+	type: string;
+	direction?: number[] | number;
+	position: number[];
+	[key: string]: any;
+}
+
+export type BuildingData = {
+	obstacles: ObstacleData[];
+}

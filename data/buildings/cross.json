@@ -1,0 +1,19 @@
+{
+	"obstacles": [
+		{
+			"type": "wall",
+			"hitbox": [9, 1],
+			"color": 2139062271,
+			"__color": "(comment) 2139062271 is 0x7f7f7fff",
+			"position": [0, 0],
+			"__position": "(comment) position is relative to center of building"
+		},
+		{
+			"type": "wall",
+			"hitbox": [1, 9],
+			"color": 1566399999,
+			"__color": "(comment) 1566399999 is 0x5d5d5dff",
+			"position": [0, 0]
+		}
+	]
+}

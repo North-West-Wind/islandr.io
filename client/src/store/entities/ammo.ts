@@ -1,5 +1,5 @@
 import { ENTITY_SUPPLIERS } from ".";
-import { CommonAngle, GunColor } from "../../constants";
+import { GunColor } from "../../constants";
 import { Entity } from "../../types/entity";
 import { MinEntity } from "../../types/minimized";
 import { EntitySupplier } from "../../types/supplier";

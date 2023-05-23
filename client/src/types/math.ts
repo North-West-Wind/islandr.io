@@ -10,6 +10,10 @@ export class Vec2 {
 		return new Vec2(minVec2.x, minVec2.y);
 	}
 
+	static fromArray(array: number[]) {
+		return new Vec2(array[0], array[1]);
+	}
+
 	readonly x: number;
 	readonly y: number;
 
@@ -258,6 +262,10 @@ export interface Hitbox {
 // Rectangle hitbox with a width and height
 export class RectHitbox implements Hitbox {
 	static readonly ZERO = new RectHitbox(0, 0);
+
+	static fromArray(array: number[]) {
+		return new RectHitbox(array[0], array[1]);
+	}
 
 	type: "rect" | "circle";
 	width: number;

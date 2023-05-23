@@ -153,7 +153,7 @@ export class GrenadeWeapon extends Weapon {
 
 
 	attack(attacker: Entity, _entities: Entity[], _obstacles: Obstacle[]) {
-		this.attack(attacker, _entities, _obstacles);
+		//this.attack(attacker, _entities, _obstacles);
 	}
 
 	// Spawn the bullet(s)

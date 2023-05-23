@@ -2,16 +2,46 @@ import { world } from "../..";
 import { RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { LOOT_TABLES } from "../../types/loot_table";
+import { ObstacleSupplier } from "../../types/supplier";
+import { ObstacleData } from "../../types/data";
+import { OBSTACLE_SUPPLIERS } from ".";
+
+class CrateSupplier extends ObstacleSupplier {
+	make(data: ObstacleData) {
+		return new Crate(data.special || "normal");
+	}
+}
 
 export default class Crate extends Obstacle {
-	static readonly LOOT_TABLE = "crate";
-	type = "crate";
+	static readonly TYPE = "crate";
+	type = Crate.TYPE;
+	special: "normal" | "grenade" | "soviet" | "awc";
 
-	constructor() {
-		const hitbox = new RectHitbox(4, 4);
+	constructor(special: "normal" | "grenade" | "soviet" | "awc" = "normal") {
+		var hitbox: RectHitbox;
+		var health: number;
+		switch (special) {
+			case "grenade":
+				hitbox = new RectHitbox(3, 3);
+				health = 100;
+				break;
+			case "soviet":
+				hitbox = new RectHitbox(4, 4);
+				health = 125;
+				break;
+			default:
+				hitbox = new RectHitbox(4, 4);
+				health = 80;
+				break;
+		}
 		super(world, hitbox, hitbox.scaleAll(0.75), 80, 80);
 		this.direction = Vec2.UNIT_X;
 		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this))) this.position = world.size.scale(Math.random(), Math.random());
+		this.special = special;
+	}
+
+	static {
+		OBSTACLE_SUPPLIERS.set(Crate.TYPE, new CrateSupplier());
 	}
 
 	damage(dmg: number) {
@@ -21,7 +51,22 @@ export default class Crate extends Obstacle {
 
 	die() {
 		super.die();
-		const entities = LOOT_TABLES.get(Crate.LOOT_TABLE)?.roll();
+		var lootTable: string;
+		switch (this.special) {
+			case "grenade":
+				lootTable = "crate_grenade";
+				break;
+			case "soviet":
+				lootTable = "crate_more";
+				break;
+			case "awc":
+				lootTable = "crate_rare";
+				break;
+			default:
+				lootTable = "crate";
+				break;
+		}
+		const entities = LOOT_TABLES.get(lootTable)?.roll();
 		if (entities) {
 			world.entities.push(...entities.map(e => {
 				e.position = this.position;
@@ -29,5 +74,13 @@ export default class Crate extends Obstacle {
 			}));
 		}
 		world.onceSounds.push({ path: "obstacle/break/crate/crate_break_02.mp3", position: this.position });
+	}
+
+	minimize() {
+		return Object.assign(super.minimize(), { special: this.special });
+	}
+
+	minmin() {
+		return Object.assign(super.minmin(), { special: this.special });
 	}
 }

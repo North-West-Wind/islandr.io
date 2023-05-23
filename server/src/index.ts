@@ -4,10 +4,10 @@ import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPac
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { Vec2 } from "./types/math";
 import { Player } from "./store/entities";
-import { Particle } from "./types/particle";
 import { World } from "./types/terrain";
 import { Plain, Pond, River, Sea } from "./store/terrains";
-import { Tree, Bush, Crate, Stone, MosinTree, SovietCrate, GrenadeCrate, Barrel, AK47Stone } from "./store/obstacles";
+import { Tree, Bush, Crate, Stone, Barrel } from "./store/obstacles";
+import { BUILDING_SUPPLIERS } from "./store/buildings";
 
 export var ticksElapsed = 0;
 
@@ -20,40 +20,33 @@ const sockets = new Map<string, ws.WebSocket>();
 export const world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]), new Plain());
 
 // Start of testing section
+// As tempting as it might be, do NOT put these inside World constructor, as all of these read something from the world, and will cause error if put inside the constructor
 
 // Let's add some ponds
-for (let ii = 0; ii < 5; ii++) world.terrains.push(new Pond());
+let ii: number;
+for (ii = 0; ii < 5; ii++) world.terrains.push(new Pond());
 // And a river
 world.terrains.push(new River());
 // And the sea ring
-for (let ii = 0; ii < 4; ii++) world.terrains.push(new Sea(ii));
+for (ii = 0; ii < 4; ii++) world.terrains.push(new Sea(ii));
 
 // Add random obstacles
-/*
-for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Tree());
-for (let ii = 0; ii < 10; ii++) world.obstacles.push(new MosinTree());
-for (let ii = 0; ii < 20; ii++) world.obstacles.push(new SovietCrate());
-for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Bush());
-for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Crate());
-for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Stone());
-for (let ii = 0; ii < 30; ii++) world.obstacles.push(new GrenadeCrate());
-//crashing server
-//for (let ii = 0; ii < 1; ii++) world.obstacles.push(new AWMCrate());
-for (let ii = 0; ii < 50; ii++) world.obstacles.push(new Barrel());
-for (let ii = 0; ii < 15; ii++) world.obstacles.push(new AK47Stone());
-*/
-//smaller map
-for (let ii = 0; ii < 25; ii++) world.obstacles.push(new Tree());
-for (let ii = 0; ii < 1; ii++) world.obstacles.push(new MosinTree());
-for (let ii = 0; ii < 10; ii++) world.obstacles.push(new SovietCrate());
-for (let ii = 0; ii < 25; ii++) world.obstacles.push(new Bush());
-for (let ii = 0; ii < 25; ii++) world.obstacles.push(new Crate());
-for (let ii = 0; ii < 25; ii++) world.obstacles.push(new Stone());
-for (let ii = 0; ii < 15; ii++) world.obstacles.push(new GrenadeCrate());
-//crashing server
-//for (let ii = 0; ii < 1; ii++) world.obstacles.push(new AWMCrate());
-for (let ii = 0; ii < 25; ii++) world.obstacles.push(new Barrel());
-for (let ii = 0; ii < 1; ii++) world.obstacles.push(new AK47Stone());
+for (ii = 0; ii < 25; ii++) world.obstacles.push(new Tree());
+world.obstacles.push(new Tree("mosin"));
+for (ii = 0; ii < 25; ii++) world.obstacles.push(new Stone());
+world.obstacles.push(new Stone("ak47"));
+for (ii = 0; ii < 25; ii++) world.obstacles.push(new Crate());
+for (ii = 0; ii < 10; ii++) world.obstacles.push(new Crate("soviet"));
+for (ii = 0; ii < 15; ii++) world.obstacles.push(new Crate("grenade"));
+for (ii = 0; ii < 25; ii++) world.obstacles.push(new Bush());
+for (ii = 0; ii < 25; ii++) world.obstacles.push(new Barrel());
+
+// Add buildings
+for (ii = 0; ii < 5; ii++) {
+	const cross = BUILDING_SUPPLIERS.get("cross")!.create();
+	cross.setPosition(world.size.scaleAll(Math.random()));
+	world.buildings.push(cross);
+}
 // End of testing section
 let numberOfPlayers = 0;
 server.on("connection", async socket => {
@@ -101,7 +94,7 @@ server.on("connection", async socket => {
 	// Send the player the entire map
 	send(socket, new MapPacket(world.obstacles, world.terrains));
 	// Send the player initial objects
-	send(socket, new GamePacket(world.entities, world.obstacles, player, numberOfPlayers, true));
+	send(socket, new GamePacket(world.entities, world.obstacles.concat(...world.buildings.map(b => b.obstacles.map(o => o.obstacle))), player, numberOfPlayers, true));
 	// Send the player music
 	for (const sound of world.joinSounds) send(socket, new SoundPacket(sound.path, sound.position));
 

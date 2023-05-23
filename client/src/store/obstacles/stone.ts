@@ -9,8 +9,16 @@ const stoneImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image
 stoneImg.onload = () => stoneImg.loaded = true;
 stoneImg.src = "assets/images/game/objects/stone.svg";
 
+const ak47stoneImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+ak47stoneImg.onload = () => ak47stoneImg.loaded = true;
+ak47stoneImg.src = "assets/images/game/objects/ak47_stone.svg";
+
+interface AdditionObstacle {
+	special: "normal" | "ak47";
+}
+
 class StoneSupplier implements ObstacleSupplier {
-	create(minObstacle: MinObstacle) {
+	create(minObstacle: MinObstacle & AdditionObstacle) {
 		return new Stone(minObstacle);
 	}
 }
@@ -18,19 +26,34 @@ class StoneSupplier implements ObstacleSupplier {
 export default class Stone extends Obstacle {
 	static readonly TYPE = "stone";
 	type = Stone.TYPE;
+	special!: "normal" | "ak47";
 
 	static {
 		OBSTACLE_SUPPLIERS.set(Stone.TYPE, new StoneSupplier());
 	}
+
+	copy(minObstacle: MinObstacle & AdditionObstacle) {
+		super.copy(minObstacle);
+		this.special = minObstacle.special;
+	}
 	
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
-		if (!stoneImg.loaded) return;
+		var img: HTMLImageElement & { loaded: boolean };
+		switch (this.special) {
+			case "ak47":
+				img = ak47stoneImg;
+				break;
+			default:
+				img = stoneImg;
+				break;
+		}
+		if (!img.loaded) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
 		if (!this.despawn) {
 			const width = scale * this.hitbox.comparable * 2, height = width * stoneImg.naturalWidth / stoneImg.naturalHeight;
-			ctx.drawImage(stoneImg, -width / 2, -height / 2, width, height);
+			ctx.drawImage(img, -width / 2, -height / 2, width, height);
 		} else {
 			const radius = scale * this.hitbox.comparable / 2;
 			ctx.fillStyle = "#000000";

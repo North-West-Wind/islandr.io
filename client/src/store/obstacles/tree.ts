@@ -9,9 +9,17 @@ const treeImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(
 treeImg.onload = () => treeImg.loaded = true;
 treeImg.src = "assets/images/game/objects/tree.svg";
 
+const mosinTreeImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+mosinTreeImg.onload = () => mosinTreeImg.loaded = true;
+mosinTreeImg.src = "assets/images/game/objects/mosin_tree.svg";
+
 const treeResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 treeResidueImg.onload = () => treeResidueImg.loaded = true;
 treeResidueImg.src = "assets/images/game/objects/residues/tree.svg";
+
+interface AdditionalObstacle {
+	special: "normal" | "mosin";
+}
 
 class TreeSupplier implements ObstacleSupplier {
 	create(minObstacle: MinObstacle) {
@@ -24,17 +32,35 @@ export default class Tree extends Obstacle {
 	type = Tree.TYPE;
 	zIndex = 1000;
 
+	special!: "normal" | "mosin";
+
 	static {
 		OBSTACLE_SUPPLIERS.set(Tree.TYPE, new TreeSupplier());
 	}
 
+	copy(minObstacle: MinObstacle & AdditionalObstacle) {
+		super.copy(minObstacle);
+		this.special = minObstacle.special;
+	}
+
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
-		if (!treeImg.loaded || !treeResidueImg.loaded) return;
+		var img: HTMLImageElement & { loaded: boolean };
+		var renderScale = 1;
+		if (this.despawn) img = treeResidueImg;
+		else switch (this.special) {
+			case "mosin":
+				img = mosinTreeImg;
+				renderScale = 3.6;
+				break;
+			default:
+				img = treeImg;
+				renderScale = 5;
+		}
+		if (!img.loaded || !treeResidueImg.loaded) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
-		const img = this.despawn ? treeResidueImg : treeImg;
-		const width = scale * this.hitbox.comparable * 2 * (this.despawn ? 1 : 5), height = width * img.naturalWidth / img.naturalHeight;
+		const width = scale * this.hitbox.comparable * 2 * renderScale, height = width * img.naturalWidth / img.naturalHeight;
 		ctx.drawImage(img, -width / 2, -height / 2, width, height);
 		ctx.resetTransform();
 	}

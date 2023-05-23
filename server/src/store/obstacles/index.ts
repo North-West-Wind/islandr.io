@@ -1,10 +1,15 @@
+import { ObstacleData } from "../../types/data";
+import { ObstacleSupplier } from "../../types/supplier";
+
+export const OBSTACLE_SUPPLIERS = new Map<string, ObstacleSupplier>();
+
 export { default as Tree } from "./tree";
 export { default as Bush } from "./bush";
 export { default as Crate } from "./crate";
 export { default as Stone } from "./stone";
-export { default as MosinTree } from "./mosin_tree";
-export { default as SovietCrate } from "./soviet_crate";
-export { default as GrenadeCrate} from "./grenade_crate";
-export { default as AWMCrate} from "./awm_crate";
-export { default as Barrel} from "./barrel";
-export { default as AK47Stone} from "./ak47stone";
+export { default as Barrel } from "./barrel";
+export { default as Wall } from "./wall";
+
+export function castCorrectObstacle(data: ObstacleData) {
+	return OBSTACLE_SUPPLIERS.get(data.type)?.create(data);
+}

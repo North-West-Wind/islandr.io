@@ -1,6 +1,5 @@
 import { Entity } from "../../types/entity";
 import { CircleHitbox, Vec2 } from "../../types/math";
-import { MinEntity } from "../../types/minimized";
 import { Obstacle } from "../../types/obstacle";
 
 export default class Explosion extends Entity {

@@ -1,7 +1,7 @@
 import { ID } from "../utils";
 import { Entity } from "./entity";
 import { Vec2, Hitbox, CircleHitbox, RectHitbox, CommonAngles, Line } from "./math";
-import { MinObstacle } from "./minimized";
+import { MinMinObstacle, MinObstacle } from "./minimized";
 import { CollisionType } from "./misc";
 import { World } from "./terrain";
 
@@ -168,6 +168,10 @@ export class Obstacle {
 			despawn: this.despawn,
 			animations: this.animations
 		};
+	}
+
+	minmin() {
+		return <MinMinObstacle>{ type: this.type, position: this.position };
 	}
 
 	private isLeft(a: Vec2, b: Vec2, c: Vec2) {

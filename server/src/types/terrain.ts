@@ -1,3 +1,4 @@
+import Building from "./building";
 import { Entity } from "./entity";
 import { Line, Vec2 } from "./math";
 import { MinTerrain } from "./minimized";
@@ -9,13 +10,14 @@ export class World {
 	size: Vec2;
 	entities: Entity[] = [];
 	obstacles: Obstacle[] = [];
+	buildings: Building[] = [];
 	discardEntities: string[] = [];
 	discardObstacles: string[] = [];
 	dirtyEntities: Entity[] = [];
 	dirtyObstacles: Obstacle[] = [];
 	defaultTerrain: Terrain;
 	terrains: Terrain[];
-	lastSecond: number = 0;
+	lastSecond = 0;
 
 	// These should be sent once only to the client
 	particles: Particle[] = [];
@@ -49,12 +51,16 @@ export class World {
 			this.lastSecond = Date.now();
 			this.ticks = 0;
 		}*/
+
+		// Merge obstacles
+		const allObstacles = this.obstacles.concat(...this.buildings.map(b => b.obstacles.map(o => o.obstacle)));
+
 		// Tick every entity and obstacle.
 		let ii: number;
 		var removable: number[] = [];
 		for (ii = 0; ii < this.entities.length; ii++) {
 			const entity = this.entities[ii];
-			entity.tick(this.entities, this.obstacles);
+			entity.tick(this.entities, allObstacles);
 			// Mark entity for removal
 			if (entity.despawn && entity.discardable) {
 				removable.push(ii);
@@ -68,9 +74,9 @@ export class World {
 		for (ii = removable.length - 1; ii >= 0; ii--) this.entities.splice(removable[ii], 1);
 	
 		removable = [];
-		for (ii = 0; ii < this.obstacles.length; ii++) {
-			const obstacle = this.obstacles[ii];
-			obstacle.tick(this.entities, this.obstacles);
+		for (ii = 0; ii < allObstacles.length; ii++) {
+			const obstacle = allObstacles[ii];
+			obstacle.tick(this.entities, allObstacles);
 			// Mark obstacle for removal
 			if (obstacle.despawn && obstacle.discardable) {
 				removable.push(ii);
