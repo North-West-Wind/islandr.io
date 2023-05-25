@@ -1,0 +1,39 @@
+.modal {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: fit-content;
+    height: 80vh;
+    background-color: rgba(2, 48, 32);
+    color: #fff;
+    padding: 1vh;
+    cursor: pointer;
+    border-radius: 1vh;
+    overflow-y: auto;
+}
+
+.modal a {
+    color: #00BFFF;
+}
+
+.modal li {
+    margin-top: 15px;
+    font-size: 20px;
+    color: rgb(255, 255, 153);
+}
+
+.modal #close-btn {
+    position: fixed;
+    top: 0;
+    right: 0;
+    opacity: 0.5;
+}
+
+/* .modal #close-btn::before {
+    content: "\00d7";
+} */
+
+.modal #close-btn:hover {
+    opacity: 1;
+}

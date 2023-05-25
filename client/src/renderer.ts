@@ -8,10 +8,21 @@ import { Entity } from "./types/entity";
 import { Obstacle } from "./types/obstacle";
 import { RenderableLayerN1 } from "./types/extenstions";
 import { Terrain } from "./types/terrain";
-import { lineBetween } from "./utils";
+import { lineBetween, modal } from "./utils";
 import { drawPrompt } from "./rendering/prompt";
 import { cookieExists, getCookieValue, setCookie } from "cookies-utils";
 import { Healing } from "./store/entities";
+import { marked } from "marked"
+
+let credits: string;
+async function getCredits() {
+	// read contents of file and then store as cache
+	return await fetch('/assets/CREDITS.md').then(response => response.text());
+}
+
+getCredits().then(data => {
+	credits = data
+});
 
 // HOMEPAGE STUFF STARTS
 $(document).ready(function () {
@@ -32,22 +43,29 @@ $(document).ready(function () {
 	$('.partner').click(function () {
 		$('.partner-box').toggle();
 	});
-}); 
+});
 
-window.onload = function () {
-	setTimeout(function () {
-		document.getElementById('loading')!.classList.add('zoom-out');
-		setTimeout(function () {
-			document.getElementById('loading')!.style.display = 'none';
-		}, 2000);
-	}, 3000);
-};
+// window.onload = function () {
+// 	setTimeout(function () {
+// 		document.getElementById('loading')!.classList.add('zoom-out');
+// 		setTimeout(function () {
+// 			document.getElementById('loading')!.style.display = 'none';
+// 		}, 2000);
+// 	}, 3000);
+// };
+
+//Replaced the above code and removed fake delaying, kept for historic reasons, remove soon.
+
+window.addEventListener('load', () => {
+	document.getElementById('loading')!.classList.add('zoom-out');
+	document.getElementById('loading')!.style.display = 'none';
+});
 
 document.addEventListener('DOMContentLoaded', function () {
-	var audio = <HTMLAudioElement> document.getElementById('menu-audio');
-	var volumeIcon = <HTMLDivElement> document.getElementById('volume-icon');
-	var volumeSlider = <HTMLDivElement> document.getElementById('volume-slider');
-	var volumeRange = <HTMLInputElement> document.getElementById('volume-range');
+	var audio = <HTMLAudioElement>document.getElementById('menu-audio');
+	var volumeIcon = <HTMLDivElement>document.getElementById('volume-icon');
+	var volumeSlider = <HTMLDivElement>document.getElementById('volume-slider');
+	var volumeRange = <HTMLInputElement>document.getElementById('volume-range');
 
 	var started = false;
 	document.addEventListener('click', function () {
@@ -89,7 +107,7 @@ function showAds() {
 	document.querySelectorAll('.ads').forEach(ad => { (<HTMLElement>ad).style.visibility = "visible"; });
 }
 function hideAds() {
-	const allElements = <HTMLCollectionOf<HTMLElement>> document.getElementsByTagName("*");
+	const allElements = <HTMLCollectionOf<HTMLElement>>document.getElementsByTagName("*");
 	for (let i = 0; i < allElements.length; i++) {
 		if (allElements[i].tagName === "DIV" && allElements[i].hasAttribute("class") && allElements[i].getAttribute("class")!.includes("ads")) {
 			allElements[i].style.display = "none";
@@ -110,14 +128,14 @@ if (!cookieExists("gave_me_cookies")) {
 	button.onclick = () => {
 		setCookie({ name: "gave_me_cookies", value: "1" });
 		button.classList.add("disabled");
- 		document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
+		document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
 
 		if (accepted >= 0)
 			setCookie({ name: "ads", value: accepted.toString() });
- 	}
+	}
 } else {
- 	document.getElementById("cookies-button")!.classList.add("disabled");
- 	document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
+	document.getElementById("cookies-button")!.classList.add("disabled");
+	document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
 	if (cookieExists("ads")) {
 		const ads = getCookieValue("ads");
 		if (ads == "1") showAds();
@@ -125,9 +143,15 @@ if (!cookieExists("gave_me_cookies")) {
 		closeBox();
 	}
 }
+
+function creditsCallback() {
+	modal(marked.parse(credits))
+}
+document.getElementById("credit-btn")!.onclick = creditsCallback
+
 // HOMEPAGE STUFF ENDS
 
-const canvas = <HTMLCanvasElement> document.getElementById("game");
+const canvas = <HTMLCanvasElement>document.getElementById("game");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
@@ -139,7 +163,7 @@ window.onresize = () => {
 var running = false;
 var lastTime: number;
 
-const ctx = <CanvasRenderingContext2D> canvas.getContext("2d");
+const ctx = <CanvasRenderingContext2D>canvas.getContext("2d");
 function animate(currentTime: number) {
 	if (!lastTime) lastTime = currentTime;
 	const elapsed = currentTime - lastTime;
@@ -149,7 +173,7 @@ function animate(currentTime: number) {
 		// Fill canvas with default terrain color
 		ctx.fillStyle = world.defaultTerrain.colorToHex();
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
-		
+
 		const player = getPlayer();
 		if (player) {
 			// Client side ticking
@@ -165,7 +189,7 @@ function animate(currentTime: number) {
 
 			// Draw terrains
 			// Do negative layer first
-			(<(Terrain & RenderableLayerN1)[]> world.terrains.filter((terrain: any) => !!terrain["renderLayerN1"])).forEach(terrain => terrain.renderLayerN1(player, canvas, ctx, scale));
+			(<(Terrain & RenderableLayerN1)[]>world.terrains.filter((terrain: any) => !!terrain["renderLayerN1"])).forEach(terrain => terrain.renderLayerN1(player, canvas, ctx, scale));
 			// Do layer zero
 			world.terrains.forEach(terrain => terrain.render(player, canvas, ctx, scale));
 
@@ -176,7 +200,7 @@ function animate(currentTime: number) {
 			for (let ii = 0; ii <= size.x; ii += GRID_INTERVAL) lineBetween(ctx, canvas.width / 2 - (player.position.x - ii) * scale, Math.max(y, 0), canvas.width / 2 - (player.position.x - ii) * scale, Math.min(y + height, canvas.height));
 			for (let ii = 0; ii <= size.y; ii += GRID_INTERVAL) lineBetween(ctx, Math.max(x, 0), canvas.height / 2 - (player.position.y - ii) * scale, Math.min(x + width, canvas.width), canvas.height / 2 - (player.position.y - ii) * scale);
 			ctx.globalAlpha = 1;
-			
+
 			// Draw obstacles and entities
 			var combined: (Entity | Obstacle)[] = [];
 			combined = combined.concat(world.entities, world.obstacles);
@@ -184,7 +208,7 @@ function animate(currentTime: number) {
 			// Sort them by zIndex. Higher = Above
 			combined = combined.sort((a, b) => a.zIndex - b.zIndex);
 			// Do negative layer first
-			(<((Entity | Obstacle) & RenderableLayerN1)[]> combined.filter((entOrObs: any) => !!entOrObs["renderLayerN1"])).forEach(entOrObs => entOrObs.renderLayerN1(player, canvas, ctx, scale));
+			(<((Entity | Obstacle) & RenderableLayerN1)[]>combined.filter((entOrObs: any) => !!entOrObs["renderLayerN1"])).forEach(entOrObs => entOrObs.renderLayerN1(player, canvas, ctx, scale));
 			// Do layer zero
 			combined.forEach(thing => {
 				thing.render(player, canvas, ctx, scale);
@@ -208,7 +232,7 @@ function animate(currentTime: number) {
 			ctx.strokeStyle = "#000000";
 			ctx.lineWidth = scale / 4;
 			ctx.strokeRect(x, y, width, height);
-	
+
 			// Draw overlays
 			if (!isHudHidden()) drawHud(player, canvas, ctx);
 			if (isMapOpened()) drawMap(canvas, ctx);

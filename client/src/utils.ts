@@ -1,4 +1,5 @@
 import { CommonAngle } from "./constants";
+let modalActive = false;
 
 // Promisified setTimeout
 export function wait(ms: number) { return new Promise(resolve => setTimeout(resolve, ms)); }
@@ -29,7 +30,7 @@ export function numToRGBA(num: number) {
 // Make numbers 2 digits
 export function twoDigits(num: number | string) {
 	if (typeof num === "string") {
-		const str = <string> num;
+		const str = <string>num;
 		if (str.length <= 1) return Array(2 - str.length).fill("0").join("") + str;
 		else return str;
 	} else {
@@ -42,14 +43,15 @@ export function twoDigits(num: number | string) {
 import { encode, decode } from "msgpack-lite";
 import { deflate, inflate } from "pako";
 import { ServerPacketResolvable, IPacket } from "./types/packet";
+import { error } from "console";
 // Send packet
 export function send(socket: WebSocket, packet: IPacket) {
-  //socket.send(deflate(deflate(encode(packet).buffer)));
+	//socket.send(deflate(deflate(encode(packet).buffer)));
 	socket.send(deflate(encode(packet).buffer));
 }
 // Receive packet
 export function receive(msg: ArrayBuffer) {
-  //return <ServerPacketResolvable>decode(inflate(inflate(new Uint8Array(msg))));
+	//return <ServerPacketResolvable>decode(inflate(inflate(new Uint8Array(msg))));
 	return <ServerPacketResolvable>decode(inflate(new Uint8Array(msg)));
 }
 
@@ -102,4 +104,27 @@ export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w
 	ctx.closePath();
 	if (fill) ctx.fill();
 	if (stroke) ctx.stroke();
+}
+
+export function modal(content: string, title?: string) {
+	if (modalActive) {
+		throw new Error("Modal already in view");
+	}
+	const _modalDiv = document.createElement('div')
+	_modalDiv.innerHTML = `
+		<div class="modal name="contents">
+		<button id="close-btn">X</button>
+			${title ? "<h2>" + title + "<h2>" : ""}  
+			${content}
+		  </div>
+		`
+
+	document.body.appendChild(_modalDiv)
+	modalActive = true;
+
+	const closeButton = document.querySelector('#close-btn');
+	closeButton!.addEventListener('click', () => {
+		document.body.removeChild(_modalDiv);
+		modalActive = false;
+	});
 }

@@ -13,6 +13,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="scripts/css/style.css" id="horizontal">
   <link rel="stylesheet" href="scripts/css/cookies.css">
+  <link rel="stylesheet" href="scripts/css/modal.css">
   <title>Islandr.io</title>
 </head>
 
@@ -22,9 +23,9 @@
       Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
     </div>
   </div>
-  
+
   <div id="volume-icon"></div>
-  
+
   <div id="volume-slider">
     <input type="range" min="0" max="100" value="50" step="1" id="volume-range">
   </div>
@@ -33,7 +34,7 @@
     <source src="menu.wav" type="audio/wav">
   </audio>
 
-  <div class="center"> 
+  <div class="center">
     <img
       src="https://svgtrace-upload-results-bucket.s3.amazonaws.com/2023-05-03/windows_273b5de6-0727-42a3-9469-544417294d54_1683141443489.svg"
       alt="Islandr Logo">
@@ -102,7 +103,11 @@
       <div class="panel">
         <div id="cookies-button"><span id="cookies-span">Give me cookies</span></div>
         <span>Cookies are used for storing settings and configurations.</span>
-        <blockquote class="reddit-embed-bq" style="height:500px" data-embed-theme="dark" data-embed-height="500">      <a href="https://www.reddit.com/r/splatoon/comments/121zoih/give_me_cookies/">Give me cookies</a><br> by      <a href="https://www.reddit.com/user/Giudicher4G">u/Giudicher4G</a> in      <a href="https://www.reddit.com/r/splatoon/">splatoon</a>    </blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
+        <blockquote class="reddit-embed-bq" style="height:500px" data-embed-theme="dark" data-embed-height="500"> <a
+            href="https://www.reddit.com/r/splatoon/comments/121zoih/give_me_cookies/">Give me cookies</a><br> by <a
+            href="https://www.reddit.com/user/Giudicher4G">u/Giudicher4G</a> in <a
+            href="https://www.reddit.com/r/splatoon/">splatoon</a> </blockquote>
+        <script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
       </div>
       <script> </script>
     </div>
@@ -113,7 +118,8 @@
   <div id="menu">
     <div class="panel">
       <h1>Info:</h1>
-      <p>About islandr.io:</p>This is a 2D battle royale shooter game inspired from the recent death of surviv.io. If you
+      <p>About islandr.io:</p>This is a 2D battle royale shooter game inspired from the recent death of surviv.io. If
+      you
       miss surviv.io and resurviv.io, well don't lose your hopes! islandr.io is here to bring you back the feel of
       surviv.io as well as bringing you new more advanced features that even surviv.io didn't.
     </div>
@@ -151,9 +157,10 @@
         x
       </div>
     </div>
-    <div class="partner">
+    <div id="credit-btn" class="partner" onclick="creditsCallback()">
       Credits/Partners
     </div>
+<<<<<<< Updated upstream
     <div class="partner-box">
       # Assets providers:<br>
       NorthWestWind (project initiator/core developer)<br>
@@ -177,6 +184,11 @@
       ur mom Gary (from discord) (assets)<br>
       <div class="close">
         x
+=======
+    <div class="partner-box" id="credit-box">
+      <div name="contents" onload="this.innerHTML = document.credits;">
+        <!-- We populate this with JS -->
+>>>>>>> Stashed changes
       </div>
     </div>
   </div>
@@ -193,10 +205,26 @@
       <!-- We populate this with JS -->
     </table>
     <table id="weapon-container">
-      <tr class="weapon-panel" id="weapon-panel-0"><td class="weapon-name-container"><span class="weapon-index">1</span><span class="weapon-name" id="weapon-name-0">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-0" /></td></tr>
-      <tr class="weapon-panel" id="weapon-panel-1"><td class="weapon-name-container"><span class="weapon-index">2</span><span class="weapon-name" id="weapon-name-1">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-1" /></td></tr>
-      <tr class="weapon-panel" id="weapon-panel-2"><td class="weapon-name-container"><span class="weapon-index">3</span><span class="weapon-name" id="weapon-name-2">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-2" /></td></tr>
-      <tr class="weapon-panel" id="weapon-panel-3"><td class="weapon-name-container"><span class="weapon-index">4</span><span class="weapon-name" id="weapon-name-3">&nbsp;</span></td><td class="weapon-image-container"><img class="weapon-image" id="weapon-image-3" /></td></tr>
+      <tr class="weapon-panel" id="weapon-panel-0">
+        <td class="weapon-name-container"><span class="weapon-index">1</span><span class="weapon-name"
+            id="weapon-name-0">&nbsp;</span></td>
+        <td class="weapon-image-container"><img class="weapon-image" id="weapon-image-0" /></td>
+      </tr>
+      <tr class="weapon-panel" id="weapon-panel-1">
+        <td class="weapon-name-container"><span class="weapon-index">2</span><span class="weapon-name"
+            id="weapon-name-1">&nbsp;</span></td>
+        <td class="weapon-image-container"><img class="weapon-image" id="weapon-image-1" /></td>
+      </tr>
+      <tr class="weapon-panel" id="weapon-panel-2">
+        <td class="weapon-name-container"><span class="weapon-index">3</span><span class="weapon-name"
+            id="weapon-name-2">&nbsp;</span></td>
+        <td class="weapon-image-container"><img class="weapon-image" id="weapon-image-2" /></td>
+      </tr>
+      <tr class="weapon-panel" id="weapon-panel-3">
+        <td class="weapon-name-container"><span class="weapon-index">4</span><span class="weapon-name"
+            id="weapon-name-3">&nbsp;</span></td>
+        <td class="weapon-image-container"><img class="weapon-image" id="weapon-image-3" /></td>
+      </tr>
     </table>
   </div>
   <script src="scripts/bundle.min.js"></script>
