@@ -78,6 +78,13 @@ div#menu div#connection.panel {
     padding: 1vh;
 }
 
+.connect {
+    width: 80% !important;
+
+    position: absolute;
+    bottom: 0;
+}
+
 .panel {
     position: relative;
     margin: auto;
@@ -401,6 +408,18 @@ input[type="text"] {
     cursor: pointer;
 }
 
+.user-input {
+    height: 3em !important;
+    font-size: 1.5rem;
+}
+
+.mode-select {
+    margin-top: 5%;
+    background-color: cornflowerblue;
+    color: white;
+    font-size: 2rem;
+}
+
 .partner {
     position: absolute;
     top: 1vh;
@@ -455,8 +474,10 @@ input[type="text"] {
     color: #fff;
 
     /* Hide scroll bar (Edge, Firefox) */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 /* Hide scroll bar (Chrome, Safari) */
