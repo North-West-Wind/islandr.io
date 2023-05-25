@@ -16,10 +16,10 @@ import { marked } from "marked"
 
 let credits: string;
 async function getCredits() {
-	// read contents of file and then store as cache
 	return await fetch('/assets/CREDITS.md').then(response => response.text());
 }
 
+// read contents of file and then store as cache
 getCredits().then(data => {
 	credits = data
 });
