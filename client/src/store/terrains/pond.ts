@@ -9,6 +9,7 @@ import { TERRAIN_SUPPLIERS } from ".";
 interface AdditionalTerrain {
 	position: MinVec2;
 	radius: number;
+	border: number;
 }
 
 class PondSupplier implements TerrainSupplier {
@@ -20,11 +21,13 @@ class PondSupplier implements TerrainSupplier {
 export default class Pond extends DotTerrain implements BorderedTerrain {
 	static readonly ID = "pond";
 	id = Pond.ID;
+	border: number;
 	color = 0x3481ab;
 	secondaryColor = 0x905e26;
 
 	constructor(minTerrain: MinTerrain & AdditionalTerrain) {
 		super(minTerrain);
+		this.border = minTerrain.border;
 	}
 
 	static {

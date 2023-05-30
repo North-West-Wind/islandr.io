@@ -64,5 +64,4 @@ export interface MinParticle {
 
 export interface MinTerrain {
 	id: string;
-	border: number;
 }

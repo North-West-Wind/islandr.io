@@ -109,7 +109,7 @@ export class World {
 	}
 }
 
-export class Terrain {
+export abstract class Terrain {
 	id!: string;
 	type = "generic";
 	// Moving speed factor, 0 - 1
@@ -118,8 +118,6 @@ export class Terrain {
 	damage: number;
 	// Interval duration (in ticks)
 	interval: number;
-	// If the terrain fills the map
-	full = false;
 
 	constructor(speed: number, damage: number, interval: number) {
 		this.speed = speed;
@@ -127,12 +125,18 @@ export class Terrain {
 		this.interval = interval;
 	}
 
-	inside(_position: Vec2) {
-		return this.full;
-	}
+	abstract inside(position: Vec2): boolean;
 
 	minimize() {
 		return <MinTerrain> { id: this.id };
+	}
+}
+
+export class FullTerrain extends Terrain {
+	type = "full";
+
+	inside(_position: Vec2) {
+		return true;
 	}
 }
 

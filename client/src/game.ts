@@ -17,7 +17,7 @@ if(urlargs.get("from")){
 	alert("We have moved from " + urlargs.get("from") + " to islandr.io!")
 }
 
-export var world = new World();
+export var world: World;
 
 var id: string | null;
 var tps = 1; // Default should be 1, so even if no TPS detail from server, we will not be dividing by 0
@@ -124,7 +124,6 @@ async function init(address: string) {
 			tps = 1;
 			username = null;
 			player = null;
-			world = new World();
 			res(undefined);
 			//remove playercount
 		}

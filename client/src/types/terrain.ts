@@ -1,5 +1,5 @@
 import { castCorrectEntity, FullPlayer, Player } from "../store/entities";
-import { castCorrectTerrain, Plain } from "../store/terrains";
+import { castCorrectTerrain } from "../store/terrains";
 import { Entity } from "./entity";
 import { Line, Vec2 } from "./math";
 import { MinEntity, MinLine, MinObstacle, MinTerrain, MinVec2 } from "./minimized";
@@ -18,10 +18,8 @@ export class World {
 	aliveCount: Number = 0;
 	sounds: Map<number, { howl: Howl, pos: Vec2 }> = new Map();
 
-	constructor(size?: Vec2, defaultTerrain?: Terrain) {
-		if (!size) size = Vec2.ZERO;
+	constructor(size: Vec2, defaultTerrain: Terrain) {
 		this.size = size;
-		if (!defaultTerrain) defaultTerrain = new Plain({ id: "plain", border: 0 });
 		this.defaultTerrain = defaultTerrain;
 	}
 
@@ -70,14 +68,12 @@ export class World {
 
 export abstract class Terrain implements Renderable, RenderableMap {
 	id: string;
-	border: number;
 	type = "generic";
 	// Use RGB
 	color = 0;
 
 	constructor(minTerrain: MinTerrain) {
 		this.id = minTerrain.id;
-		this.border = minTerrain.border;
 	}
 
 	colorToHex(color?: number) {
@@ -87,6 +83,11 @@ export abstract class Terrain implements Renderable, RenderableMap {
 
 	abstract render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void;
 	abstract renderMap(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void;
+}
+
+export class FullTerrain extends Terrain {
+	render(_you: Player, _canvas: HTMLCanvasElement, _ctx: CanvasRenderingContext2D, _scale: number) { }
+	renderMap(_canvas: HTMLCanvasElement, _ctx: CanvasRenderingContext2D, _scale: number) { }
 }
 
 export class DotTerrain extends Terrain {

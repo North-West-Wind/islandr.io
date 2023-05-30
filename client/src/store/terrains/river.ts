@@ -6,14 +6,21 @@ import { Player } from "../entities";
 import { TerrainSupplier } from "../../types/supplier";
 import { TERRAIN_SUPPLIERS } from ".";
 
+interface AdditionalSegmentTerrain {
+	line: MinLine;
+	range: number;
+	border: number;
+	boundary: MinVec2[];
+}
+
 class RiverSegmentSupplier implements TerrainSupplier {
-	create(minTerrain: MinTerrain & { line: MinLine, range: number, boundary: MinVec2[] }) {
+	create(minTerrain: MinTerrain & AdditionalSegmentTerrain) {
 		return new RiverSegment(minTerrain);
 	}
 }
 
 class RiverSupplier implements TerrainSupplier {
-	create(minTerrain: MinTerrain & { lines: (MinTerrain & { line: MinLine, range: number, boundary: MinVec2[] })[] }) {
+	create(minTerrain: MinTerrain & { lines: (MinTerrain & AdditionalSegmentTerrain)[] }) {
 		return new River(minTerrain);
 	}
 }
@@ -21,8 +28,14 @@ class RiverSupplier implements TerrainSupplier {
 export class RiverSegment extends LineTerrain implements BorderedTerrain {
 	static readonly ID = "river_segment";
 	id = RiverSegment.ID;
+	border: number;
 	color = 0x3481ab;
 	secondaryColor = 0x905e26;
+
+	constructor(minTerrain: MinTerrain & AdditionalSegmentTerrain) {
+		super(minTerrain);
+		this.border = minTerrain.border;
+	}
 
 	static {
 		TERRAIN_SUPPLIERS.set(RiverSegment.ID, new RiverSegmentSupplier());
@@ -82,10 +95,11 @@ export class RiverSegment extends LineTerrain implements BorderedTerrain {
 export default class River extends PiecewiseTerrain implements BorderedTerrain {
 	static readonly ID = "river";
 	id = River.ID;
+	border = 0;
 	color = 0xFF3481ab;
 	secondaryColor = 0xFF905e26;
 
-	constructor(minTerrain: MinTerrain & { lines: (MinTerrain & { line: MinLine, range: number, boundary: MinVec2[] })[] }) {
+	constructor(minTerrain: MinTerrain & { lines: (MinTerrain & AdditionalSegmentTerrain)[] }) {
 		super(minTerrain);
 	}
 
