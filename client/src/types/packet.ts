@@ -1,4 +1,4 @@
-import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2 } from "./minimized";
+import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2, MinBuilding } from "./minimized";
 import { MovementDirection } from "./misc";
 
 export interface IPacket {
@@ -130,6 +130,7 @@ export class GamePacket implements IPacket {
 export class MapPacket implements IPacket {
 	type = "map";
 	obstacles!: MinMinObstacle[];
+	buildings!: MinBuilding[];
 	terrains!: MinTerrain[];
 }
 

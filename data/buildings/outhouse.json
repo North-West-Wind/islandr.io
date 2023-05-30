@@ -1,0 +1,42 @@
+{
+	"obstacles": [
+		{
+			"type": "wall",
+			"hitbox": [6, 0.5],
+			"color": 2908887295,
+			"__color": "(comment) 2908887295 is 0xad6218ff",
+			"position": [0, -3]
+		},
+		{
+			"type": "wall",
+			"hitbox": [2, 0.5],
+			"color": 2908887295,
+			"position": [-2, 3]
+		},
+		{
+			"type": "wall",
+			"hitbox": [2, 0.5],
+			"color": 2908887295,
+			"position": [2, 3]
+		},
+		{
+			"type": "wall",
+			"hitbox": [0.5, 6],
+			"color": 2908887295,
+			"position": [-3, 0]
+		},
+		{
+			"type": "wall",
+			"hitbox": [0.5, 6],
+			"color": 2908887295,
+			"position": [3, 0]
+		}
+	],
+	"zones": [
+		{
+			"position": [0, 0],
+			"hitbox": [6, 6]
+		}
+	],
+	"mapColor": 2942442751
+}

@@ -47,6 +47,12 @@ for (ii = 0; ii < 5; ii++) {
 	cross.setPosition(world.size.scaleAll(Math.random()));
 	world.buildings.push(cross);
 }
+for (ii = 0; ii < 5; ii++) {
+	const outhouse = BUILDING_SUPPLIERS.get("outhouse")!.create();
+	outhouse.setPosition(world.size.scaleAll(Math.random()));
+	console.log(outhouse.minimize());
+	world.buildings.push(outhouse);
+}
 // End of testing section
 let numberOfPlayers = 0;
 server.on("connection", async socket => {
@@ -92,7 +98,7 @@ server.on("connection", async socket => {
 	world.entities.push(player);
 
 	// Send the player the entire map
-	send(socket, new MapPacket(world.obstacles, world.terrains));
+	send(socket, new MapPacket(world.obstacles, world.buildings, world.terrains));
 	// Send the player initial objects
 	send(socket, new GamePacket(world.entities, world.obstacles.concat(...world.buildings.map(b => b.obstacles.map(o => o.obstacle))), player, numberOfPlayers, true));
 	// Send the player music

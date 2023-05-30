@@ -1,7 +1,7 @@
 import { castCorrectObstacle } from "../store/obstacles";
 import Building from "./building";
 import { BuildingData, ObstacleData } from "./data";
-import { CommonAngles, Vec2 } from "./math";
+import { CommonAngles, Hitbox, Vec2 } from "./math";
 import { Obstacle } from "./obstacle";
 import { Weapon } from "./weapon";
 
@@ -41,6 +41,10 @@ export class BuildingSupplier implements Supplier<Building> {
 			if (!obstacle) continue;
 			building.addObstacle(Vec2.fromArray(ob.position), obstacle);
 		}
+		if (this.data.zones)
+			for (const zone of this.data.zones)
+				building.addZone(Vec2.fromArray(zone.position), Hitbox.fromNumber(zone.hitbox));
+		building.color = this.data.mapColor;
 		return building;
 	}
 }

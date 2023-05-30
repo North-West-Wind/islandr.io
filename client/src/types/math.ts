@@ -45,7 +45,7 @@ export class Vec2 {
 	}
 
 	angleBetween(vec: Vec2) {
-		return Math.acos(this.dot(vec) / (this.magnitude() * vec.magnitude()));
+		return vec.angle() - this.angle();
 	}
 
 	angle() {
@@ -249,34 +249,50 @@ export class Line {
 	}
 }
 
-export interface Hitbox {
+export abstract class Hitbox {
 	type: "rect" | "circle";
 	comparable: number;
 
-	scaleAll(ratio: number): Hitbox;
-	lineIntersects(line: Line, position: Vec2, direction: Vec2): boolean;
-	inside(point: Vec2, position: Vec2, direction: Vec2): boolean;
-	minimize(): MinHitbox;
+	static fromMinHitbox(minHitbox: MinHitbox) {
+		if (minHitbox.type === "rect") return RectHitbox.fromMinRectHitbox(<MinRectHitbox>minHitbox);
+		else return CircleHitbox.fromMinCircleHitbox(<MinCircleHitbox>minHitbox);
+	}
+
+	static fromNumber(args: number[] | number) {
+		if (Array.isArray(args)) return new RectHitbox(args[0], args[1]);
+		else return new CircleHitbox(args);
+	}
+
+	constructor(type: "rect" | "circle", comparable: number) {
+		this.type = type;
+		this.comparable = comparable;
+	}
+
+	abstract scaleAll(ratio: number): Hitbox;
+	abstract lineIntersects(line: Line, position: Vec2, direction: Vec2): boolean;
+	abstract inside(point: Vec2, position: Vec2, direction: Vec2): boolean;
+	abstract minimize(): MinHitbox;
 }
 
 // Rectangle hitbox with a width and height
-export class RectHitbox implements Hitbox {
+export class RectHitbox extends Hitbox {
 	static readonly ZERO = new RectHitbox(0, 0);
+
+	static fromMinRectHitbox(minRectHitbox: MinRectHitbox) {
+		return new RectHitbox(minRectHitbox.width, minRectHitbox.height);
+	}
 
 	static fromArray(array: number[]) {
 		return new RectHitbox(array[0], array[1]);
 	}
 
-	type: "rect" | "circle";
 	width: number;
 	height: number;
-	comparable: number;
 
 	constructor(width: number, height: number) {
-		this.type = "rect";
+		super("rect", Math.sqrt(Math.pow(width / 2, 2) + Math.pow(height / 2, 2)));
 		this.width = width;
 		this.height = height;
-		this.comparable = Math.sqrt(Math.pow(this.width / 2, 2) + Math.pow(this.height / 2, 2));
 	}
 
 	scaleAll(ratio: number) {
@@ -319,16 +335,18 @@ export class RectHitbox implements Hitbox {
 }
 
 // Circle hitbox with a radius
-export class CircleHitbox implements Hitbox {
+export class CircleHitbox extends Hitbox {
 	static readonly ZERO = new RectHitbox(0, 0);
 
-	type: "rect" | "circle";
+	static fromMinCircleHitbox(minCircleHitbox: MinCircleHitbox) {
+		return new CircleHitbox(minCircleHitbox.radius);
+	}
+
 	radius: number;
-	comparable: number;
 
 	constructor(radius: number) {
-		this.type = "circle";
-		this.comparable = this.radius = radius;
+		super("circle", radius);
+		this.radius = radius;
 	}
 
 	scaleAll(ratio: number) {

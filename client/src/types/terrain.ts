@@ -8,11 +8,13 @@ import { Renderable, RenderableMap } from "./extenstions";
 import { circleFromCenter } from "../utils";
 import { castCorrectObstacle } from "../store/obstacles";
 import { Howl } from "howler";
+import Building from "./building";
 
 export class World {
 	size: Vec2;
 	entities: Entity[] = [];
 	obstacles: Obstacle[] = [];
+	buildings: Building[] = [];
 	defaultTerrain: Terrain;
 	terrains: Terrain[] = [];
 	aliveCount: Number = 0;

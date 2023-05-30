@@ -10,13 +10,13 @@ export interface MinLine {
 }
 
 export interface MinRectHitbox {
-	type: string;
+	type: "rect";
 	width: number;
 	height: number;
 }
 
 export interface MinCircleHitbox {
-	type: string;
+	type: "circle";
 	radius: number;
 }
 
@@ -64,4 +64,12 @@ export interface MinParticle {
 
 export interface MinTerrain {
 	id: string;
+}
+
+export interface MinBuilding {
+	id: string;
+	position: MinVec2;
+	direction: MinVec2;
+	zones: { position: MinVec2, hitbox: MinHitbox }[];
+	color?: number;
 }

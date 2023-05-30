@@ -10,6 +10,7 @@ import { Vec2 } from "./types/math";
 import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
 import { World } from "./types/terrain";
 import { receive, send } from "./utils";
+import Building from "./types/building";
 
 //handle users that tried to go to old domain name, or direct ip
 var urlargs = new URLSearchParams(window.location.search);
@@ -91,7 +92,9 @@ async function init(address: string) {
 						// This should happen once only normally
 						const mapPkt = <MapPacket>data;
 						world.terrains = mapPkt.terrains.map(ter => castCorrectTerrain(ter));
-						initMap(mapPkt.obstacles.map(obs => castCorrectObstacle(castMinObstacle(obs))));
+						world.obstacles = mapPkt.obstacles.map(obs => castCorrectObstacle(castMinObstacle(obs)));
+						world.buildings = mapPkt.buildings.map(bui => new Building(bui));
+						initMap();
 						//Show player count once game starts
 						(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block";
 						break;

@@ -14,7 +14,7 @@ var constScale: number;
 const tmpCanvas = document.createElement("canvas");
 
 // Initialize the map when MapPacket is received
-export function initMap(obstacles: Obstacle[]) {
+export function initMap() {
 	// Determine the dimension
 	const size = world.size;
 	const maxSide = Math.max(size.x, size.y);
@@ -40,9 +40,13 @@ export function initMap(obstacles: Obstacle[]) {
 	for (let ii = 0; ii <= size.x; ii += GRID_INTERVAL) lineBetween(mapCtx, ii * minScreen / maxSide, 0, ii * minScreen / maxSide, mapCanvas.height);
 	for (let ii = 0; ii <= size.y; ii += GRID_INTERVAL) lineBetween(mapCtx, 0, ii * minScreen / maxSide, mapCanvas.width, ii * minScreen / maxSide);
 	mapCtx.globalAlpha = 1;
+
+	// Draw buildings on map
+	const buildings = world.buildings;
+	buildings.forEach(building => building.renderMap(mapCanvas, mapCtx, scale));
 	
 	// Draw obstacles on map, -ve layer -> layer 0
-	obstacles = obstacles.sort((a, b) => a.zIndex - b.zIndex);
+	const obstacles = world.obstacles.sort((a, b) => a.zIndex - b.zIndex);
 	(<(Obstacle & RenderableMapLayerN1)[]> obstacles.filter((obstacle: any) => !!obstacle["renderMapLayerN1"])).forEach(obstacle => obstacle.renderMapLayerN1(mapCanvas, mapCtx, scale));
 	obstacles.forEach(obstacle => obstacle.renderMap(mapCanvas, mapCtx, scale));
 }
