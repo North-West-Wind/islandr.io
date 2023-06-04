@@ -44,13 +44,12 @@ for (ii = 0; ii < 25; ii++) world.obstacles.push(new Barrel());
 // Add buildings
 for (ii = 0; ii < 5; ii++) {
 	const cross = BUILDING_SUPPLIERS.get("cross")!.create();
-	cross.setPosition(world.size.scaleAll(Math.random()));
+	cross.setPosition(world.size.scale(Math.random(), Math.random()));
 	world.buildings.push(cross);
 }
 for (ii = 0; ii < 5; ii++) {
 	const outhouse = BUILDING_SUPPLIERS.get("outhouse")!.create();
-	outhouse.setPosition(world.size.scaleAll(Math.random()));
-	console.log(outhouse.minimize());
+	outhouse.setPosition(world.size.scale(Math.random(), Math.random()));
 	world.buildings.push(outhouse);
 }
 // End of testing section

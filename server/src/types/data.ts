@@ -140,8 +140,19 @@ export type ObstacleData = {
 	[key: string]: any;
 }
 
+export type TerrainData = {
+	type: string;
+	speed: number;
+	damage: number;
+	interval: number;
+	position: number[];
+	[key: string]: any;
+}
+
 export type BuildingData = {
 	obstacles: ObstacleData[];
 	zones?: { position: number[], hitbox: number[] | number }[];
+	floors?: TerrainData[];
+	roofs?: ObstacleData[];
 	mapColor?: number;
 }

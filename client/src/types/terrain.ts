@@ -200,3 +200,7 @@ export class PiecewiseTerrain extends Terrain {
 	}
 
 }
+
+export class RectTerrain extends LineTerrain {
+	
+}

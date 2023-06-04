@@ -1,8 +1,9 @@
-import { castCorrectObstacle } from "../store/obstacles";
+import { Roof, castCorrectObstacle } from "../store/obstacles";
 import Building from "./building";
-import { BuildingData, ObstacleData } from "./data";
+import { BuildingData, ObstacleData, TerrainData } from "./data";
 import { CommonAngles, Hitbox, Vec2 } from "./math";
 import { Obstacle } from "./obstacle";
+import { Terrain } from "./terrain";
 import { Weapon } from "./weapon";
 
 export interface Supplier<T> {
@@ -34,17 +35,42 @@ export class BuildingSupplier implements Supplier<Building> {
 		this.data = data;
 	}
 
-	create() {
+	create(direction = Vec2.UNIT_X) {
+		const angle = direction.angle();
 		const building = new Building();
+		building.direction = direction;
 		for (const ob of this.data.obstacles) {
 			const obstacle = castCorrectObstacle(ob);
 			if (!obstacle) continue;
-			building.addObstacle(Vec2.fromArray(ob.position), obstacle);
+			building.addObstacle(Vec2.fromArray(ob.position).addAngle(angle), obstacle);
 		}
+		const zones = this.data.zones?.map(zone => ({ position: Vec2.fromArray(zone.position).addAngle(angle), hitbox: Hitbox.fromNumber(zone.hitbox) })) || [];
 		if (this.data.zones)
-			for (const zone of this.data.zones)
-				building.addZone(Vec2.fromArray(zone.position), Hitbox.fromNumber(zone.hitbox));
+			for (const zone of zones)
+				building.addZone(zone.position, zone.hitbox);
+		if (this.data.roofs)
+			for (const ob of this.data.roofs) {
+				const roof = new Roof(Hitbox.fromNumber(ob.hitbox), ob.color);
+				for (const zone of zones)
+					roof.addZone(zone.position, zone.hitbox);
+				building.addObstacle(Vec2.fromArray(ob.position).addAngle(angle), roof);
+			}
+		building.setDirection(direction);
 		building.color = this.data.mapColor;
 		return building;
+	}
+}
+
+export class TerrainSupplier implements Supplier<Terrain> {
+	id: string;
+	data: TerrainData;
+
+	constructor(id: string, data: TerrainData) {
+		this.id = id;
+		this.data = data;
+	}
+
+	create() {
+		return Terrain.fromTerrainData(this.data);
 	}
 }

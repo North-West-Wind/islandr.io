@@ -56,9 +56,11 @@ export class Vec2 {
 	}
 
 	addAngle(radian: number) {
-		const angle = this.angle() + radian;
+		const angle = this.angle();
+		if (isNaN(angle)) return new Vec2(this.x, this.y);
+		const newAngle = angle + radian;
 		const mag = this.magnitude();
-		return new Vec2(mag * Math.cos(angle), mag * Math.sin(angle));
+		return new Vec2(mag * Math.cos(newAngle), mag * Math.sin(newAngle));
 	}
 	
 	addVec(vec: Vec2) {
@@ -115,6 +117,10 @@ export class Line {
 		const c = p.y - p.x * m;
 		const b = new Vec2(p.x + 1, (p.x + 1) * m + c);
 		return new Line(p, b, false);
+	}
+
+	static fromArrays(arr: number[][]) {
+		return new Line(Vec2.fromArray(arr[0]), Vec2.fromArray(arr[1]));
 	}
 
 	readonly a: Vec2;
