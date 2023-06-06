@@ -17,18 +17,6 @@
 </head>
 
 <body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-  <script>
-    document.credits = "";
-    $.get("./assets/CREDITS.md", function(data) {
-      document.credits = data;
-      document.credits.replace("#","");
-      document.credits.replace("*","");
-      document.credits.replace("[","");
-      document.credits.replace("]","");
-      document.credits.replace(/(?:\r\n|\r|\n)/g,"<br/>");
-    }, "text");
-  </script>
   <div id="loading">
     <div class="loading-text">
       Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
@@ -167,7 +155,7 @@
       Credits/Partners
     </div>
     <div class="partner-box">
-      <div name="conetents" onload="this.innerHTML = document.credits;">
+      <div id="contents">
         <!-- We populate this with JS -->
       </div>
     </div>

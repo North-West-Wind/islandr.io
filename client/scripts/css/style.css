@@ -419,13 +419,23 @@ input[type="text"] {
     left: 50%;
     transform: translate(-50%, 0);
     width: fit-content;
-    height: fit-content;
+    height: 80vh;
     background-color: rgba(2, 48, 32);
     color: #fff;
     padding: 1vh;
     cursor: pointer;
     border-radius: 1vh;
     text-align: left-to-right;
+    display: none;
+    overflow-y: auto;
+
+    /* Hide scroll bar (Edge, Firefox) */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scroll bar (Chrome, Safari) */
+.partner-box::-webkit-scrollbar {
     display: none;
 }
 

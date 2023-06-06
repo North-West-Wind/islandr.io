@@ -32,7 +32,11 @@ $(document).ready(function () {
 	$('.partner').click(function () {
 		$('.partner-box').toggle();
 	});
-}); 
+});
+
+$.get("assets/CREDITS.md", function(data) {
+	document.getElementById("contents")!.innerHTML = (<string>data).replace(/[#*\[\]]/g,"").replace(/(?:\r\n|\r|\n)/g,"<br/>");
+}, "text");
 
 window.onload = function () {
 	setTimeout(function () {
