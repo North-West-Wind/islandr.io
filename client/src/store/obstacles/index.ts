@@ -12,6 +12,7 @@ export { default as Stone } from "./stone";
 export { default as Barrel } from "./barrel";
 export { default as Wall } from "./wall";
 export { default as Roof } from "./roof";
+export { default as Toilet} from "./toilet";
 
 export function castCorrectObstacle(minObstacle: MinObstacle & any) {
 	return OBSTACLE_SUPPLIERS.get(minObstacle.type)?.create(minObstacle) || new DummyObstacle(minObstacle);
