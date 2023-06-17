@@ -3,6 +3,7 @@
 **/lib
 **/tmp
 .env
+.idea
 
 # Client stuff
 client/scripts/bundle.min.js

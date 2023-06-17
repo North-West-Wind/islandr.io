@@ -13,6 +13,7 @@ Install [Node.js](https://nodejs.org) before hand.
 2. Open your terminal and `cd` into the directory it is cloned.
 3. Run `npm run deep-install`.
 4. Run `npm run gameserv` to launch the server at port 8080. Run `npm run webserv` to launch the client at port 8000.
+5. To open the game, go to https://127.0.0.1:8000 in your browser.
 
 Note: Once the project is finished, it will be published in `npm`. Instructions will be different after that.
 
