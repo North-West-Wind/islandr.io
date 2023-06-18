@@ -160,7 +160,7 @@ function animate(currentTime: number) {
 			world.clientTick(player);
 
 			// 1 unit to x pixels
-			const scale = Math.max(canvas.width, canvas.height) / (20 + 20 * player.scope);
+			const scale = Math.max(canvas.width, canvas.height) / (30 + 10 * player.scope);
 			const size = world.size;
 			const x = canvas.width / 2 - player.position.x * scale;
 			const y = canvas.height / 2 - player.position.y * scale;

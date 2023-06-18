@@ -6,6 +6,7 @@ import { LootTableData, TypeLootTableData } from "./data";
 import { Entity, Inventory } from "./entity";
 import { GrenadeWeapon, GunWeapon, WeaponType } from "./weapon";
 import Healing from "../store/entities/healing";
+import Scope from "../store/entities/scope";
 
 class TypeLootTable {
 	static readonly MAX_RARITY = 5;
@@ -69,11 +70,13 @@ class LootTable {
 
 	roll() {
 		const entities: Entity[] = [];
+		const results: any[] = [];
 		for (let ii = 0; ii < this.rolls; ii++) {
 			const entry = this.entries[Math.floor(Math.random() * this.entries.length)];
 			const table = TYPE_LOOT_TABLES.get(entry);
 			if (!table) continue;
 			const result = table.roll(this.rarity);
+			results.push(result);
 			switch (entry) {
 				case "gun": {
 					const supplier = WEAPON_SUPPLIERS.get(result.id);
@@ -107,8 +110,13 @@ class LootTable {
 						entities.push(new Healing(result.id, result.amount));
 					break;
 				}
+				case "scope": {
+					entities.push(new Scope(parseInt(result.id)));
+					break;
+				}
 			}
 		}
+		if (!entities.length) console.log(results);
 		return entities;
 	}
 }

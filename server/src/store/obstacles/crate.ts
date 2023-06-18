@@ -4,7 +4,7 @@ import { Obstacle } from "../../types/obstacle";
 import { LOOT_TABLES } from "../../types/loot_table";
 import { ObstacleSupplier } from "../../types/supplier";
 import { ObstacleData } from "../../types/data";
-import { OBSTACLE_SUPPLIERS } from ".";
+import { OBSTACLE_SUPPLIERS, Roof } from ".";
 
 class CrateSupplier extends ObstacleSupplier {
 	make(data: ObstacleData) {
@@ -34,9 +34,7 @@ export default class Crate extends Obstacle {
 				health = 80;
 				break;
 		}
-		super(world, hitbox, hitbox.scaleAll(0.75), 80, 80);
-		this.direction = Vec2.UNIT_X;
-		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this))) this.position = world.size.scale(Math.random(), Math.random());
+		super(world, hitbox, hitbox.scaleAll(0.75), 80, 80, Vec2.UNIT_X);
 		this.special = special;
 	}
 

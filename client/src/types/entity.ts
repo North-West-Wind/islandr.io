@@ -20,6 +20,8 @@ export class Inventory {
 	utilities: CountableString;
 	healings: CountableString;
 	backpackLevel!: number;
+	scopes!: number[];
+	selectedScope!: number;
 
 	constructor(holding: number, slots: number[], weapons?: Weapon[], ammos?: number[], utilities: CountableString = {}, healings: CountableString = {}) {
 		this.holding = holding;

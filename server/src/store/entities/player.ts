@@ -17,7 +17,7 @@ export default class Player extends Entity {
 	collisionLayers = [0];
 	boost = 0;
 	maxBoost = 100;
-	scope = 2;
+	scope = 1;
 	tryAttacking = false;
 	attackLock = 0;
 	tryInteracting = false;
@@ -167,6 +167,9 @@ export default class Player extends Entity {
 				this.healItem = undefined;
 			}
 		}
+
+		// Check scope difference
+		if (this.inventory.selectedScope != this.scope) this.scope = this.inventory.selectedScope;
 	}
 
 	die() {

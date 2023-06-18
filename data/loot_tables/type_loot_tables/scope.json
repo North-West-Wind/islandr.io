@@ -1,0 +1,22 @@
+{
+	"2": {
+		"rarity": 0,
+		"weight": 20,
+		"amount": 1
+	},
+	"4": {
+		"rarity": 0,
+		"weight": 10,
+		"amount": 1
+	},
+	"8": {
+		"rarity": 1,
+		"weight": 10,
+		"amount": 1
+	},
+	"15": {
+		"rarity": 2,
+		"weight": 4,
+		"amount": 1
+	}
+}

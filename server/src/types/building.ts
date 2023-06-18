@@ -34,8 +34,10 @@ export default class Building {
 	setDirection(direction: Vec2) {
 		const delta = this.direction.angleBetween(direction);
 		this.direction = direction;
-		for (const ob of this.obstacles) 
-			ob.obstacle.direction = ob.obstacle.direction.addAngle(delta);
+		for (const ob of this.obstacles) {
+			ob.obstacle.direction = ob.obstacle.direction.addAngle(-delta);
+			ob.obstacle.position = this.position.addVec(ob.position.addAngle(delta));
+		}
 	}
 
 	minimize() {

@@ -2,7 +2,7 @@ import * as ws from "ws";
 import { ID, receive, send, wait } from "./utils";
 import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
-import { Vec2 } from "./types/math";
+import { CommonAngles, Vec2 } from "./types/math";
 import { Player } from "./store/entities";
 import { World } from "./types/terrain";
 import { Plain, Pond, River, Sea } from "./store/terrains";
@@ -30,6 +30,22 @@ world.terrains.push(new River());
 // And the sea ring
 for (ii = 0; ii < 4; ii++) world.terrains.push(new Sea(ii));
 
+// Add buildings
+for (ii = 0; ii < 5; ii++) {
+	const cross = BUILDING_SUPPLIERS.get("cross")!.create();
+	cross.setPosition(world.size.scale(Math.random(), Math.random()));
+	world.buildings.push(cross);
+}
+for (ii = 0; ii < 5; ii++) {
+	const outhouse = BUILDING_SUPPLIERS.get("outhouse")!.create();
+	do {
+		var position = world.size.scale(Math.random(), Math.random());
+	} while (world.terrainAtPos(position).id != "plain");
+	outhouse.setPosition(position);
+	outhouse.setDirection(Vec2.UNIT_X.addAngle(Math.floor(Math.random() * 4) * CommonAngles.PI_TWO));
+	world.buildings.push(outhouse);
+}
+
 // Add random obstacles
 for (ii = 0; ii < 25; ii++) world.obstacles.push(new Tree());
 world.obstacles.push(new Tree("mosin"));
@@ -40,18 +56,6 @@ for (ii = 0; ii < 10; ii++) world.obstacles.push(new Crate("soviet"));
 for (ii = 0; ii < 15; ii++) world.obstacles.push(new Crate("grenade"));
 for (ii = 0; ii < 25; ii++) world.obstacles.push(new Bush());
 for (ii = 0; ii < 25; ii++) world.obstacles.push(new Barrel());
-
-// Add buildings
-for (ii = 0; ii < 5; ii++) {
-	const cross = BUILDING_SUPPLIERS.get("cross")!.create();
-	cross.setPosition(world.size.scale(Math.random(), Math.random()));
-	world.buildings.push(cross);
-}
-for (ii = 0; ii < 5; ii++) {
-	const outhouse = BUILDING_SUPPLIERS.get("outhouse")!.create();
-	outhouse.setPosition(world.size.scale(Math.random(), Math.random()));
-	world.buildings.push(outhouse);
-}
 // End of testing section
 let numberOfPlayers = 0;
 server.on("connection", async socket => {

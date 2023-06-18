@@ -77,6 +77,8 @@ export default class Player extends Entity {
 				if (this.inventory.healings[key]) document.getElementById("healing-panel-" + Healing.mapping.indexOf(key))!.classList.add("enabled");
 				else document.getElementById("healing-panel-" + Healing.mapping.indexOf(key))!.classList.remove("enabled");
 			}
+			this.inventory.scopes = inventory.scopes;
+			this.inventory.selectedScope = inventory.selectedScope;
 		} else this.inventory = new PartialInventory(<MinInventory>minEntity.inventory);
 		if (this.despawn) this.zIndex = 7;
 	}

@@ -5,7 +5,6 @@ import { LOOT_TABLES } from "../../types/loot_table";
 import { ObstacleSupplier } from "../../types/supplier";
 import { ObstacleData } from "../../types/data"; 
 import { OBSTACLE_SUPPLIERS } from ".";
-import { randomBetween } from "../../utils";
 
 class ToiletSupplier extends ObstacleSupplier {
 	make(data: ObstacleData) {
@@ -17,10 +16,10 @@ export default class Toilet extends Obstacle {
 	type = Toilet.TYPE;
 
 	constructor() {
-		const salt = randomBetween(0.9, 1.1);
-		super(world, new CircleHitbox(1).scaleAll(salt), new CircleHitbox(0.5).scaleAll(salt), 120, 120);
-		while (world.terrainAtPos(this.position).id != "plain" || world.obstacles.find(obstacle => obstacle.collided(this))) this.position = world.size.scale(Math.random(), Math.random());
+		const hitbox = new CircleHitbox(1.2);
+		super(world, hitbox, hitbox.scaleAll(0.5), 120, 120);
 	}
+
 	static {
 		OBSTACLE_SUPPLIERS.set(Toilet.TYPE, new ToiletSupplier());
 	}

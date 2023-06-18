@@ -21,9 +21,11 @@ export class Inventory {
 	ammos: number[];
 	// Utilities. Maps ID to amount of util.
 	utilities: CountableString;
-	utilOrder: Set<string> = new Set();
+	utilOrder = new Set<string>();
 	healings: CountableString;
 	backpackLevel = 0;
+	scopes = [1];
+	selectedScope = 1;
 
 	constructor(holding: number, weapons?: Weapon[], ammos?: number[], utilities: CountableString = {}, healings: CountableString = {}) {
 		this.holding = holding;
@@ -56,6 +58,19 @@ export class Inventory {
 	fourthSlot() {
 		const util = Array.from(this.utilOrder)[0];
 		if (this.utilities[util]) this.weapons[3] = WEAPON_SUPPLIERS.get(util)!.create();
+	}
+
+	addScope(scope: number) {
+		if (this.scopes.includes(scope)) return false;
+		this.scopes.push(scope);
+		this.scopes = this.scopes.sort();
+		if (this.selectedScope < scope) this.selectScope(scope);
+		return true;
+	}
+
+	selectScope(scope: number) {
+		if (!this.scopes.includes(scope)) return;
+		this.selectedScope = scope;
 	}
 
 	minimize() {

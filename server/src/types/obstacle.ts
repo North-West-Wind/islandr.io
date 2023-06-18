@@ -1,3 +1,4 @@
+import { Roof } from "../store/obstacles";
 import { ID } from "../utils";
 import { Entity } from "./entity";
 import { Vec2, Hitbox, CircleHitbox, RectHitbox, CommonAngles, Line } from "./math";
@@ -23,15 +24,17 @@ export class Obstacle {
 	animations: string[] = [];
 	dirty = true;
 
-	constructor(world: World, baseHitbox: Hitbox, minHitbox: Hitbox, health: number, maxHealth: number) {
+	constructor(world: World, baseHitbox: Hitbox, minHitbox: Hitbox, health: number, maxHealth: number, direction?: Vec2) {
 		if (baseHitbox.type !== minHitbox.type) throw new Error("Hitboxes are not the same type!");
 		this.id = ID();
-		this.position = world.size.scale(Math.random(), Math.random());
-		this.direction = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI);
+		this.direction = direction || Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI);
 		this.baseHitbox = this.hitbox = baseHitbox;
 		this.minHitbox = minHitbox;
 		this.health = health;
 		this.maxHealth = maxHealth;
+		do {
+			this.position = world.size.scale(Math.random(), Math.random());
+		} while (world.terrainAtPos(this.position).id != world.defaultTerrain.id || world.obstacles.find(obstacle => obstacle.collided(this)) || world.buildings.some(b => b.obstacles.find(o => o.obstacle.type === Roof.ID)?.obstacle.collided(this)));
 	}
 
 	damage(dmg: number) {

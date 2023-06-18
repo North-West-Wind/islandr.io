@@ -23,7 +23,7 @@ class ToiletSupplier implements ObstacleSupplier {
 export default class Toilet extends Obstacle {
 	static readonly TYPE = "toilet";
 	type = Toilet.TYPE;
-	zIndex = 10;
+	zIndex = 9;
 
 	static {
 		OBSTACLE_SUPPLIERS.set(Toilet.TYPE, new ToiletSupplier());
@@ -36,7 +36,7 @@ export default class Toilet extends Obstacle {
 		ctx.rotate(-this.direction.angle());
 		const img = this.despawn ? toiletResidueImg : toiletImg;
 		// Times 2 because radius * 2 = diameter
-		const width = scale * this.hitbox.comparable * 2 * (this.despawn ? 0.5 : 1), height = width * img.naturalWidth / img.naturalHeight;
+		const width = scale * this.hitbox.comparable * 2, height = width * img.naturalWidth / img.naturalHeight;
 		ctx.drawImage(img, -width / 2, -height / 2, width, height);
 		ctx.resetTransform();
 	}

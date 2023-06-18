@@ -2,6 +2,8 @@
 	"rolls": 1,
 	"rarity": 2,
 	"entries": [
-		"gun"
+		"gun",
+		"gun",
+		"scope"
 	]
 }

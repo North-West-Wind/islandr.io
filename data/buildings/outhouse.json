@@ -2,7 +2,7 @@
 	"obstacles": [
 		{
 			"type": "wall",
-			"hitbox": [6.5, 0.5],
+			"hitbox": [7, 0.5],
 			"color": 2908887295,
 			"__color": "(comment) 2908887295 is 0xad6218ff",
 			"position": [0, -3]
@@ -11,25 +11,25 @@
 			"type": "wall",
 			"hitbox": [2, 0.5],
 			"color": 2908887295,
-			"position": [-2, 3]
+			"position": [-2.5, 3]
 		},
 		{
 			"type": "wall",
 			"hitbox": [2, 0.5],
 			"color": 2908887295,
-			"position": [2, 3]
+			"position": [2.5, 3]
 		},
 		{
 			"type": "wall",
 			"hitbox": [0.5, 7],
 			"color": 2908887295,
-			"position": [-3, 0]
+			"position": [-3.5, 0]
 		},
 		{
 			"type": "wall",
 			"hitbox": [0.5, 7],
 			"color": 2908887295,
-			"position": [3, 0]
+			"position": [3.5, 0]
 		},
 		{
 			"type": "toilet",
@@ -55,7 +55,7 @@
 	"roofs": [
 		{
 			"type": "roof",
-			"hitbox": [6.5, 6.5],
+			"hitbox": [7, 6.5],
 			"position": [0, 0],
 			"color": 2942442751
 		}
