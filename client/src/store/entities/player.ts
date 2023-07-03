@@ -53,10 +53,13 @@ export default class Player extends Entity {
 	inventory!: PartialInventory | Inventory;
 	zIndex = 9;
 	currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+	
 
 	constructor(minEntity: MinEntity & AdditionalEntity) {
 		super(minEntity);
 		this.copy(minEntity);
+		this.currentSkinSVG.onload = () => this.currentSkinSVG.loaded = true;
+		this.currentSkinSVG.src = "assets/images/game/skins/" + this.skin + ".svg";
 	}
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
@@ -87,8 +90,6 @@ export default class Player extends Entity {
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
-		this.currentSkinSVG.onload = () => this.currentSkinSVG.loaded = true;
-		this.currentSkinSVG.src = "assets/images/game/skins/" + this.skin + ".svg";
 		const relative = this.position.addVec(you.position.inverse());
 		const radius = scale * this.hitbox.comparable;
 		console.log("drawimage currentSkinSVG")
