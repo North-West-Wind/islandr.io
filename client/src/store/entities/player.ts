@@ -1,3 +1,4 @@
+import { addListener } from "process";
 import { ENTITY_SUPPLIERS, Healing } from ".";
 import { getWeaponImagePath } from "../../textures";
 import { Entity, Inventory, PartialInventory } from "../../types/entity";
@@ -6,7 +7,6 @@ import { EntitySupplier } from "../../types/supplier";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { circleFromCenter } from "../../utils";
 import { castCorrectWeapon, WEAPON_SUPPLIERS } from "../weapons";
-import { cookieExists, getCookieValue, setCookie } from "cookies-utils";
 
 const weaponPanelDivs: HTMLDivElement[] = [];
 const weaponNameDivs: HTMLDivElement[] = [];
@@ -21,13 +21,6 @@ const deathImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image
 deathImg.onload = () => deathImg.loaded = true;
 deathImg.src = "assets/images/game/entities/death.svg";
 if (!localStorage.getItem("playerSkin")){ localStorage.setItem("playerSkin", "default")}
-const currentSkin = localStorage.getItem("playerSkin");
-console.log(`The current value of the current skin: ${localStorage.getItem("playerSkin")}`)
-console.log("Current skin loadout start")
-const currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-currentSkinSVG.onload = () => currentSkinSVG.loaded = true;
-currentSkinSVG.src = "assets/images/game/skins/" + currentSkin + ".svg";
-console.log("Current skin loadout finished, it is workin?")
 interface AdditionalEntity {
 	id: string;
 	username: string;
@@ -42,6 +35,7 @@ interface AdditionalEntity {
 	maxReloadTicks: number;
 	healTicks: number;
 	maxHealTicks: number;
+	skin: string | null;
 }
 
 class PlayerSupplier implements EntitySupplier {
@@ -55,8 +49,10 @@ export default class Player extends Entity {
 	type = Player.TYPE;
 	id!: string;
 	username!: string;
+	skin!: string | null
 	inventory!: PartialInventory | Inventory;
 	zIndex = 9;
+	currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 
 	constructor(minEntity: MinEntity & AdditionalEntity) {
 		super(minEntity);
@@ -66,6 +62,7 @@ export default class Player extends Entity {
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
 		this.username = minEntity.username;
+		this.skin = minEntity.skin;
 		if (typeof minEntity.inventory.holding === "number") {
 			const inventory = <Inventory>minEntity.inventory;
 			this.inventory = new Inventory(inventory.holding, inventory.slots, inventory.weapons.map(w => w ? castCorrectWeapon(w, w.type == WeaponType.GUN ? (<GunWeapon>w).magazine : 0) : w), inventory.ammos, inventory.utilities, inventory.healings);
@@ -90,6 +87,8 @@ export default class Player extends Entity {
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
+		this.currentSkinSVG.onload = () => this.currentSkinSVG.loaded = true;
+		this.currentSkinSVG.src = "assets/images/game/skins/" + this.skin + ".svg";
 		const relative = this.position.addVec(you.position.inverse());
 		const radius = scale * this.hitbox.comparable;
 		console.log("drawimage currentSkinSVG")
@@ -103,7 +102,7 @@ export default class Player extends Entity {
 				ctx.strokeStyle = "#000000";
 				circleFromCenter(ctx, -radius * 0.2 * (1 + this.inventory.backpackLevel), 0, radius * 0.9, true, true);
 			}
-			ctx.drawImage(currentSkinSVG, -radius, -radius, radius * 2 , radius * 2 );
+			ctx.drawImage(this.currentSkinSVG, -radius, -radius, radius * 2 , radius * 2 );
 
 			// We will leave the transform for the weapon
 			// If player is holding nothing, render fist

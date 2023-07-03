@@ -75,14 +75,17 @@ server.on("connection", async socket => {
 	});
 
 	var username = "";
+	var skin = "default";
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
 		send(socket, new AckPacket(id, TICKS_PER_SECOND, world.size, world.defaultTerrain));
 		socket.once("message", (msg: ArrayBuffer) => {
 			const decoded = <ResponsePacket>receive(msg);
-			if (decoded.id == id && decoded.username) {
+			if (decoded.id == id && decoded.username && decoded.skin) {
 				connected = true;
 				username = decoded.username;
+				skin = decoded.skin;
+				console.log(skin)
 			} else try { socket.close(); } catch (err) { }
 			resolve();
 		})
@@ -93,7 +96,7 @@ server.on("connection", async socket => {
 	console.log(`Number of players are: ${numberOfPlayers}`);
 
 	// Create the new player and add it to the entity list.
-	const player = new Player(id, username);
+	const player = new Player(id, username, skin);
 	world.entities.push(player);
 
 	// Send the player the entire map

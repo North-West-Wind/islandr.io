@@ -24,6 +24,8 @@ var id: string | null;
 var tps = 1; // Default should be 1, so even if no TPS detail from server, we will not be dividing by 0
 var username: string | null;
 var address: string | null;
+var skin: string | null = localStorage.getItem("playerSkin");
+console.log(skin)
 var player: FullPlayer | null;
 
 export function getId() { return id; }
@@ -54,8 +56,8 @@ async function init(address: string) {
 	
 			// Call renderer start to setup
 			await start();
-
-			send(ws, new ResponsePacket(id, username!));
+			console.log("from game.ts client skin! > " + skin! + " and skin > " + skin)
+			send(ws, new ResponsePacket(id, username!, skin!));
 			connected = true;
 			clearTimeout(timer);
 			

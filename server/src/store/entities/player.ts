@@ -8,7 +8,6 @@ import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { spawnAmmo, spawnGun } from "../../utils";
 import Healing from "./healing";
-
 export default class Player extends Entity {
 	type = "player";
 	hitbox = new CircleHitbox(1);
@@ -34,11 +33,15 @@ export default class Player extends Entity {
 	healTicks = 0;
 	maxHealTicks = 0;
 	healItem: string | undefined = undefined;
+	skin: string | null;
 
-	constructor(id: string, username: string) {
+
+	constructor(id: string, username: string, skin: string) {
 		super();
 		this.id = id;
 		this.username = username;
+		this.skin = skin;
+		console.log("from player.ts server skin > " + this.skin)
 		this.inventory = Inventory.defaultEmptyInventory();
 	}
 
@@ -214,6 +217,6 @@ export default class Player extends Entity {
 
 	minimize() {
 		const min = super.minimize();
-		return Object.assign(min, { username: this.username, inventory: this.inventory.minimize() })
+		return Object.assign(min, { username: this.username, inventory: this.inventory.minimize(), skin: this.skin })
 	}
 }
