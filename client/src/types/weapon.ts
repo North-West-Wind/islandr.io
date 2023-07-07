@@ -119,7 +119,6 @@ export class GunWeapon extends Weapon {
 			} else
 				ctx.drawImage(img, player.hitbox.comparable * scale, - this.length * scale / 2, this.length * scale, this.length * scale)
 		}
-		this.currentSkinSVG.src = "assets/images/game/skins/" + player.skin + ".svg";
 		ctx.lineWidth = fistRadius / 3;
 		ctx.strokeStyle = "#000000";
 		for (const pos of fistPositions) {
