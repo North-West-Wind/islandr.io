@@ -539,7 +539,7 @@
     </div>
 
 
- <div id="emotes-section" class="content-section">
+ <!--<div id="emotes-section" class="content-section">
   <div class="bigg-box">
     <div class="boxè" id="emoji-box">
       <img id="emoji1" class="emoji" src="https://static.vecteezy.com/system/resources/previews/009/268/713/original/yellow-emoji-face-reaction-illustration-free-png.png" draggable="true" ondragstart="drag(event)">
@@ -553,8 +553,9 @@
       <img id="emoji9" class="emoji" src="https://images.emojiterra.com/google/android-12l/512px/1f60d.png" draggable="true" ondragstart="drag(event)">
       <img id="emoji10" class="emoji" src="https://static.vecteezy.com/system/resources/previews/009/931/816/original/angry-face-emoji-file-png.png" draggable="true" ondragstart="drag(event)">
     </div>
-    <div class="empty-space-container">
+    <div class="empty-space-container"> -->
       <!-- Contents of "empty-space-container" -->
+      <!--
       <div class="empty-space" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
       <div class="empty-space" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
       <div class="empty-space" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
@@ -565,6 +566,7 @@
     </div>
   </div>
 </div>
+-->
 
   
 
@@ -615,9 +617,9 @@
         showSection("skins-section", this);
       });
 
-      document.getElementById("emotes-btn").addEventListener("click", function () {
-        showSection("emotes-section", this);
-      });
+      // document.getElementById("emotes-btn").addEventListener("click", function () {
+      //   showSection("emotes-section", this);
+      // });
 
       document.getElementById("cursors-btn").addEventListener("click", function () {
         showSection("cursors-section", this);
@@ -716,50 +718,50 @@
       }
     }
 
-    function removeEmoji(event) {
-      var data = event.dataTransfer.getData("text");
-      var emoji = document.getElementById(data);
-      var box = document.getElementById("emoji-box");
-      box.appendChild(emoji);
+    // function removeEmoji(event) {
+    //   var data = event.dataTransfer.getData("text");
+    //   var emoji = document.getElementById(data);
+    //   var box = document.getElementById("emoji-box");
+    //   box.appendChild(emoji);
 
-      // Save the positions to local storage
-      savePositionsToLocalStorage();
-    }
+    //   // Save the positions to local storage
+    //   savePositionsToLocalStorage();
+    // }
 
-    function savePositionsToLocalStorage() {
-      var box = document.getElementById("emoji-box");
-      var emojiPositions = [];
+    // function savePositionsToLocalStorage() {
+    //   var box = document.getElementById("emoji-box");
+    //   var emojiPositions = [];
 
-      // Save the positions of the emojis
-      box.childNodes.forEach(function (emoji) {
-        if (emoji.nodeType === Node.ELEMENT_NODE) {
-          emojiPositions.push({
-            id: emoji.id,
-            top: emoji.style.top,
-            left: emoji.style.left
-          });
-        }
-      });
+    //   // Save the positions of the emojis
+    //   box.childNodes.forEach(function (emoji) {
+    //     if (emoji.nodeType === Node.ELEMENT_NODE) {
+    //       emojiPositions.push({
+    //         id: emoji.id,
+    //         top: emoji.style.top,
+    //         left: emoji.style.left
+    //       });
+    //     }
+    //   });
 
-      // Store the positions in local storage
-      localStorage.setItem("emojiPositions", JSON.stringify(emojiPositions));
-    }
+    //   // Store the positions in local storage
+    //   localStorage.setItem("emojiPositions", JSON.stringify(emojiPositions));
+    // }
 
-    function loadPositionsFromLocalStorage() {
-      var box = document.getElementById("emoji-box");
-      var emojiPositions = JSON.parse(localStorage.getItem("emojiPositions"));
+    // function loadPositionsFromLocalStorage() {
+    //   var box = document.getElementById("emoji-box");
+    //   var emojiPositions = JSON.parse(localStorage.getItem("emojiPositions"));
 
-      if (emojiPositions && Array.isArray(emojiPositions)) {
-        // Restore the positions of the emojis
-        emojiPositions.forEach(function (emojiPosition) {
-          var emoji = document.getElementById(emojiPosition.id);
-          if (emoji) {
-            emoji.style.top = emojiPosition.top;
-            emoji.style.left = emojiPosition.left;
-          }
-        });
-      }
-    }
+    //   if (emojiPositions && Array.isArray(emojiPositions)) {
+    //     // Restore the positions of the emojis
+    //     emojiPositions.forEach(function (emojiPosition) {
+    //       var emoji = document.getElementById(emojiPosition.id);
+    //       if (emoji) {
+    //         emoji.style.top = emojiPosition.top;
+    //         emoji.style.left = emojiPosition.left;
+    //       }
+    //     });
+    //   }
+    // }
 
     // Load the saved positions when the page is reloaded
     window.addEventListener("load", loadPositionsFromLocalStorage);

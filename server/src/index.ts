@@ -76,15 +76,17 @@ server.on("connection", async socket => {
 
 	var username = "";
 	var skin = "default";
+	var deathImg = "default";
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
 		send(socket, new AckPacket(id, TICKS_PER_SECOND, world.size, world.defaultTerrain));
 		socket.once("message", (msg: ArrayBuffer) => {
 			const decoded = <ResponsePacket>receive(msg);
-			if (decoded.id == id && decoded.username && decoded.skin) {
+			if (decoded.id == id && decoded.username && decoded.skin && decoded.deathImg) {
 				connected = true;
 				username = decoded.username;
 				skin = decoded.skin;
+				deathImg = decoded.deathImg
 				console.log(skin)
 			} else try { socket.close(); } catch (err) { }
 			resolve();
@@ -96,7 +98,7 @@ server.on("connection", async socket => {
 	console.log(`Number of players are: ${numberOfPlayers}`);
 
 	// Create the new player and add it to the entity list.
-	const player = new Player(id, username, skin);
+	const player = new Player(id, username, skin, deathImg);
 	world.entities.push(player);
 
 	// Send the player the entire map
@@ -104,7 +106,7 @@ server.on("connection", async socket => {
 	// Send the player initial objects
 	send(socket, new GamePacket(world.entities, world.obstacles.concat(...world.buildings.map(b => b.obstacles.map(o => o.obstacle))), player, numberOfPlayers, true));
 	// Send the player music
-	for (const sound of world.joinSounds) send(socket, new SoundPacket(sound.path, sound.position));
+	// for (const sound of world.joinSounds) send(socket, new SoundPacket(sound.path, sound.position));
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {

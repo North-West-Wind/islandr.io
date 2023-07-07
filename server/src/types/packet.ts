@@ -18,6 +18,7 @@ export class ResponsePacket implements IPacket {
 	id!: string;
 	username!: string;
 	skin!: string | null;
+	deathImg!: string | null;
 }
 
 class PingPacket implements IPacket {
