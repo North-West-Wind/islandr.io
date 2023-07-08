@@ -25,8 +25,12 @@ var tps = 1; // Default should be 1, so even if no TPS detail from server, we wi
 var username: string | null;
 var address: string | null;
 var skin: string | null = localStorage.getItem("playerSkin");
-var deathImg: string | null = localStorage.getItem("playerDeathImg")
+if (!localStorage.getItem("playerDeathImg")) localStorage.setItem("playerDeathImg", "default")
+
+var deathImg: string | null = localStorage.getItem("playerDeathImg");
+
 console.log(skin)
+console.log(deathImg)
 var player: FullPlayer | null;
 
 export function getId() { return id; }
@@ -57,10 +61,10 @@ async function init(address: string) {
 	
 			// Call renderer start to setup
 			await start();
-			var currentCursor = localStorage.getItem("selectedCursor")
-			if (!currentCursor){localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor")}
-			if (currentCursor) {document.documentElement.style.cursor = currentCursor}
-			console.log("from game.ts client skin! > " + skin! + " and death img > " + deathImg)
+			// var currentCursor = localStorage.getItem("selectedCursor")
+			// if (!currentCursor){localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor")}
+			// if (currentCursor) {document.documentElement.style.cursor = currentCursor}
+			console.log("from game.ts client skin! > " + skin! + " and death img > " + deathImg!)
 			send(ws, new ResponsePacket(id, username!, skin!, deathImg!));
 			connected = true;
 			clearTimeout(timer);

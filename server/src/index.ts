@@ -86,7 +86,7 @@ server.on("connection", async socket => {
 				connected = true;
 				username = decoded.username;
 				skin = decoded.skin;
-				deathImg = decoded.deathImg
+				deathImg = decoded.deathImg;
 				console.log(skin)
 			} else try { socket.close(); } catch (err) { }
 			resolve();

@@ -61,7 +61,7 @@ export default class Player extends Entity {
 		this.currentSkinSVG.onload = () => this.currentSkinSVG.loaded = true;
 		this.currentSkinSVG.src = "assets/images/game/skins/" + this.skin + ".svg";
 		this.CurrentdeathImg.onload = () => this.CurrentdeathImg.loaded = true;
-		this.CurrentdeathImg.src = "assets/images/game/entities/" + this.CurrentdeathImg + ".svg";
+		this.CurrentdeathImg.src = "assets/images/game/entities/" + this.deathImg + ".svg";
 	}
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
