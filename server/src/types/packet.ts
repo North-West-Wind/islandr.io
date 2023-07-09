@@ -80,6 +80,13 @@ export class UseHealingPacket {
 	item!: string;
 }
 
+export class CurrencyUpdatePacket {
+	type = "currencyupdatepacket"
+	updationAmount!: number
+	constructor(updationAmount: number){
+		this.updationAmount = updationAmount
+	}
+}
 export type ClientPacketResolvable = ResponsePacket | PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket | ReloadWeaponPacket;
 
 export class AckPacket implements IPacket {

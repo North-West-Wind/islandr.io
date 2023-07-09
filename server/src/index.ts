@@ -14,7 +14,7 @@ export var ticksElapsed = 0;
 const server = new ws.Server({ port: 8080 });
 server.once("listening", () => console.log(`WebSocket Server listening at port ${server.options.port}`));
 
-const sockets = new Map<string, ws.WebSocket>();
+export const sockets = new Map<string, ws.WebSocket>();
 
 // Initialize the map
 export const world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]), new Plain());
@@ -85,6 +85,7 @@ server.on("connection", async socket => {
 			if (decoded.id == id && decoded.username && decoded.skin && decoded.deathImg) {
 				connected = true;
 				username = decoded.username;
+				
 				skin = decoded.skin;
 				deathImg = decoded.deathImg;
 				console.log(skin)
@@ -195,7 +196,7 @@ setInterval(() => {
 		if (!socket) return;
 		send(socket, new GamePacket(world.dirtyEntities, world.dirtyObstacles, player, numberOfPlayers, false, world.discardEntities, world.discardObstacles));
 		if (world.particles.length) send(socket, new ParticlesPacket(world.particles, player));
-		for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
+		// for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
 	});
 	world.postTick();
 }, 1000 / TICKS_PER_SECOND);

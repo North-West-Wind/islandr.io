@@ -30,7 +30,7 @@ export abstract class Weapon implements MinWeapon, Renderable {
 export class MeleeWeapon extends Weapon {
 	type = WeaponType.MELEE;
 	static readonly FIST_ANIMATIONS = ["left_fist", "right_fist"];
-	currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+	readonly currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 
 	constructor(id: string, data: MeleeData) {
 		super(id, data.name);
@@ -83,7 +83,7 @@ export class GunWeapon extends Weapon {
 	length: number;
 	hasBarrelImage: boolean;
 	magazine: number;
-	currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+	readonly currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 
 	
 
