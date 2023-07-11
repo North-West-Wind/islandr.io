@@ -12,6 +12,11 @@ app.get("/", (_req, res) => {
 		res.setHeader(key, value);
 	res.sendFile("index.html", { root: "client" });
 });
+app.get("/loadout", (_req, res) => {
+	for (const [key, value] of Object.entries(defaultHeaders))
+		res.setHeader(key, value);
+	res.sendFile("loadout.html", { root: "client" });
+});
 
 app.get("/discord", (_req, res) => {
 	res.redirect(308, "https://discord.gg/jKQEVT7Vd3");

@@ -10,10 +10,12 @@ export class ResponsePacket implements IPacket {
 	type = "response";
 	id: string;
 	username: string;
+	skin: string | null
 
-	constructor(id: string, username: string) {
+	constructor(id: string, username: string, skin: string | null) {
 		this.id = id;
 		this.username = username;
+		this.skin = skin;
 	}
 }
 
