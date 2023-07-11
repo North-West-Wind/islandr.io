@@ -34,14 +34,16 @@ export default class Player extends Entity {
 	maxHealTicks = 0;
 	healItem: string | undefined = undefined;
 	skin: string | null;
+	deathImg: string | null;
 
 
-	constructor(id: string, username: string, skin: string) {
+	constructor(id: string, username: string, skin: string | null, deathImg: string | null) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.skin = skin;
-		console.log("from player.ts server skin > " + this.skin)
+		this.deathImg = deathImg
+		console.log("from player.ts server skin > " + this.skin + " and death image = " + this.deathImg)
 		this.inventory = Inventory.defaultEmptyInventory();
 	}
 
@@ -220,6 +222,6 @@ export default class Player extends Entity {
 
 	minimize() {
 		const min = super.minimize();
-		return Object.assign(min, { username: this.username, inventory: this.inventory.minimize(), skin: this.skin })
+		return Object.assign(min, { username: this.username, inventory: this.inventory.minimize(), skin: this.skin, deathImg: this.deathImg })
 	}
 }

@@ -2,12 +2,14 @@ import { world } from "..";
 import { GLOBAL_UNIT_MULTIPLIER, TICKS_PER_SECOND } from "../constants";
 import { Bullet } from "../store/entities";
 import { GunColor } from "./misc";
-import { randomBetween, toRadians } from "../utils";
+import { randomBetween, send, toRadians } from "../utils";
 import { Entity } from "./entity";
 import { CircleHitbox, Hitbox, Vec2 } from "./math";
 import { MinWeapon } from "./minimized";
 import { Obstacle } from "./obstacle";
 import { BulletStats, GunData, MeleeData, TracerData } from "./data";
+import {sockets} from "../index"
+import { CurrencyUpdatePacket } from "./packet";
 
 export enum WeaponType {
 	MELEE = "melee",
@@ -85,6 +87,7 @@ export class MeleeWeapon extends Weapon {
 			for (const thing of combined)
 				if (thing.collided(dummy) && thing.id != attacker.id) {
 					thing.damage(this.damage);
+					
 					if (!this.cleave) break;
 				}
 		}, this.delay);

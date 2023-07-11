@@ -17,9 +17,6 @@ for (let ii = 0; ii < 4; ii++) {
 	weaponImages.push(<HTMLImageElement & { path: string }> document.getElementById("weapon-image-" + ii));
 }
 
-const deathImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-deathImg.onload = () => deathImg.loaded = true;
-deathImg.src = "assets/images/game/entities/death.svg";
 if (!localStorage.getItem("playerSkin")){ localStorage.setItem("playerSkin", "default")}
 interface AdditionalEntity {
 	id: string;
@@ -36,6 +33,7 @@ interface AdditionalEntity {
 	healTicks: number;
 	maxHealTicks: number;
 	skin: string | null;
+	deathImg: string | null;
 }
 
 class PlayerSupplier implements EntitySupplier {
@@ -52,7 +50,9 @@ export default class Player extends Entity {
 	skin!: string | null
 	inventory!: PartialInventory | Inventory;
 	zIndex = 9;
+	deathImg!: string | null
 	currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+	CurrentdeathImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 	
 
 	constructor(minEntity: MinEntity & AdditionalEntity) {
@@ -60,12 +60,15 @@ export default class Player extends Entity {
 		this.copy(minEntity);
 		this.currentSkinSVG.onload = () => this.currentSkinSVG.loaded = true;
 		this.currentSkinSVG.src = "assets/images/game/skins/" + this.skin + ".svg";
+		this.CurrentdeathImg.onload = () => this.CurrentdeathImg.loaded = true;
+		this.CurrentdeathImg.src = "assets/images/game/entities/" + this.deathImg + ".svg";
 	}
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
 		this.username = minEntity.username;
 		this.skin = minEntity.skin;
+		this.deathImg = minEntity.deathImg;
 		if (typeof minEntity.inventory.holding === "number") {
 			const inventory = <Inventory>minEntity.inventory;
 			this.inventory = new Inventory(inventory.holding, inventory.slots, inventory.weapons.map(w => w ? castCorrectWeapon(w, w.type == WeaponType.GUN ? (<GunWeapon>w).magazine : 0) : w), inventory.ammos, inventory.utilities, inventory.healings);
@@ -115,7 +118,7 @@ export default class Player extends Entity {
 			weapon.render(this, canvas, ctx, scale);
 			ctx.resetTransform();
 		} else {
-			ctx.drawImage(deathImg, -radius * 2, -radius * 2, radius * 4, radius * 4);
+			ctx.drawImage(this.CurrentdeathImg, -radius * 2, -radius * 2, radius * 4, radius * 4);
 			ctx.textAlign = "center";
 			ctx.textBaseline = "top";
 			ctx.font = `700 ${scale}px Jura`;

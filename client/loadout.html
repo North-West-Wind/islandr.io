@@ -539,7 +539,7 @@
     </div>
 
 
- <div id="emotes-section" class="content-section">
+ <!--<div id="emotes-section" class="content-section">
   <div class="bigg-box">
     <div class="boxè" id="emoji-box">
       <img id="emoji1" class="emoji" src="https://static.vecteezy.com/system/resources/previews/009/268/713/original/yellow-emoji-face-reaction-illustration-free-png.png" draggable="true" ondragstart="drag(event)">
@@ -553,8 +553,9 @@
       <img id="emoji9" class="emoji" src="https://images.emojiterra.com/google/android-12l/512px/1f60d.png" draggable="true" ondragstart="drag(event)">
       <img id="emoji10" class="emoji" src="https://static.vecteezy.com/system/resources/previews/009/931/816/original/angry-face-emoji-file-png.png" draggable="true" ondragstart="drag(event)">
     </div>
-    <div class="empty-space-container">
+    <div class="empty-space-container"> -->
       <!-- Contents of "empty-space-container" -->
+      <!--
       <div class="empty-space" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
       <div class="empty-space" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
       <div class="empty-space" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
@@ -565,6 +566,7 @@
     </div>
   </div>
 </div>
+-->
 
   
 
@@ -615,9 +617,9 @@
         showSection("skins-section", this);
       });
 
-      document.getElementById("emotes-btn").addEventListener("click", function () {
-        showSection("emotes-section", this);
-      });
+      // document.getElementById("emotes-btn").addEventListener("click", function () {
+      //   showSection("emotes-section", this);
+      // });
 
       document.getElementById("cursors-btn").addEventListener("click", function () {
         showSection("cursors-section", this);
@@ -716,55 +718,203 @@
       }
     }
 
-    function removeEmoji(event) {
-      var data = event.dataTransfer.getData("text");
-      var emoji = document.getElementById(data);
-      var box = document.getElementById("emoji-box");
-      box.appendChild(emoji);
+    // function removeEmoji(event) {
+    //   var data = event.dataTransfer.getData("text");
+    //   var emoji = document.getElementById(data);
+    //   var box = document.getElementById("emoji-box");
+    //   box.appendChild(emoji);
 
-      // Save the positions to local storage
-      savePositionsToLocalStorage();
-    }
+    //   // Save the positions to local storage
+    //   savePositionsToLocalStorage();
+    // }
 
-    function savePositionsToLocalStorage() {
-      var box = document.getElementById("emoji-box");
-      var emojiPositions = [];
+    // function savePositionsToLocalStorage() {
+    //   var box = document.getElementById("emoji-box");
+    //   var emojiPositions = [];
 
-      // Save the positions of the emojis
-      box.childNodes.forEach(function (emoji) {
-        if (emoji.nodeType === Node.ELEMENT_NODE) {
-          emojiPositions.push({
-            id: emoji.id,
-            top: emoji.style.top,
-            left: emoji.style.left
-          });
-        }
-      });
+    //   // Save the positions of the emojis
+    //   box.childNodes.forEach(function (emoji) {
+    //     if (emoji.nodeType === Node.ELEMENT_NODE) {
+    //       emojiPositions.push({
+    //         id: emoji.id,
+    //         top: emoji.style.top,
+    //         left: emoji.style.left
+    //       });
+    //     }
+    //   });
 
-      // Store the positions in local storage
-      localStorage.setItem("emojiPositions", JSON.stringify(emojiPositions));
-    }
+    //   // Store the positions in local storage
+    //   localStorage.setItem("emojiPositions", JSON.stringify(emojiPositions));
+    // }
 
-    function loadPositionsFromLocalStorage() {
-      var box = document.getElementById("emoji-box");
-      var emojiPositions = JSON.parse(localStorage.getItem("emojiPositions"));
+    // function loadPositionsFromLocalStorage() {
+    //   var box = document.getElementById("emoji-box");
+    //   var emojiPositions = JSON.parse(localStorage.getItem("emojiPositions"));
 
-      if (emojiPositions && Array.isArray(emojiPositions)) {
-        // Restore the positions of the emojis
-        emojiPositions.forEach(function (emojiPosition) {
-          var emoji = document.getElementById(emojiPosition.id);
-          if (emoji) {
-            emoji.style.top = emojiPosition.top;
-            emoji.style.left = emojiPosition.left;
-          }
-        });
-      }
-    }
+    //   if (emojiPositions && Array.isArray(emojiPositions)) {
+    //     // Restore the positions of the emojis
+    //     emojiPositions.forEach(function (emojiPosition) {
+    //       var emoji = document.getElementById(emojiPosition.id);
+    //       if (emoji) {
+    //         emoji.style.top = emojiPosition.top;
+    //         emoji.style.left = emojiPosition.left;
+    //       }
+    //     });
+    //   }
+    // }
 
     // Load the saved positions when the page is reloaded
     window.addEventListener("load", loadPositionsFromLocalStorage);
 
 
+    </script>
+    <style>
+
+      .boxy {
+        border-radius: 15px;
+        background-color: #233a2f;
+        width: 575px;
+        height: 180px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+  
+      .boxy img {
+        width: 100px;
+        height: 100px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: relative;
+      }
+  
+      .boxy .image-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+  
+      .boxy .image-wrapper:before {
+        content: attr(data-text);
+        color: white;
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+  
+      .boxy {
+    position: relative; /* Add this line */
+  }
+  
+  
+  .boxy .selected-checkmark {
+    content: '';
+    background-image: url('https://cdn-icons-png.flaticon.com/512/5289/5289675.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: gray;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    z-index: 1;
+  }
+  
+  
+  .boxy img:not(.selected):hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+    </style>
+  </head>
+  <body>
+    <div class="boxy">
+      <div class="image-wrapper" data-text="default">
+        <img src="https://raw.githubusercontent.com/North-West-Wind/islandr.io/b64ec2d302abdebd516c2b7bd29fd75cd421ec18/client/assets/images/game/entities/death.svg">
+      </div>
+      <div class="image-wrapper" data-text="Big-Head-Skull">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Death_skull.svg/796px-Death_skull.svg.png">
+      </div>
+      <div class="image-wrapper" data-text="3d-Quality-Skull">
+        <img src="https://clipart-library.com/img/1609358.png">
+      </div>
+      <div class="image-wrapper" data-text="R.I.P">
+        <img src="https://cdn.pixabay.com/photo/2013/07/13/12/32/tombstone-159792_1280.png">
+      </div>
+      <div class="image-wrapper" data-text="Cartoon-Skull">
+        <img src="https://cdn4.iconfinder.com/data/icons/holidays-18/64/skull_Halloween_bone_death_RIP-512.png">
+      </div>
+    </div>
+  
+  
+    <script>
+     // Get the boxy element
+  const image_array = ["default", "Big-Head-Skull", "3d-Quality-Skull", "R.I.P", "Cartoon-Skull"]
+  const boxy = document.querySelector('.boxy');
+  // Get all the images
+  const images = boxy.querySelectorAll('img');
+  
+  // Check if a selected image index is stored in local storage
+  const selectedImageIndex = localStorage.getItem('selectedImageIndex');
+  
+  // If no selected image index is stored, set the default image as selected
+  if (!selectedImageIndex) {
+    // Set the default image as selected
+    images[0].classList.add('selected');
+  } else {
+    // Get the index from the stored selected image index
+    const index = parseInt(selectedImageIndex);
+  
+    // Check if the index is within the range of available images
+    if (index >= 0 && index < images.length) {
+      // Add 'selected' class to the image with the stored index
+      images[index].classList.add('selected');
+    } else {
+      // Set the default image as selected
+      images[0].classList.add('selected');
+    }
+  }
+  
+  // Create the checkmark element
+  const checkmark = document.createElement('div');
+  checkmark.classList.add('selected-checkmark');
+  boxy.appendChild(checkmark);
+  
+  // Position the checkmark element initially
+  const selectedImage = boxy.querySelector('.selected');
+  if (selectedImage) {
+    const imageRect = selectedImage.getBoundingClientRect();
+    checkmark.style.top = imageRect.top + imageRect.height - 10 + 'px';
+    checkmark.style.left = imageRect.left + imageRect.width - 10 + 'px';
+  }
+  
+  // Add click event listener to the boxy element
+  boxy.addEventListener('click', (event) => {
+    // Check if the clicked element is an image
+    if (event.target.tagName === 'IMG') {
+      // Remove 'selected' class from all images
+      images.forEach((img) => img.classList.remove('selected'));
+  
+      // Add 'selected' class to the clicked image
+      event.target.classList.add('selected');
+  
+      // Get the position of the clicked image
+      const imageRect = event.target.getBoundingClientRect();
+  
+      // Position the checkmark element relative to the clicked image
+      checkmark.style.top = imageRect.top + imageRect.height - 10 + 'px';
+      checkmark.style.left = imageRect.left + imageRect.width - 10 + 'px';
+  
+      // Store the index of the selected image in local storage
+      const selectedIndex = Array.from(images).indexOf(event.target);
+      localStorage.setItem('selectedImageIndex', selectedIndex.toString());
+      localStorage.setItem("playerDeathImg", image_array[selectedIndex]);
+    }
+  });
+  
     </script>
 </body>
 
