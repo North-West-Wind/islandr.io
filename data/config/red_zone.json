@@ -1,0 +1,50 @@
+[
+	{
+		"wait": 80,
+		"move": 30,
+		"damage": 1.4,
+		"area": 0.64
+	},
+	{
+		"wait": 65,
+		"move": 25,
+		"damage": 2.2,
+		"area": 0.31
+	},
+	{
+		"wait": 50,
+		"move": 20,
+		"damage": 3.5,
+		"area": 0.14
+	},
+	{
+		"wait": 40,
+		"move": 15,
+		"damage": 7.5,
+		"area": 0.06
+	},
+	{
+		"wait": 30,
+		"move": 10,
+		"damage": 10,
+		"area": 0.018
+	},
+	{
+		"wait": 25,
+		"move": 5,
+		"damage": 14,
+		"area": 0.006
+	},
+	{
+		"wait": 20,
+		"move": 6,
+		"damage": 22,
+		"area": 0.0015
+	},
+	{
+		"wait": 15,
+		"move": 15,
+		"damage": 22,
+		"area": 0
+	}
+]

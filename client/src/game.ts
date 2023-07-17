@@ -94,6 +94,7 @@ async function init(address: string) {
 						world.updateEntities(gamePkt.entities, gamePkt.discardEntities);
 						world.updateObstacles(gamePkt.obstacles, gamePkt.discardObstacles);
 						world.updateLiveCount(gamePkt.alivecount);
+						if (gamePkt.safeZone) world.updateSafeZone(gamePkt.safeZone);
 						if (!player) player = new FullPlayer(gamePkt.player);
 						else player.copy(gamePkt.player);
 						break;

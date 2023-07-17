@@ -1,10 +1,12 @@
+import * as fs from "fs";
 import Building from "./building";
-import { TerrainData } from "./data";
+import { RedZoneDataEntry, TerrainData } from "./data";
 import { Entity } from "./entity";
-import { Line, Vec2 } from "./math";
+import { CircleHitbox, Line, Vec2 } from "./math";
 import { MinTerrain } from "./minimized";
 import { Obstacle } from "./obstacle";
 import { Particle } from "./particle";
+import { TICKS_PER_SECOND } from "../constants";
 
 export class World {
 	ticks = 0;
@@ -20,6 +22,15 @@ export class World {
 	terrains: Terrain[];
 	lastSecond = 0;
 
+	// Red zone stuff
+	private zoneData: RedZoneDataEntry[];
+	zoneStep = 0;
+	zoneMoving = false;
+	zoneTick: number;
+	zoneDamage: number;
+	safeZone: { hitbox: CircleHitbox, oHitbox: CircleHitbox, position: Vec2, oPosition: Vec2 };
+	nextSafeZone: { hitbox: CircleHitbox, position: Vec2 };
+
 	// These should be sent once only to the client
 	particles: Particle[] = [];
 	onceSounds: { path: string, position: Vec2 }[] = []; // Sent when stuff happens, e.g. effect sounds
@@ -32,6 +43,19 @@ export class World {
 		// Set the terrains
 		this.defaultTerrain = defaultTerrain;
 		this.terrains = terrains;
+
+		// Red zone init
+		this.zoneData = <RedZoneDataEntry[]> JSON.parse(fs.readFileSync("../data/config/red_zone.json", { encoding: "utf8" }));
+		this.zoneTick = this.zoneData[this.zoneStep].wait * TICKS_PER_SECOND;
+		this.zoneDamage = this.zoneData[this.zoneStep].damage;
+
+		this.safeZone = {
+			hitbox: new CircleHitbox(this.size.magnitude() * 0.5),
+			oHitbox: new CircleHitbox(this.size.magnitude() * 0.5),
+			position: this.size.scaleAll(0.5),
+			oPosition: this.size.scaleAll(0.5)
+		};
+		this.nextSafeZone = this.safeZone;
 	}
 
 	terrainAtPos(position: Vec2) {
@@ -89,6 +113,34 @@ export class World {
 		}
 		// Remove all discardable obstacles
 		for (ii = removable.length - 1; ii >= 0; ii--) this.obstacles.splice(removable[ii], 1);
+
+		// Tick red zone
+		if (this.zoneTick > 0) {
+			this.zoneTick--;
+			if (!this.zoneTick) {
+				this.zoneMoving = !this.zoneMoving;
+				if (this.zoneMoving) this.zoneTick = this.zoneData[this.zoneStep].move * TICKS_PER_SECOND;
+				else {
+					this.zoneStep++;
+					if (!this.zoneData[this.zoneStep]) this.zoneTick = -1;
+					else {
+						this.safeZone.oPosition = this.safeZone.position;
+						this.safeZone.oHitbox = this.safeZone.hitbox;
+						const positions = this.entities.filter(entity => entity.type === "player" && !entity.despawn).map(entity => entity.position);
+						this.nextSafeZone = {
+							hitbox: new CircleHitbox(Math.sqrt(this.size.scaleAll(0.5).magnitudeSqr() * this.zoneData[this.zoneStep].area)),
+							position: positions.reduce((a, b) => a.addVec(b)).scaleAll(1 / positions.length)
+						};
+						this.zoneTick = this.zoneData[this.zoneStep].wait * TICKS_PER_SECOND;
+					}
+				}
+			}
+			if (this.zoneMoving) {
+				const vec = this.nextSafeZone.position.addVec(this.safeZone.oPosition.inverse());
+				this.safeZone.position = this.safeZone.oPosition.addVec(vec.scaleAll((this.zoneData[this.zoneStep].move * TICKS_PER_SECOND - this.zoneTick) / (this.zoneData[this.zoneStep].move * TICKS_PER_SECOND)));
+				this.safeZone.hitbox = new CircleHitbox((this.safeZone.oHitbox.radius - this.nextSafeZone.hitbox.radius) * this.zoneTick / (this.zoneData[this.zoneStep].move * TICKS_PER_SECOND) + this.nextSafeZone.hitbox.radius);
+			}
+		}
 	}
 
 	// Called after data are sent to clients

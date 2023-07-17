@@ -68,6 +68,15 @@ export function drawMap(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D
 	}
 	// Draw pre-rendered map
 	ctx.drawImage(mapCanvas, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+	// Draw safe zone circle
+	//ctx.save();
+	//ctx.beginPath();
+	//ctx.rect((canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+	//ctx.clip();
+	ctx.strokeStyle = "#fff";
+	ctx.lineWidth = 2;
+	circleFromCenter(ctx, (canvas.width - width) / 2 + world.safeZone.position.x * scale, (canvas.height - height) / 2 + world.safeZone.position.y * scale, world.safeZone.hitbox.radius * scale, false, true);
+	//ctx.restore();
 	// Draw border around map
 	ctx.strokeStyle = "#000";
 	ctx.lineWidth = 2;
@@ -87,7 +96,12 @@ export function drawMinimap(player: FullPlayer, canvas: HTMLCanvasElement, ctx: 
 	const y = player.position.y * constScale - size / 2;
 	const imageData = mapCtx.getImageData(x, y, size, size);
 	tmpCanvas.width = tmpCanvas.height = size;
-	tmpCanvas.getContext("2d")?.putImageData(imageData, 0, 0);
+	const tmpCtx = tmpCanvas.getContext("2d")!;
+	tmpCtx.putImageData(imageData, 0, 0);
+	// Draw safe zone circle
+	tmpCtx.strokeStyle = "#fff";
+	tmpCtx.lineWidth = 2;
+	circleFromCenter(tmpCtx, -x + world.safeZone.position.x * constScale, -y + world.safeZone.position.y * constScale, world.safeZone.hitbox.radius * constScale, false, true);
 	const margin = canvas.width / 100;
 	const side = canvas.width / (8 / (isBigMap() ? 1.5 : 1));
 	// Fill map background

@@ -1,8 +1,8 @@
 import { castCorrectEntity, FullPlayer, Player } from "../store/entities";
 import { castCorrectTerrain } from "../store/terrains";
 import { Entity } from "./entity";
-import { Line, Vec2 } from "./math";
-import { MinEntity, MinLine, MinObstacle, MinTerrain, MinVec2 } from "./minimized";
+import { CircleHitbox, Line, Vec2 } from "./math";
+import { MinCircleHitbox, MinEntity, MinLine, MinObstacle, MinTerrain, MinVec2 } from "./minimized";
 import { Obstacle } from "./obstacle";
 import { Renderable, RenderableMap } from "./extenstions";
 import { circleFromCenter } from "../utils";
@@ -19,10 +19,12 @@ export class World {
 	terrains: Terrain[] = [];
 	aliveCount: Number = 0;
 	sounds: Map<number, { howl: Howl, pos: Vec2 }> = new Map();
+	safeZone: { hitbox: CircleHitbox, position: Vec2 };
 
 	constructor(size: Vec2, defaultTerrain: Terrain) {
 		this.size = size;
 		this.defaultTerrain = defaultTerrain;
+		this.safeZone = { hitbox: new CircleHitbox(this.size.magnitude() * 0.5), position: this.size.scaleAll(0.5) };
 	}
 
 	clientTick(player: FullPlayer) {
@@ -65,6 +67,11 @@ export class World {
 	updateLiveCount(count: Number) {
 		this.aliveCount = count;
 		(document.getElementById("playercount") as HTMLInputElement).innerText = this.aliveCount.toString();
+	}
+
+	updateSafeZone(safeZone: { hitbox: MinCircleHitbox, position: MinVec2 }) {
+		this.safeZone.hitbox = CircleHitbox.fromMinCircleHitbox(safeZone.hitbox);
+		this.safeZone.position = Vec2.fromMinVec2(safeZone.position);
 	}
 }
 

@@ -156,3 +156,10 @@ export type BuildingData = {
 	roofs?: ObstacleData[];
 	mapColor?: number;
 }
+
+export type RedZoneDataEntry = {
+	wait: number;
+	move: number;
+	damage: number;
+	area: number;
+}

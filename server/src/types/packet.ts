@@ -2,8 +2,8 @@ import { BASE_RADIUS } from "../constants";
 import { Player } from "../store/entities";
 import Building from "./building";
 import { Entity } from "./entity";
-import { Vec2 } from "./math";
-import { MinBuilding, MinEntity, MinMinObstacle, MinObstacle, MinParticle, MinTerrain } from "./minimized";
+import { CircleHitbox, Vec2 } from "./math";
+import { MinBuilding, MinCircleHitbox, MinEntity, MinMinObstacle, MinObstacle, MinParticle, MinTerrain, MinVec2 } from "./minimized";
 import { MovementDirection } from "./misc";
 import { Obstacle } from "./obstacle";
 import { Particle } from "./particle";
@@ -112,6 +112,7 @@ export class GamePacket implements IPacket {
 	alivecount: number;
 	discardEntities?: string[];
 	discardObstacles?: string[];
+	safeZone?: { hitbox: MinCircleHitbox, position: MinVec2 };
 
 	constructor(entities: Entity[], obstacles: Obstacle[], player: Player, alivecount: number, sendAll = false, discardEntities: string[] = [], discardObstacles: string[] = []) {
 		this.entities = (sendAll ? entities : entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2))).map(entity => entity.minimize());
@@ -120,6 +121,10 @@ export class GamePacket implements IPacket {
 		this.alivecount = alivecount;
 		if (discardEntities.length) this.discardEntities = discardEntities;
 		if (discardObstacles.length) this.discardObstacles = discardObstacles;
+	}
+
+	addSafeZoneData(safeZone: { hitbox: CircleHitbox, position: Vec2 }) {
+		this.safeZone = { hitbox: safeZone.hitbox.minimize(), position: safeZone.position.minimize() };
 	}
 }
 

@@ -1,4 +1,4 @@
-import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2, MinBuilding } from "./minimized";
+import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2, MinBuilding, MinCircleHitbox } from "./minimized";
 import { MovementDirection } from "./misc";
 
 export interface IPacket {
@@ -134,6 +134,7 @@ export class GamePacket implements IPacket {
 	alivecount!: number;
 	discardEntities?: string[];
 	discardObstacles?: string[];
+	safeZone?: { hitbox: MinCircleHitbox, position: MinVec2 };
 }
 
 /// Packet from server containing map data

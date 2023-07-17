@@ -198,7 +198,9 @@ setInterval(() => {
 	players.forEach(player => {
 		const socket = sockets.get(player.id);
 		if (!socket) return;
-		send(socket, new GamePacket(world.dirtyEntities, world.dirtyObstacles, player, numberOfPlayers, false, world.discardEntities, world.discardObstacles));
+		const pkt = new GamePacket(world.dirtyEntities, world.dirtyObstacles, player, numberOfPlayers, false, world.discardEntities, world.discardObstacles)
+		if (world.zoneMoving) pkt.addSafeZoneData(world.safeZone);
+		send(socket, pkt);
 		if (world.particles.length) send(socket, new ParticlesPacket(world.particles, player));
 		// for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
 	});
