@@ -17,6 +17,7 @@ export default class Grenade extends Item {
 		if (!WEAPON_SUPPLIERS.has(name)) console.warn("Creating a grenade entity that doesn't have a supplier for its type");
 		this.name = name;
 		this.amount = amount;
+		
 	}
 
 	picked(player: Player) {

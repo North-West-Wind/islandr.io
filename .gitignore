@@ -8,3 +8,27 @@
 # Client stuff
 client/scripts/bundle.min.js
 .vercel
+bin/Microsoft.NodejsTools.WebRole.dll
+.vs/VSWorkspaceState.json
+.vs/slnx.sqlite
+.vs/ProjectSettings.json
+.vs/Islandr/v17/.wsuo
+.vs/Islandr/FileContentIndex/read.lock
+.vs/Islandr/FileContentIndex/bad86109-c695-4260-80f3-3720ed230dc3.vsidx
+.vs/Islandr.io/v17/fileList.bin
+.vs/Islandr.io/v17/.suo
+.vs/Islandr.io/FileContentIndex/read.lock
+.vs/Islandr.io/FileContentIndex/ebf6a421-d3c4-4eb8-b18a-a37d74958135.vsidx
+.vs/Islandr.io/FileContentIndex/c84889be-f12b-4977-9a8b-a18ae0b3f345.vsidx
+.vs/Islandr.io/FileContentIndex/c3abbb46-9a20-4a0e-9c0f-05ffdf76e216.vsidx
+.vs/Islandr.io/FileContentIndex/9c914dc0-b6b2-481e-8f3f-a0b52ef43aec.vsidx
+.vs/Islandr.io/FileContentIndex/94573684-5949-4992-b2f2-3ffa70528d73.vsidx
+.vs/Islandr.io/FileContentIndex/4365bc10-72c3-4c51-bcd9-9ccbe41aa6ca.vsidx
+.vs/Islandr.io/FileContentIndex/1f4aaaea-92ae-48f0-97a2-54b0a93ba9fb.vsidx
+Islandr.code-workspace
+Islandr.io.njsproj
+Islandr.io.sln
+obj/Debug/Islandr.io.njsproj.AssemblyReference.cache
+obj/Debug/Islandr.io.njsproj.CoreCompileInputs.cache
+obj/Debug/Islandr.io.njsproj.FileListAbsolute.txt
+/.vs/Islandr.io/FileContentIndex

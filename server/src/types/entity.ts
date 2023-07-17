@@ -50,7 +50,7 @@ export class Inventory {
 
 	setWeapon(weapon: Weapon, index = -1) {
 		if (index < 0) index = this.holding;
-		if (index < 3) this.weapons[index] = weapon;
+		if (index < 3) {this.weapons[index] = weapon; }
 	}
 
 	fourthSlot() {
@@ -72,6 +72,7 @@ export class Inventory {
 
 export class Entity {
 	id: string;
+	name = "";
 	type = "";
 	position: Vec2;
 	velocity: Vec2 = Vec2.ZERO;
@@ -94,6 +95,7 @@ export class Entity {
 
 	constructor() {
 		this.id = ID();
+		if (!this.name) this.name = this.type
 		// Currently selects a random position to spawn. Will change in the future.
 		this.position = world.size.scale(Math.random(), Math.random());
 	}

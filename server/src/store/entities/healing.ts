@@ -9,13 +9,15 @@ export default class Healing extends Item {
 	static readonly healingData = new Map<string, { heal: number, boost: number, time: number }>();
 	type = "healing";
 	hitbox = new CircleHitbox(1);
-	name: string; // healing item ID, but id was taken for entity already
+	nameId: string; // healing item ID, but id was taken for entity already
+	name: string;
 	amount: number;
 
-	constructor(name: string, amount: number) {
+	constructor(nameId: string, amount: number) {
 		super();
-		this.name = name;
+		this.nameId = nameId;
 		this.amount = amount;
+		this.name = this.nameId;
 	}
 
 	static {
@@ -28,9 +30,9 @@ export default class Healing extends Item {
 	}
 
 	picked(player: Player) {
-		const newAmount = Math.min(Inventory.maxHealings[player.inventory.backpackLevel].get(this.name) || 0, (player.inventory.healings[this.name] || 0) + this.amount);
-		const delta = newAmount - (player.inventory.healings[this.name] || 0);
-		player.inventory.healings[this.name] = newAmount;
+		const newAmount = Math.min(Inventory.maxHealings[player.inventory.backpackLevel].get(this.nameId) || 0, (player.inventory.healings[this.nameId] || 0) + this.amount);
+		const delta = newAmount - (player.inventory.healings[this.nameId] || 0);
+		player.inventory.healings[this.nameId] = newAmount;
 		if (delta != this.amount) {
 			this.amount -= delta;
 			this.setVelocity(Vec2.UNIT_X.addAngle(this.position.addVec(player.position.inverse()).angle()).scaleAll(0.001));
@@ -41,6 +43,6 @@ export default class Healing extends Item {
 
 	minimize() {
 		const min = super.minimize();
-		return Object.assign(min, { name: this.name, });
+		return Object.assign(min, { nameId: this.nameId, });
 	}
 }

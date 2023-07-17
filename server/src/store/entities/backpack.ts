@@ -5,12 +5,14 @@ import Player from "./player";
 
 export default class Backpack extends Item {
 	type = "backpack";
+	name: string;
 	hitbox = new CircleHitbox(1);
 	level: number;
 
 	constructor(level: number) {
 		super();
 		this.level = level;
+		this.name = `Level ${this.level} backpack`
 	}
 
 	picked(player: Player) {
