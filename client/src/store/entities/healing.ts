@@ -7,6 +7,7 @@ import { circleFromCenter } from "../../utils";
 
 interface AdditionalEntity {
 	name: string;
+	nameId: string;
 }
 
 class HealingSupplier implements EntitySupplier {
@@ -21,6 +22,7 @@ export default class Healing extends Entity {
 	static readonly TYPE = "healing";
 	type = Healing.TYPE;
 	// Used for rendering Grenade size
+	nameId!: string;
 	name!: string;
 	zIndex = 8;
 
@@ -47,6 +49,7 @@ export default class Healing extends Entity {
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
 		this.name = minEntity.name;
+		this.nameId = minEntity.nameId;
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
@@ -64,7 +67,7 @@ export default class Healing extends Entity {
 			if (!img) {
 				const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 				image.onload = () => image.loaded = true;
-				image.src = getHealingImagePath(this.name);
+				image.src = getHealingImagePath(this.nameId);
 				Healing.healingImages.set(this.name, image);
 			}
 			ctx.textAlign = "center";

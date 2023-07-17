@@ -1,4 +1,3 @@
-import { addListener } from "process";
 import { ENTITY_SUPPLIERS, Healing } from ".";
 import { getWeaponImagePath } from "../../textures";
 import { Entity, Inventory, PartialInventory } from "../../types/entity";
@@ -34,6 +33,7 @@ interface AdditionalEntity {
 	maxHealTicks: number;
 	skin: string | null;
 	deathImg: string | null;
+	onTopOfLoot: string | null;
 }
 
 class PlayerSupplier implements EntitySupplier {
@@ -53,11 +53,13 @@ export default class Player extends Entity {
 	deathImg!: string | null
 	currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 	CurrentdeathImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+	onTopOfLoot: string | null = null;
 	
 
 	constructor(minEntity: MinEntity & AdditionalEntity) {
 		super(minEntity);
 		this.copy(minEntity);
+		console.log(this.onTopOfLoot);
 		this.currentSkinSVG.onload = () => this.currentSkinSVG.loaded = true;
 		this.currentSkinSVG.src = "assets/images/game/skins/" + this.skin + ".svg";
 		this.CurrentdeathImg.onload = () => this.CurrentdeathImg.loaded = true;
@@ -69,6 +71,8 @@ export default class Player extends Entity {
 		this.username = minEntity.username;
 		this.skin = minEntity.skin;
 		this.deathImg = minEntity.deathImg;
+		this.onTopOfLoot = minEntity.onTopOfLoot;
+		
 		if (typeof minEntity.inventory.holding === "number") {
 			const inventory = <Inventory>minEntity.inventory;
 			this.inventory = new Inventory(inventory.holding, inventory.slots, inventory.weapons.map(w => w ? castCorrectWeapon(w, w.type == WeaponType.GUN ? (<GunWeapon>w).magazine : 0) : w), inventory.ammos, inventory.utilities, inventory.healings);
@@ -97,7 +101,6 @@ export default class Player extends Entity {
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
 		const relative = this.position.addVec(you.position.inverse());
 		const radius = scale * this.hitbox.comparable;
-		console.log("drawimage currentSkinSVG")
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		if (!this.despawn) {
 			ctx.rotate(this.direction.angle());
@@ -149,6 +152,7 @@ export class FullPlayer extends Player {
 	maxReloadTicks!: number;
 	healTicks!: number;
 	maxHealTicks!: number;
+	onTopOfLoot!: string | null;
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);

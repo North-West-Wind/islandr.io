@@ -37,6 +37,23 @@ export enum GunColor {
 	CURSED = 12,
 	BUGLE = 13,
 }
+//for the reverse.
+export enum ReverseGunColour {
+	a0 = "9mm", // 9mm
+	a1 = "12 gauge", // 12 gauge
+	a2 = "7.62mm", // 7.62mm
+	a3 = "5.56mm", // 5.56mm
+	a4 = ".50 AE", // .50 AE
+	a5 = ".308 subsonic", // .308 Subsonic
+	a6 = "Flare", // Flare
+	a7 = ".45 ACP", // .45 ACP
+	a8 = "40mm", // 40mm
+	a9 = "Potatoes", // potato
+	a10 = "Hearts", // Heart
+	a11 = "Rainbow", // Rainbow
+	a12 = "Cursed",
+	a13 = "Bugle",
+}
 
 export type CountableString = {
 	[key: string]: number;

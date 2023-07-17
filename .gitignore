@@ -8,3 +8,10 @@
 # Client stuff
 client/scripts/bundle.min.js
 .vercel
+
+bin
+.vs
+Islandr.code-workspace
+Islandr.io.njsproj
+Islandr.io.sln
+obj

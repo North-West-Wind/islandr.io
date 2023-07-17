@@ -10,6 +10,7 @@ import { spawnAmmo, spawnGun } from "../../utils";
 import Healing from "./healing";
 export default class Player extends Entity {
 	type = "player";
+	onTopOfLoot: string | null;
 	hitbox = new CircleHitbox(1);
 	id: string;
 	username: string;
@@ -40,6 +41,7 @@ export default class Player extends Entity {
 	constructor(id: string, username: string, skin: string | null, deathImg: string | null) {
 		super();
 		this.id = id;
+		this.onTopOfLoot = null;
 		this.username = username;
 		this.skin = skin;
 		this.deathImg = deathImg
@@ -101,6 +103,7 @@ export default class Player extends Entity {
 		for (const entity of entities) {
 			if (entity.hitbox.inside(this.position, entity.position, entity.direction) && (<any>entity)['picked']) {
 				this.canInteract = true;
+				this.onTopOfLoot = entity.name;
 				// Only interact when trying
 				if (this.tryInteracting) {
 					this.canInteract = false;
