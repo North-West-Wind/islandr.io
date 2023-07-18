@@ -34,6 +34,7 @@ export default class Scope extends Entity {
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
+		this.name = minEntity.name;
 		this.zoom = minEntity.zoom;
 	}
 
