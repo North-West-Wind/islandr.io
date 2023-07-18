@@ -16,7 +16,7 @@ export default class Bullet extends Entity {
 
 	constructor(shooter: Entity | Obstacle, dmg: number, velocity: Vec2, ticks: number, falloff: number, data: TracerData) {
 		super();
-		this.hitbox = new CircleHitbox(data.width * GLOBAL_UNIT_MULTIPLIER / 2);
+		this.hitbox = new CircleHitbox(data.width * GLOBAL_UNIT_MULTIPLIER * 0.5);
 		this.shooter = shooter;
 		this.data = data;
 		this.dmg = dmg;
@@ -42,14 +42,14 @@ export default class Bullet extends Entity {
 					break;
 				}
 		// In case the bullet is moving too fast, check for hitbox intersection
-		if (!this.despawn)
+		/*if (!this.despawn)
 			for (const thing of combined) {
 				if (this.type != thing.type && !thing.despawn && thing.hitbox.lineIntersects(new Line(this.position, this.position.addVec(this.velocity)), thing.position, thing.direction)) {
 					thing.damage(this.dmg);
 					if (!thing.noCollision) this.die();
 					break;
 				}
-			} 
+			} */
 
 		if (!this.despawn) {
 			this.health--;

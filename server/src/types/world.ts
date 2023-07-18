@@ -8,7 +8,7 @@ import { Particle } from "./particle";
 import { PLAYER_THRESHOLD, TICKS_PER_SECOND } from "../constants";
 import { Player } from "../store/entities";
 import { Terrain } from "./terrain";
-import { resetWorld } from "..";
+import { reset } from "..";
 
 export class World {
 	ticks = 0;
@@ -72,10 +72,10 @@ export class World {
 
 	playerDied() {
 		this.playerCount = this.entities.filter(entity => entity.type === "player" && !entity.despawn).length;
-		if (this.zoneActive) return;
+		if (this.zoneActive || this.zoneTick > 0) return;
 		if (!this.playerCount) {
 			console.log("All players have died. Resetting game...");
-			resetWorld();
+			reset();
 		}
 	}
 
@@ -144,6 +144,7 @@ export class World {
 					this.zoneStep++;
 					if (!this.zoneData[this.zoneStep]) {
 						this.zoneActive = false;
+						this.zoneTick = 0;
 						this.playerDied();
 					} else {
 						this.safeZone.oPosition = this.safeZone.position;

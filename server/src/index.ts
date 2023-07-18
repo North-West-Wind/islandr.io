@@ -18,7 +18,10 @@ export const sockets = new Map<string, ws.WebSocket>();
 
 // Initialize the map
 export var world: World;
-export function resetWorld() {
+export function reset() {
+	for (const socket of sockets.values()) socket.close();
+	sockets.clear();
+
 	world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]), new Plain());
 	// Let's add some ponds
 	let ii: number;
@@ -55,7 +58,7 @@ export function resetWorld() {
 	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Bush());
 	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Barrel());
 }
-resetWorld();
+reset();
 
 server.on("connection", async socket => {
 	console.log("Received a connection request");
