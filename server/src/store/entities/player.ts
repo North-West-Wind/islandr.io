@@ -30,13 +30,14 @@ export default class Player extends Entity {
 	// Track reloading ticks
 	reloadTicks = 0;
 	maxReloadTicks = 0;
-	// Tracking healing item usage ticks
+	// Track healing item usage ticks
 	healTicks = 0;
 	maxHealTicks = 0;
 	healItem: string | undefined = undefined;
 	skin: string | null;
 	deathImg: string | null;
-
+	// Track zone damage ticks
+	zoneDamageTicks = 2 * TICKS_PER_SECOND;
 
 	constructor(id: string, username: string, skin: string | null, deathImg: string | null) {
 		super();
@@ -178,6 +179,15 @@ export default class Player extends Entity {
 
 		// Check scope difference
 		if (this.inventory.selectedScope != this.scope) this.scope = this.inventory.selectedScope;
+
+		// Check red zone
+		if (!world.safeZone.hitbox.inside(this.position, world.safeZone.position, Vec2.UNIT_X)) {
+			this.zoneDamageTicks--;
+			if (!this.zoneDamageTicks) {
+				this.zoneDamageTicks = 2 * TICKS_PER_SECOND;
+				this.damage(world.zoneDamage);
+			}
+		}
 	}
 
 	die() {
@@ -202,6 +212,7 @@ export default class Player extends Entity {
 				world.entities.push(item);
 			}
 		}
+		world.playerDied();
 	}
 
 	reload() {

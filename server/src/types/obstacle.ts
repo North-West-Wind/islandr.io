@@ -4,7 +4,7 @@ import { Entity } from "./entity";
 import { Vec2, Hitbox, CircleHitbox, RectHitbox, CommonAngles, Line } from "./math";
 import { MinMinObstacle, MinObstacle } from "./minimized";
 import { CollisionType } from "./misc";
-import { World } from "./terrain";
+import { World } from "./world";
 
 export class Obstacle {
 	id: string;

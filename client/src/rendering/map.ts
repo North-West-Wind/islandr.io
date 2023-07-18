@@ -69,14 +69,22 @@ export function drawMap(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D
 	// Draw pre-rendered map
 	ctx.drawImage(mapCanvas, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
 	// Draw safe zone circle
-	//ctx.save();
-	//ctx.beginPath();
-	//ctx.rect((canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
-	//ctx.clip();
-	ctx.strokeStyle = "#fff";
-	ctx.lineWidth = 2;
-	circleFromCenter(ctx, (canvas.width - width) / 2 + world.safeZone.position.x * scale, (canvas.height - height) / 2 + world.safeZone.position.y * scale, world.safeZone.hitbox.radius * scale, false, true);
-	//ctx.restore();
+	const zoneCanvas = document.createElement("canvas");
+	zoneCanvas.width = width;
+	zoneCanvas.height = height;
+	const zoneCtx = zoneCanvas.getContext("2d")!;
+	zoneCtx.fillStyle = "#fff";
+	circleFromCenter(zoneCtx, world.safeZone.position.x * scale, world.safeZone.position.y * scale, world.safeZone.hitbox.radius * scale);
+	zoneCtx.globalCompositeOperation = "source-out";
+	zoneCtx.fillStyle = "#f00";
+	zoneCtx.globalAlpha = 0.6;
+	zoneCtx.fillRect(0, 0, zoneCanvas.width, zoneCanvas.height);
+	/*zoneCtx.globalAlpha = 1;
+	zoneCtx.strokeStyle = "#fff";
+	zoneCtx.lineWidth = 2;
+	zoneCtx.globalCompositeOperation = "source-over";
+	circleFromCenter(zoneCtx, world.nextSafeZone.position.x * scale, world.nextSafeZone.position.y * scale, world.nextSafeZone.hitbox.radius * scale, false, true);*/
+	ctx.drawImage(zoneCanvas, (canvas.width - width) / 2, (canvas.height - height) / 2);
 	// Draw border around map
 	ctx.strokeStyle = "#000";
 	ctx.lineWidth = 2;
@@ -99,9 +107,26 @@ export function drawMinimap(player: FullPlayer, canvas: HTMLCanvasElement, ctx: 
 	const tmpCtx = tmpCanvas.getContext("2d")!;
 	tmpCtx.putImageData(imageData, 0, 0);
 	// Draw safe zone circle
-	tmpCtx.strokeStyle = "#fff";
+	const zoneCanvas = document.createElement("canvas");
+	zoneCanvas.width = tmpCanvas.width;
+	zoneCanvas.height = tmpCanvas.height;
+	const zoneCtx = zoneCanvas.getContext("2d")!;
+	zoneCtx.fillStyle = "#fff";
+	circleFromCenter(zoneCtx, -x + world.safeZone.position.x * constScale, -y + world.safeZone.position.y * constScale, world.safeZone.hitbox.radius * constScale);
+	zoneCtx.globalCompositeOperation = "source-out";
+	zoneCtx.fillStyle = "#f00";
+	zoneCtx.globalAlpha = 0.6;
+	zoneCtx.fillRect(0, 0, zoneCanvas.width, zoneCanvas.height);
+	/*zoneCtx.globalAlpha = 1;
+	zoneCtx.strokeStyle = "#fff";
+	zoneCtx.lineWidth = 2;
+	zoneCtx.globalCompositeOperation = "source-over";
+	circleFromCenter(zoneCtx, -x + world.nextSafeZone.position.x * constScale, -y + world.nextSafeZone.position.y * constScale, world.nextSafeZone.hitbox.radius * constScale, false, true);*/
+	tmpCtx.drawImage(zoneCanvas, 0, 0);
+	// Draw safe zone circle
+	/*tmpCtx.strokeStyle = "#fff";
 	tmpCtx.lineWidth = 2;
-	circleFromCenter(tmpCtx, -x + world.safeZone.position.x * constScale, -y + world.safeZone.position.y * constScale, world.safeZone.hitbox.radius * constScale, false, true);
+	circleFromCenter(tmpCtx, -x + world.safeZone.position.x * constScale, -y + world.safeZone.position.y * constScale, world.safeZone.hitbox.radius * constScale, false, true);*/
 	const margin = canvas.width / 100;
 	const side = canvas.width / (8 / (isBigMap() ? 1.5 : 1));
 	// Fill map background

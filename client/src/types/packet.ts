@@ -135,6 +135,7 @@ export class GamePacket implements IPacket {
 	discardEntities?: string[];
 	discardObstacles?: string[];
 	safeZone?: { hitbox: MinCircleHitbox, position: MinVec2 };
+	nextSafeZone?: { hitbox: MinCircleHitbox, position: MinVec2 };
 }
 
 /// Packet from server containing map data

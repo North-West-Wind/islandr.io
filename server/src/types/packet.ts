@@ -113,6 +113,7 @@ export class GamePacket implements IPacket {
 	discardEntities?: string[];
 	discardObstacles?: string[];
 	safeZone?: { hitbox: MinCircleHitbox, position: MinVec2 };
+	nextSafeZone?: { hitbox: MinCircleHitbox, position: MinVec2 };
 
 	constructor(entities: Entity[], obstacles: Obstacle[], player: Player, alivecount: number, sendAll = false, discardEntities: string[] = [], discardObstacles: string[] = []) {
 		this.entities = (sendAll ? entities : entities.filter(entity => entity.position.addVec(player.position.inverse()).magnitudeSqr() < Math.pow(BASE_RADIUS * player.scope, 2))).map(entity => entity.minimize());
@@ -125,6 +126,10 @@ export class GamePacket implements IPacket {
 
 	addSafeZoneData(safeZone: { hitbox: CircleHitbox, position: Vec2 }) {
 		this.safeZone = { hitbox: safeZone.hitbox.minimize(), position: safeZone.position.minimize() };
+	}
+
+	addNextSafeZoneData(nextSafeZone: { hitbox: CircleHitbox, position: Vec2 }) {
+		this.nextSafeZone = { hitbox: nextSafeZone.hitbox.minimize(), position: nextSafeZone.position.minimize() };
 	}
 }
 

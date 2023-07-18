@@ -4,7 +4,7 @@ import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPac
 import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { CommonAngles, Vec2 } from "./types/math";
 import { Player } from "./store/entities";
-import { World } from "./types/terrain";
+import { World } from "./types/world";
 import { Plain, Pond, River, Sea } from "./store/terrains";
 import { Tree, Bush, Crate, Stone, Barrel } from "./store/obstacles";
 import { BUILDING_SUPPLIERS } from "./store/buildings";
@@ -17,47 +17,46 @@ server.once("listening", () => console.log(`WebSocket Server listening at port $
 export const sockets = new Map<string, ws.WebSocket>();
 
 // Initialize the map
-export const world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]), new Plain());
-
-// Start of testing section
-// As tempting as it might be, do NOT put these inside World constructor, as all of these read something from the world, and will cause error if put inside the constructor
-
-// Let's add some ponds
-let ii: number;
-for (ii = 0; ii < 5; ii++) world.terrains.push(new Pond());
-// And a river
-world.terrains.push(new River());
-// And the sea ring
-for (ii = 0; ii < 4; ii++) world.terrains.push(new Sea(ii));
-
-// Add buildings
-for (ii = 0; ii < 5; ii++) {
-	const cross = BUILDING_SUPPLIERS.get("cross")!.create();
-	cross.setPosition(world.size.scale(Math.random(), Math.random()));
-	world.buildings.push(cross);
+export var world: World;
+export function resetWorld() {
+	world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]), new Plain());
+	// Let's add some ponds
+	let ii: number;
+	for (ii = 0; ii < 5; ii++) world.terrains.push(new Pond());
+	// And a river
+	world.terrains.push(new River());
+	// And the sea ring
+	for (ii = 0; ii < 4; ii++) world.terrains.push(new Sea(ii));
+	
+	// Add buildings
+	for (ii = 0; ii < 5; ii++) {
+		const cross = BUILDING_SUPPLIERS.get("cross")!.create();
+		cross.setPosition(world.size.scale(Math.random(), Math.random()));
+		world.buildings.push(cross);
+	}
+	for (ii = 0; ii < 5; ii++) {
+		const outhouse = BUILDING_SUPPLIERS.get("outhouse")!.create();
+		do {
+			var position = world.size.scale(Math.random(), Math.random());
+		} while (world.terrainAtPos(position).id != "plain");
+		outhouse.setPosition(position);
+		outhouse.setDirection(Vec2.UNIT_X.addAngle(Math.floor(Math.random() * 4) * CommonAngles.PI_TWO));
+		world.buildings.push(outhouse);
+	}
+	
+	// Add random obstacles
+	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Tree());
+	world.obstacles.push(new Tree("mosin"));
+	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Stone());
+	world.obstacles.push(new Stone("ak47"));
+	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Crate());
+	for (ii = 0; ii < 10; ii++) world.obstacles.push(new Crate("soviet"));
+	for (ii = 0; ii < 15; ii++) world.obstacles.push(new Crate("grenade"));
+	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Bush());
+	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Barrel());
 }
-for (ii = 0; ii < 5; ii++) {
-	const outhouse = BUILDING_SUPPLIERS.get("outhouse")!.create();
-	do {
-		var position = world.size.scale(Math.random(), Math.random());
-	} while (world.terrainAtPos(position).id != "plain");
-	outhouse.setPosition(position);
-	outhouse.setDirection(Vec2.UNIT_X.addAngle(Math.floor(Math.random() * 4) * CommonAngles.PI_TWO));
-	world.buildings.push(outhouse);
-}
+resetWorld();
 
-// Add random obstacles
-for (ii = 0; ii < 25; ii++) world.obstacles.push(new Tree());
-world.obstacles.push(new Tree("mosin"));
-for (ii = 0; ii < 25; ii++) world.obstacles.push(new Stone());
-world.obstacles.push(new Stone("ak47"));
-for (ii = 0; ii < 25; ii++) world.obstacles.push(new Crate());
-for (ii = 0; ii < 10; ii++) world.obstacles.push(new Crate("soviet"));
-for (ii = 0; ii < 15; ii++) world.obstacles.push(new Crate("grenade"));
-for (ii = 0; ii < 25; ii++) world.obstacles.push(new Bush());
-for (ii = 0; ii < 25; ii++) world.obstacles.push(new Barrel());
-// End of testing section
-let numberOfPlayers = 0;
 server.on("connection", async socket => {
 	console.log("Received a connection request");
 	// Set the type for msgpack later.
@@ -72,9 +71,6 @@ server.on("connection", async socket => {
 	socket.on("close", () => {
 		console.log("Connection closed");
 		sockets.delete(id);
-		if(connected){
-			numberOfPlayers--;
-		}
 		connected = false;
 	});
 
@@ -98,18 +94,16 @@ server.on("connection", async socket => {
 		})
 	})]);
 	if (!connected) return;
-	numberOfPlayers++ ;
 	console.log(`A new player with ID ${id} connected!`);
-	console.log(`Number of players are: ${numberOfPlayers}`);
 
 	// Create the new player and add it to the entity list.
 	const player = new Player(id, username, skin, deathImg);
-	world.entities.push(player);
+	world.addPlayer(player);
 
 	// Send the player the entire map
 	send(socket, new MapPacket(world.obstacles, world.buildings, world.terrains));
 	// Send the player initial objects
-	send(socket, new GamePacket(world.entities, world.obstacles.concat(...world.buildings.map(b => b.obstacles.map(o => o.obstacle))), player, numberOfPlayers, true));
+	send(socket, new GamePacket(world.entities, world.obstacles.concat(...world.buildings.map(b => b.obstacles.map(o => o.obstacle))), player, world.playerCount, true));
 	// Send the player music
 	// for (const sound of world.joinSounds) send(socket, new SoundPacket(sound.path, sound.position));
 
@@ -198,8 +192,9 @@ setInterval(() => {
 	players.forEach(player => {
 		const socket = sockets.get(player.id);
 		if (!socket) return;
-		const pkt = new GamePacket(world.dirtyEntities, world.dirtyObstacles, player, numberOfPlayers, false, world.discardEntities, world.discardObstacles)
+		const pkt = new GamePacket(world.dirtyEntities, world.dirtyObstacles, player, world.playerCount, false, world.discardEntities, world.discardObstacles)
 		if (world.zoneMoving) pkt.addSafeZoneData(world.safeZone);
+		else pkt.addNextSafeZoneData(world.nextSafeZone);
 		send(socket, pkt);
 		if (world.particles.length) send(socket, new ParticlesPacket(world.particles, player));
 		// for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));

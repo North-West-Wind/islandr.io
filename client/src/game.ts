@@ -8,7 +8,7 @@ import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
 import { castCorrectTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
 import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
-import { World } from "./types/terrain";
+import { World } from "./types/world";
 import { receive, send } from "./utils";
 import Building from "./types/building";
 
@@ -95,6 +95,7 @@ async function init(address: string) {
 						world.updateObstacles(gamePkt.obstacles, gamePkt.discardObstacles);
 						world.updateLiveCount(gamePkt.alivecount);
 						if (gamePkt.safeZone) world.updateSafeZone(gamePkt.safeZone);
+						if (gamePkt.nextSafeZone) world.updateNextSafeZone(gamePkt.nextSafeZone);
 						if (!player) player = new FullPlayer(gamePkt.player);
 						else player.copy(gamePkt.player);
 						break;
