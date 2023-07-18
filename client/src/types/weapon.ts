@@ -38,7 +38,7 @@ export class MeleeWeapon extends Weapon {
 	}
 
 	render(player: Player, _canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
-		if (!this.currentSkinSVG.src) this.currentSkinSVG.src = "assets/images/game/fists/" + player.skin + ".svg";
+		this.currentSkinSVG.src = "assets/images/game/fists/" + player.skin + ".svg";
 		const radius = scale * (<CircleHitbox> player.hitbox).radius;
 		const fistScale = radius * 1.2 * CommonNumber.SIN45;
 		const fistExtend = Vec2.UNIT_X.scaleAll(fistScale);
