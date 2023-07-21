@@ -34,7 +34,7 @@ function drawReloading(player: FullPlayer, canvas: HTMLCanvasElement, ctx: Canva
 
 function drawHealing(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
 	if (!player.healTicks) return;
-	drawCircleLoading(player.healTicks, player.maxHealTicks, "Healing", canvas, ctx);
+	drawCircleLoading(player.healTicks, player.maxHealTicks, "Using " + player.onTopOfLoot, canvas, ctx);
 }
 
 function drawCircleLoading(remain: number, max: number, message: string, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {

@@ -102,6 +102,7 @@ server.on("connection", async socket => {
 	// Create the new player and add it to the entity list.
 	const player = new Player(id, username, skin, deathImg);
 	world.addPlayer(player);
+	player.boost *= 1.5;
 
 	// Send the player the entire map
 	send(socket, new MapPacket(world.obstacles, world.buildings, world.terrains));
@@ -200,7 +201,7 @@ setInterval(() => {
 		else pkt.addNextSafeZoneData(world.nextSafeZone);
 		send(socket, pkt);
 		if (world.particles.length) send(socket, new ParticlesPacket(world.particles, player));
-		// for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
+		for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
 	});
 	world.postTick();
 }, 1000 / TICKS_PER_SECOND);
