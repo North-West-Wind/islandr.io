@@ -44,7 +44,7 @@ export default class Tree extends Obstacle {
 				break;
 			}
 		}
-		world.onceSounds.push({ path: "obstacle/break/tree/tree_break.mp3", position: this.position });
+		world.onceSounds.push({ path: "objects/tree_break.mp3", position: this.position });
 	}
 
 	minimize() {

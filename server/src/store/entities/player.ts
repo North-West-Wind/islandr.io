@@ -219,7 +219,8 @@ export default class Player extends Entity {
 		if (this.maxReloadTicks) return;
 		const weapon = this.inventory.getWeapon();
 		if (weapon?.type != WeaponType.GUN) return;
-		const gun = <GunWeapon> weapon;
+		const gun = <GunWeapon>weapon;
+		world.onceSounds.push({ path: "guns/" + gun.name + "_reload.mp3", position: this.position })
 		if (!this.inventory.ammos[gun.color] || gun.magazine == gun.capacity) return;
 		this.maxReloadTicks = this.reloadTicks = gun.reloadTicks;
 		this.markDirty();

@@ -109,7 +109,7 @@ server.on("connection", async socket => {
 	// Send the player initial objects
 	send(socket, new GamePacket(world.entities, world.obstacles.concat(...world.buildings.map(b => b.obstacles.map(o => o.obstacle))), player, world.playerCount, true));
 	// Send the player music
-	// for (const sound of world.joinSounds) send(socket, new SoundPacket(sound.path, sound.position));
+	for (const sound of world.joinSounds) send(socket, new SoundPacket(sound.path, sound.position));
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
