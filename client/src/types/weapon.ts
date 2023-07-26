@@ -97,7 +97,7 @@ export class GunWeapon extends Weapon {
 	}
 
 	render(player: Player, _canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void {
-		if (!this.currentFistSVG.src) this.currentFistSVG.src = "assets/images/game/fists/" + player.skin + ".svg";
+		this.currentFistSVG.src = "assets/images/game/fists/" + player.skin + ".svg";
 		const radius = scale * player.hitbox.comparable;
 		const fistRadius = radius / 3;
 		const fistPositions = [new Vec2(player.hitbox.comparable, 0.1), new Vec2(player.hitbox.comparable + 0.25, -0.1)];
