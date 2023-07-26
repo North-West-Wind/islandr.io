@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="800"
+   height="800"
+   viewBox="0 0 211.66667 211.66666"
+   version="1.1"
+   id="svg12"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="mosin_tree.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#">
+  <sodipodi:namedview
+     id="namedview14"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:snap-global="true"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="-150.61374"
+     inkscape:cy="348.60364"
+     inkscape:window-width="1920"
+     inkscape:window-height="1002"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs9" />
+  <g
+     inkscape:label="圖層 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       sodipodi:type="star"
+       style="fill:#0a390a;fill-opacity:0.89842707;stroke-width:2.04205;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;paint-order:fill markers stroke"
+       id="path899"
+       inkscape:flatsided="false"
+       sodipodi:sides="10"
+       sodipodi:cx="54.360378"
+       sodipodi:cy="62.939758"
+       sodipodi:r1="110.12026"
+       sodipodi:r2="18.33593"
+       sodipodi:arg1="0.83413721"
+       sodipodi:arg2="-0.73523751"
+       inkscape:rounded="2.65"
+       inkscape:randomized="-4.8572257e-17"
+       d="M 128.34104,144.50773 C 384.96259,291.5595 337.74111,-70.589623 67.959614,50.640689 -226.41604,182.92275 -65.955611,-121.98774 66.267546,172.41437 187.44388,442.22012 362.10681,121.47924 72.591603,60.983032 -243.31675,-5.0281999 65.720354,-157.38969 -0.35408505,158.50544 -60.908213,448.00853 268.92383,291.188 70.259883,72.072779 -146.51491,-167.0177 193.05719,-108.63329 -46.076651,108.09366 -265.23162,306.71376 93.784904,373.7137 61.855093,79.674022 27.014458,-241.17126 267.41656,5.6581921 -53.435686,40.434631 -347.48174,72.305609 -96.412849,337.53431 50.587577,80.883345 210.98904,-199.16476 260.39571,141.82928 -19.620288,-18.628208 -276.24184,-165.67998 -229.02035,196.46914 40.761142,75.238828 335.13679,-57.043232 174.67637,247.86726 42.45321,-46.534857 -78.72312,-316.3406 -253.38605,4.4002816 36.129154,64.896484 352.0375,130.90772 43.000403,283.26921 109.07484,-32.625924 169.62897,-322.12902 -160.20307,-165.30849 38.460873,53.806738 255.23567,292.89721 -84.336438,234.5128 154.79741,17.785852 373.95238,-180.83425 14.935853,-247.83418 46.865663,46.205495 81.706299,367.05078 -158.69581,120.22132 162.15644,85.444885 456.2025,53.573908 205.13361,-211.6548 58.13318,44.996172 -102.26828,325.04427 -151.67496,-15.949766 128.34104,144.50773 Z"
+       inkscape:transform-center-x="0.11105312"
+       inkscape:transform-center-y="0.033515795"
+       transform="matrix(0.41764144,0,0,0.41764144,83.130186,79.547081)" />
+    <circle
+       style="opacity:1;fill:#28170b;stroke-width:0.429798"
+       id="path6885"
+       cx="105.83334"
+       cy="105.83334"
+       r="28.759676" />
+    <circle
+       style="opacity:1;fill:#502d16;stroke-width:0.275215"
+       id="path7091"
+       cx="105.83334"
+       cy="105.83334"
+       r="23.301632" />
+  </g>
+  <metadata
+     id="metadata647">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-nc/4.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-nc/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:prohibits
+           rdf:resource="http://creativecommons.org/ns#CommercialUse" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
