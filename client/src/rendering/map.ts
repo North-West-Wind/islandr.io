@@ -26,7 +26,7 @@ export function initMap() {
 	mapCtx = <CanvasRenderingContext2D> mapCanvas.getContext("2d");
 
 	// Fill map background
-	mapCtx.fillStyle = "#49993e";
+	mapCtx.fillStyle = world.defaultTerrain.colorToHex();
 	mapCtx.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
 
 	// Draw terrains on map, -ve layer -> layer 0
@@ -130,7 +130,7 @@ export function drawMinimap(player: FullPlayer, canvas: HTMLCanvasElement, ctx: 
 	const margin = canvas.width / 100;
 	const side = canvas.width / (8 / (isBigMap() ? 1.5 : 1));
 	// Fill map background
-	ctx.fillStyle = "#49993e";
+	ctx.fillStyle = world.defaultTerrain.colorToHex();
 	ctx.fillRect(margin, canvas.height - margin - side, side, side);
 	// Draw pre-rendered map
 	ctx.drawImage(tmpCanvas, margin, canvas.height - margin - side, side, side);

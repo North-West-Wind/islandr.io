@@ -151,7 +151,7 @@ function animate(currentTime: number) {
 	// Don't panic when drawing error
 	try {
 		// Fill canvas with default terrain color
-		ctx.fillStyle = "#49993e";
+		ctx.fillStyle = world.defaultTerrain.colorToHex();
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 		
 		const player = getPlayer();
@@ -196,7 +196,7 @@ function animate(currentTime: number) {
 			});
 
 			// Fill areas outside the border
-			ctx.fillStyle = "#49993e";
+			ctx.fillStyle = world.defaultTerrain.colorToHex();
 			// The corners: top-left, top-right, bottom-left, bottom-right
 			ctx.fillRect(0, 0, canvas.width / 2 - player.position.x * scale, canvas.height / 2 - player.position.y * scale);
 			ctx.fillRect(canvas.width, 0, (world.size.x - player.position.x) * scale - canvas.width / 2, canvas.height / 2 - player.position.y * scale);
