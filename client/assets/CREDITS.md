@@ -46,6 +46,9 @@
 - `images/game/objects/grenade_crate.svg` (modified by NorthWestWind: dimension)
 - `images/game/objects/soviet_crate.svg` (modified by NorthWestWind: dimension)
 - `image/game/objects/barrel.svg` (modified by NorthWestWind: svg attributes)
+- `sounds/guns/jm9_reload.mp3`
+- `sounds/guns/m960_reload.mp3`
+
 
 ### piesimp (from Discord)
 - `images/menu/islandr-logo.svg `
