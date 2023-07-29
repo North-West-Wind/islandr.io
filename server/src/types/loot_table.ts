@@ -7,6 +7,7 @@ import { Entity, Inventory } from "./entity";
 import { GrenadeWeapon, GunWeapon, WeaponType } from "./weapon";
 import Healing from "../store/entities/healing";
 import Scope from "../store/entities/scope";
+import Vest from "../store/entities/vest";
 
 class TypeLootTable {
 	static readonly MAX_RARITY = 5;
@@ -112,6 +113,10 @@ class LootTable {
 				}
 				case "scope": {
 					entities.push(new Scope(parseInt(result.id)));
+					break;
+				}
+				case "vest": {
+					entities.push(new Vest(parseInt(result.id)));
 					break;
 				}
 			}

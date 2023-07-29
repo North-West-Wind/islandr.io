@@ -8,6 +8,7 @@ export function drawHud(player: FullPlayer, canvas: HTMLCanvasElement, ctx: Canv
 	drawAdrenaline(player, canvas, ctx);
 	drawGunAmmo(player, canvas, ctx);
 	drawBackpack(player, canvas, ctx);
+	drawVest(player, canvas, ctx);
 }
 
 // Draws the player's health
@@ -91,4 +92,23 @@ function drawBackpack(player: FullPlayer, canvas: HTMLCanvasElement, ctx: Canvas
 	ctx.textBaseline = "bottom";
 	ctx.textAlign = "center";
 	ctx.fillText(`Lv. ${player.inventory.backpackLevel}`, (canvas.width + healthWidth) / 2 + padding + size / 2, canvas.height - size - padding * 2);
+}
+
+function drawVest(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+	if (player.inventory.vestLevel == 0) return;
+	const size = canvas.height / 20;
+	const healthWidth = size * 10;
+	const padding = Math.min(canvas.width, canvas.height) / 100;
+	ctx.fillStyle = "#000000";
+	ctx.globalAlpha = 0.2;
+	roundRect(ctx, (canvas.width + healthWidth) / 2 + padding * 2 + size, canvas.height - size - padding, size, size, padding / 2);
+	ctx.globalAlpha = 1;
+	//const img = Backpack.backpackImages[player.inventory.backpackLevel - 1];
+	//if (img?.loaded) ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 2, canvas.height - size, size - padding * 2, size - padding * 2);
+
+	ctx.fillStyle = "#fff";
+	ctx.font = `${canvas.height / 54}px Arial`;
+	ctx.textBaseline = "bottom";
+	ctx.textAlign = "center";
+	ctx.fillText(`Lv. ${player.inventory.vestLevel}`, (canvas.width + healthWidth) / 2 + padding * 2 + size * 3 / 2, canvas.height - size - padding * 2);
 }

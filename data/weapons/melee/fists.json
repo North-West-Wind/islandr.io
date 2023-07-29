@@ -20,7 +20,7 @@
 		}
 	},
 	"sounds": {
-		"swing": "melee/punch_swing.mp3"
+		"swing": "guns/fist_swing.mp3"
 	},
 	"visuals": {
 		"animations": ["left_fist", "right_fist"]

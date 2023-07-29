@@ -1,4 +1,4 @@
-import { Howler } from "howler";
+import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
 import { initMap } from "./rendering/map";
@@ -7,7 +7,7 @@ import { FullPlayer, Healing } from "./store/entities";
 import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
 import { castCorrectTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket } from "./types/packet";
 import { World } from "./types/world";
 import { receive, send } from "./utils";
 import Building from "./types/building";
@@ -61,9 +61,9 @@ async function init(address: string) {
 	
 			// Call renderer start to setup
 			await start();
-			// var currentCursor = localStorage.getItem("selectedCursor")
-			// if (!currentCursor){localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor")}
-			// if (currentCursor) {document.documentElement.style.cursor = currentCursor}
+			var currentCursor = localStorage.getItem("selectedCursor")
+			if (!currentCursor){localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor")}
+			if (currentCursor) {document.documentElement.style.cursor = currentCursor}
 			console.log("from game.ts client skin! > " + skin! + " and death img > " + deathImg!)
 			send(ws, new ResponsePacket(id, username!, skin!, deathImg!));
 			connected = true;
@@ -111,8 +111,7 @@ async function init(address: string) {
 						(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block";
 						break;
 					}
-					// Temporarily disabled until we have sounds
-					/*case "sound": {
+					case "sound": {
 						if (!player) break;
 						const soundPkt = <SoundPacket>data;
 						const howl = new Howl({
@@ -125,7 +124,7 @@ async function init(address: string) {
 						world.sounds.set(id, { howl, pos });
 						howl.on("end", () => world.sounds.delete(id));
 						break;
-					}*/
+					}
 				}
 			}
 		}

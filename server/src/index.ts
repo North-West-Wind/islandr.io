@@ -102,13 +102,14 @@ server.on("connection", async socket => {
 	// Create the new player and add it to the entity list.
 	const player = new Player(id, username, skin, deathImg);
 	world.addPlayer(player);
+	player.boost *= 1.5;
 
 	// Send the player the entire map
 	send(socket, new MapPacket(world.obstacles, world.buildings, world.terrains));
 	// Send the player initial objects
 	send(socket, new GamePacket(world.entities, world.obstacles.concat(...world.buildings.map(b => b.obstacles.map(o => o.obstacle))), player, world.playerCount, true));
 	// Send the player music
-	// for (const sound of world.joinSounds) send(socket, new SoundPacket(sound.path, sound.position));
+	for (const sound of world.joinSounds) send(socket, new SoundPacket(sound.path, sound.position));
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
@@ -200,7 +201,7 @@ setInterval(() => {
 		else pkt.addNextSafeZoneData(world.nextSafeZone);
 		send(socket, pkt);
 		if (world.particles.length) send(socket, new ParticlesPacket(world.particles, player));
-		// for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
+		for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
 	});
 	world.postTick();
 }, 1000 / TICKS_PER_SECOND);

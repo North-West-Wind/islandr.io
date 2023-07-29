@@ -77,6 +77,7 @@ export default class Player extends Entity {
 			const inventory = <Inventory>minEntity.inventory;
 			this.inventory = new Inventory(inventory.holding, inventory.slots, inventory.weapons.map(w => w ? castCorrectWeapon(w, w.type == WeaponType.GUN ? (<GunWeapon>w).magazine : 0) : w), inventory.ammos, inventory.utilities, inventory.healings);
 			this.inventory.backpackLevel = inventory.backpackLevel;
+			this.inventory.vestLevel = inventory.vestLevel;
 			for (let ii = 0; ii < inventory.weapons.length; ii++) {
 				if (ii == inventory.holding) weaponPanelDivs[ii].classList.add("selected");
 				else weaponPanelDivs[ii].classList.remove("selected");
@@ -110,6 +111,12 @@ export default class Player extends Entity {
 				ctx.lineWidth = radius / 6;
 				ctx.strokeStyle = "#000000";
 				circleFromCenter(ctx, -radius * 0.2 * (1 + this.inventory.backpackLevel), 0, radius * 0.9, true, true);
+			}
+			if (this.inventory.vestLevel) {
+				ctx.fillStyle = "#675230";
+				ctx.lineWidth = radius / (7-this.inventory.vestLevel);
+				ctx.strokeStyle = "#000000";
+				circleFromCenter(ctx, 0, 0, radius, true, true);
 			}
 			ctx.drawImage(this.currentSkinSVG, -radius, -radius, radius * 2 , radius * 2 );
 

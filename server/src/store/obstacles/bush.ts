@@ -19,6 +19,6 @@ export default class Bush extends Obstacle {
 
 	die() {
 		super.die();
-		world.onceSounds.push({ path: `obstacle/break/bush/bush_break.mp3`, position: this.position });
+		world.onceSounds.push({ path: `objects/bush_break.mp3`, position: this.position });
 	}
 }

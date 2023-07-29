@@ -8,6 +8,7 @@ import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { spawnAmmo, spawnGun } from "../../utils";
 import Healing from "./healing";
+import Vest from "./vest";
 export default class Player extends Entity {
 	type = "player";
 	onTopOfLoot: string | null;
@@ -190,6 +191,12 @@ export default class Player extends Entity {
 		}
 	}
 
+	damage(dmg: number) {
+		if (!this.vulnerable) return;
+		this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];
+		this.markDirty();
+	}
+
 	die() {
 		super.die();
 		for (const weapon of this.inventory.weapons) {
@@ -219,7 +226,8 @@ export default class Player extends Entity {
 		if (this.maxReloadTicks) return;
 		const weapon = this.inventory.getWeapon();
 		if (weapon?.type != WeaponType.GUN) return;
-		const gun = <GunWeapon> weapon;
+		const gun = <GunWeapon>weapon;
+		world.onceSounds.push({ path: "guns/" + gun.name + "_reload.mp3", position: this.position })
 		if (!this.inventory.ammos[gun.color] || gun.magazine == gun.capacity) return;
 		this.maxReloadTicks = this.reloadTicks = gun.reloadTicks;
 		this.markDirty();

@@ -14,12 +14,12 @@ export default class Barrel extends Obstacle {
 
 	damage(dmg: number) {
 		super.damage(dmg);
-		world.onceSounds.push({ path: `obstacle/hit/metal/metal_hit_03.mp3`, position: this.position });
+		world.onceSounds.push({ path: `objects/Barrel_Hit.mp3`, position: this.position });
 	}
 
 	die() {
 		super.die();
-		world.onceSounds.push({ path: `obstacle/break/barrel/barrel_break.mp3`, position: this.position });
+		world.onceSounds.push({ path: `objects/barrel_explosion.mp3`, position: this.position });
 		world.entities.push(new Explosion(this, 150, 50, this.position, this.hitbox.comparable, 4, 20));
 	}
 }
