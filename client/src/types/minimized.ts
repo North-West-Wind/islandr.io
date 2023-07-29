@@ -35,6 +35,7 @@ export interface MinEntity {
 export interface MinInventory {
 	holding: MinWeapon;
 	backpackLevel: number;
+	vestLevel: number;
 }
 
 export interface MinObstacle {

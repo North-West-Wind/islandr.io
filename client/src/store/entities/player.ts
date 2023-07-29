@@ -111,6 +111,12 @@ export default class Player extends Entity {
 				ctx.strokeStyle = "#000000";
 				circleFromCenter(ctx, -radius * 0.2 * (1 + this.inventory.backpackLevel), 0, radius * 0.9, true, true);
 			}
+			if (this.inventory.vestLevel) {
+				ctx.fillStyle = "#675230";
+				ctx.lineWidth = radius / (7-this.inventory.vestLevel);
+				ctx.strokeStyle = "#000000";
+				circleFromCenter(ctx, 0, 0, radius, true, true);
+			}
 			ctx.drawImage(this.currentSkinSVG, -radius, -radius, radius * 2 , radius * 2 );
 
 			// We will leave the transform for the weapon

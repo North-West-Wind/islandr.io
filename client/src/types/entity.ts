@@ -20,6 +20,7 @@ export class Inventory {
 	utilities: CountableString;
 	healings: CountableString;
 	backpackLevel!: number;
+	vestLevel!: number;
 	scopes!: number[];
 	selectedScope!: number;
 
@@ -45,10 +46,12 @@ export class Inventory {
 export class PartialInventory {
 	holding: Weapon;
 	backpackLevel: number;
+	vestLevel: number;
 
 	constructor(minInv: MinInventory) {
 		this.holding = castCorrectWeapon(minInv.holding);
 		this.backpackLevel = minInv.backpackLevel;
+		this.vestLevel = minInv.vestLevel
 	}
 }
 

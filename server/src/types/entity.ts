@@ -24,6 +24,7 @@ export class Inventory {
 	utilOrder = new Set<string>();
 	healings: CountableString;
 	backpackLevel = 0;
+	vestLevel = 0;
 	scopes = [1];
 	selectedScope = 1;
 
@@ -74,7 +75,7 @@ export class Inventory {
 	}
 
 	minimize() {
-		return <MinInventory> { holding: this.weapons[this.holding].minimize(), backpackLevel: this.backpackLevel };
+		return <MinInventory> { holding: this.weapons[this.holding].minimize(), backpackLevel: this.backpackLevel, vestLevel: this.vestLevel };
 		//If the player isn't holding anything no need to minimize it
 	}
 
