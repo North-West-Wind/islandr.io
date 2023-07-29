@@ -12,7 +12,7 @@ export default class Vest extends Item {
 	level: number;
 
 	static {
-		const data = JSON.parse(fs.readFileSync("../data/vest_reduction.json", { encoding: "utf8" }));
+		const data = JSON.parse(fs.readFileSync("../data/config/vest_reduction.json", { encoding: "utf8" }));
 		this.VEST_REDUCTION.push(...data);
 	}
 
