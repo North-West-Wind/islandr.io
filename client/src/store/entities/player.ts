@@ -118,8 +118,17 @@ export default class Player extends Entity {
 				ctx.strokeStyle = "#000000";
 				circleFromCenter(ctx, 0, 0, radius, true, true);
 			}
+			
+			
 			ctx.drawImage(this.currentSkinSVG, -radius, -radius, radius * 2 , radius * 2 );
-
+			
+			if (this.inventory.helmetlevel) {
+				ctx.fillStyle = "#675230";
+				ctx.lineWidth = radius / (7-this.inventory.helmetlevel);
+				ctx.strokeStyle = "#000000";
+				circleFromCenter(ctx, 0, 0, radius * 0.7, true, true);
+			}
+			
 			// We will leave the transform for the weapon
 			// If player is holding nothing, render fist
 			var weapon = WEAPON_SUPPLIERS.get("fists")!.create();

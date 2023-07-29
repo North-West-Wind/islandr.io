@@ -25,6 +25,7 @@ export class Inventory {
 	healings: CountableString;
 	backpackLevel = 0;
 	vestLevel = 0;
+	helmetlevel = 0;
 	scopes = [1];
 	selectedScope = 1;
 
