@@ -25,7 +25,7 @@ export default class Helmet extends Item {
 			helmet.position = player.position;
 			world.entities.push(helmet);
 		}
-		player.inventory.helmetlevel= this.level;
+		player.inventory.helmetlevel = this.level;
 		return true;
 	}
 

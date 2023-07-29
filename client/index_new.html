@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>islandr.io</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background-image: url('https://github.com/North-West-Wind/islandr.io/blob/main/client/assets/images/menu/background.png?raw=true');
+     top: 0px !important;
+    }
+
+     .box-containerz {
+      position: absolute;
+      top: 25%;
+      right: 10%;
+      width: 300px;
+      height: 300px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 20px;
+      overflow: auto;
+        border-bottom: 1px solid white; /* Added the border-bottom property */
+      padding-bottom: 10px; /* Added padding to create spacing between lines */
+      margin-bottom: 10px; /* Added margin to create spacing between lines */
+    }
+
+    .box-containerz::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .box-containerz::-webkit-scrollbar-track {
+      background: gray;
+    }
+
+    .box-containerz::-webkit-scrollbar-thumb {
+      background: lightgray;
+      border-radius: 5px;
+    transition: all 0.5s ease;
+    }
+
+    .box-containerz::-webkit-scrollbar-thumb:hover {
+      background-color: #555; /* Applied the transition to background-color */
+    }
+
+      .animate-charcter {
+      text-transform: uppercase;
+      background-image: linear-gradient(
+        -225deg,
+        #00bda7 0%,
+        #44107a 29%,
+        #ff1361 67%,
+        #181f7a 100%
+      );
+      background-size: auto auto;
+      background-clip: border-box;
+      background-size: 200% auto;
+      color: #fff;
+      background-clip: text;
+      text-fill-color: transparent;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textclip 2s linear infinite;
+      display: inline-block;
+      font-size: 25px;
+    }
+
+    @keyframes textclip {
+      to { /* Corrected the keyframes syntax */
+        background-position: 200% center;
+      }
+    }
+
+    .box-contentz {
+      color: white;
+      font-size: 16px;
+      text-align: center;
+    }
+
+
+
+   .containeo {
+      max-width: 950px;
+      width: 500px;
+      padding: 50px 40px;
+      margin: 0px 20px;
+      border-radius: 12px;
+      background: #22272C;
+box-shadow: 0px 0px 3px 37px #22272C;
+    }
+
+
+
+    .containeo .topic {
+      font-size: 30px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .content input {
+      display: none;
+    }
+
+    .content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .content .list {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      width: 20%;
+      margin-right: 50px;
+    }
+
+    .content .list label {
+      cursor: pointer;
+      width: 80px;
+      height: 60px;
+      line-height: 60px;
+      font-size: 18px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.5);
+      padding-left: 25px;
+      transition: all 0.5s ease;
+      z-index: 10;
+    }
+
+    #home:checked~.list label.home,
+    #blog:checked~.list label.blog,
+    #help:checked~.list label.help,
+    #code:checked~.list label.code,
+    #about:checked~.list label.about {
+      color: #22272C;
+    }
+
+    .content .slider {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 60px;
+      width: 100%;
+      border-radius: 12px;
+      transition: all 0.5s ease;
+
+      background: #BB86FC;
+    }
+
+    #home:checked~.list .slider {
+      top: 0;
+    }
+
+    #blog:checked~.list .slider {
+      top: 60px;
+    }
+
+    #help:checked~.list .slider {
+      top: 120px;
+    }
+
+    #code:checked~.list .slider {
+      top: 180px;
+    }
+
+    #about:checked~.list .slider {
+      top: 240px;
+    }
+
+    .content .text-content {
+      width: 80%;
+      height: 100%;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .content .text {
+      display: none;
+    }
+
+    .content .text .title {
+      font-size: 25px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .container .text p {
+      text-align: justify;
+    }
+
+    .content .text-content .home {
+      display: block;
+    }
+
+    #home:checked~.text-content .home,
+    #blog:checked~.text-content .blog,
+    #help:checked~.text-content .help,
+    #code:checked~.text-content .code,
+    #about:checked~.text-content .about {
+      display: block;
+    }
+
+    #blog:checked~.text-content .home,
+    #help:checked~.text-content .home,
+    #code:checked~.text-content .home,
+    #about:checked~.text-content .home {
+      display: none;
+    }
+
+    .content .list label:hover {
+      color: #BB86FC;
+    }
+    
+ .how-to-play-button {
+      position: relative;
+      bottom: -65px;
+      left: 1px;
+      width: 165px;
+      height: 20px;
+      display: inline-block;
+      padding: 15px 30px;
+      background-color: #808080;
+      color: white;
+      font-size: 23px;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: 5px;
+      box-shadow: 0 5px 0 #505050;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .how-to-play-button:hover {
+      box-shadow: 0 3px 0 #505050;
+      transform: translateY(2px);
+    }
+
+   .containerk {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 600px;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+
+    .containerk.open {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.5s ease;
+    }
+
+    .example-text {
+      padding: 20px;
+      font-size: 18px;
+      color: #333;
+      text-align: center;
+
+    }
+
+    .overlappy {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9998;
+      display: none;
+    }
+
+    .close-buttony {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      background-color: darkred;
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      line-height: 20px;
+      text-decoration: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      box-shadow: 0px 0px 20px 0px red;
+    }
+
+    .close-buttony:hover {
+      box-shadow: 0 1px 0 #505050;
+      transform: translateY(1px);
+    }
+
+
+
+    .duo-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 68px;
+      position: relative;
+      top: 35px;
+      right: 23%;
+      background-color: #00A4CCFF;
+      color: white;
+      font-size: 19px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 0 #5B6F99;
+    }
+
+    .duo-button:hover {
+      box-shadow: 0 2px 0 #5B6F99;
+      transform: translateY(2px);
+    }
+
+
+
+    .squad-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 68px;
+      position: relative;
+      top: -7px;
+      right: -23%;
+      background-color: #F95700FF;
+      color: white;
+      font-size: 19px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 0 #5B6F99;
+    }
+
+    .squad-button:hover {
+      box-shadow: 0 2px 0 #5B6F99;
+      transform: translateY(2px);
+    }
+
+
+    #keybinds-button {
+      bottom: 20px;
+      left: 50%;
+      background-color: gray;
+      border: none;
+      padding: 0;
+      height: 40px;
+      width: 60px;
+    box-shadow: 0 5px 0 #505050;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    #keybinds-button:hover {
+      box-shadow: 0 3px 0 #505050;
+      transform: translateY(2px);
+    }
+
+    #keybinds-button img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    
+  #keybinds-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0%;
+  width: 103%;
+  height: 450%; /* Use 100% instead of 400% */
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 1);
+  z-index: 9998;
+     transition: all 0.5s ease;
+}
+  
+    #keybinds-modal {
+      display: none;
+      position: fixed;
+      color: white;
+      margin-top: -30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 300px;
+      background-color: limegreen;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 9999;
+      box-shadow: 0px 0px 24px 4px limegreen;
+      transition: all 0.3s;
+    }
+
+    #keybinds-content {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #keybinds-header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px;
+    }
+
+    .close-buttoned {
+      padding: 4px 8px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.5s ease;
+      box-shadow: 0 3px 0 #5B6F99;
+    }
+
+    .close-buttoned:hover {
+      box-shadow: 0 1px 0 #a60303;
+      transform: translateY(2px);
+      background-color: #a60303;
+    }
+
+    #keybinds-scroll {
+      width: calc(100% - 20px);
+      height: calc(100% - 50px);
+      overflow-y: scroll;
+      margin: 6px;
+      padding-right: 10px;
+      background-color: #07a343;
+      border-radius: 5px;
+      scroll-behavior: smooth;
+    }
+
+    .keybind {
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    .key {
+      display: block;
+      width: 70px;
+      margin: 6px;
+      text-align: center;
+      background-color: darkgreen;
+      color: white;
+      border-radius: 6px;
+      padding: 4px 8px;
+      transition: all 0.5s ease;
+      box-shadow: 0 2px 0 #5B6F99;
+    }
+
+    .key:hover {
+      background-color: #013013;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: lightblue;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Custom scrollbar */
+    #keybinds-scroll::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    #keybinds-scroll::-webkit-scrollbar-track {
+      background-color: #65c98a;
+      border-radius: 4px;
+    }
+
+    #keybinds-scroll::-webkit-scrollbar-thumb {
+      background-color: green;
+      border-radius: 5px;
+    }
+
+    #keybinds-scroll::-webkit-scrollbar-thumb:hover {
+      background-color: darkgreen;
+    }
+
+    #reset-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: gray;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+      transition: all 0.5s ease;
+    }
+
+    #reset-button:hover {
+      background-color: #434a43;
+      box-shadow: 0px 0px 0px 3px darkred;
+    }
+
+    #reset-message {
+      position: absolute;
+      top: 10px;
+      right: 70px;
+      font-size: 15px;
+      color: darkred;
+      font-weight: bold;
+      background-color: lightgray;
+      border-radius: 5px;
+      box-shadow: 34px 8px 17px 14px rgba(0, 0, 0, 0.1), 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Styles for tab content */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Styles for modal items */
+    .modal-item {
+      margin-bottom: 10px;
+    }
+
+    .setting-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* Styles for buttons */
+    .btn {
+      display: inline-block;
+      padding: 10px;
+      margin-right: 5px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .btn-darken {
+      background-color: #343a40;
+      color: #ffffff;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+    }
+
+    .btn-bind {
+      margin-bottom: 5px;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: #ffffff;
+    }
+
+    /* Surviv.io specific styles */
+    .setting-title {
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    .btn {
+      font-size: 12px;
+      padding: 8px;
+      margin-right: 4px;
+    }
+
+    .btn-lg {
+      font-size: 14px;
+    }
+
+    .btn-danger {
+      background-color: #bd2c33;
+    }
+
+    .btn-darken:hover,
+    .btn-secondary:hover,
+    .btn-danger:hover {
+      filter: brightness(90%);
+    }
+
+    .btn-bind {
+      font-size: 10px;
+      padding: 5px;
+      margin-bottom: 3px;
+    }
+
+    .box {
+      width: 300px;
+      height: 300px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f4f4f4;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      overflow: auto;
+      position: absolute;
+      z-index: 5;
+      margin: auto;
+    }
+
+
+
+
+
+    /* Reset button styles */
+    .reset-button {
+      position: absolute;
+      right: 70px;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px;
+      background-color: #dc3545;
+      color: #ffffff;
+      font-size: 12px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .overlayp {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 1);
+      z-index: 4;
+      display: none;
+      /* Initially hide the overlay */
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      position: relative;
+    }
+
+    .boxi {
+      width: 250px;
+      height: 230px;
+      border-radius: 10px;
+      background-color: rgba(0, 0, 0, 0.5);
+      margin-right: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .example-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      top: 0%;
+      right: 0%;
+      width: 72%;
+      height: 21px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 0 #5B6F99;
+      background-color: green;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    .example-button:hover {
+      box-shadow: 0 2px 0 #5B6F99;
+      transform: translateY(2px);
+    }
+
+
+    .name-input {
+      width: 80%;
+      margin-top: -150px;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+      font-size: 16px;
+      text-align: center;
+    }
+
+
+    .second-box {
+      margin-top: 4%;
+      width: 50px;
+      height: 135px;
+      border-radius: 5px;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .discord-button,
+    .new-button,
+    .settings-button,
+    .credit-button,
+    .github-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 0 #5B6F99;
+      background-color: lightcoral;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .discord-button:hover,
+    .new-button:hover,
+    .settings-button:hover,
+    .credit-button:hover,
+    .github-button:hover {
+      box-shadow: 0 2px 0 #5B6F99;
+      transform: translateY(2px);
+    }
+
+    .settings-button img,
+    .credit-button img {
+      transition: all 0.3s ease;
+    }
+
+    .settings-button:hover img {
+      transform: rotate(360deg);
+    }
+
+    .credit-button {
+      width: 60px;
+      height: 40px;
+      position: absolute;
+      top: 50%;
+      left: 5px;
+      background-color: ghostwhite;
+    }
+
+    .settings-button {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      /* Adjust this value as needed */
+      background-color: lightgray;
+      width: 40px;
+    }
+
+        .github-button {
+          background-color: white;
+        }
+
+
+    .credit-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 100, 0, 1);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.3s ease;
+      z-index: 2;
+      transition: all 0.5s;
+      box-shadow: 0px 0px 0px 17px rgba(0,0,0,0.1);
+    }
+
+    .credit-box:hover {
+      background-color: #007512;
+      box-shadow: 0px 0px 100px 100px #919191;
+    }
+
+    .volume-box.active,
+    .credit-box.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .volume-box .volume-text,
+    .credit-box .credit-text {
+      margin-bottom: 10px;
+    }
+
+    .volume-box input[type="range"] {
+      width: 100%;
+    }
+.volume-box {
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  width: 600px; /* Adjust the size of the circle as desired */
+  height: 95px; /* Adjust the size of the circle as desired */
+  transform: translate(-50%, -50%);
+  background-color:  #22272C;
+  color: white;
+  padding: 20px;
+  border-radius: 50%;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.3s ease;
+  z-index: 2;
+  font-size: 20px;
+}
+
+
+ .close-buttons {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: whitesmoke;
+  font-size: 30px; /* Change the font size to make the button bigger */
+  transition: color 0.3s ease;
+}
+
+.close-buttons:hover {
+  color: red;
+}
+
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+    }
+
+    .overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .credit-text {
+      font-size: 20px;
+      text-align: center;
+    }
+.volume-control {
+  position: relative;
+  width: 100%;
+  height: 20px; /* Change the height to 20px or any desired value */
+border-radius: 5px;
+  background-color: #2c3357;
+  cursor: pointer;
+}
+
+.volume-control .sliderh {
+  position: absolute;
+  height: 20px;
+  top: 0;
+  left: 0;
+  border-radius: 5px;
+  background-color: rgb(0, 122, 153, 0.5);
+  transition: all 0.5s ease;
+}
+
+.volume-percentage {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 17px;
+  color: #333;
+  pointer-events: none;
+  z-index: 50;
+}
+    
+.VIpgJd-ZVi9od-ORHb-OEVmcd {
+      visibility: hidden !important;
+    }
+
+
+    /* Center the container div */
+.containerb {
+  position: absolute;
+  top: 37%;
+  left: 57%;
+  transform: translate(-50%, -50%);
+}
+
+/* Basic styles for the placeholder */
+.placeholderl {
+
+  display: inline-block;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #666;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  cursor: pointer; 
+box-shadow: 0px 0px 0px 5px #a2ff00;
+}
+
+/* Styling the dropdown menu */
+.dropdown {
+  /* Your existing styles for the dropdown */
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 10;
+}
+
+.item {
+  /* Your existing styles for the dropdown items */
+  padding: 5px;
+  cursor: pointer;
+}
+
+.item:hover {
+  /* Your existing styles for the dropdown items on hover */
+  background-color: #f2f2f2;
+}
+
+  </style>
+</head>
+
+<body>
+
+
+  <div class="overlayp" id="overlayp"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweeta lert2@11.0.19/dist/sweetalert2.min.css">
+  <div class="container">
+
+    <div class="boxi">
+      <a class="duo-button" href="#">Duo</a>
+      <a class="squad-button" href="#">Squad</a>
+
+
+<div class="containerb">
+  <div class="placeholderl" id="placeholderl">Servers ⬇</div>
+  <div class="dropdown" id="dropdown">
+    <div class="item" address="islandr.io:8000" data-value="America">America</div>
+  </div>
+</div>
+
+
+      
+
+     <input type="text" maxlength="15" placeholder="Insert name here" class="name-input" id="username">
+      <a href="#" class="example-button">Play Solo</a>
+      <a href="#" class="how-to-play-button" onclick="openContainerk()">How to Play</a>
+      <div class="containerk" id="containerk">
+        <a href="#" class="close-buttony" onclick="closeContainerk()">X</a>
+        <div class="example-text">
+          <li><br>In a post-apocalyptic world, your survival instincts are put to the ultimate test. Welcome to the
+            ruthless battleground of [Islandr.io], a fast-paced 2D shooting game that will push your skills to the
+            limit.</br></li>
+
+
+          <li><br>Stranded in an abandoned city, you must fend off hordes of enemies while searching for weapons,
+            ammunition, and crucial supplies. As you navigate through desolate streets, haunted buildings, and
+            treacherous landscapes, every step could be your last.</br></li>
+
+
+
+          <li><br>But remember, you are not alone. Other survivors, just like you, are fighting for their lives. Will
+            you forge alliances and work together for a greater chance of survival, or will you choose a solitary path,
+            trusting only in your own skills?</br></li>
+
+
+
+          <li><br>Upgradable weapons, tactical gear, and power-ups await you at every corner. Equip yourself with an
+            arsenal of devastating firearms to survive. Use W, A, S, D keys to move and use mouse left to shoot (from keyboard), you can change this option from settings.</br></li>
+
+
+        </div>
+      </div>
+      <div class="overlappy" id="overlayl"></div>
+
+    </div>
+    <div class="second-box">
+      <a href="http://islandr.io/discord" target="_blank" class="discord-button">
+        <img src="https://static-00.iconduck.com/assets.00/discord-icon-2048x2048-nnt62s2u.png" alt="Discord"
+          width="30">
+      </a>
+       <a href="https://github.com/North-West-Wind/islandr.io" target="_blank" class="github-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub"
+          width="30">
+      </a>
+      <a href="https://nativeafraidsphere.xrobloxhack1ben.repl.co/" target="_blank" class="new-button">
+        <img src="https://cdn-icons-png.flaticon.com/512/2665/2665038.png" alt="New Button" width="30">
+      </a>
+      <div class="credit-button">
+        <img src="https://arco.academy/wp-content/uploads/2021/03/partnership-icon-10-363x344.png" alt="Credit/Partners"
+          width="30">
+      </div>
+    </div>
+    <div class="settings-button">
+      <a href="#" class="settings-icon">
+        <img src="https://static-00.iconduck.com/assets.00/settings-icon-1964x2048-8nigtrtt.png" alt="Settings"
+          width="30">
+      </a>
+    </div>
+  </div>
+  <div class="volume-box" id="volumeBox">
+    <div class="containeo">
+
+      <div class="topic">Settings</div>
+
+      <div class="content">
+        <input type="radio" name="slider" checked id="home">
+        <input type="radio" name="slider" id="blog">
+        <input type="radio" name="slider" id="help">
+
+        <div class="list">
+          <label for="home" class="home">
+            <span>Audio</span>
+          </label>
+          <label for="blog" class="blog">
+            <span>Keybinds</span>
+          </label>
+          <label for="help" class="help">
+            <span>language</span>
+          </label>
+          <div class="slider"></div>
+        </div>
+
+        <div class="text-content">
+          <div class="home text">
+            <div class="title">Audio</div>
+       <div class="volume-control" id="volumeControl">
+            <div class="sliderh"></div>
+            <div class="volume-percentage" id="volumePercentage">50%</div>
+
+       </div>
+          </div>
+          <div class="blog text">
+            <div class="title">keybinds</div>
+            <p>  <button id="keybinds-button">
+      <img src="https://www.iconpacks.net/icons/1/free-keyboard-icon-1405-thumb.png" alt="Keybinds Icon">
+    </button></p>
+          </div>
+          <div class="help text">
+           <div class="help text">
+    <div class="title">Select translation</div>
+    <!-- This is the section where the translator will be displayed -->
+    <div id="google_translate_element"></div>
+  </div>
+
+  <!-- Google Website Translator script -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,it,zh-CN,zh-TW,fr,ru,ja,de,ko,es,ar', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+    }
+
+     // Function to change the CSS and hide the translator element
+    function hideTranslator() {
+      const translatorElement = document.querySelector('.VIpgJd-ZVi9od-ORHb-OEVmcd');
+      if (translatorElement) {
+        translatorElement.style.visibility = 'hidden';
+      }
+    }
+
+    // Call the function when the page loads
+    document.addEventListener('DOMContentLoaded', hideTranslator);
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        
+          </div>
+          <div class="code text">
+            <div class="title">Code</div>
+            <p>Lorem</p>
+          </div>
+          <div class="about text">
+            <div class="title">About</div>
+            <p>Lorem</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+
+    <style>
+     /* Custom Range Input Styling */
+.custom-range {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 17px;
+  border-radius: 4px;
+  background-color: #2c3357;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #4285f4;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.custom-range::-webkit-slider-thumb:hover {
+  background-color: #3367d6;
+}
+
+.custom-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.custom-range::-moz-range-thumb:hover {
+  background-color: #3367d6;
+}
+
+.custom-range::-ms-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #4285f4;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.custom-range::-ms-thumb:hover {
+  background-color: #3367d6;
+}
+
+.custom-range:focus {
+  opacity: 1;
+}
+
+    </style>
+
+
+    <div class="close-buttons">&times;</div>
+
+    <div id="keybinds-overlay"></div>
+
+    <div id="keybinds-modal">
+      <div id="keybinds-content">
+        <div id="keybinds-header">
+          <button class="close-buttoned" id="keybinds-close">X</button>
+
+          <button id="reset-button">Reset</button>
+          <div id="reset-message"></div>
+        </div>
+        <div id="keybinds-scroll" class="notranslate">
+          <div class="keybind">Move Left: <span class="key">A</span></div>
+          <div class="keybind">Move Right: <span class="key">D</span></div>
+          <div class="keybind">Move Up: <span class="key">W</span></div>
+          <div class="keybind">Move Down: <span class="key">S</span></div>
+          <div class="keybind">Fire: <span class="key" id="fire-key">Mouse 0</span></div>
+          <div class="keybind">Reload: <span class="key">R</span></div>
+          <div class="keybind">Cancel: <span class="key">X</span></div>
+          <div class="keybind">Interact: <span class="key">F</span></div>
+          <div class="keybind">Equip Primary: <span class="key">1</span></div>
+          <div class="keybind">Equip Secondary: <span class="key">2</span></div>
+          <div class="keybind">Equip Melee: <span class="key">3</span></div>
+          <div class="keybind">Equip Throwables: <span class="key">4</span></div>
+          <div class="keybind">Use Bandage: <span class="key">7</span></div>
+          <div class="keybind">Use Medkit: <span class="key">8</span></div>
+          <div class="keybind">Use Soda: <span class="key">9</span></div>
+          <div class="keybind">Use Pills: <span class="key">0</span></div>
+          <div class="keybind">Switch Gun Slots: <span class="key">T</span></div>
+          <div class="keybind">Toggle Map: <span class="key">M</span></div>
+          <div class="keybind">Toggle Minimap: <span class="key">V</span></div>
+          <div class="keybind">Full Screen: <span class="key" id="fullscreen-key">F11</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay"></div>
+  <div class="credit-box" id="creditBox">
+    <div class="credit-text">Credit/Partners</div>
+    <p><br>NorthWestWind(!DEV-PROJECT!INITIATOR)<br><br>Darkside (from Discord) (assets/helper)<br><br>Leo. (from
+      Discord) (assets/helper)<br><br>SquareCube (from Discord) (assets/helper)<br><br>piesimp (from
+      Discord)(assets/helpe)<br><br>xpayton (from Discord)(assets/helper)<br><br>HeheBoi420(from
+      Discord)(co-developer)<br><br>@hmm (co-developer)<br><br>Wef324(from Discord)(fellow developer)<br></p>
+    <div class="close-buttons">&times;</div>
+  </div>
+  </div>
+
+  <div class="box-containerz">
+    <h2 class="animate-charcter">Latest Updates</h2><br>
+    <div class="box-contentz"><li>We added a new homepage/lobby for you guys to understand and enjoy the new updates without bugs, etc.</li>---------------------------------------</div><br>
+    <div class="box-contentz"><li>New features: We also added some buildings to make the game more fun. Hide from your enemies or surprise them in a trap.</li>----------------------------------------</div><br>
+    <div class="box-contentz"><li>Fixed a lot of bugs: We fixed so many bugs thanks to heheboi420 (discord, co-developer) and NorthWestWind (Developer of the game | Project initiator) in less time. It could be our personal record fixing so many bugs in a short amount of time.</li>-------------------------------------</div><br>
+    <div class="box-contentz"><li>What happened to us? We choose to take down islandr.io instead of closing it. Some of you thought that we lost hope in this project, but NO! We are here to reborn surviv.io in our style! To not lose our memories of the old surviv.io, we also made the game have the same mechanics.</li></div>
+  </div>
+
+
+
+  <script>
+    const settingsButton = document.querySelector('.settings-button');
+    const volumeBox = document.querySelector('#volumeBox');
+    const creditButton = document.querySelector('.credit-button');
+    const creditBox = document.querySelector('#creditBox');
+    const closeButton = document.querySelectorAll('.close-buttons');
+    const overlay = document.querySelector('.overlay');
+
+    settingsButton.addEventListener('click', () => {
+      volumeBox.classList.add('active');
+      overlay.classList.add('active');
+    });
+
+    creditButton.addEventListener('click', () => {
+      creditBox.classList.add('active');
+      overlay.classList.add('active');
+    });
+
+    closeButton.forEach(button => {
+      button.addEventListener('click', () => {
+        volumeBox.classList.remove('active');
+        creditBox.classList.remove('active');
+        overlay.classList.remove('active');
+      });
+    });
+
+    var keybindsButton = document.getElementById('keybinds-button');
+    var keybindsModal = document.getElementById('keybinds-modal');
+    var keybindsCloseButton = document.getElementById('keybinds-close');
+    var keybindsOverlay = document.getElementById('keybinds-overlay');
+
+
+  // Open the keybinds modal
+    keybindsButton.addEventListener('click', function () {
+      keybindsModal.style.display = 'block';
+      keybindsOverlay.style.display = 'block';
+      disableContextMenu();
+    });
+
+    // Close the keybinds modal
+    keybindsCloseButton.addEventListener('click', function () {
+      keybindsModal.style.display = 'none';
+      keybindsOverlay.style.display = 'none';
+      enableContextMenu();
+    });
+
+
+
+
+    // Handle click on the keys
+    var keyElements = document.getElementsByClassName('key');
+    for (var i = 0; i < keyElements.length; i++) {
+      keyElements[i].addEventListener('click', function () {
+        setKey(this);
+      });
+    }
+
+    // Function to set the keybinding
+    function setKey(element) {
+      element.innerHTML = 'Press any key';
+      disableContextMenu();
+
+      // Remove existing event listeners
+      document.removeEventListener('keydown', keydownHandler);
+      document.removeEventListener('mousedown', mousedownHandler);
+
+      // Event listener for keydown event
+      function keydownHandler(event) {
+        event.preventDefault();
+        var selectedKey = event.key.toUpperCase();
+        if (!isKeyInUse(selectedKey)) {
+          element.innerHTML = selectedKey;
+          saveKeyBinding(element, selectedKey);
+        } else {
+          showErrorMessage(element, 'Key already in use!');
+        }
+        cleanup();
+      }
+
+      // Event listener for mousedown event
+      function mousedownHandler(event) {
+        event.preventDefault();
+        var selectedKey = 'Mouse ' + event.button;
+        if (!isKeyInUse(selectedKey)) {
+          element.innerHTML = selectedKey;
+          saveKeyBinding(element, selectedKey);
+        } else {
+          showErrorMessage(element, 'Key already in use');
+        }
+        cleanup();
+      }
+
+      // Event listener for the first keydown or mousedown event
+      document.addEventListener('keydown', keydownHandler, {once: true});
+      document.addEventListener('mousedown', mousedownHandler, {once: true});
+
+      // Cleanup function to remove event listeners if the user cancels the input
+      function cleanup() {
+        document.removeEventListener('keydown', keydownHandler);
+        document.removeEventListener('mousedown', mousedownHandler);
+      }
+    }
+
+    // Function to check if a key is already in use
+    function isKeyInUse(selectedKey) {
+      var keys = document.getElementsByClassName('key');
+      for (var i = 0; i < keys.length; i++) {
+        if (keys[i].innerHTML === selectedKey) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Function to show an error message and clear it after 2 seconds
+    function showErrorMessage(element, message) {
+      element.innerHTML = message;
+      setTimeout(function () {
+        element.innerHTML = 'Press any key';
+        element.click(); // Trigger mouse click on the element
+      }, 2000);
+    }
+
+    // Function to disable the right-click context menu
+    function disableContextMenu() {
+      document.addEventListener('contextmenu', preventDefaultContextMenu);
+    }
+
+    // Function to enable the right-click context menu
+    function enableContextMenu() {
+      document.removeEventListener('contextmenu', preventDefaultContextMenu);
+    }
+
+    // Event listener function to prevent the default context menu
+    function preventDefaultContextMenu(event) {
+      event.preventDefault();
+    }
+
+    // Function to save the keybinding to local storage
+    function saveKeyBinding(element, selectedKey) {
+      var keyName = element.parentNode.innerText.split(':')[0].trim();
+      // Save the key to local storage
+      localStorage.setItem(keyName, selectedKey);
+    }
+
+    // Function to load the keybindings from local storage
+    function loadKeyBindings() {
+      var keyElements = document.getElementsByClassName('key');
+      for (var i = 0; i < keyElements.length; i++) {
+        var keyName = keyElements[i].parentNode.innerText.split(':')[0].trim();
+        var savedKey = localStorage.getItem(keyName);
+        if (savedKey) {
+          keyElements[i].innerHTML = savedKey;
+        }
+      }
+    }
+
+    // Load the keybindings when the page is loaded
+    loadKeyBindings();
+
+    // Reset button click event
+    document.getElementById('reset-button').addEventListener('click', function () {
+      var keyElements = document.getElementsByClassName('key');
+      var defaultKeyBindings = [
+        {keyName: 'Move Left', defaultValue: 'A'},
+        {keyName: 'Move Right', defaultValue: 'D'},
+        {keyName: 'Move Up', defaultValue: 'W'},
+        {keyName: 'Move Down', defaultValue: 'S'},
+        {keyName: 'Fire', defaultValue: 'Mouse 0'},
+        {keyName: 'Reload', defaultValue: 'R'},
+        {keyName: 'Cancel', defaultValue: 'X'},
+        {keyName: 'Interact', defaultValue: 'F'},
+        {keyName: 'Equip Primary', defaultValue: '1'},
+        {keyName: 'Equip Secondary', defaultValue: '2'},
+        {keyName: 'Equip Melee', defaultValue: '3'},
+        {keyName: 'Equip Throwables', defaultValue: '4'},
+        {keyName: 'Use Bandage', defaultValue: '7'},
+        {keyName: 'Use Medkit', defaultValue: '8'},
+        {keyName: 'Use Soda', defaultValue: '9'},
+        {keyName: 'Use Pills', defaultValue: '0'},
+        {keyName: 'Switch Gun Slots', defaultValue: 'T'},
+        {keyName: 'Toggle Map', defaultValue: 'M'},
+        {keyName: 'Toggle Minimap', defaultValue: 'V'},
+        {keyName: 'Full Screen', defaultValue: 'F11'},
+      ];
+
+      var hasChanges = false;
+      for (var i = 0; i < keyElements.length; i++) {
+        var keyName = keyElements[i].parentNode.innerText.split(':')[0].trim();
+        var defaultValue = defaultKeyBindings.find(function (binding) {
+          return binding.keyName === keyName;
+        }).defaultValue;
+        if (keyElements[i].innerHTML !== defaultValue) {
+          keyElements[i].innerHTML = defaultValue;
+          localStorage.removeItem(keyName);
+          hasChanges = true;
+        }
+      }
+
+      var resetMessage = document.getElementById('reset-message');
+      if (hasChanges) {
+        resetMessage.innerText = 'Keys have been reset to default settings.';
+        resetMessage.style.color = 'darkgreen';
+      } else {
+        resetMessage.innerText = 'The keys have already been reset.';
+        resetMessage.style.color = 'red';
+      }
+
+      setTimeout(function () {
+        resetMessage.innerText = '';
+      }, 3000);
+    });
+
+
+    function openContainerk() {
+      var container = document.getElementById('containerk');
+      var overlayl = document.getElementById('overlayl');
+
+      container.classList.add('open');
+      overlayl.style.display = 'block';
+    }
+
+    function closeContainerk() {
+      var containerk = document.getElementById('containerk');
+      var overlayl = document.getElementById('overlayl');
+
+      containerk.classList.remove('open');
+      overlayl.style.display = 'none';
+    }
+
+
+    // JavaScript to handle the volume control functionality
+
+var volumeControl = document.getElementById('volumeControl');
+var sliderh = document.createElement('div');
+sliderh.className = 'sliderh';
+volumeControl.appendChild(sliderh);
+
+var volumePercentageText = document.createElement('div');
+volumePercentageText.className = 'volume-percentage';
+volumePercentageText.id = 'volumePercentage';
+volumeControl.appendChild(volumePercentageText);
+
+volumeControl.addEventListener('click', function(event) {
+  var boundingRect = volumeControl.getBoundingClientRect();
+  var clickX = event.clientX - boundingRect.left;
+  var volumePercentage = Math.max(0, Math.min(clickX / boundingRect.width, 1));
+  updateVolume(volumePercentage);
+});
+
+function updateVolume(volumePercentage) {
+  // Your code to update the volume based on the percentage (0 to 1)
+  // For example, if you're using an audio or video element, you can set its volume property:
+  // audioElement.volume = volumePercentage;
+  // Update any UI elements or visuals as required
+  sliderh.style.width = volumePercentage * 100 + '%';
+  var volumePercentageText = document.getElementById('volumePercentage');
+  volumePercentageText.innerText = Math.round(volumePercentage * 100) + '%';
+}
+
+
+    // JavaScript to reset scroll position to the top on page load
+    window.onload = function() {
+      var containerz = document.querySelector('.box-containerz');
+      containerz.scrollTop = 0;
+    };
+
+
+    
+document.addEventListener("DOMContentLoaded", function () {
+  const placeholderl = document.getElementById("placeholderl");
+  const dropdown = document.getElementById("dropdown");
+
+  // Check if the user has already selected a server and update the placeholder accordingly
+  const selectedServer = localStorage.getItem("selectedServer");
+  if (selectedServer) {
+    placeholderl.textContent = selectedServer;
+  }
+
+  placeholderl.addEventListener("click", function () {
+    dropdown.style.display = "block";
+  });
+
+  // Handle the item click in the dropdown
+  const items = document.querySelectorAll(".item");
+  items.forEach(function (item) {
+    item.addEventListener("click", function () {
+      const selectedServer = item.dataset.value;
+      placeholderl.textContent = selectedServer;
+      dropdown.style.display = "none";
+
+      // Save the selected server in local storage
+      localStorage.setItem("selectedServer", selectedServer);
+    });
+  });
+
+  // Hide the dropdown if the user clicks outside of it
+  document.addEventListener("click", function (event) {
+    if (!dropdown.contains(event.target) && event.target !== placeholderl) {
+      dropdown.style.display = "none";
+    }
+  });
+});
+
+
+    // Function to save the input value to localStorage
+function saveInputValue() {
+  const nameInput = document.getElementById('nameInput');
+  localStorage.setItem('savedName', nameInput.value);
+}
+
+// Function to retrieve the input value from localStorage
+function retrieveSavedValue() {
+  const savedName = localStorage.getItem('savedName');
+  if (savedName) {
+    document.getElementById('nameInput').value = savedName;
+  }
+}
+
+// Call the retrieveSavedValue function when the page loads to populate the input field
+window.addEventListener('load', retrieveSavedValue);
+
+// Call the saveInputValue function whenever the input field loses focus (blur event)
+document.getElementById('nameInput').addEventListener('blur', saveInputValue);
+  </script>
+</body>
+
+</html>

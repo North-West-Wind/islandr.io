@@ -52,7 +52,7 @@ export default class Helmet extends Entity {
 		ctx.textBaseline = "middle";
 		ctx.fillStyle = "#fff";
 		ctx.font = `${canvas.height / 54}px Arial`;
-		ctx.fillText(`V${this.level}`, 0, 0);
+		ctx.fillText(`H${this.level}`, 0, 0);
 		ctx.resetTransform();
 	}
 }
