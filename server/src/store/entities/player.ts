@@ -8,6 +8,7 @@ import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { spawnAmmo, spawnGun } from "../../utils";
 import Healing from "./healing";
+import Vest from "./vest";
 export default class Player extends Entity {
 	type = "player";
 	onTopOfLoot: string | null;
@@ -188,6 +189,12 @@ export default class Player extends Entity {
 				this.damage(world.zoneDamage);
 			}
 		}
+	}
+
+	damage(dmg: number) {
+		if (!this.vulnerable) return;
+		this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];
+		this.markDirty();
 	}
 
 	die() {

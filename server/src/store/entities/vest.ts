@@ -1,14 +1,20 @@
+import * as fs from "fs";
 import { CircleHitbox } from "../../types/math";
-import { MinEntity } from "../../types/minimized";
 import Item from "./item";
 import { world } from "../..";
 import Player from "./player";
 
 export default class Vest extends Item {
+	static readonly VEST_REDUCTION: number[] = [];
 	type = "Vest";
 	name: string;
 	hitbox = new CircleHitbox(1);
 	level: number;
+
+	static {
+		const data = JSON.parse(fs.readFileSync("../data/vest_reduction.json", { encoding: "utf8" }));
+		this.VEST_REDUCTION.push(...data);
+	}
 
 	constructor(level: number) {
 		super();
