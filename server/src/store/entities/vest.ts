@@ -6,7 +6,7 @@ import Player from "./player";
 
 export default class Vest extends Item {
 	static readonly VEST_REDUCTION: number[] = [];
-	type = "Vest";
+	type = "vest";
 	name: string;
 	hitbox = new CircleHitbox(1);
 	level: number;

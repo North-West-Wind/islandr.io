@@ -77,6 +77,7 @@ export default class Player extends Entity {
 			const inventory = <Inventory>minEntity.inventory;
 			this.inventory = new Inventory(inventory.holding, inventory.slots, inventory.weapons.map(w => w ? castCorrectWeapon(w, w.type == WeaponType.GUN ? (<GunWeapon>w).magazine : 0) : w), inventory.ammos, inventory.utilities, inventory.healings);
 			this.inventory.backpackLevel = inventory.backpackLevel;
+			this.inventory.vestLevel = inventory.vestLevel;
 			for (let ii = 0; ii < inventory.weapons.length; ii++) {
 				if (ii == inventory.holding) weaponPanelDivs[ii].classList.add("selected");
 				else weaponPanelDivs[ii].classList.remove("selected");
