@@ -78,6 +78,7 @@ export default class Player extends Entity {
 			this.inventory = new Inventory(inventory.holding, inventory.slots, inventory.weapons.map(w => w ? castCorrectWeapon(w, w.type == WeaponType.GUN ? (<GunWeapon>w).magazine : 0) : w), inventory.ammos, inventory.utilities, inventory.healings);
 			this.inventory.backpackLevel = inventory.backpackLevel;
 			this.inventory.vestLevel = inventory.vestLevel;
+			this.inventory.helmetLevel = inventory.helmetLevel
 			for (let ii = 0; ii < inventory.weapons.length; ii++) {
 				if (ii == inventory.holding) weaponPanelDivs[ii].classList.add("selected");
 				else weaponPanelDivs[ii].classList.remove("selected");
@@ -119,15 +120,20 @@ export default class Player extends Entity {
 				circleFromCenter(ctx, 0, 0, radius, true, true);
 			}
 			
-			ctx.drawImage(this.currentSkinSVG, -radius, -radius, radius * 2 , radius * 2 );
-			if (this.inventory.helmetlevel) {
-				if (this.inventory.helmetlevel == 1) ctx.fillStyle = "#0000FF";
-				else if (this.inventory.helmetlevel == 2) ctx.fillStyle = "#808080";
-				else if (this.inventory.helmetlevel == 3) ctx.fillStyle = "#A9A9A9";
-				else if (this.inventory.helmetlevel == 4) ctx.fillStyle = "#000000";
+			ctx.drawImage(this.currentSkinSVG, -radius, -radius, radius * 2, radius * 2);
+			if (this.inventory.helmetLevel) {
+				console.log("helmetLevel check passed")
+				if (this.inventory.helmetLevel == 1) ctx.fillStyle = "#0000FF";
+				else if (this.inventory.helmetLevel == 2) ctx.fillStyle = "#808080";
+				else if (this.inventory.helmetLevel == 3) ctx.fillStyle = "#A9A9A9";
+				else if (this.inventory.helmetLevel == 4) ctx.fillStyle = "#000000";
+				else ctx.fillStyle = "#ff00ff"
+				console.log("fillstyles defined")
 				ctx.lineWidth = 2
 				ctx.strokeStyle = "#000000";
+				console.log("linewidth and strokestyle defined")
 				circleFromCenter(ctx, 0, 0, radius * 0.7, true, true);
+				console.log("circle drawn!")
 			}
 			// We will leave the transform for the weapon
 			// If player is holding nothing, render fist

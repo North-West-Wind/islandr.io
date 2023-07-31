@@ -10,7 +10,7 @@ import { Animation } from "./animation";
 import { CountableString } from "./misc";
 
 export class Inventory {
-	helmetlevel !: number
+	helmetLevel !: number
 	holding: number;
 	weapons: Weapon[];
 	// Array of 2 numbers. Order: gun slots, melee slots, grenade slot.
@@ -45,16 +45,16 @@ export class Inventory {
 
 // Inventory, mainly for players
 export class PartialInventory {
-	helmetlevel!: number;
 	holding: Weapon;
 	backpackLevel: number;
 	vestLevel: number;
+	helmetLevel!: number;
 
 	constructor(minInv: MinInventory) {
 		this.holding = castCorrectWeapon(minInv.holding);
 		this.backpackLevel = minInv.backpackLevel;
 		this.vestLevel = minInv.vestLevel
-		this.helmetlevel = minInv.helmetlevel;
+		this.helmetLevel = minInv.helmetLevel;
 	}
 }
 

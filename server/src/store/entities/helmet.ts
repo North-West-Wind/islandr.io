@@ -16,16 +16,16 @@ export default class Helmet extends Item {
 	}
 
 	picked(player: Player) {
-		if (player.inventory.helmetlevel >= this.level) {
+		if (player.inventory.helmetLevel >= this.level) {
 			this.randomVelocity(this.position.addVec(player.position.inverse()));
 			return false;
 		}
-		if (player.inventory.helmetlevel != 0) {
-			const helmet = new Helmet(player.inventory.helmetlevel);
+		if (player.inventory.helmetLevel != 0) {
+			const helmet = new Helmet(player.inventory.helmetLevel);
 			helmet.position = player.position;
 			world.entities.push(helmet);
 		}
-		player.inventory.helmetlevel = this.level;
+		player.inventory.helmetLevel = this.level;
 		return true;
 	}
 
