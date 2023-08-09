@@ -1,27 +1,27 @@
 import { ENTITY_SUPPLIERS } from ".";
+import { getHelmetImagePath } from "../../textures";
 import { Entity } from "../../types/entity";
 import { MinEntity } from "../../types/minimized";
 import { EntitySupplier } from "../../types/supplier";
 import { circleFromCenter } from "../../utils";
 import Player from "./player";
-import { getVestImagePath } from "../../textures";
 
 interface AdditionalEntity {
 	level: number;
 	name: string;
 }
 
-class VestSupplier implements EntitySupplier {
+class HelmetSupplier implements EntitySupplier {
 	create(minEntity: MinEntity & AdditionalEntity) {
-		return new Vest(minEntity);
+		return new Helmet(minEntity);
 	}
 }
 
-export default class Vest extends Entity {
-	static readonly vestImages: (HTMLImageElement & { loaded: boolean })[] = Array(4).fill(undefined);
-	static readonly TYPE = "vest";
+export default class Helmet extends Entity {
+	static readonly helmetImages: (HTMLImageElement & { loaded: boolean })[] = Array(4).fill(undefined);
+	static readonly TYPE = "helmet";
 	name!: string
-	type = Vest.TYPE;
+	type = Helmet.TYPE;
 	level!: number;
 	zIndex = 8;
 
@@ -31,7 +31,7 @@ export default class Vest extends Entity {
 	}
 
 	static {
-		ENTITY_SUPPLIERS.set(Vest.TYPE, new VestSupplier());
+		ENTITY_SUPPLIERS.set(Helmet.TYPE, new HelmetSupplier());
 	}
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
@@ -50,19 +50,19 @@ export default class Vest extends Entity {
 		circleFromCenter(ctx, 0, 0, radius, false, true);
 		ctx.fillStyle = "#00000066"; // <- alpha/opacity
 		circleFromCenter(ctx, 0, 0, radius, true, false);
-		const img = Vest.vestImages[this.level - 1];
+		const img = Helmet.helmetImages[this.level - 1];
 		if (!img?.loaded) {
 			if (!img) {
 				const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 				image.onload = () => image.loaded = true;
-				image.src = getVestImagePath(this.level);
-				Vest.vestImages[this.level -1] = image;
+				image.src = getHelmetImagePath(this.level);
+				Helmet.helmetImages[this.level - 1] = image;
 			}
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
 			ctx.fillStyle = "#fff";
 			ctx.font = `${canvas.height / 54}px Arial`;
-			ctx.fillText(`V${this.level}`, 0, 0);
+			ctx.fillText(`H${this.level}`, 0, 0);
 		} else
 			ctx.drawImage(img, -0.6 * radius, -0.6 * radius, 1.2 * radius, 1.2 * radius);
 		ctx.resetTransform();

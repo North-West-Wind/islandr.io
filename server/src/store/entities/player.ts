@@ -8,6 +8,7 @@ import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { spawnAmmo, spawnGun } from "../../utils";
 import Healing from "./healing";
+import Helmet from "./helmet";
 import Vest from "./vest";
 export default class Player extends Entity {
 	type = "player";
@@ -218,6 +219,16 @@ export default class Player extends Entity {
 				item.position = this.position;
 				world.entities.push(item);
 			}
+		}
+		if (this.inventory.vestLevel) {
+			const item = new Vest(this.inventory.vestLevel);
+			item.position = this.position;
+			world.entities.push(item);
+		}
+		if (this.inventory.helmetLevel) {
+			const item = new Helmet(this.inventory.helmetLevel);
+			item.position = this.position;
+			world.entities.push(item);
 		}
 		world.playerDied();
 	}
