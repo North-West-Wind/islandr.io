@@ -7,6 +7,7 @@ import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { spawnAmmo, spawnGun } from "../../utils";
+import Backpack from "./backpack";
 import Healing from "./healing";
 import Helmet from "./helmet";
 import Vest from "./vest";
@@ -195,6 +196,7 @@ export default class Player extends Entity {
 	damage(dmg: number) {
 		if (!this.vulnerable) return;
 		this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];
+		this.health -= dmg * Helmet.HELMET_REDUCTION[this.inventory.helmetLevel];
 		this.markDirty();
 	}
 
@@ -227,6 +229,11 @@ export default class Player extends Entity {
 		}
 		if (this.inventory.helmetLevel) {
 			const item = new Helmet(this.inventory.helmetLevel);
+			item.position = this.position;
+			world.entities.push(item);
+		}
+		if (this.inventory.backpackLevel) {
+			const item = new Backpack(this.inventory.backpackLevel);
 			item.position = this.position;
 			world.entities.push(item);
 		}
