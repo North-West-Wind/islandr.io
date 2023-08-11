@@ -13,6 +13,7 @@ import Helmet from "./helmet";
 import Vest from "./vest";
 export default class Player extends Entity {
 	type = "player";
+	currentHealItem: string | null;
 	onTopOfLoot: string | null;
 	hitbox = new CircleHitbox(1);
 	id: string;
@@ -51,6 +52,7 @@ export default class Player extends Entity {
 		this.deathImg = deathImg
 		console.log("from player.ts server skin > " + this.skin + " and death image = " + this.deathImg)
 		this.inventory = Inventory.defaultEmptyInventory();
+		this.currentHealItem = null;
 	}
 
 	setVelocity(velocity?: Vec2) {
@@ -256,6 +258,7 @@ export default class Player extends Entity {
 		if (!this.inventory.healings[item]) return;
 		if (this.health >= this.maxHealth && !Healing.healingData.get(item)?.boost) return;
 		this.maxHealTicks = this.healTicks = Healing.healingData.get(item)!.time * TICKS_PER_SECOND / 1000;
+		this.currentHealItem = item;
 		this.healItem = item;
 		this.markDirty();
 	}
