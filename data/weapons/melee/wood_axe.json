@@ -1,0 +1,28 @@
+{
+	"name": "Wood Axe",
+	"droppable": true,
+	"normal": {
+		"damage": 30,
+		"multiplier": {
+			"headshot": 1,
+			"obstacle": 1.5
+		},
+		"damageDelay": 110,
+		"cooldown": 270,
+		"offset": {
+			"x": 1.35,
+			"y": 0
+		},
+		"radius": 1.1,
+		"speed": {
+			"equip": 16,
+			"attack": 15
+		}
+	},
+	"sounds": {
+		"swing": "guns/fist_swing.mp3"
+	},
+	"visuals": {
+		"animations": ["left_fist", "right_fist"]
+	}
+}
