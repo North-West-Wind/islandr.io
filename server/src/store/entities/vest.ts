@@ -33,6 +33,7 @@ export default class Vest extends Item {
 			world.entities.push(vest);
 		}
 		player.inventory.vestLevel = this.level;
+		world.onceSounds.push({"path": "item_usage/vest_wear.mp3", "position": this.position})
 		return true;
 	}
 

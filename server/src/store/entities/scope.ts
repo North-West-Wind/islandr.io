@@ -1,3 +1,4 @@
+import { world } from "../..";
 import { CircleHitbox } from "../../types/math";
 import { MinEntity } from "../../types/minimized";
 import Item from "./item";
@@ -16,6 +17,7 @@ export default class Scope extends Item {
 	}
 
 	picked(player: Player) {
+		world.onceSounds.push({"path": "item_usage/scope_equip.mp3", "position": this.position})
 		return player.inventory.addScope(this.zoom);
 	}
 

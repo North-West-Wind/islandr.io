@@ -105,7 +105,6 @@ export default class Player extends Entity {
 		super.tick(entities, obstacles);
 		// Check for entity hitbox intersection
 		let breaked = false;
-
 		for (const entity of entities) {
 			if (entity.hitbox.inside(this.position, entity.position, entity.direction) && (<any>entity)['picked']) {
 				this.canInteract = true;
@@ -197,8 +196,10 @@ export default class Player extends Entity {
 
 	damage(dmg: number) {
 		if (!this.vulnerable) return;
-		this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];
-		this.health -= dmg * Helmet.HELMET_REDUCTION[this.inventory.helmetLevel];
+		var probablity = Math.floor(Math.random() * 100)
+		var tenRandomNumbers = [1, 10, 35, 69, 20, 78, 62, 14, 2, 82]
+		if (tenRandomNumbers.includes(probablity)){ this.health -= dmg * Helmet.HELMET_REDUCTION[this.inventory.helmetLevel]; }
+		else this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];	
 		this.markDirty();
 	}
 
@@ -257,6 +258,7 @@ export default class Player extends Entity {
 		if (this.maxHealTicks) return;
 		if (!this.inventory.healings[item]) return;
 		if (this.health >= this.maxHealth && !Healing.healingData.get(item)?.boost) return;
+		world.onceSounds.push({ "path": `item_usage/${item}.mp3`, position: this.position })
 		this.maxHealTicks = this.healTicks = Healing.healingData.get(item)!.time * TICKS_PER_SECOND / 1000;
 		this.currentHealItem = item;
 		this.healItem = item;

@@ -32,6 +32,7 @@ export default class Helmet extends Item {
 			world.entities.push(helmet);
 		}
 		player.inventory.helmetLevel = this.level;
+		world.onceSounds.push({ "path": "item_usage/helmet_wear.mp3", "position": this.position })
 		return true;
 	}
 
