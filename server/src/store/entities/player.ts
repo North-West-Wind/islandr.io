@@ -7,11 +7,13 @@ import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { spawnAmmo, spawnGun } from "../../utils";
+import Backpack from "./backpack";
 import Healing from "./healing";
 import Helmet from "./helmet";
 import Vest from "./vest";
 export default class Player extends Entity {
 	type = "player";
+	currentHealItem: string | null;
 	onTopOfLoot: string | null;
 	hitbox = new CircleHitbox(1);
 	id: string;
@@ -50,6 +52,7 @@ export default class Player extends Entity {
 		this.deathImg = deathImg
 		console.log("from player.ts server skin > " + this.skin + " and death image = " + this.deathImg)
 		this.inventory = Inventory.defaultEmptyInventory();
+		this.currentHealItem = null;
 	}
 
 	setVelocity(velocity?: Vec2) {
@@ -102,7 +105,6 @@ export default class Player extends Entity {
 		super.tick(entities, obstacles);
 		// Check for entity hitbox intersection
 		let breaked = false;
-
 		for (const entity of entities) {
 			if (entity.hitbox.inside(this.position, entity.position, entity.direction) && (<any>entity)['picked']) {
 				this.canInteract = true;
@@ -194,7 +196,9 @@ export default class Player extends Entity {
 
 	damage(dmg: number) {
 		if (!this.vulnerable) return;
-		this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];
+		// Implement headshot multiplier in gun data later
+		if (Math.random() < 0.1) this.health -= dmg * Helmet.HELMET_REDUCTION[this.inventory.helmetLevel];
+		else this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];	
 		this.markDirty();
 	}
 
@@ -230,6 +234,11 @@ export default class Player extends Entity {
 			item.position = this.position;
 			world.entities.push(item);
 		}
+		if (this.inventory.backpackLevel) {
+			const item = new Backpack(this.inventory.backpackLevel);
+			item.position = this.position;
+			world.entities.push(item);
+		}
 		world.playerDied();
 	}
 
@@ -248,7 +257,9 @@ export default class Player extends Entity {
 		if (this.maxHealTicks) return;
 		if (!this.inventory.healings[item]) return;
 		if (this.health >= this.maxHealth && !Healing.healingData.get(item)?.boost) return;
+		world.onceSounds.push({ "path": `item_usage/${item}.mp3`, position: this.position })
 		this.maxHealTicks = this.healTicks = Healing.healingData.get(item)!.time * TICKS_PER_SECOND / 1000;
+		this.currentHealItem = item;
 		this.healItem = item;
 		this.markDirty();
 	}

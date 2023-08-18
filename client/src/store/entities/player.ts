@@ -34,6 +34,7 @@ interface AdditionalEntity {
 	skin: string | null;
 	deathImg: string | null;
 	onTopOfLoot: string | null;
+	currentHealItem: string | null;
 }
 
 class PlayerSupplier implements EntitySupplier {
@@ -54,6 +55,7 @@ export default class Player extends Entity {
 	currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 	CurrentdeathImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 	onTopOfLoot: string | null = null;
+	currentHealItem: string | null = null;
 	
 
 	constructor(minEntity: MinEntity & AdditionalEntity) {
@@ -175,6 +177,7 @@ export class FullPlayer extends Player {
 	healTicks!: number;
 	maxHealTicks!: number;
 	onTopOfLoot!: string | null;
+	currentHealItem!: string | null;
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
@@ -182,6 +185,8 @@ export class FullPlayer extends Player {
 		this.maxHealth = minEntity.maxHealth;
 		this.boost = minEntity.boost;
 		this.maxBoost = minEntity.maxBoost;
+		this.onTopOfLoot = minEntity.onTopOfLoot;
+		this.currentHealItem = minEntity.currentHealItem;
 		this.scope = minEntity.scope;
 		this.canInteract = minEntity.canInteract || false;
 		this.reloadTicks = minEntity.reloadTicks;
