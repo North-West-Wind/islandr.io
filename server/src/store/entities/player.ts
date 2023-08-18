@@ -196,9 +196,8 @@ export default class Player extends Entity {
 
 	damage(dmg: number) {
 		if (!this.vulnerable) return;
-		var probablity = Math.floor(Math.random() * 100)
-		var tenRandomNumbers = [1, 10, 35, 69, 20, 78, 62, 14, 2, 82]
-		if (tenRandomNumbers.includes(probablity)){ this.health -= dmg * Helmet.HELMET_REDUCTION[this.inventory.helmetLevel]; }
+		// Implement headshot multiplier in gun data later
+		if (Math.random() < 0.1) this.health -= dmg * Helmet.HELMET_REDUCTION[this.inventory.helmetLevel];
 		else this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];	
 		this.markDirty();
 	}
