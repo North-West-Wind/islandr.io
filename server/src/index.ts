@@ -8,6 +8,7 @@ import { World } from "./types/world";
 import { Plain, Pond, River, Sea } from "./store/terrains";
 import { Tree, Bush, Crate, Stone, Barrel } from "./store/obstacles";
 import { BUILDING_SUPPLIERS } from "./store/buildings";
+import { getUserData } from "./currencyUpdate";
 
 export var ticksElapsed = 0;
 
@@ -80,15 +81,17 @@ server.on("connection", async socket => {
 	var username = "";
 	var skin = "default";
 	var deathImg = "default";
+	var loggedIn = false;
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
 		send(socket, new AckPacket(id, TICKS_PER_SECOND, world.size, world.defaultTerrain));
 		socket.once("message", (msg: ArrayBuffer) => {
 			const decoded = <ResponsePacket>receive(msg);
-			if (decoded.id == id && decoded.username && decoded.skin && decoded.deathImg) {
+			if (decoded.id == id && decoded.username && decoded.skin && decoded.deathImg && decoded.loggedInUser) {
 				connected = true;
 				username = decoded.username;
-				
+				loggedIn = decoded.loggedInUser;
+				getUserData()
 				skin = decoded.skin;
 				deathImg = decoded.deathImg;
 				console.log(skin)

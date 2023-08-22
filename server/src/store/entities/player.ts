@@ -1,5 +1,6 @@
 import { world } from "../..";
 import { GLOBAL_UNIT_MULTIPLIER, TICKS_PER_SECOND } from "../../constants";
+import { updateUserScore } from "../../currencyUpdate";
 import { Entity, Inventory } from "../../types/entity";
 import { PickupableEntity } from "../../types/extensions";
 import { CircleHitbox, Vec2 } from "../../types/math";
@@ -103,6 +104,11 @@ export default class Player extends Entity {
 			}
 		}
 		super.tick(entities, obstacles);
+		for (const entity of entities) {
+			if (entity.type == "player" && this.collided(entity) && entity.health == 0) {
+				updateUserScore(100)
+			}
+		}
 		// Check for entity hitbox intersection
 		let breaked = false;
 		for (const entity of entities) {
@@ -197,8 +203,9 @@ export default class Player extends Entity {
 	damage(dmg: number) {
 		if (!this.vulnerable) return;
 		// Implement headshot multiplier in gun data later
-		if (Math.random() < 0.1) this.health -= dmg * Helmet.HELMET_REDUCTION[this.inventory.helmetLevel];
-		else this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];	
+		if (Math.random() < 0.1 && this.inventory.helmetLevel) this.health -= dmg * Helmet.HELMET_REDUCTION[this.inventory.helmetLevel];
+		else if (this.inventory.vestLevel) this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];
+		else this.health -= dmg
 		this.markDirty();
 	}
 

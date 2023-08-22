@@ -12,11 +12,13 @@ export class ResponsePacket implements IPacket {
 	username: string;
 	skin: string | null
 	deathImg: string | null
-	constructor(id: string, username: string, skin: string | null, deathImg: string | null) {
+	loggedInUser: boolean;
+	constructor(id: string, username: string, skin: string | null, deathImg: string | null, loggedInUser: boolean) {
 		this.id = id;
 		this.username = username;
 		this.skin = skin;
-		this.deathImg = deathImg
+		this.deathImg = deathImg;
+		this.loggedInUser = loggedInUser;
 	}
 }
 

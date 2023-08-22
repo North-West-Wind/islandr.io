@@ -19,6 +19,7 @@ export class ResponsePacket implements IPacket {
 	username!: string;
 	skin!: string | null;
 	deathImg!: string | null;
+	loggedInUser!: boolean;
 }
 
 class PingPacket implements IPacket {
