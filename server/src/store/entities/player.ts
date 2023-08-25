@@ -1,6 +1,6 @@
 import { world } from "../..";
 import { GLOBAL_UNIT_MULTIPLIER, TICKS_PER_SECOND } from "../../constants";
-import { updateUserScore } from "../../currencyUpdate";
+//import { updateUserScore } from "../../currencyUpdate";
 import { Entity, Inventory } from "../../types/entity";
 import { PickupableEntity } from "../../types/extensions";
 import { CircleHitbox, Vec2 } from "../../types/math";
@@ -104,11 +104,11 @@ export default class Player extends Entity {
 			}
 		}
 		super.tick(entities, obstacles);
-		for (const entity of entities) {
+		/*for (const entity of entities) {
 			if (entity.type == "player" && this.collided(entity) && entity.health == 0) {
 				updateUserScore(100)
 			}
-		}
+		}*/
 		// Check for entity hitbox intersection
 		let breaked = false;
 		for (const entity of entities) {

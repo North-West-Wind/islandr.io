@@ -1,0 +1,63 @@
+{
+	"obstacles": [
+		{
+			"type": "wall",
+			"hitbox": [7, 0.5],
+			"color": 2908887295,
+			"__color": "(comment) 2908887295 is 0xad6218ff",
+			"position": [0, -3]
+		},
+		{
+			"type": "wall",
+			"hitbox": [2, 0.5],
+			"color": 2908887295,
+			"position": [-2.5, 3]
+		},
+		{
+			"type": "wall",
+			"hitbox": [2, 0.5],
+			"color": 2908887295,
+			"position": [2.5, 3]
+		},
+		{
+			"type": "wall",
+			"hitbox": [0.5, 7],
+			"color": 2908887295,
+			"position": [-3.5, 0]
+		},
+		{
+			"type": "wall",
+			"hitbox": [0.5, 7],
+			"color": 2908887295,
+			"position": [3.5, 0]
+		},
+		{
+			"type": "toilet_more",
+			"position": [0, -1]
+		}
+	],
+	"zones": [
+		{
+			"position": [0, 0],
+			"hitbox": [6, 6]
+		}
+	],
+	"mapColor": 2942442751,
+	"floors": [
+		{
+			"type": "line",
+			"speed": 1,
+			"damage": 0,
+			"interval": 0,
+			"position": [0, 0]
+		}
+	],
+	"roofs": [
+		{
+			"type": "roof",
+			"hitbox": [7, 6.5],
+			"position": [0, 0],
+			"color": 2942442751
+		}
+	]
+}

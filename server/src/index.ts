@@ -33,7 +33,7 @@ export function reset() {
 	for (ii = 0; ii < 4; ii++) world.terrains.push(new Sea(ii));
 	
 	// Add buildings
-	for (ii = 0; ii < 5; ii++) {
+	for (ii = 0; ii < 2; ii++) {
 		const cross = BUILDING_SUPPLIERS.get("cross")!.create();
 		cross.setPosition(world.size.scale(Math.random(), Math.random()));
 		world.buildings.push(cross);
@@ -47,7 +47,15 @@ export function reset() {
 		outhouse.setDirection(Vec2.UNIT_X.addAngle(Math.floor(Math.random() * 4) * CommonAngles.PI_TWO));
 		world.buildings.push(outhouse);
 	}
-	
+	for (ii = 0; ii < 2; ii++) {
+		const outhouseMore = BUILDING_SUPPLIERS.get("outhouse_more")!.create();
+		do {
+			var position = world.size.scale(Math.random(), Math.random());
+		} while (world.terrainAtPos(position).id != "plain");
+		outhouseMore.setPosition(position);
+		outhouseMore.setDirection(Vec2.UNIT_X.addAngle(Math.floor(Math.random() * 4) * CommonAngles.PI_TWO));
+		world.buildings.push(outhouseMore);
+	}
 	// Add random obstacles
 	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Tree());
 	world.obstacles.push(new Tree("mosin"));
@@ -91,7 +99,6 @@ server.on("connection", async socket => {
 				connected = true;
 				username = decoded.username;
 				loggedIn = decoded.loggedInUser;
-				getUserData()
 				skin = decoded.skin;
 				deathImg = decoded.deathImg;
 				console.log(skin)

@@ -10,7 +10,8 @@ export { default as Stone } from "./stone";
 export { default as Barrel } from "./barrel";
 export { default as Wall } from "./wall";
 export { default as Roof } from "./roof";
-export { default as Toilet} from "./toilet";
+export { default as Toilet } from "./toilet";
+export {default as ToiletMore } from "./toilet_more"
 
 export function castCorrectObstacle(data: ObstacleData) {
 	return OBSTACLE_SUPPLIERS.get(data.type)?.create(data);

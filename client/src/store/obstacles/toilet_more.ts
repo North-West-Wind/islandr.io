@@ -7,26 +7,26 @@ import { OBSTACLE_SUPPLIERS } from ".";
 
 const toiletImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 toiletImg.onload = () => toiletImg.loaded = true;
-toiletImg.src = "assets/images/game/objects/toilet.svg";
+toiletImg.src = "assets/images/game/objects/toilet_more.svg";
 
 const toiletResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 toiletResidueImg.onload = () => toiletResidueImg.loaded = true;
 toiletResidueImg.src = "assets/images/game/objects/residues/toilet.svg";
 
-class ToiletSupplier implements ObstacleSupplier {
+class ToiletMoreSupplier implements ObstacleSupplier {
 	create(minObstacle: MinObstacle) {
-		return new Toilet(minObstacle);
+		return new ToiletMore(minObstacle);
 	}
 }
 
 // Toilet
-export default class Toilet extends Obstacle {
-	static readonly TYPE = "toilet";
-	type = Toilet.TYPE;
+export default class ToiletMore extends Obstacle {
+	static readonly TYPE = "toilet_more";
+	type = ToiletMore.TYPE;
 	zIndex = 9;
 
 	static {
-		OBSTACLE_SUPPLIERS.set(Toilet.TYPE, new ToiletSupplier());
+		OBSTACLE_SUPPLIERS.set(ToiletMore.TYPE, new ToiletMoreSupplier());
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void {
