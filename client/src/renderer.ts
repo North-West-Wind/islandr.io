@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { GRID_INTERVAL } from "./constants";
 import { getPlayer, world } from "./game";
 import { drawHud } from "./rendering/hud";
@@ -10,126 +9,9 @@ import { RenderableLayerN1 } from "./types/extenstions";
 import { Terrain } from "./types/terrain";
 import { lineBetween } from "./utils";
 import { drawPrompt } from "./rendering/prompt";
-import { cookieExists, getCookieValue, setCookie } from "cookies-utils";
 import { Healing } from "./store/entities";
 
-// HOMEPAGE STUFF STARTS
-$(document).ready(function () {
-	$('.arrow').click(function () {
-		$('.box-selectable').toggle();
-		$(this).toggleClass('arrow-down');
-	});
-	$('.discord').click(function () {
-		window.open('http://opensurviv.run.place/discord');
-	});
-	$('.info').click(function () {
-		$('.info-box').toggle();
-	});
-	$('.close').click(function () {
-		$('.info-box').hide();
-		$('.partner-box').hide();
-	});
-	$('.partner').click(function () {
-		$('.partner-box').toggle();
-	});
-});
-
-$.get("assets/CREDITS.md", function(data) {
-	document.getElementById("contents")!.innerHTML = (<string>data).replace(/[#*\[\]]/g,"").replace(/(?:\r\n|\r|\n)/g,"<br/>");
-}, "text");
-
-window.onload = function () {
-	setTimeout(function () {
-		document.getElementById('loading')!.classList.add('zoom-out');
-		setTimeout(function () {
-			document.getElementById('loading')!.style.display = 'none';
-		}, 2000);
-	}, 3000);
-};
-
-document.addEventListener('DOMContentLoaded', function () {
-	var audio = <HTMLAudioElement> document.getElementById('menu-audio');
-	var volumeIcon = <HTMLDivElement> document.getElementById('volume-icon');
-	var volumeSlider = <HTMLDivElement> document.getElementById('volume-slider');
-	var volumeRange = <HTMLInputElement> document.getElementById('volume-range');
-
-	var started = false;
-	document.addEventListener('click', function () {
-		if (!started) {
-			audio.play();
-			started = true;
-		}
-	});
-
-
-	volumeIcon.addEventListener('click', function () {
-		if (volumeSlider.style.display === 'none') {
-			volumeSlider.style.display = 'block';
-		} else {
-			volumeSlider.style.display = 'none';
-		}
-	});
-
-
-	volumeRange.addEventListener('input', function () {
-		var volume = Number(volumeRange.value) / 100;
-		audio.volume = volume;
-	});
-});
-
-var accepted = -1;
-document.getElementById("button-accept")!.onclick = () => {
-	showAds();
-	accepted = 1;
-	closeBox();
-}
-document.getElementById("button-decline")!.onclick = () => {
-	hideAds();
-	accepted = 0;
-	closeBox();
-}
-document.getElementById("button-close")!.onclick = closeBox;
-function showAds() {
-	document.querySelectorAll('.ads').forEach(ad => { (<HTMLElement>ad).style.visibility = "visible"; });
-}
-function hideAds() {
-	const allElements = <HTMLCollectionOf<HTMLElement>> document.getElementsByTagName("*");
-	for (let i = 0; i < allElements.length; i++) {
-		if (allElements[i].tagName === "DIV" && allElements[i].hasAttribute("class") && allElements[i].getAttribute("class")!.includes("ads")) {
-			allElements[i].style.display = "none";
-		}
-	}
-}
-function closeBox() {
-	//document.getElementById("privacyBox").style.display = "none";
-	document.querySelectorAll('.overlays').forEach(overlay => { (<HTMLElement>overlay).style.display = "none"; });
-	//document.querySelectorAll('.boxers').forEach(boxer => { (<HTMLElement>boxer).style.display = "none"; });
-	if (cookieExists("gave_me_cookies") && !cookieExists("ads"))
-		setCookie({ name: "ads", value: accepted.toString() });
-}
-
-if (!cookieExists("gave_me_cookies")) {
-	const button = document.getElementById("cookies-button")!;
-	button.scrollIntoView();
-	button.onclick = () => {
-		setCookie({ name: "gave_me_cookies", value: "1" });
-		button.classList.add("disabled");
- 		document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
-
-		if (accepted >= 0)
-			setCookie({ name: "ads", value: accepted.toString() });
- 	}
-} else {
- 	document.getElementById("cookies-button")!.classList.add("disabled");
- 	document.getElementById("cookies-span")!.innerHTML = "You gave me cookies :D";
-	if (cookieExists("ads")) {
-		const ads = getCookieValue("ads");
-		if (ads == "1") showAds();
-		else hideAds();
-		closeBox();
-	}
-}
-// HOMEPAGE STUFF ENDS
+import "./homepage";
 
 const canvas = <HTMLCanvasElement> document.getElementById("game");
 canvas.width = window.innerWidth;

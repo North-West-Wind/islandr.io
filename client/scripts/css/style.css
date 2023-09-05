@@ -43,26 +43,26 @@ div#scopes {
 div#menu {
     width: 100%;
     height: fit-content;
-    text-align: center;
     overflow-y: scroll;
     clear: both;
     margin: auto;
 }
 
 div#menu:not(:is(.hidden)) {
-    display: table;
+    display: flex;
 }
 
 div#menu div.panel {
-    float: left;
-    width: 33%;
     height: 40vh;
-    padding: 2vh 1vw;
+    padding: 2vw;
     margin: 1vw;
+    text-align: left;
+    flex: 2;
 }
 
 div#menu div#connection.panel {
-    width: 20%;
+    text-align: center;
+    flex: 1;
 }
 
 .hidden {
@@ -106,7 +106,6 @@ div#menu div#connection.panel {
     padding: 1vw;
     border-radius: 1vw;
     margin: 2vw auto;
-    width: fit-content;
 }
 
 #hud {
@@ -296,7 +295,7 @@ div#menu div#connection.panel {
 }
 
 .button:hover {
-    background-color: rgb(21, 88, 21);
+    filter: brightness(80%);
 }
 
 .arrow {
@@ -305,6 +304,7 @@ div#menu div#connection.panel {
     display: inline-block;
     padding: 5px;
     cursor: pointer;
+    transition: all .25s ease;
 }
 
 .arrow-down {
@@ -334,7 +334,7 @@ div#menu div#connection.panel {
     display: none;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
     position: relative;
     width: 80%;
     padding: 1vh;
@@ -347,22 +347,19 @@ input[type="text"] {
 }
 
 .discord {
-    position: absolute;
-    top: 1vh;
-    right: 1vh;
-    width: 5vh;
-    height: 5vh;
+    padding: 1vh;
     background-color: rgba(0, 0, 0, 0.5);
     border: none;
     border-radius: 1vh;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .discord img {
-    margin-top: -3px;
-    padding: 13px;
-    width: 36px;
-    height: 28px;
+    aspect-ratio: 1 / 1;
+    height: 3vh;
 }
 
 .info {
@@ -396,8 +393,8 @@ input[type="text"] {
 
 .close {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 1vw;
+    right: 1vw;
     cursor: pointer;
 }
 
@@ -422,10 +419,10 @@ input[type="text"] {
     height: 80vh;
     background-color: rgba(2, 48, 32);
     color: #fff;
-    padding: 1vh;
+    padding: 2vw;
     cursor: pointer;
-    border-radius: 1vh;
-    text-align: left-to-right;
+    border-radius: 1vw;
+    text-align: left;
     display: none;
     overflow-y: auto;
 
@@ -455,10 +452,10 @@ input[type="text"] {
     left: 50%;
     transform: translate(-50%, -50%);
     width: fit-content;
-    height: 500px;
-    max-width: 600px;
+    height: 50vh;
+    max-width: 60vw;
     background-color: #fff;
-    padding: 1vw;
+    padding: 2vw;
     z-index: 1000;
     overflow-y: auto;
     border-radius: 1vw;
@@ -586,8 +583,6 @@ input[type="text"] {
 }
 
 img {
-    max-width: 50%;
-    max-height: 55%;
     margin: auto;
     margin-top: 1px;
 }
@@ -722,4 +717,32 @@ button:hover {
 .button-close:hover {
     opacity: 0.7;
     transform: scale(1.1);
+}
+
+a {
+    text-decoration: none;
+    color: bisque;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.top-right-stuff {
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+    display: flex;
+}
+
+img#logo {
+    max-width: 50%;
+}
+
+div#menu div.panel#account {
+    text-align: center;
+}
+
+.flex {
+    display: flex;
 }

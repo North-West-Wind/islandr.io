@@ -34,6 +34,7 @@
   </audio>
   <div class="center">
     <img
+      id="logo"
       src="https://svgtrace-upload-results-bucket.s3.amazonaws.com/2023-05-03/windows_273b5de6-0727-42a3-9469-544417294d54_1683141443489.svg"
       alt="Islandr Logo"
       draggable="false">
@@ -42,7 +43,8 @@
   <div class="overlays">
     <div class="boxers">
       <div id="privacy-box">
-        <h1>Privacy Policy</h1>This privacy notice for islandr (Company, we, us, or our), describes how and why we might
+        <h1>Privacy Policy</h1>
+        This privacy notice for islandr (Company, we, us, or our), describes how and why we might
         collect, store, use, and/or share (process) your information when you use our services (Services), such as when
         you: This summary provides key points from our privacy notice, but you can find out more details about any of
         these topics by clicking the link following each key point or by using our table of contents below to find the
@@ -50,11 +52,12 @@
         depending on how you interact with islandr and the Services, the choices you make, and the products and features
         you use.We process your information to provide, improve, and administer our Services, communicate with you, for
         security and fraud prevention, and to comply with law. In what situations and with which parties do we share
-        personal information?Learn more about when and with whom we share your personal information.Depending on where
+        personal information?Learn more about when and with whom we share your personal information. Depending on where
         you
         are located geographically, the applicable privacy law may mean you have certain rights regarding your personal
-        information.Learn more about your privacy rights. 3. WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL
-        INFORMATION?In Short: We collect personal information that you provide to us.We collect personal information
+        information.Learn more about your privacy rights.<br>
+        3. WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL
+        INFORMATION? In Short: We collect personal information that you provide to us.We collect personal information
         that
         you voluntarily provide to us when you express an interest in obtaining information about us or our products and
         Services, when you participate in activities on the Services, or otherwise when you contact us.Personal
@@ -102,7 +105,7 @@
       <div class="panel">
         <div id="cookies-button"><span id="cookies-span">Give me cookies</span></div>
         <span>Cookies are used for storing settings and configurations.</span>
-        <blockquote class="reddit-embed-bq" style="height:500px" data-embed-theme="dark" data-embed-height="500">      <a href="https://www.reddit.com/r/splatoon/comments/121zoih/give_me_cookies/">Give me cookies</a><br> by      <a href="https://www.reddit.com/user/Giudicher4G">u/Giudicher4G</a> in      <a href="https://www.reddit.com/r/splatoon/">splatoon</a>    </blockquote><script async="" src="https://embed.reddit.com/widgets.js" charset="UTF-8"></script>
+        <img src="assets/images/menu/cookies.jpg" />
       </div>
       <script> </script>
     </div>
@@ -112,10 +115,15 @@
   <form id="hidden-form" class="hidden"></form>
   <div id="menu">
     <div class="panel">
-      <h1>Info:</h1>
-      <p>About islandr.io:</p>This is a 2D battle royale shooter game inspired from the recent death of surviv.io. If you
-      miss surviv.io and resurviv.io, well don't lose your hopes! islandr.io is here to bring you back the feel of
-      surviv.io as well as bringing you new more advanced features that even surviv.io didn't.
+      <div>
+        <h1>Info:</h1>
+        <p>About islandr.io:</p>This is a 2D battle royale shooter game inspired from the recent death of surviv.io. If you
+        miss surviv.io and resurviv.io, well don't lose your hopes! islandr.io is here to bring you back the feel of
+        surviv.io as well as bringing you new more advanced features that even surviv.io didn't.
+      </div>
+      <div>
+        <h1>Changelog</h1> New Home page update! (join discord for more!).
+      </div>
     </div>
     <div class="hidden" id="server-error-panel">
     </div>
@@ -137,11 +145,20 @@
       </div>
       <div class="arrow"></div>
     </div>
-    <div class="panel">
-      <h1>Changelog</h1> New Home page update! (join discord for more!).
+    <div class="panel" id="account">
+      <h1>Login / Sign up</h1>
+      <input type="text" id="login_username" placeholder="Username..." /><br>
+      <input type="password" id="password" placeholder="Password..." /><br>
+      <div class="flex">
+        <div class="button" id="button-login">Login</div>
+        <div class="button" id="button-signup">Sign up</div>
+      </div>
     </div>
-    <div class="discord"><img src="https://logodownload.org/wp-content/uploads/2017/11/discord-logo-1-1.png"
-        alt="discord-logo-1-1"></div>
+    <div class="top-right-stuff">
+      <div class="discord">
+        <img src="https://logodownload.org/wp-content/uploads/2017/11/discord-logo-1-1.png" alt="discord-logo-1-1" />
+      </div>
+    </div>
     <div class="info">
       info/news/changelog
     </div>

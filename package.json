@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/North-West-Wind/islandr.io#readme",
   "devDependencies": {
+    "@types/body-parser": "^1.19.2",
     "@types/express": "^4.17.17",
     "@types/mime-types": "^2.1.1",
     "@types/node": "^18.15.5",
@@ -33,9 +34,11 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "csv-parser": "^3.0.0",
     "express": "^4.18.2",
     "mime-types": "^2.1.35",
-    "mysql2": "^3.6.0"
+    "mysql2": "^3.6.0",
+    "sqlite3": "^5.1.6"
   }
 }

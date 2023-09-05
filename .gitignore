@@ -4,6 +4,7 @@
 **/tmp
 .env
 .idea
+*.db
 
 # Client stuff
 client/scripts/bundle.min.js
