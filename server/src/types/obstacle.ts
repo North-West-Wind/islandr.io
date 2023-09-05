@@ -37,15 +37,15 @@ export class Obstacle {
 		} while (world.terrainAtPos(this.position).id != world.defaultTerrain.id || world.obstacles.find(obstacle => obstacle.collided(this)) || world.buildings.some(b => b.obstacles.find(o => o.obstacle.type === Roof.ID)?.obstacle.collided(this)));
 	}
 
-	damage(dmg: number) {
+	damage(dmg: number, damager?: string) {
 		if (this.despawn || this.health <= 0 || !this.vulnerable) return;
 		this.health -= dmg;
-		if (this.health <= 0) this.die();
+		if (this.health <= 0) this.die(damager);
 		this.hitbox = this.baseHitbox.scaleAll(this.minHitbox.comparable / this.baseHitbox.comparable + (this.health / this.maxHealth) * (1 - this.minHitbox.comparable / this.baseHitbox.comparable));
 		this.markDirty();
 	}
 
-	die() {
+	die(killer?: string) {
 		this.despawn = true;
 		this.health = 0;
 		this.markDirty();

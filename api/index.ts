@@ -1,5 +1,6 @@
 import bodyParser from "body-parser";
 import * as crypto from "crypto";
+import "dotenv/config";
 import express from "express";
 import { verbose } from "sqlite3";
 const sqlite3 = verbose();
@@ -37,64 +38,82 @@ app.get("/discord", (_req, res) => {
 const jsonParser = bodyParser.json();
 // Generate a new access token when this endpoint is called
 app.post("/api/login", jsonParser, (req, res) => {
-	if (!req.body?.username || !req.body.password) {
-		res.status(400);
-		return res.json({ success: false, error: "No username or password provided" });
-	}
+	if (!req.body?.username || !req.body.password) return res.status(400).json({ success: false, error: "No username or password provided" });
 	// Re-hashing password
 	const hashed = crypto.createHash("sha1").update(req.body.password).digest("hex").slice(0, 16);
 	db.get("SELECT id FROM players WHERE username = ? AND password = ?", [req.body.username, hashed], function (err, row?: { id: number }) {
 		if (err) {
 			console.error(err);
-			res.status(500);
-			return res.json({ success: false, error: "Server database failed" });
+			return res.status(500).json({ success: false, error: "Server database failed" });
 		}
-		if (!row) {
-			res.status(403);
-			return res.json({ success: false, error: "No user found" });
-		}
+		if (!row) return res.status(403).json({ success: false, error: "No user found" });
 		const accessToken = crypto.createHash("sha512").update(`${req.body.username}${hashed}${crypto.randomUUID()}`).digest("hex");
 		db.run("UPDATE players SET access_token = ? WHERE id = ?", [accessToken, row.id]);
-		console.log("Account login:", req.body.username);
 		res.json({ success: true, accessToken });
 	});
 });
 // Create a new sign up
 app.post("/api/signup", jsonParser, (req, res) => {
-	if (!req.body?.username || !req.body.password) {
-		res.status(400);
-		return res.json({ success: false, error: "No username or password provided" });
-	}
+	if (!req.body?.username || !req.body.password) return res.status(400).json({ success: false, error: "No username or password provided" });
 	// Password should be SHA1-hashed and trimmed to 16 characters
-	if (req.body.password.length != 16) {
-		res.status(400);
-		return res.json({ success: false, error: "Password hash is invalid" });
-	}
+	if (req.body.password.length != 16) return res.status(400).json({ success: false, error: "Password hash is invalid" });
 	// Re-hashing password
 	const hashed = crypto.createHash("sha1").update(req.body.password).digest("hex").slice(0, 16);
 	const accessToken = crypto.createHash("sha512").update(`${req.body.username}${hashed}${crypto.randomUUID()}`).digest("hex");
-	db.run("INSERT INTO players (username, password, access_token) VALUES (?, ?, ?)", [req.body.username, hashed, accessToken]);
-	console.log("Account creation:", req.body.username);
-	res.json({ success: true, accessToken });
+	db.run("INSERT INTO players (username, password, access_token) VALUES (?, ?, ?)", [req.body.username, hashed, accessToken], err => {
+		if (err) {
+			console.error(err);
+			return res.status(500).json({ success: false, error: "Server database failed" });
+		}
+		console.log("Account creation:", req.body.username);
+		res.json({ success: true, accessToken });
+	});
 });
 // Validate access token
 app.post("/api/validate", jsonParser, (req, res) => {
-	if (!req.body?.username || !req.body.accessToken) {
-		res.status(400);
-		return res.json({ success: false, error: "No username or access token provided" });
-	}
-	db.get("SELECT id FROM players WHERE username = ? AND access_token = ?;", [req.body.username, req.body.accessToken], (err, row) => {
+	if (!req.body?.username || !req.body.accessToken) return res.status(400).json({ success: false, error: "No username or access token provided" });
+	db.get("SELECT id FROM players WHERE username = ? AND access_token = ?", [req.body.username, req.body.accessToken], (err, row) => {
 		if (err) {
 			console.error(err);
-			res.status(500);
-			return res.json({ success: false, error: "Server database failed" });
+			return res.status(500).json({ success: false, error: "Server database failed" });
 		}
-		if (!row) {
-			res.status(403);
-			return res.json({ success: false, error: "No user found" });
-		}
-		console.log("Account validate:", req.body.username);
+		if (!row) return res.status(403).json({ success: false, error: "No user found" });
 		res.json({ success: true });
+	});
+});
+// Get player currency
+app.get("/api/currency", (req, res) => {
+	if (!req.headers.authorization?.startsWith("Bearer")) return res.status(400).json({ success: false, error: "No access token provided" });
+	const token = req.headers.authorization.split(" ")[1];
+	db.get("SELECT currency FROM players WHERE access_token = ?", token, (err, row?: { currency: number }) => {
+		if (err) {
+			console.error(err);
+			return res.status(500).json({ success: false, error: "Server database failed" });
+		}
+		if (!row) return res.status(403).json({ success: false, error: "No user found" });
+		res.json({ success: true, currency: row.currency });
+	});
+});
+// Add currency to player
+app.post("/api/delta-currency", jsonParser, (req, res) => {
+	if (!req.headers.authorization?.startsWith("Bearer")) return res.status(400).json({ success: false, error: "No server access token provided" });
+	if (!req.body?.accessToken || !req.body.delta) return res.status(400).json({ success: false, error: "No delta or access token provided" });
+	if (typeof req.body.delta !== "number") return res.status(400).json({ success: false, error: "Data type of delta is invalid" });
+	const token = req.headers.authorization.split(" ")[1];
+	if (token !== process.env.SERVER_DB_TOKEN) return res.status(403).json({ success: false, error: "Unauthorized server access token" });
+	db.get("SELECT currency FROM players WHERE access_token = ?", req.body.accessToken, (err, row?: { currency: number }) => {
+		if (err) {
+			console.error(err);
+			return res.status(500).json({ success: false, error: "Server database failed" });
+		}
+		if (!row) return res.status(403).json({ success: false, error: "No user found" });
+		db.run("UPDATE players SET currency = ? WHERE access_token = ?", [row.currency + req.body.delta, req.body.accessToken], err => {
+			if (err) {
+				console.error(err);
+				return res.status(500).json({ success: false, error: "Server database failed" });
+			}
+			res.json({ success: true, currency: row.currency + req.body.delta });
+		});
 	});
 });
 

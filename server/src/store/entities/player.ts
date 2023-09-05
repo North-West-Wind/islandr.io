@@ -6,7 +6,7 @@ import { CircleHitbox, Vec2 } from "../../types/math";
 import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
-import { spawnAmmo, spawnGun } from "../../utils";
+import { changeCurrency, spawnAmmo, spawnGun } from "../../utils";
 import Backpack from "./backpack";
 import Healing from "./healing";
 import Helmet from "./helmet";
@@ -43,7 +43,11 @@ export default class Player extends Entity {
 	// Track zone damage ticks
 	zoneDamageTicks = 2 * TICKS_PER_SECOND;
 
-	constructor(id: string, username: string, skin: string | null, deathImg: string | null) {
+	// Server-side only
+	accessToken?: string;
+	killCount = 0;
+
+	constructor(id: string, username: string, skin: string | null, deathImg: string | null, accessToken?: string) {
 		super();
 		this.id = id;
 		this.onTopOfLoot = null;
@@ -53,6 +57,7 @@ export default class Player extends Entity {
 		console.log("from player.ts server skin > " + this.skin + " and death image = " + this.deathImg)
 		this.inventory = Inventory.defaultEmptyInventory();
 		this.currentHealItem = null;
+		this.accessToken = accessToken;
 	}
 
 	setVelocity(velocity?: Vec2) {
@@ -194,11 +199,12 @@ export default class Player extends Entity {
 		}
 	}
 
-	damage(dmg: number) {
+	damage(dmg: number, damager?: string) {
 		if (!this.vulnerable) return;
 		// Implement headshot multiplier in gun data later
-		if (Math.random() < 0.1) this.health -= dmg * Helmet.HELMET_REDUCTION[this.inventory.helmetLevel];
-		else this.health -= dmg * Vest.VEST_REDUCTION[this.inventory.vestLevel];	
+		if (Math.random() < 0.1) this.health -= dmg * (1 - Helmet.HELMET_REDUCTION[this.inventory.helmetLevel]);
+		else this.health -= dmg * (1 - Vest.VEST_REDUCTION[this.inventory.vestLevel]);
+		this.potentialKiller = damager;
 		this.markDirty();
 	}
 
@@ -240,6 +246,13 @@ export default class Player extends Entity {
 			world.entities.push(item);
 		}
 		world.playerDied();
+		// Add kill count to killer
+		if (this.potentialKiller) {
+			const entity = world.entities.find(e => e.id == this.potentialKiller);
+			if (entity?.type === this.type) (<Player>entity).killCount++;
+		}
+		// Add currency to user if they are logged in and have kills
+		if (this.accessToken && this.killCount) changeCurrency(this.accessToken, this.killCount * 100);
 	}
 
 	reload() {
