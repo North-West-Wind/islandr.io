@@ -39,3 +39,12 @@ export function toggleBigMap() { bigMap = !bigMap; }
 var mouseDisabled = false;
 export function isMouseDisabled() { return mouseDisabled; }
 export function toggleMouseDisabled() { mouseDisabled = !mouseDisabled; }
+
+// Used when cookies are not accepted
+var username: string;
+export function getUsername() { return username; }
+export function setUsername(u: string) { return username = u; }
+
+var token: string;
+export function getToken() { return token; }
+export function setToken(t: string) { return token = t; }

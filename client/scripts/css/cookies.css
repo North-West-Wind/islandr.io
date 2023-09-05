@@ -9,6 +9,11 @@
 	color: #999;
 }
 
+.panel img {
+	border-radius: 1vw;
+	margin-top: 1vw;
+}
+
 .purple {
 	background-color: #A761B2;
 	transition: all ease .25s;
