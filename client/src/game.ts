@@ -2,7 +2,7 @@ import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
 import { initMap } from "./rendering/map";
-import { addKeyPressed, addMousePressed, isKeyPressed, isMenuHidden, isMouseDisabled, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap, toggleMouseDisabled } from "./states";
+import { addKeyPressed, addMousePressed, getToken, isKeyPressed, isMenuHidden, isMouseDisabled, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap, toggleMouseDisabled } from "./states";
 import { FullPlayer, Healing } from "./store/entities";
 import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
 import { castCorrectTerrain } from "./store/terrains";
@@ -11,6 +11,7 @@ import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket
 import { World } from "./types/world";
 import { receive, send } from "./utils";
 import Building from "./types/building";
+import { cookieExists, getCookieValue } from "cookies-utils";
 
 //handle users that tried to go to old domain name, or direct ip
 var urlargs = new URLSearchParams(window.location.search);
@@ -65,8 +66,7 @@ async function init(address: string) {
 			if (!currentCursor){localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor")}
 			if (currentCursor) {document.documentElement.style.cursor = currentCursor}
 			console.log("from game.ts client skin! > " + skin! + " and death img > " + deathImg!)
-			var checkUserLoginInformation = localStorage.getItem("loggedInUser")
-			send(ws, new ResponsePacket(id, username!, skin!, deathImg!, !checkUserLoginInformation!));
+			send(ws, new ResponsePacket(id, username!, skin!, deathImg!, cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()));
 			connected = true;
 			clearTimeout(timer);
 			

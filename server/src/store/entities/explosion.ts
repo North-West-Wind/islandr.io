@@ -36,7 +36,7 @@ export default class Explosion extends Entity {
 		for (const thing of combined) {
 			if (!this.collided(thing) || this.damaged.has(thing.id)) continue;
 			const damage = this.dmg + (this.minDmg - this.dmg) * (this.hitbox.comparable - this.radius) / (this.radius * this.inflation - this.radius);
-			thing.damage(damage);
+			thing.damage(damage, this.exploder.id);
 			this.damaged.add(thing.id);
 		}
 

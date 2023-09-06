@@ -12,6 +12,7 @@ import { drawPrompt } from "./rendering/prompt";
 import { Healing } from "./store/entities";
 
 import "./homepage";
+import { checkLoggedIn } from "./homepage";
 
 const canvas = <HTMLCanvasElement> document.getElementById("game");
 canvas.width = window.innerWidth;
@@ -126,4 +127,6 @@ export function stop() {
 		if (nameEle) nameEle.innerHTML = "";
 		if (imageEle) (<HTMLImageElement>imageEle).src = "";
 	}
+
+	checkLoggedIn();
 }

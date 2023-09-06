@@ -2,7 +2,7 @@ import $ from "jquery";
 import { cookieExists, setCookie, getCookieValue, deleteCookie } from "cookies-utils";
 import MarkdownIt from "markdown-it";
 import { createHash } from "crypto";
-import { setToken, setUsername } from "./states";
+import { getToken, setToken, setUsername } from "./states";
 
 $(document).ready(function () {
 	$('.arrow').click(function () {
@@ -99,12 +99,17 @@ function closeBox() {
 }
 
 function setLoggedIn(username: string) {
-	document.getElementById("account")!.innerHTML = `<h1>${username}</h1><div class="flex"><div class="button" id="button-logout">Log out</div></div>`;
+	document.getElementById("account")!.innerHTML = `<h1>${username}</h1><h2 id="currency">Currency: 0</h2><div class="flex"><div class="button" id="button-logout">Log out</div></div>`;
 	document.getElementById("button-logout")!.onclick = () => setLoggedOut(username);
 
 	const input = <HTMLInputElement>document.getElementById("username");
 	input.value = username;
 	input.disabled = true;
+
+	const token = cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken();
+	fetch("/api/currency", { headers: { "Authorization": "Bearer " + token } }).then(async res => {
+		if (res.ok) document.getElementById("currency")!.innerHTML = `Currency: ${(await res.json()).currency}`;
+	});
 }
 
 function setLoggedOut(username?: string) {
@@ -169,6 +174,7 @@ function setLoggedOut(username?: string) {
 	}
 
 	deleteCookie("access_token");
+	setToken(undefined);
 
 	const input = <HTMLInputElement>document.getElementById("username");
 	input.value = "";
@@ -198,6 +204,10 @@ if (!cookieExists("gave_me_cookies")) {
 		closeBox();
 	}
 
+	checkLoggedIn();
+}
+
+export function checkLoggedIn() {
 	if (cookieExists("username")) {
 		const username = getCookieValue("username")!;
 		if (cookieExists("access_token")) {

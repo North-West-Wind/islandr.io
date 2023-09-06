@@ -10,15 +10,15 @@ export class ResponsePacket implements IPacket {
 	type = "response";
 	id: string;
 	username: string;
-	skin: string | null
-	deathImg: string | null
-	loggedInUser: boolean;
-	constructor(id: string, username: string, skin: string | null, deathImg: string | null, loggedInUser: boolean) {
+	skin: string | null;
+	deathImg: string | null;
+	accessToken?: string;
+
+	constructor(id: string, username: string, skin: string | null, deathImg: string | null, accessToken?: string) {
 		this.id = id;
 		this.username = username;
 		this.skin = skin;
-		this.deathImg = deathImg;
-		this.loggedInUser = loggedInUser;
+		this.deathImg = deathImg
 	}
 }
 

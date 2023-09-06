@@ -1,3 +1,4 @@
+import "dotenv/config";
 import * as ws from "ws";
 import { ID, receive, send, wait } from "./utils";
 import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
@@ -87,6 +88,7 @@ server.on("connection", async socket => {
 	});
 
 	var username = "";
+	var accessToken: string | undefined = undefined;
 	var skin = "default";
 	var deathImg = "default";
 	var loggedIn = false;
@@ -98,6 +100,8 @@ server.on("connection", async socket => {
 			if (decoded.id == id && decoded.username && decoded.skin && decoded.deathImg && decoded.loggedInUser) {
 				connected = true;
 				username = decoded.username;
+				accessToken = decoded.accessToken;
+				
 				loggedIn = decoded.loggedInUser;
 				skin = decoded.skin;
 				deathImg = decoded.deathImg;
@@ -110,7 +114,7 @@ server.on("connection", async socket => {
 	console.log(`A new player with ID ${id} connected!`);
 
 	// Create the new player and add it to the entity list.
-	const player = new Player(id, username, skin, deathImg);
+	const player = new Player(id, username, skin, deathImg, accessToken);
 	world.addPlayer(player);
 	player.boost *= 1.5;
 

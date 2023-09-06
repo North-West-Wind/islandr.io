@@ -1,3 +1,4 @@
+import axios from "axios";
 import * as crypto from "crypto";
 
 // ID generator
@@ -47,6 +48,7 @@ import { world } from ".";
 import { Ammo, Gun, Grenade } from "./store/entities";
 import { Vec2 } from "./types/math";
 import { GunColor } from "./types/misc";
+import fetch from "node-fetch";
 
 // Spawners
 export function spawnGun(id: string, color: GunColor, position: Vec2, ammoAmount: number) {
@@ -72,4 +74,10 @@ export function spawnLoot(type: string, id: string, color: GunColor, position: V
     if(type == "ammo"){
         spawnAmmo(amount, color, position)
     }
+}
+
+// Networking
+export function changeCurrency(accessToken: string, delta: number) {
+    fetch((process.env.API_URL || "http://localhost:8000") + "/api/delta-currency", { method: "POST", headers: { "Authorization": "Bearer " + process.env.SERVER_DB_TOKEN, "Content-Type": "application/json" }, body: JSON.stringify({ accessToken, delta }) })
+        .catch(console.error);
 }

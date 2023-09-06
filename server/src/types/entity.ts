@@ -109,6 +109,7 @@ export class Entity {
 	animations: string[] = [];
 	repelExplosions = false;
 	dirty = true;
+	potentialKiller?: string;
 
 	constructor() {
 		this.id = ID();
@@ -236,9 +237,10 @@ export class Entity {
 		}
 	}
 
-	damage(dmg: number) {
+	damage(dmg: number, damager?: string) {
 		if (!this.vulnerable) return;
 		this.health -= dmg;
+		this.potentialKiller = damager;
 		this.markDirty();
 	}
 

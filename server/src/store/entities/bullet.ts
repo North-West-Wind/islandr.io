@@ -37,7 +37,7 @@ export default class Bullet extends Entity {
 		if (!this.despawn)
 			for (const thing of combined)
 				if (this.type != thing.type && thing.collided(this)) {
-					thing.damage(this.dmg);
+					thing.damage(this.dmg, this.shooter.id);
 					if (!thing.noCollision) this.die();
 					break;
 				}
