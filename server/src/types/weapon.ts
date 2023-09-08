@@ -86,7 +86,7 @@ export class MeleeWeapon extends Weapon {
 			dummy.direction = attacker.direction;
 			for (const thing of combined)
 				if (thing.collided(dummy) && thing.id != attacker.id) {
-					thing.damage(this.damage);
+					thing.damage(this.damage, attacker.id);
 					
 					if (!this.cleave) break;
 				}
