@@ -109,11 +109,6 @@ export default class Player extends Entity {
 			}
 		}
 		super.tick(entities, obstacles);
-		/*for (const entity of entities) {
-			if (entity.type == "player" && this.collided(entity) && entity.health == 0) {
-				updateUserScore(100)
-			}
-		}*/
 		// Check for entity hitbox intersection
 		let breaked = false;
 		for (const entity of entities) {
@@ -252,13 +247,15 @@ export default class Player extends Entity {
 			world.entities.push(item);
 		}
 		world.playerDied();
-		// Add kill count to killer
+		// Add currency to user if they are logged in and have kills
 		if (this.potentialKiller) {
 			const entity = world.entities.find(e => e.id == this.potentialKiller);
 			if (entity?.type === this.type) (<Player>entity).killCount++;
+			console.log("sup boi", this.killCount)
 		}
-		// Add currency to user if they are logged in and have kills
-		if (this.accessToken && this.killCount) changeCurrency(this.accessToken, this.killCount * 100);
+		if (this.accessToken && this.killCount) { changeCurrency(this.accessToken, this.killCount * 100); console.log("success") }
+		console.log(this.killCount, this.potentialKiller, typeof this.potentialKiller);
+		// Add kill count to killer
 	}
 
 	reload() {

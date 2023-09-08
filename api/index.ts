@@ -96,11 +96,18 @@ app.get("/api/currency", (req, res) => {
 });
 // Add currency to player
 app.post("/api/delta-currency", jsonParser, (req, res) => {
-	if (!req.headers.authorization?.startsWith("Bearer")) return res.status(400).json({ success: false, error: "No server access token provided" });
+	console.log("api/delta-currency called!")
+	var respond = req.headers.authorization
+	if (!respond?.startsWith("Bearer")) return res.status(400).json({ success: false, error: "No server access token provided" });
+	console.log("CONDITION EN 1")
 	if (!req.body?.accessToken || !req.body.delta) return res.status(400).json({ success: false, error: "No delta or access token provided" });
+	console.log("CONDITION EN 2")
 	if (typeof req.body.delta !== "number") return res.status(400).json({ success: false, error: "Data type of delta is invalid" });
-	const token = req.headers.authorization.split(" ")[1];
+	console.log("CONDITION EN 3")
+	const token = respond.split(" ")[1];
+	console.log("TOKEN VAR" + token + " AND SERVERDBTOKEN" + process.env.SERVER_DB_TOKEN)
 	if (token !== process.env.SERVER_DB_TOKEN) return res.status(403).json({ success: false, error: "Unauthorized server access token" });
+	console.log("CONDITION EN 4")
 	db.get("SELECT currency FROM players WHERE access_token = ?", req.body.accessToken, (err, row?: { currency: number }) => {
 		if (err) {
 			console.error(err);
@@ -108,12 +115,14 @@ app.post("/api/delta-currency", jsonParser, (req, res) => {
 		}
 		if (!row) return res.status(403).json({ success: false, error: "No user found" });
 		db.run("UPDATE players SET currency = ? WHERE access_token = ?", [row.currency + req.body.delta, req.body.accessToken], err => {
+			console.log("api/delta-currency changing currency!!")
 			if (err) {
 				console.error(err);
 				return res.status(500).json({ success: false, error: "Server database failed" });
 			}
 			res.json({ success: true, currency: row.currency + req.body.delta });
 		});
+		console.log("api/delta-currency finished everythin!")
 	});
 });
 

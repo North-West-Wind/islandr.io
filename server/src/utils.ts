@@ -78,6 +78,8 @@ export function spawnLoot(type: string, id: string, color: GunColor, position: V
 
 // Networking
 export function changeCurrency(accessToken: string, delta: number) {
+    console.log("changeCUrrency called with at " + process.env.SERVER_DB_TOKEN)
     fetch((process.env.API_URL || "http://localhost:8000") + "/api/delta-currency", { method: "POST", headers: { "Authorization": "Bearer " + process.env.SERVER_DB_TOKEN, "Content-Type": "application/json" }, body: JSON.stringify({ accessToken, delta }) })
         .catch(console.error);
+    console.log("changeCurrency finished!")
 }

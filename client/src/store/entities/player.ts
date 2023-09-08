@@ -124,18 +124,14 @@ export default class Player extends Entity {
 			
 			ctx.drawImage(this.currentSkinSVG, -radius, -radius, radius * 2, radius * 2);
 			if (this.inventory.helmetLevel) {
-				console.log("helmetLevel check passed")
 				if (this.inventory.helmetLevel == 1) ctx.fillStyle = "#0000FF";
 				else if (this.inventory.helmetLevel == 2) ctx.fillStyle = "#808080";
 				else if (this.inventory.helmetLevel == 3) ctx.fillStyle = "#A9A9A9";
 				else if (this.inventory.helmetLevel == 4) ctx.fillStyle = "#000000";
 				else ctx.fillStyle = "#ff00ff"
-				console.log("fillstyles defined")
 				ctx.lineWidth = 2
 				ctx.strokeStyle = "#000000";
-				console.log("linewidth and strokestyle defined")
 				circleFromCenter(ctx, 0, 0, radius * 0.7, true, true);
-				console.log("circle drawn!")
 			}
 			// We will leave the transform for the weapon
 			// If player is holding nothing, render fist

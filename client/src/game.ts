@@ -66,7 +66,7 @@ async function init(address: string) {
 			if (!currentCursor){localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor")}
 			if (currentCursor) {document.documentElement.style.cursor = currentCursor}
 			console.log("from game.ts client skin! > " + skin! + " and death img > " + deathImg!)
-			send(ws, new ResponsePacket(id, username!, skin!, deathImg!, cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()));
+			send(ws, new ResponsePacket(id, username!, skin!, deathImg!, cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()!));
 			connected = true;
 			clearTimeout(timer);
 			

@@ -19,6 +19,7 @@ export class ResponsePacket implements IPacket {
 		this.username = username;
 		this.skin = skin;
 		this.deathImg = deathImg
+		this.accessToken = accessToken;
 	}
 }
 
