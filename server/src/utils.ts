@@ -3,7 +3,7 @@ import * as crypto from "crypto";
 
 // ID generator
 export function ID() {
-    return crypto.randomBytes(24).toString("hex");
+    return crypto.randomBytes(8).toString("hex");
 }
 
 // Promisified setTimeout

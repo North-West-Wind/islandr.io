@@ -57,7 +57,7 @@
 			"type": "roof",
 			"hitbox": [7, 6.5],
 			"position": [0, 0],
-			"color": 2942442751
+			"imagePath": "assets/images/game/buildings/shack.svg"
 		}
 	]
 }
