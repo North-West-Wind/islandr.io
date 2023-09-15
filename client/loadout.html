@@ -488,12 +488,18 @@
 
         <script>
           // Get the elements
+            import fetch from "node-fetch";
+            fetch("/api/currency", { headers: { "Authorization": "Bearer " + token } }).then(async res => {
+                if (res.ok) var currentCurrency = (await res.json()).currency;
+            });
           const defaultButton = document.getElementById('default-player');
           const freeSkinButton = document.getElementById('free-skin');
           const previewBox = document.querySelector('.previewed-box-player');
           const selectedSkinImage = document.getElementById('selected-skin');
           const applyButton = document.getElementById('apply-button');
-          const messageElement = document.getElementById('message');
+            const messageElement = document.getElementById('message');
+            const currencyNameAccordance = ["default", "orange", "illuminati", "", "", "", "", "", "", "", ""]
+          const currencyReq = ["0, 0, 100, 150, 200, 250, 300, 350, 400, 500, 600 "]
 
           // Function to show the message
           function showMessage(message) {
@@ -510,7 +516,8 @@
           }
 
           // Set up event listeners
-          defaultButton.addEventListener('click', function () {
+            defaultButton.addEventListener('click', function () {
+              
             saveSelectedSkinToLocalStorage("default");
           });
 
