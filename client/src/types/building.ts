@@ -7,14 +7,14 @@ export default class Building implements RenderableMap {
 	id: string;
 	position: Vec2;
 	direction: Vec2;
-	zones: { position: Vec2, hitbox: Hitbox }[] = [];
+	zones: { position: Vec2, hitbox: Hitbox, map: boolean }[] = [];
 	color?: number;
 
 	constructor(minBuilding: MinBuilding) {
 		this.id = minBuilding.id;
 		this.position = Vec2.fromMinVec2(minBuilding.position);
 		this.direction = Vec2.fromMinVec2(minBuilding.direction);
-		this.zones = minBuilding.zones.map(zone => ({ position: Vec2.fromMinVec2(zone.position), hitbox: Hitbox.fromMinHitbox(zone.hitbox) }));
+		this.zones = minBuilding.zones.map(zone => ({ position: Vec2.fromMinVec2(zone.position), hitbox: Hitbox.fromMinHitbox(zone.hitbox), map: zone.map }));
 		this.color = minBuilding.color;
 	}
 
@@ -25,6 +25,7 @@ export default class Building implements RenderableMap {
 		ctx.rotate(this.direction.angle());
 		ctx.fillStyle = numToRGBA(this.color);
 		for (const zone of this.zones) {
+			if (!zone.map) continue;
 			if (zone.hitbox.type === "circle")
 				circleFromCenter(ctx, zone.position.x, zone.position.y, zone.hitbox.comparable);
 			else {

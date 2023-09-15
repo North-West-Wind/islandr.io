@@ -10,15 +10,15 @@ export default class Building {
 	direction = Vec2.UNIT_X;
 	// "position" here is the relative position of the obstacle towards the center of the building
 	obstacles: { obstacle: Obstacle, position: Vec2 }[] = [];
-	zones: { position: Vec2, hitbox: Hitbox }[] = [];
+	zones: { origPos: Vec2, position: Vec2, hitbox: Hitbox, map: boolean }[] = [];
 	color?: number;
 
 	constructor() {
 		this.id = ID();
 	}
 
-	addZone(position: Vec2, hitbox: Hitbox) {
-		this.zones.push({ position, hitbox });
+	addZone(position: Vec2, hitbox: Hitbox, map: boolean) {
+		this.zones.push({ origPos: position, position: position.addAngle(this.direction.angle()), hitbox, map });
 	}
 
 	addObstacle(position: Vec2, obstacle: Obstacle) {
@@ -38,6 +38,9 @@ export default class Building {
 			ob.obstacle.direction = ob.obstacle.direction.addAngle(-delta);
 			ob.obstacle.position = this.position.addVec(ob.position.addAngle(delta));
 		}
+		for (const zone of this.zones) {
+			zone.position = zone.origPos.addAngle(this.direction.angle());
+		}
 	}
 
 	minimize() {
@@ -45,7 +48,7 @@ export default class Building {
 			id: this.id,
 			position: this.position.minimize(),
 			direction: this.direction.minimize(),
-			zones: this.zones.map(zone => ({ position: zone.position.minimize(), hitbox: zone.hitbox.minimize() })),
+			zones: this.zones.map(zone => ({ position: zone.position.minimize(), hitbox: zone.hitbox.minimize(), map: zone.map })),
 			color: this.color
 		};
 	}

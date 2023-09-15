@@ -44,13 +44,13 @@ export class BuildingSupplier implements Supplier<Building> {
 			if (!obstacle) continue;
 			building.addObstacle(Vec2.fromArray(ob.position).addAngle(angle), obstacle);
 		}
-		const zones = this.data.zones?.map(zone => ({ position: Vec2.fromArray(zone.position).addAngle(angle), hitbox: Hitbox.fromNumber(zone.hitbox) })) || [];
+		const zones = this.data.zones?.map(zone => ({ position: Vec2.fromArray(zone.position).addAngle(angle), hitbox: Hitbox.fromNumber(zone.hitbox), map: !!zone.map })) || [];
 		if (this.data.zones)
 			for (const zone of zones)
-				building.addZone(zone.position, zone.hitbox);
+				building.addZone(zone.position, zone.hitbox, zone.map);
 		if (this.data.roofs)
 			for (const ob of this.data.roofs) {
-				const roof = new Roof(Hitbox.fromNumber(ob.hitbox), ob.color);
+				const roof = new Roof(Hitbox.fromNumber(ob.hitbox), ob.color, building.id);
 				for (const zone of zones)
 					roof.addZone(zone.position, zone.hitbox);
 				building.addObstacle(Vec2.fromArray(ob.position).addAngle(angle), roof);

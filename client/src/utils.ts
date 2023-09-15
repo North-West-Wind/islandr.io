@@ -17,8 +17,8 @@ export function toDegrees(radian: number) {
 
 // Colors
 // Converting number to RGBA
-export function numToRGBA(num: number) {
-	const a = num % 256;
+export function numToRGBA(num: number, overrideAlpha?: number) {
+	const a = overrideAlpha === undefined ? num % 256 : overrideAlpha;
 	const b = (num >>> 8) % 256;
 	const g = (num >>> 16) % 256;
 	const r = (num >>> 24) % 256;

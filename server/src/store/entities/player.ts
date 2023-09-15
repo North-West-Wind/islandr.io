@@ -7,6 +7,7 @@ import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { changeCurrency, spawnAmmo, spawnGun } from "../../utils";
+import { Roof } from "../obstacles";
 import Backpack from "./backpack";
 import Healing from "./healing";
 import Helmet from "./helmet";
@@ -137,6 +138,13 @@ export default class Player extends Entity {
 			if (!weapon.auto) this.tryAttacking = false;
 			this.markDirty();
 		}
+		// Building collision handling
+		const rooflessAdd = new Set<string>();
+		const rooflessDel = new Set<string>();
+		for (const building of world.buildings) {
+			if (building.zones.some(z => z.hitbox.collideCircle(z.position.addVec(building.position), building.direction, this.hitbox, this.position, this.direction) != CollisionType.NONE)) rooflessAdd.add(building.id);
+			else rooflessDel.add(building.id);
+		}
 		// Collision handling
 		for (const obstacle of obstacles) {
 			const collisionType = obstacle.collided(this);
@@ -149,6 +157,12 @@ export default class Player extends Entity {
 					else if (collisionType == CollisionType.CIRCLE_RECT_LINE_INSIDE) this.handleCircleRectLineCollision(obstacle);
 					this.markDirty();
 				}
+			}
+			// For roof to be roofless
+			if (obstacle.type === Roof.ID) {
+				const roof = <Roof>obstacle;
+				if (rooflessAdd.has(roof.buildingId)) roof.addRoofless(this.id);
+				if (rooflessDel.has(roof.buildingId)) roof.delRoofless(this.id);
 			}
 		}
 

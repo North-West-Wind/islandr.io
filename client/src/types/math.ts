@@ -1,4 +1,5 @@
 import { MinCircleHitbox, MinHitbox, MinLine, MinRectHitbox, MinVec2 } from "./minimized";
+import { CollisionType } from "./misc";
 
 // Linear algebra paid off! (2D vector)
 export class Vec2 {
@@ -62,7 +63,7 @@ export class Vec2 {
 		const mag = this.magnitude();
 		return new Vec2(mag * Math.cos(newAngle), mag * Math.sin(newAngle));
 	}
-	
+
 	addVec(vec: Vec2) {
 		return new Vec2(this.x + vec.x, this.y + vec.y);
 	}
@@ -112,7 +113,7 @@ export class Line {
 	static fromMinLine(minLine: MinLine) {
 		return new Line(Vec2.fromMinVec2(minLine.a), Vec2.fromMinVec2(minLine.b), minLine.segment);
 	}
-	
+
 	static fromPointSlope(p: Vec2, m: number) {
 		const c = p.y - p.x * m;
 		const b = new Vec2(p.x + 1, (p.x + 1) * m + c);
@@ -149,16 +150,16 @@ export class Line {
 		const ae = point.addVec(this.a.inverse());
 		if (this.segment) {
 			const be = point.addVec(this.b.inverse());
-	
+
 			const abbe = ab.dot(be);
 			const abae = ab.dot(ae);
 			if (abbe > 0) return be.magnitude();
 			if (abae < 0) return ae.magnitude();
-	
+
 			const a = this.b.y - this.a.y;
 			const b = this.a.x - this.b.x;
 			const c = (this.b.x - this.a.x) * this.a.y - (this.b.y - this.a.y) * this.a.x;
-	
+
 			return Math.pow(a * point.x + b * point.y + c, 2) / (a * a + b * b);
 		} else return ae.projectTo(ab.perpendicular()).magnitudeSqr();
 	}
@@ -277,6 +278,10 @@ export abstract class Hitbox {
 	abstract scaleAll(ratio: number): Hitbox;
 	abstract lineIntersects(line: Line, position: Vec2, direction: Vec2): boolean;
 	abstract inside(point: Vec2, position: Vec2, direction: Vec2): boolean;
+
+	abstract collideRect(position: Vec2, direction: Vec2, hitbox: RectHitbox, position1: Vec2, direction1: Vec2): CollisionType;
+	abstract collideCircle(position: Vec2, direction: Vec2, hitbox: CircleHitbox, position1: Vec2, direction1: Vec2): CollisionType;
+
 	abstract minimize(): MinHitbox;
 }
 
@@ -335,8 +340,86 @@ export class RectHitbox extends Hitbox {
 		return new Polygon(points).inside(point);
 	}
 
+	collideRect(position: Vec2, direction: Vec2, hitbox: RectHitbox, position1: Vec2, direction1: Vec2) {
+		// https://math.stackexchange.com/questions/1278665/how-to-check-if-two-rectangles-intersect-rectangles-can-be-rotated
+		// Using the last answer
+		const thisStartingPoint = position.addVec(new Vec2(-this.width / 2, -this.height / 2).addAngle(direction.angle()));
+		const thingStartingPoint = position1.addVec(new Vec2(-hitbox.width / 2, -hitbox.height / 2).addAngle(direction1.angle()));
+		const thisPoints = [
+			thisStartingPoint,
+			thisStartingPoint.addVec(new Vec2(this.width, 0).addAngle(direction.angle())),
+			thisStartingPoint.addVec(new Vec2(0, this.height).addAngle(direction.angle())),
+			thisStartingPoint.addVec(new Vec2(this.width, this.height).addAngle(direction.angle()))
+		];
+		const thingPoints = [
+			thingStartingPoint,
+			thingStartingPoint.addVec(new Vec2(hitbox.width, 0).addAngle(direction1.angle())),
+			thingStartingPoint.addVec(new Vec2(0, hitbox.height).addAngle(direction1.angle())),
+			thingStartingPoint.addVec(new Vec2(hitbox.width, hitbox.height).addAngle(direction1.angle()))
+		];
+		var results: boolean[] = Array(4);
+		var ii: number;
+
+		const thisVecs = [
+			new Vec2(this.width, 0).addAngle(direction.angle()),
+			new Vec2(0, this.height).addAngle(direction.angle())
+		];
+
+		const thingVecs = [
+			new Vec2(hitbox.width, 0).addAngle(direction1.angle()),
+			new Vec2(0, hitbox.height).addAngle(direction1.angle())
+		];
+
+		for (const mainVec of thisVecs) {
+			const mainMagSqr = mainVec.magnitudeSqr();
+			for (ii = 0; ii < thingPoints.length; ii++)
+				results[ii] = thingPoints[ii].addVec(thisStartingPoint.inverse()).dot(mainVec) < 0 || thingPoints[ii].addVec(thisStartingPoint.inverse()).projectTo(mainVec).magnitudeSqr() > mainMagSqr;
+			if (results.every(x => x)) return CollisionType.NONE;
+		}
+
+		for (const mainVec of thingVecs) {
+			const mainMagSqr = mainVec.magnitudeSqr();
+			for (ii = 0; ii < thisPoints.length; ii++)
+				results[ii] = thisPoints[ii].addVec(thisStartingPoint.inverse()).dot(mainVec) < 0 || thisPoints[ii].addVec(thisStartingPoint.inverse()).projectTo(mainVec).magnitudeSqr() > mainMagSqr;
+			if (results.every(x => x)) return CollisionType.NONE;
+		}
+
+		return CollisionType.RECT_RECT;
+	}
+
+	collideCircle(position: Vec2, direction: Vec2, hitbox: CircleHitbox, position1: Vec2, _direction1: Vec2) {
+		const rectStartingPoint = position.addVec(new Vec2(-this.width / 2, -this.height / 2).addAngle(direction.angle()));
+
+		const rectPoints = [
+			rectStartingPoint,
+			rectStartingPoint.addVec(new Vec2(this.width, 0).addAngle(direction.angle())),
+			rectStartingPoint.addVec(new Vec2(this.width, this.height).addAngle(direction.angle())),
+			rectStartingPoint.addVec(new Vec2(0, this.height).addAngle(direction.angle()))
+		];
+
+		if (this.pointInRect(rectPoints[0], rectPoints[1], rectPoints[2], rectPoints[3], position1)) return CollisionType.CIRCLE_RECT_CENTER_INSIDE;
+
+		for (let ii = 0; ii < rectPoints.length; ii++)
+			if (rectPoints[ii].addVec(position1.inverse()).magnitudeSqr() < Math.pow(hitbox.radius, 2))
+				return CollisionType.CIRCLE_RECT_POINT_INSIDE;
+
+		for (let ii = 0; ii < rectPoints.length; ii++)
+			if (hitbox.lineIntersects(new Line(rectPoints[ii], rectPoints[(ii + 1) % rectPoints.length]), position1))
+				return CollisionType.CIRCLE_RECT_LINE_INSIDE;
+		
+		return CollisionType.NONE;
+	}
+
 	minimize() {
 		return <MinRectHitbox>{ type: this.type, width: this.width, height: this.height };
+	}
+
+	private isLeft(a: Vec2, b: Vec2, c: Vec2) {
+		return ((b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y));
+	}
+
+	private pointInRect(a: Vec2, b: Vec2, c: Vec2, d: Vec2, p: Vec2) {
+		return (this.isLeft(a, b, p) > 0 && this.isLeft(b, c, p) > 0 && this.isLeft(c, d, p) > 0 && this.isLeft(d, a, p) > 0);
 	}
 }
 
@@ -365,6 +448,14 @@ export class CircleHitbox extends Hitbox {
 
 	inside(point: Vec2, position: Vec2, direction: Vec2) {
 		return position.addVec(point.inverse()).magnitudeSqr() < this.radius * this.radius;
+	}
+
+	collideRect(position: Vec2, direction: Vec2, hitbox: RectHitbox, position1: Vec2, direction1: Vec2) {
+		return hitbox.collideCircle(position1, direction1, this, position, direction);
+	}
+
+	collideCircle(position: Vec2, _direction: Vec2, hitbox: CircleHitbox, position1: Vec2, _direction1: Vec2) {
+		return position.distanceTo(position1) > this.comparable + hitbox.comparable ? CollisionType.NONE : CollisionType.CIRCLE_CIRCLE;
 	}
 
 	minimize() {
