@@ -38,8 +38,6 @@ export default class Building {
 			ob.obstacle.position = this.position.addVec(ob.position);
 		for (const fl of this.floors)
 			fl.terrain.setPosition(this.position.addVec(fl.position));
-		console.log("building position", position);
-		if (this.floors[0]) console.log("after setPosition", (<Floor>this.floors[0].terrain).line);
 	}
 
 	setDirection(direction: Vec2) {

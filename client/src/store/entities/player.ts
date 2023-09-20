@@ -61,7 +61,6 @@ export default class Player extends Entity {
 	constructor(minEntity: MinEntity & AdditionalEntity) {
 		super(minEntity);
 		this.copy(minEntity);
-		console.log(this.onTopOfLoot);
 		this.currentSkinImg.src = "assets/images/game/skins/" + this.skin + ".svg";
 		this.currentDeathImg.src = "assets/images/game/entities/" + this.deathImg + ".svg";
 	}
@@ -122,18 +121,14 @@ export default class Player extends Entity {
 			
 			if (this.currentSkinImg.complete) ctx.drawImage(this.currentSkinImg, -radius, -radius, radius * 2, radius * 2);
 			if (this.inventory.helmetLevel) {
-				console.log("helmetLevel check passed")
 				if (this.inventory.helmetLevel == 1) ctx.fillStyle = "#0000FF";
 				else if (this.inventory.helmetLevel == 2) ctx.fillStyle = "#808080";
 				else if (this.inventory.helmetLevel == 3) ctx.fillStyle = "#A9A9A9";
 				else if (this.inventory.helmetLevel == 4) ctx.fillStyle = "#000000";
-				else ctx.fillStyle = "#ff00ff"
-				console.log("fillstyles defined")
-				ctx.lineWidth = 2
+				else ctx.fillStyle = "#ff00ff";
+				ctx.lineWidth = 2;
 				ctx.strokeStyle = "#000000";
-				console.log("linewidth and strokestyle defined")
 				circleFromCenter(ctx, 0, 0, radius * 0.7, true, true);
-				console.log("circle drawn!")
 			}
 			// We will leave the transform for the weapon
 			// If player is holding nothing, render fist
