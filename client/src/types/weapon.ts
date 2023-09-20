@@ -30,15 +30,14 @@ export abstract class Weapon implements MinWeapon, Renderable {
 export class MeleeWeapon extends Weapon {
 	type = WeaponType.MELEE;
 	static readonly FIST_ANIMATIONS = ["left_fist", "right_fist"];
-	readonly currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+	readonly currentFistImg = new Image();
 
 	constructor(id: string, data: MeleeData) {
 		super(id, data.name);
-		this.currentSkinSVG.onload = () => this.currentSkinSVG.loaded = true;
 	}
 
 	render(player: Player, _canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
-		this.currentSkinSVG.src = "assets/images/game/fists/" + player.skin + ".svg";
+		this.currentFistImg.src = "assets/images/game/fists/" + player.skin + ".svg";
 		const radius = scale * (<CircleHitbox> player.hitbox).radius;
 		const fistScale = radius * 1.2 * CommonNumber.SIN45;
 		const fistExtend = Vec2.UNIT_X.scaleAll(fistScale);
@@ -71,21 +70,19 @@ export class MeleeWeapon extends Weapon {
 		ctx.strokeStyle = "#000000";
 		for (const fist of fists) 
 		{//circleFromCenter(ctx, fist.x, fist.y, fistRadius, true, true);
-		ctx.drawImage(this.currentSkinSVG, fist.x - fistRadius, fist.y - fistRadius, fistRadius *2, fistRadius*2)}
+		ctx.drawImage(this.currentFistImg, fist.x - fistRadius, fist.y - fistRadius, fistRadius *2, fistRadius*2)}
 	}
 }
 
 export class GunWeapon extends Weapon {
-	static readonly barrelImages = new Map<string, HTMLImageElement & { loaded: boolean }>();
+	static readonly barrelImages = new Map<string, HTMLImageElement>();
 
 	type = WeaponType.GUN;
 	color: GunColor;
 	length: number;
 	hasBarrelImage: boolean;
 	magazine: number;
-	readonly currentFistSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-
-	
+	readonly currentFistImg = new Image();
 
 	constructor(id: string, data: GunData, magazine = 0) {
 		super(id, data.name);
@@ -93,11 +90,10 @@ export class GunWeapon extends Weapon {
 		this.length = data.length;
 		this.hasBarrelImage = data.visuals.hasBarrelImage;
 		this.magazine = magazine;
-		this.currentFistSVG.onload = () => this.currentFistSVG.loaded = true;
 	}
 
 	render(player: Player, _canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void {
-		this.currentFistSVG.src = "assets/images/game/fists/" + player.skin + ".svg";
+		this.currentFistImg.src = "assets/images/game/fists/" + player.skin + ".svg";
 		const radius = scale * player.hitbox.comparable;
 		const fistRadius = radius / 3;
 		const fistPositions = [new Vec2(player.hitbox.comparable, 0.1), new Vec2(player.hitbox.comparable + 0.25, -0.1)];
@@ -109,10 +105,9 @@ export class GunWeapon extends Weapon {
 			roundRect(ctx, player.hitbox.comparable * scale, -0.15 * scale, this.length * scale, 0.3 * scale, 0.15 * scale, true, true);
 		else {
 			const img = GunWeapon.barrelImages.get(this.id);
-			if (!img?.loaded) {
+			if (!img?.complete) {
 				if (!img) {
-					const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-					image.onload = () => image.loaded = true;
+					const image = new Image();
 					image.src = getBarrelImagePath(this.id);
 					GunWeapon.barrelImages.set(this.id, image);
 				}
@@ -124,7 +119,7 @@ export class GunWeapon extends Weapon {
 		ctx.strokeStyle = "#000000";
 		for (const pos of fistPositions) {
 			const fist = pos.addVec(offset).scaleAll(scale);
-			ctx.drawImage(this.currentFistSVG, fist.x - fistRadius, fist.y - fistRadius, fistRadius *2, fistRadius*2)
+			ctx.drawImage(this.currentFistImg, fist.x - fistRadius, fist.y - fistRadius, fistRadius *2, fistRadius*2)
 		}
 	}
 }

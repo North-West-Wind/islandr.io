@@ -52,8 +52,8 @@ export default class Player extends Entity {
 	inventory!: PartialInventory | Inventory;
 	zIndex = 9;
 	deathImg!: string | null
-	currentSkinSVG: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-	CurrentdeathImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+	currentSkinSvg = new Image();
+	currentDeathImg = new Image();
 	onTopOfLoot: string | null = null;
 	currentHealItem: string | null = null;
 	
@@ -62,10 +62,8 @@ export default class Player extends Entity {
 		super(minEntity);
 		this.copy(minEntity);
 		console.log(this.onTopOfLoot);
-		this.currentSkinSVG.onload = () => this.currentSkinSVG.loaded = true;
-		this.currentSkinSVG.src = "assets/images/game/skins/" + this.skin + ".svg";
-		this.CurrentdeathImg.onload = () => this.CurrentdeathImg.loaded = true;
-		this.CurrentdeathImg.src = "assets/images/game/entities/" + this.deathImg + ".svg";
+		this.currentSkinSvg.src = "assets/images/game/skins/" + this.skin + ".svg";
+		this.currentDeathImg.src = "assets/images/game/entities/" + this.deathImg + ".svg";
 	}
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
@@ -122,7 +120,7 @@ export default class Player extends Entity {
 				circleFromCenter(ctx, 0, 0, radius, true, true);
 			}
 			
-			ctx.drawImage(this.currentSkinSVG, -radius, -radius, radius * 2, radius * 2);
+			if (this.currentSkinSvg.complete) ctx.drawImage(this.currentSkinSvg, -radius, -radius, radius * 2, radius * 2);
 			if (this.inventory.helmetLevel) {
 				console.log("helmetLevel check passed")
 				if (this.inventory.helmetLevel == 1) ctx.fillStyle = "#0000FF";
@@ -145,7 +143,7 @@ export default class Player extends Entity {
 			weapon.render(this, canvas, ctx, scale);
 			ctx.resetTransform();
 		} else {
-			ctx.drawImage(this.CurrentdeathImg, -radius * 2, -radius * 2, radius * 4, radius * 4);
+			if (this.currentDeathImg.complete) ctx.drawImage(this.currentDeathImg, -radius * 2, -radius * 2, radius * 4, radius * 4);
 			ctx.textAlign = "center";
 			ctx.textBaseline = "top";
 			ctx.font = `700 ${scale}px Jura`;

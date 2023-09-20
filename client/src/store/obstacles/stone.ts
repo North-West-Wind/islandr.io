@@ -5,12 +5,10 @@ import { ObstacleSupplier } from "../../types/supplier";
 import { circleFromCenter } from "../../utils";
 import { Player } from "../entities";
 
-const stoneImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-stoneImg.onload = () => stoneImg.loaded = true;
+const stoneImg = new Image();
 stoneImg.src = "assets/images/game/objects/stone.svg";
 
-const ak47stoneImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-ak47stoneImg.onload = () => ak47stoneImg.loaded = true;
+const ak47stoneImg = new Image();
 ak47stoneImg.src = "assets/images/game/objects/ak47_stone.svg";
 
 interface AdditionObstacle {
@@ -38,7 +36,7 @@ export default class Stone extends Obstacle {
 	}
 	
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
-		var img: HTMLImageElement & { loaded: boolean };
+		var img: HTMLImageElement;
 		switch (this.special) {
 			case "ak47":
 				img = ak47stoneImg;
@@ -47,7 +45,7 @@ export default class Stone extends Obstacle {
 				img = stoneImg;
 				break;
 		}
-		if (!img.loaded) return;
+		if (!img.complete) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
