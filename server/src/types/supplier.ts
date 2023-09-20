@@ -1,4 +1,5 @@
 import { Roof, castCorrectObstacle } from "../store/obstacles";
+import { Floor, castCorrectTerrain } from "../store/terrains";
 import Building from "./building";
 import { BuildingData, ObstacleData, TerrainData } from "./data";
 import { CommonAngles, Hitbox, Vec2 } from "./math";
@@ -53,22 +54,18 @@ export class BuildingSupplier implements Supplier<Building> {
 				const roof = new Roof(Hitbox.fromNumber(ob.hitbox), ob.color, building.id, ob.texture);
 				building.addObstacle(Vec2.fromArray(ob.position).addAngle(angle), roof);
 			}
+		if (this.data.floors)
+			for (const floor of this.data.floors) {
+				const terrain = castCorrectTerrain(floor);
+				if (!terrain) continue;
+				building.addFloor(Vec2.fromArray(floor.position).addAngle(angle), terrain);
+			}
 		building.setDirection(direction);
 		building.color = this.data.mapColor;
 		return building;
 	}
 }
 
-export class TerrainSupplier implements Supplier<Terrain> {
-	id: string;
-	data: TerrainData;
-
-	constructor(id: string, data: TerrainData) {
-		this.id = id;
-		this.data = data;
-	}
-
-	create() {
-		return Terrain.fromTerrainData(this.data);
-	}
+export interface TerrainSupplier extends Supplier<Terrain> {
+	create(data: TerrainData): Terrain;
 }

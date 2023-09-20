@@ -124,6 +124,10 @@ export class Line {
 		return new Line(Vec2.fromArray(arr[0]), Vec2.fromArray(arr[1]));
 	}
 
+	static fromPointVec(p: Vec2, vec: Vec2) {
+		return new Line(p, p.addVec(vec));
+	}
+
 	readonly a: Vec2;
 	readonly b: Vec2;
 	segment: boolean;

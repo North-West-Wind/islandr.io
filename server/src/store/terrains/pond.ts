@@ -4,7 +4,8 @@ import { DotTerrain } from "../../types/terrain";
 import { randomBetween } from "../../utils";
 
 export default class Pond extends DotTerrain {
-	id = "pond";
+	static readonly ID = "pond";
+	id = Pond.ID;
 	border = 2;
 
 	constructor() {

@@ -54,7 +54,7 @@ function animate(currentTime: number) {
 			// Do negative layer first
 			(<(Terrain & RenderableLayerN1)[]> world.terrains.filter((terrain: any) => !!terrain["renderLayerN1"])).forEach(terrain => terrain.renderLayerN1(player, canvas, ctx, scale));
 			// Do layer zero
-			world.terrains.forEach(terrain => terrain.render(player, canvas, ctx, scale));
+			world.terrains.filter(t => !t.aboveTerrainLine).forEach(terrain => terrain.render(player, canvas, ctx, scale));
 
 			// Draw grid lines
 			ctx.strokeStyle = "#000";
@@ -63,6 +63,8 @@ function animate(currentTime: number) {
 			for (let ii = 0; ii <= size.x; ii += GRID_INTERVAL) lineBetween(ctx, canvas.width / 2 - (player.position.x - ii) * scale, Math.max(y, 0), canvas.width / 2 - (player.position.x - ii) * scale, Math.min(y + height, canvas.height));
 			for (let ii = 0; ii <= size.y; ii += GRID_INTERVAL) lineBetween(ctx, Math.max(x, 0), canvas.height / 2 - (player.position.y - ii) * scale, Math.min(x + width, canvas.width), canvas.height / 2 - (player.position.y - ii) * scale);
 			ctx.globalAlpha = 1;
+
+			world.terrains.filter(t => t.aboveTerrainLine).forEach(terrain => terrain.render(player, canvas, ctx, scale));
 			
 			// Draw obstacles and entities
 			var combined: (Entity | Obstacle)[] = [];

@@ -10,6 +10,7 @@ export abstract class Terrain implements Renderable, RenderableMap {
 	type = "generic";
 	// Use RGB
 	color = 0;
+	aboveTerrainLine = false;
 
 	constructor(minTerrain: MinTerrain) {
 		this.id = minTerrain.id;
@@ -136,8 +137,4 @@ export class PiecewiseTerrain extends Terrain {
 		this.lines.forEach(line => line.renderMap(canvas, ctx, scale));
 	}
 
-}
-
-export class RectTerrain extends LineTerrain {
-	
 }

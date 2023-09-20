@@ -5,7 +5,7 @@ import { initMap } from "./rendering/map";
 import { addKeyPressed, addMousePressed, getToken, isKeyPressed, isMenuHidden, isMouseDisabled, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap, toggleMouseDisabled } from "./states";
 import { FullPlayer, Healing } from "./store/entities";
 import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
-import { castCorrectTerrain } from "./store/terrains";
+import { Floor, castCorrectTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
 import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket } from "./types/packet";
 import { World } from "./types/world";
@@ -104,7 +104,9 @@ async function init(address: string) {
 					case "map": {
 						// This should happen once only normally
 						const mapPkt = <MapPacket>data;
+						console.log("packet terrains:", mapPkt.terrains);
 						world.terrains = mapPkt.terrains.map(ter => castCorrectTerrain(ter));
+						console.log("terrains:" , world.terrains);
 						world.obstacles = mapPkt.obstacles.map(obs => castCorrectObstacle(castMinObstacle(obs)));
 						world.buildings = mapPkt.buildings.map(bui => new Building(bui));
 						initMap();

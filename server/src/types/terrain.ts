@@ -1,6 +1,6 @@
-import { TerrainData } from "./data";
+import { TerrainData, TextureData } from "./data";
 import { Line, Vec2 } from "./math";
-import { MinTerrain } from "./minimized";
+import { MinLine, MinTerrain, MinVec2 } from "./minimized";
 
 export abstract class Terrain {
 	id!: string;
@@ -12,26 +12,6 @@ export abstract class Terrain {
 	// Interval duration (in ticks)
 	interval: number;
 
-	static fromTerrainData(data: TerrainData) {
-		switch (data.type) {
-			case "full":
-				return new FullTerrain(data.speed, data.damage, data.interval);
-			case "dot":
-				return new DotTerrain(data.speed, data.damage, data.interval, Vec2.fromArray(data.position), data.radius);
-			case "line":
-				const boundary: { start?: Vec2, end?: Vec2 } = { };
-				if (data.boundary?.start) boundary.start = Vec2.fromArray(data.boundary.start);
-				if (data.boundary?.end) boundary.end = Vec2.fromArray(data.boundary.end);
-				return new LineTerrain(data.speed, data.damage, data.interval, Line.fromArrays(data.line), data.range, boundary);
-			case "piecewise":
-				const piecewise = new PiecewiseTerrain(data.speed, data.damage, data.interval);
-				for (const line of data.lines) piecewise.lines.push(<LineTerrain>Terrain.fromTerrainData(line));
-				return piecewise;
-			default:
-				return new DummyTerrain();
-		}
-	}
-
 	constructor(speed: number, damage: number, interval: number) {
 		this.speed = speed;
 		this.damage = damage;
@@ -39,6 +19,9 @@ export abstract class Terrain {
 	}
 
 	abstract inside(position: Vec2): boolean;
+
+	abstract setPosition(position: Vec2): void;
+	abstract setDirection(direction: Vec2): void;
 
 	minimize() {
 		return <MinTerrain> { id: this.id };
@@ -55,6 +38,9 @@ export class DummyTerrain extends Terrain {
 	inside(_position: Vec2) {
 		return false;
 	}
+
+	setPosition(_position: Vec2) { }
+	setDirection(_direction: Vec2) { }
 }
 
 export class FullTerrain extends Terrain {
@@ -63,6 +49,9 @@ export class FullTerrain extends Terrain {
 	inside(_position: Vec2) {
 		return true;
 	}
+
+	setPosition(_position: Vec2) { }
+	setDirection(_direction: Vec2) { }
 }
 
 export class DotTerrain extends Terrain {
@@ -80,6 +69,12 @@ export class DotTerrain extends Terrain {
 	inside(position: Vec2) {
 		return position.distanceSqrTo(this.position) <= this.radius * this.radius;
 	}
+
+	setPosition(position: Vec2) {
+		this.position = position;
+	}
+
+	setDirection(direction: Vec2) { }
 
 	minimize() {
 		return Object.assign(super.minimize(), { position: this.position, radius: this.radius });
@@ -112,6 +107,20 @@ export class LineTerrain extends Terrain {
 		return startLine.rightTo(position) && endLine.leftTo(position);
 	}
 
+	setPosition(position: Vec2) {
+		position = position.addVec(this.line.toVec().scaleAll(-0.5));
+		const line = new Line(position, position.addVec(this.line.toVec()));
+		line.segment = false;
+		this.line = line;
+	}
+
+	setDirection(direction: Vec2) {
+		const vec = this.line.toVec();
+		const delta = vec.angleBetween(direction);
+		this.line = Line.fromPointVec(this.line.a, vec.addAngle(-delta));
+		this.boundary = { start: this.boundary.start.addAngle(-delta), end: this.boundary.end.addAngle(-delta) };
+	}
+
 	minimize() {
 		return Object.assign(super.minimize(), { line: this.line.minimize(), range: this.range, boundary: [this.boundary.start.minimize(), this.boundary.end.minimize()] });
 	}
@@ -130,14 +139,10 @@ export class PiecewiseTerrain extends Terrain {
 		return false;
 	}
 
+	setPosition(_position: Vec2) { }
+	setDirection(_direction: Vec2) { }
+
 	minimize() {
 		return Object.assign(super.minimize(), { lines: this.lines.map(l => l.minimize()) });
-	}
-}
-
-export class RectTerrain extends LineTerrain {
-	constructor(speed: number, damage: number, interval: number, start: Vec2, dimension: Vec2, direction: Vec2) {
-		const line = new Line(start, start.addX(dimension.x).addAngle(direction.angle()));
-		super(speed, damage, interval, line, dimension.y * 0.5);
 	}
 }

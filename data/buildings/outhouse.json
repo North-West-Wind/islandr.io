@@ -50,11 +50,13 @@
 	"mapColor": 2942442751,
 	"floors": [
 		{
-			"type": "line",
-			"speed": 1,
-			"damage": 0,
-			"interval": 0,
-			"position": [0, 0]
+			"type": "floor",
+			"size": [8, 7],
+			"position": [0, 0],
+			"texture": {
+				"path": "dynamic/wooden.svg",
+				"horizontalFill": 2
+			}
 		}
 	],
 	"roofs": [
