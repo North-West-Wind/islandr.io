@@ -25,7 +25,7 @@ export default class Roof extends Obstacle {
 	color!: number;
 	roofless!: Set<string>;
 	texture?: { path: string, horizontalFill?: number };
-	zIndex = 1000;
+	zIndex = 999;
 	opacity = 1;
 
 	static {
