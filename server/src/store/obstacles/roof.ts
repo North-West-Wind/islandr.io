@@ -16,11 +16,11 @@ export default class Roof extends Obstacle {
 	static readonly ID = "roof";
 	type = Roof.ID;
 	color: number;
-	texture: { path: string, horizontalFill: number };
+	texture: { path: string, horizontalFill?: number };
 	buildingId: string;
 	roofless = new Set<string>();
 
-	constructor(hitbox: Hitbox, color: number, texture: { path: string, horizontalFill: number }, buildingId: string) {
+	constructor(hitbox: Hitbox, color: number, texture: { path: string, horizontalFill?: number }, buildingId: string) {
 		super(world, hitbox, hitbox, 1, 1);
 		this.direction = Vec2.UNIT_X;
 		this.color = color;
