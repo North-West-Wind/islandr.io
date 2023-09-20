@@ -1,14 +1,13 @@
 import { OBSTACLE_SUPPLIERS } from ".";
 import { world } from "../..";
 import { ObstacleData } from "../../types/data";
-import { Entity } from "../../types/entity";
 import { Hitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { ObstacleSupplier } from "../../types/supplier";
 
 class RoofSupplier extends ObstacleSupplier {
 	make(data: ObstacleData) {
-		return new Roof(Hitbox.fromNumber(data.hitbox), data.color, data.texture, data.buildingId);
+		return new Roof(Hitbox.fromNumber(data.hitbox), data.color, data.buildingId, data.texture);
 	}
 }
 
@@ -16,11 +15,11 @@ export default class Roof extends Obstacle {
 	static readonly ID = "roof";
 	type = Roof.ID;
 	color: number;
-	texture: { path: string, horizontalFill?: number };
 	buildingId: string;
+	texture?: { path: string, horizontalFill?: number };
 	roofless = new Set<string>();
 
-	constructor(hitbox: Hitbox, color: number, texture: { path: string, horizontalFill?: number }, buildingId: string) {
+	constructor(hitbox: Hitbox, color: number, buildingId: string, texture?: { path: string, horizontalFill?: number }) {
 		super(world, hitbox, hitbox, 1, 1);
 		this.direction = Vec2.UNIT_X;
 		this.color = color;

@@ -5,19 +5,19 @@
 			"hitbox": [7, 0.5],
 			"color": 2908887295,
 			"__color": "(comment) 2908887295 is 0xad6218ff",
-			"position": [0, -3]
+			"position": [0, -3.25]
 		},
 		{
 			"type": "wall",
 			"hitbox": [2, 0.5],
 			"color": 2908887295,
-			"position": [-2.5, 3]
+			"position": [-2.5, 3.25]
 		},
 		{
 			"type": "wall",
 			"hitbox": [2, 0.5],
 			"color": 2908887295,
-			"position": [2.5, 3]
+			"position": [2.5, 3.25]
 		},
 		{
 			"type": "wall",
@@ -60,8 +60,8 @@
 	"roofs": [
 		{
 			"type": "roof",
-			"hitbox": [7, 6.5],
-			"position": [0, 0],
+			"hitbox": [8, 8.5],
+			"position": [0, 0.5],
 			"color": 2942442751,
 			"texture": {
 				"path": "fixed/outhouse.svg"

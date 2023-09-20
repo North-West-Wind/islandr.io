@@ -38,7 +38,7 @@ export function reset() {
 		cross.setPosition(world.size.scale(Math.random(), Math.random()));
 		world.buildings.push(cross);
 	}
-	for (ii = 0; ii < 1; ii++) {
+	for (ii = 0; ii < 5; ii++) {
 		const outhouse = BUILDING_SUPPLIERS.get("outhouse")!.create();
 		do {
 			var position = world.size.scale(Math.random(), Math.random());
