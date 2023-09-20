@@ -50,9 +50,7 @@ export class BuildingSupplier implements Supplier<Building> {
 				building.addZone(zone.position, zone.hitbox, zone.map);
 		if (this.data.roofs)
 			for (const ob of this.data.roofs) {
-				const roof = new Roof(Hitbox.fromNumber(ob.hitbox), ob.color, building.id);
-				for (const zone of zones)
-					roof.addZone(zone.position, zone.hitbox);
+				const roof = new Roof(Hitbox.fromNumber(ob.hitbox), ob.color, ob.texture, building.id);
 				building.addObstacle(Vec2.fromArray(ob.position).addAngle(angle), roof);
 			}
 		building.setDirection(direction);

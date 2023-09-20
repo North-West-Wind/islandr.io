@@ -8,7 +8,7 @@ import { ObstacleSupplier } from "../../types/supplier";
 
 class RoofSupplier extends ObstacleSupplier {
 	make(data: ObstacleData) {
-		return new Roof(Hitbox.fromNumber(data.hitbox), data.color, data.buildingId);
+		return new Roof(Hitbox.fromNumber(data.hitbox), data.color, data.texture, data.buildingId);
 	}
 }
 
@@ -16,14 +16,15 @@ export default class Roof extends Obstacle {
 	static readonly ID = "roof";
 	type = Roof.ID;
 	color: number;
-	zones: { position: Vec2, hitbox: Hitbox }[] = [];
+	texture: { path: string, horizontalFill: number };
 	buildingId: string;
 	roofless = new Set<string>();
 
-	constructor(hitbox: Hitbox, color: number, buildingId: string) {
+	constructor(hitbox: Hitbox, color: number, texture: { path: string, horizontalFill: number }, buildingId: string) {
 		super(world, hitbox, hitbox, 1, 1);
 		this.direction = Vec2.UNIT_X;
 		this.color = color;
+		this.texture = texture;
 		this.buildingId = buildingId;
 		this.vulnerable = false;
 		this.noCollision = true;
@@ -31,10 +32,6 @@ export default class Roof extends Obstacle {
 
 	static {
 		OBSTACLE_SUPPLIERS.set(Roof.ID, new RoofSupplier());
-	}
-
-	addZone(position: Vec2, hitbox: Hitbox) {
-		this.zones.push({ position, hitbox });
 	}
 
 	// Handled from the building's zones
@@ -70,6 +67,6 @@ export default class Roof extends Obstacle {
 	}*/
 
 	minimize() {
-		return Object.assign(super.minimize(), { color: this.color, roofless: [...this.roofless] });
+		return Object.assign(super.minimize(), { color: this.color, texture: this.texture, roofless: [...this.roofless] });
 	}
 }

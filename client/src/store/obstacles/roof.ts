@@ -8,6 +8,7 @@ import { Player } from "../entities";
 
 interface AdditionalObstacle {
 	color: number;
+	texture: { path: string, horizontalFill: number };
 	roofless: string[];
 }
 
@@ -21,6 +22,7 @@ export default class Roof extends Obstacle {
 	static readonly ID = "roof";
 	type = Roof.ID;
 	color!: number;
+	texture!: { path: string, horizontalFill: number }
 	roofless!: Set<string>;
 	zIndex = 1000;
 	opacity = 1;
@@ -32,6 +34,7 @@ export default class Roof extends Obstacle {
 	copy(minObstacle: MinObstacle & AdditionalObstacle) {
 		super.copy(minObstacle);
 		this.color = minObstacle.color;
+		this.texture = minObstacle.texture;
 		this.roofless = new Set(minObstacle.roofless);
 	}
 

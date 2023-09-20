@@ -62,7 +62,11 @@
 			"type": "roof",
 			"hitbox": [7, 6.5],
 			"position": [0, 0],
-			"color": 2942442751
+			"color": 2942442751,
+			"texture": {
+				"path": "dynamic/outhouse.svg",
+				"horizontalFill": 1
+			}
 		}
 	]
 }
