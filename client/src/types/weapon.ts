@@ -37,7 +37,7 @@ export class MeleeWeapon extends Weapon {
 	}
 
 	render(player: Player, _canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
-		this.currentFistImg.src = "assets/images/game/fists/" + player.skin + ".svg";
+		if (!this.currentFistImg.src) this.currentFistImg.src = "assets/images/game/fists/" + player.skin + ".svg";
 		const radius = scale * (<CircleHitbox> player.hitbox).radius;
 		const fistScale = radius * 1.2 * CommonNumber.SIN45;
 		const fistExtend = Vec2.UNIT_X.scaleAll(fistScale);
@@ -93,7 +93,7 @@ export class GunWeapon extends Weapon {
 	}
 
 	render(player: Player, _canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void {
-		this.currentFistImg.src = "assets/images/game/fists/" + player.skin + ".svg";
+		if (!this.currentFistImg.src) this.currentFistImg.src = "assets/images/game/fists/" + player.skin + ".svg";
 		const radius = scale * player.hitbox.comparable;
 		const fistRadius = radius / 3;
 		const fistPositions = [new Vec2(player.hitbox.comparable, 0.1), new Vec2(player.hitbox.comparable + 0.25, -0.1)];

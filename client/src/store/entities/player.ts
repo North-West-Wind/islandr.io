@@ -52,7 +52,7 @@ export default class Player extends Entity {
 	inventory!: PartialInventory | Inventory;
 	zIndex = 9;
 	deathImg!: string | null
-	currentSkinSvg = new Image();
+	currentSkinImg = new Image();
 	currentDeathImg = new Image();
 	onTopOfLoot: string | null = null;
 	currentHealItem: string | null = null;
@@ -62,7 +62,7 @@ export default class Player extends Entity {
 		super(minEntity);
 		this.copy(minEntity);
 		console.log(this.onTopOfLoot);
-		this.currentSkinSvg.src = "assets/images/game/skins/" + this.skin + ".svg";
+		this.currentSkinImg.src = "assets/images/game/skins/" + this.skin + ".svg";
 		this.currentDeathImg.src = "assets/images/game/entities/" + this.deathImg + ".svg";
 	}
 
@@ -120,7 +120,7 @@ export default class Player extends Entity {
 				circleFromCenter(ctx, 0, 0, radius, true, true);
 			}
 			
-			if (this.currentSkinSvg.complete) ctx.drawImage(this.currentSkinSvg, -radius, -radius, radius * 2, radius * 2);
+			if (this.currentSkinImg.complete) ctx.drawImage(this.currentSkinImg, -radius, -radius, radius * 2, radius * 2);
 			if (this.inventory.helmetLevel) {
 				console.log("helmetLevel check passed")
 				if (this.inventory.helmetLevel == 1) ctx.fillStyle = "#0000FF";
