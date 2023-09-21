@@ -18,9 +18,12 @@ export function getVestImagePath(level: number) {
 	return `assets/images/game/loots/proc-items/vest-level-${level}.svg`;
 }
 
-
 export function getHealingImagePath(id: string) {
 	return `assets/images/game/loots/healings/${id}.svg`;
+}
+
+export function getParticleImagePath(id: string) {
+	return `assets/images/game/particles/${id}.svg`;
 }
 
 const tracerColors = new Map<string, TracerColor>();
@@ -33,4 +36,14 @@ const tracerColors = new Map<string, TracerColor>();
 
 export function getTracerColor(id: string) {
 	return tracerColors.get(id);
+}
+
+const textureStore = new Map<string, HTMLImageElement>();
+export function getTexture(path: string) {
+	if (!textureStore.has(path)) {
+		const img = new Image();
+		img.src = path;
+		textureStore.set(path, img);
+		return img;
+	} else return textureStore.get(path);
 }

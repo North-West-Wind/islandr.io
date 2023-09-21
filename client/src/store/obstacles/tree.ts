@@ -5,16 +5,13 @@ import { circleFromCenter } from "../../utils";
 import { ObstacleSupplier } from "../../types/supplier";
 import { OBSTACLE_SUPPLIERS } from ".";
 
-const treeImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-treeImg.onload = () => treeImg.loaded = true;
+const treeImg = new Image();
 treeImg.src = "assets/images/game/objects/tree.svg";
 
-const mosinTreeImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-mosinTreeImg.onload = () => mosinTreeImg.loaded = true;
+const mosinTreeImg = new Image();
 mosinTreeImg.src = "assets/images/game/objects/mosin_tree.svg";
 
-const treeResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-treeResidueImg.onload = () => treeResidueImg.loaded = true;
+const treeResidueImg = new Image();
 treeResidueImg.src = "assets/images/game/objects/residues/tree.svg";
 
 interface AdditionalObstacle {
@@ -44,7 +41,7 @@ export default class Tree extends Obstacle {
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
-		var img: HTMLImageElement & { loaded: boolean };
+		var img: HTMLImageElement;
 		var renderScale = 1;
 		if (this.despawn) img = treeResidueImg;
 		else switch (this.special) {
@@ -56,7 +53,7 @@ export default class Tree extends Obstacle {
 				img = treeImg;
 				renderScale = 5;
 		}
-		if (!img.loaded || !treeResidueImg.loaded) return;
+		if (!img.complete || !treeResidueImg.complete) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());

@@ -5,9 +5,9 @@ import { initMap } from "./rendering/map";
 import { addKeyPressed, addMousePressed, getToken, isKeyPressed, isMenuHidden, isMouseDisabled, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap, toggleMouseDisabled } from "./states";
 import { FullPlayer, Healing } from "./store/entities";
 import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
-import { castCorrectTerrain } from "./store/terrains";
+import { Floor, castCorrectTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket } from "./types/packet";
 import { World } from "./types/world";
 import { receive, send } from "./utils";
 import Building from "./types/building";
@@ -53,101 +53,108 @@ async function init(address: string) {
       rej(new Error("Failed finding game"));
       ws.close();
     }, TIMEOUT);
-
-    ws.onmessage = async (event) => {
-      const data = <AckPacket>receive(event.data);
-      id = data.id;
-      tps = data.tps;
-      world = new World(new Vec2(data.size[0], data.size[1]), castCorrectTerrain(data.terrain));
-
-      // Call renderer start to setup
-      await start();
-      var currentCursor = localStorage.getItem("selectedCursor")
-      if (!currentCursor) { localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor") }
-      if (currentCursor) { document.documentElement.style.cursor = currentCursor }
-      console.log("from game.ts client skin! > " + skin! + " and death img > " + deathImg!)
-      send(ws, new ResponsePacket(id, username!, skin!, deathImg!, cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()!));
-      connected = true;
-      clearTimeout(timer);
-
-      // Setup healing items click events
-      for (const element of document.getElementsByClassName("healing-panel")) {
-        const el = <HTMLElement>element;
-        console.log("Adding events for", el.id);
-        const ii = parseInt(<string>el.id.split("-").pop());
-        el.onmouseenter = el.onmouseleave = () => toggleMouseDisabled();
-        el.onclick = () => {
-          if (!el.classList.contains("enabled")) return;
-          send(ws, new UseHealingPacket(Healing.mapping[ii]));
-        }
-      }
-
-      const interval = setInterval(() => {
-        if (connected) send(ws, new PingPacket());
-        else clearInterval(interval);
-      }, 1000);
-
-      ws.onmessage = (event) => {
-        const data = receive(event.data);
-        switch (data.type) {
-          case "game": {
-            const gamePkt = <GamePacket>data;
-            world.updateEntities(gamePkt.entities, gamePkt.discardEntities);
-            world.updateObstacles(gamePkt.obstacles, gamePkt.discardObstacles);
-            world.updateLiveCount(gamePkt.alivecount);
-            if (gamePkt.safeZone) world.updateSafeZone(gamePkt.safeZone);
-            if (gamePkt.nextSafeZone) world.updateNextSafeZone(gamePkt.nextSafeZone);
-            if (!player) player = new FullPlayer(gamePkt.player);
-            else player.copy(gamePkt.player);
-            break;
-          }
-          case "map": {
-            // This should happen once only normally
-            const mapPkt = <MapPacket>data;
-            world.terrains = mapPkt.terrains.map(ter => castCorrectTerrain(ter));
-            world.obstacles = mapPkt.obstacles.map(obs => castCorrectObstacle(castMinObstacle(obs)));
-            world.buildings = mapPkt.buildings.map(bui => new Building(bui));
-            initMap();
-            //Show player count once game starts
-            (document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block";
-            break;
-          }
-          case "sound": {
-            if (!player) break;
-            const soundPkt = <SoundPacket>data;
-            const howl = new Howl({
-              src: `assets/sounds/${soundPkt.path}`
-            });
-            const pos = Vec2.fromMinVec2(soundPkt.position);
-            const relative = pos.addVec(player.position.inverse()).scaleAll(1 / 60);
-            howl.pos(relative.x, relative.y);
-            const id = howl.play();
-            world.sounds.set(id, { howl, pos });
-            howl.on("end", () => world.sounds.delete(id));
-            break;
-          }
-        }
-      }
-    }
-
-    // Reset everything when connection closes
-    ws.onclose = () => {
-      connected = false;
-      stop();
-      Howler.stop();
-      id = null;
-      tps = 1;
-      username = null;
-      player = null;
-      res(undefined);
-      //remove playercount
-    }
-
-    ws.onerror = (err) => {
-      console.error(err);
-      rej(new Error("Failed joining game"));
-    };
-  });
+		ws.onmessage = async (event) => {
+			const data = <AckPacket>receive(event.data);
+			id = data.id;
+			tps = data.tps;
+			world = new World(new Vec2(data.size[0], data.size[1]), castCorrectTerrain(data.terrain));
+	
+			// Call renderer start to setup
+			await start();
+			var currentCursor = localStorage.getItem("selectedCursor")
+			if (!currentCursor){localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor")}
+			if (currentCursor) {document.documentElement.style.cursor = currentCursor}
+			console.log("from game.ts client skin! > " + skin! + " and death img > " + deathImg!)
+			send(ws, new ResponsePacket(id, username!, skin!, deathImg!, cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()!));
+			connected = true;
+			clearTimeout(timer);
+			
+			// Setup healing items click events
+			for (const element of document.getElementsByClassName("healing-panel")) {
+				const el = <HTMLElement> element;
+				console.log("Adding events for", el.id);
+				const ii = parseInt(<string>el.id.split("-").pop());
+				el.onmouseenter = el.onmouseleave = () => toggleMouseDisabled();
+				el.onclick = () => {
+					if (!el.classList.contains("enabled")) return;
+					send(ws, new UseHealingPacket(Healing.mapping[ii]));
+				}
+			}
+	
+			const interval = setInterval(() => {
+				if (connected) send(ws, new PingPacket());
+				else clearInterval(interval);
+			}, 1000);
+	
+			ws.onmessage = (event) => {
+				const data = receive(event.data);
+				switch (data.type) {
+					case "game": {
+						const gamePkt = <GamePacket>data;
+						world.updateEntities(gamePkt.entities, gamePkt.discardEntities);
+						world.updateObstacles(gamePkt.obstacles, gamePkt.discardObstacles);
+						world.updateLiveCount(gamePkt.alivecount);
+						if (gamePkt.safeZone) world.updateSafeZone(gamePkt.safeZone);
+						if (gamePkt.nextSafeZone) world.updateNextSafeZone(gamePkt.nextSafeZone);
+						if (!player) player = new FullPlayer(gamePkt.player);
+						else player.copy(gamePkt.player);
+						// Client side ticking
+						world.clientTick(player);
+						break;
+					}
+					case "map": {
+						// This should happen once only normally
+						const mapPkt = <MapPacket>data;
+						console.log("packet terrains:", mapPkt.terrains);
+						world.terrains = mapPkt.terrains.map(ter => castCorrectTerrain(ter));
+						console.log("terrains:" , world.terrains);
+						world.obstacles = mapPkt.obstacles.map(obs => castCorrectObstacle(castMinObstacle(obs)));
+						world.buildings = mapPkt.buildings.map(bui => new Building(bui));
+						initMap();
+						//Show player count once game starts
+						(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block";
+						break;
+					}
+					case "sound": {
+						if (!player) break;
+						const soundPkt = <SoundPacket>data;
+						const howl = new Howl({
+							src: `assets/sounds/${soundPkt.path}`
+						});
+						const pos = Vec2.fromMinVec2(soundPkt.position);
+						const relative = pos.addVec(player.position.inverse()).scaleAll(1/60);
+						howl.pos(relative.x, relative.y);
+						const id = howl.play();
+						world.sounds.set(id, { howl, pos });
+						howl.on("end", () => world.sounds.delete(id));
+						break;
+					}
+					case "particles": {
+						const partPkt = <ParticlesPacket>data;
+						world.addParticles(partPkt.particles);
+					}
+				}
+			}
+		}
+	
+		// Reset everything when connection closes
+		ws.onclose = () => {
+			connected = false;
+			stop();
+			Howler.stop();
+			id = null;
+			tps = 1;
+			username = null;
+			player = null;
+			res(undefined);
+			//remove playercount
+		}
+	
+		ws.onerror = (err) => {
+			console.error(err);
+			rej(new Error("Failed joining game"));
+		};
+	});
 }
 
 document.getElementById("connect")?.addEventListener("click", async () => {

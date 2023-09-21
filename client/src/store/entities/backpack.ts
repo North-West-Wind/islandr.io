@@ -17,7 +17,7 @@ class BackpackSupplier implements EntitySupplier {
 }
 
 export default class Backpack extends Entity {
-	static readonly backpackImages: (HTMLImageElement & { loaded: boolean })[] = Array(3).fill(undefined);
+	static readonly backpackImages: HTMLImageElement[] = Array(3).fill(undefined);
 	static readonly TYPE = "backpack";
 	type = Backpack.TYPE;
 	level!: number;
@@ -48,10 +48,9 @@ export default class Backpack extends Entity {
 		ctx.fillStyle = "#00000066"; // <- alpha/opacity
 		circleFromCenter(ctx, 0, 0, radius, true, false);
 		const img = Backpack.backpackImages[this.level - 1];
-		if (!img?.loaded) {
+		if (!img?.complete) {
 			if (!img) {
-				const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-				image.onload = () => image.loaded = true;
+				const image = new Image();
 				image.src = getBackpackImagePath(this.level);
 				Backpack.backpackImages[this.level - 1] = image;
 			}

@@ -14,7 +14,8 @@ class RiverSegment extends LineTerrain implements BorderedTerrain {
 }
 
 export default class River extends PiecewiseTerrain implements BorderedTerrain {
-	id = "river";
+	static readonly ID = "river";
+	id = River.ID;
 	border = 2;
 
 	constructor() {

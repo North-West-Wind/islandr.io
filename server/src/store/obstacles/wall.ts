@@ -23,7 +23,10 @@ export default class Wall extends Obstacle {
 		this.vulnerable = vulnerable;
 		this.color = color;
 	}
-
+	damage(dmg: number) {
+		super.damage(dmg)
+		world.onceSounds.push({"path": "objects/wall_hit.mp3", "position": this.position})
+	}
 	static {
 		OBSTACLE_SUPPLIERS.set(Wall.TYPE, new WallSupplier());
 	}

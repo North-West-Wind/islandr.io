@@ -5,20 +5,16 @@ import { Obstacle } from "../../types/obstacle";
 import { ObstacleSupplier } from "../../types/supplier";
 import { Player } from "../entities";
 
-const crateImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-crateImg.onload = () => crateImg.loaded = true;
+const crateImg = new Image();
 crateImg.src = "assets/images/game/objects/crate.svg";
 
-const crateResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-crateResidueImg.onload = () => crateResidueImg.loaded = true;
+const crateResidueImg = new Image();
 crateResidueImg.src = "assets/images/game/objects/residues/crate.svg";
 
-const grenadeCrateImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-grenadeCrateImg.onload = () => grenadeCrateImg.loaded = true;
+const grenadeCrateImg = new Image();
 grenadeCrateImg.src = "assets/images/game/objects/grenade_crate.svg";
 
-const sovietCrateImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-sovietCrateImg.onload = () => sovietCrateImg.loaded = true;
+const sovietCrateImg = new Image();
 sovietCrateImg.src = "assets/images/game/objects/soviet_crate.svg";
 
 /*
@@ -52,7 +48,7 @@ export default class Crate extends Obstacle {
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
-		var img: HTMLImageElement & { loaded: boolean };
+		var img: HTMLImageElement;
 		switch (this.special) {
 			case "grenade":
 				img = grenadeCrateImg;
@@ -64,7 +60,7 @@ export default class Crate extends Obstacle {
 				img = crateImg;
 				break;
 		}
-		if (!img.loaded || !crateResidueImg.loaded) return;
+		if (!img.complete || !crateResidueImg.complete) return;
 		const relative = this.position.addVec(you.position.inverse());
 		const width = scale * (<RectHitbox>this.hitbox).width * (this.despawn ? 0.5 : 1), height = width * crateImg.naturalWidth / crateImg.naturalHeight;
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);

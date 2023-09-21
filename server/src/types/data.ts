@@ -142,16 +142,13 @@ export type ObstacleData = {
 
 export type TerrainData = {
 	type: string;
-	speed: number;
-	damage: number;
-	interval: number;
 	position: number[];
 	[key: string]: any;
 }
 
 export type BuildingData = {
 	obstacles: ObstacleData[];
-	zones?: { position: number[], hitbox: number[] | number }[];
+	zones?: { position: number[], hitbox: number[] | number, map?: boolean }[];
 	floors?: TerrainData[];
 	roofs?: ObstacleData[];
 	mapColor?: number;
@@ -162,4 +159,9 @@ export type RedZoneDataEntry = {
 	move: number;
 	damage: number;
 	area: number;
+}
+
+export type TextureData = {
+	path: string;
+	horizontalFill?: number;
 }

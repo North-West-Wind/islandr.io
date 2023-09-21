@@ -35,6 +35,8 @@ export interface MinEntity {
 export interface MinInventory {
 	holding: MinWeapon;
 	backpackLevel: number;
+	vestLevel: number;
+	helmetLevel: number;
 }
 
 export interface MinObstacle {
@@ -60,6 +62,7 @@ export interface MinWeapon {
 export interface MinParticle {
 	id: string;
 	position: MinVec2;
+	size: number;
 }
 
 export interface MinTerrain {
@@ -70,6 +73,6 @@ export interface MinBuilding {
 	id: string;
 	position: MinVec2;
 	direction: MinVec2;
-	zones: { position: MinVec2, hitbox: MinHitbox }[];
+	zones: { position: MinVec2, hitbox: MinHitbox, map: boolean }[];
 	color?: number;
 }

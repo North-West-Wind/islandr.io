@@ -37,7 +37,8 @@ export enum GunColor {
 	CURSED = 12,
 	BUGLE = 13,
 }
-//for the reverse.
+
+// Gun color value name lookup
 export enum ReverseGunColour {
 	a0 = "9mm", // 9mm
 	a1 = "12 gauge", // 12 gauge

@@ -3,7 +3,8 @@ import { Line, Vec2 } from "../../types/math";
 import { LineTerrain } from "../../types/terrain";
 
 export default class Sea extends LineTerrain {
-	id = "sea";
+	static readonly ID = "sea";
+	id = Sea.ID;
 	border = 0;
 
 	// 0-3: top, right, bottom, left

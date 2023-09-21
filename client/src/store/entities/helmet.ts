@@ -18,7 +18,7 @@ class HelmetSupplier implements EntitySupplier {
 }
 
 export default class Helmet extends Entity {
-	static readonly helmetImages: (HTMLImageElement & { loaded: boolean })[] = Array(4).fill(undefined);
+	static readonly helmetImages: HTMLImageElement[] = Array(4).fill(undefined);
 	static readonly TYPE = "helmet";
 	name!: string
 	type = Helmet.TYPE;
@@ -51,10 +51,9 @@ export default class Helmet extends Entity {
 		ctx.fillStyle = "#00000066"; // <- alpha/opacity
 		circleFromCenter(ctx, 0, 0, radius, true, false);
 		const img = Helmet.helmetImages[this.level - 1];
-		if (!img?.loaded) {
+		if (!img?.complete) {
 			if (!img) {
-				const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-				image.onload = () => image.loaded = true;
+				const image = new Image();
 				image.src = getHelmetImagePath(this.level);
 				Helmet.helmetImages[this.level - 1] = image;
 			}

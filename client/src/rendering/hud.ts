@@ -86,7 +86,7 @@ function drawBackpack(player: FullPlayer, canvas: HTMLCanvasElement, ctx: Canvas
 	roundRect(ctx, (canvas.width + healthWidth) / 2 + padding, canvas.height - size - padding, size, size, padding / 2);
 	ctx.globalAlpha = 1;
 	const img = Backpack.backpackImages[player.inventory.backpackLevel - 1];
-	if (img?.loaded) ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 2, canvas.height - size, size - padding * 2, size - padding * 2);
+	if (img?.complete) ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 2, canvas.height - size, size - padding * 2, size - padding * 2);
 
 	ctx.fillStyle = "#fff";
 	ctx.font = `${canvas.height / 54}px Arial`;
@@ -105,7 +105,7 @@ function drawVest(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRend
 	roundRect(ctx, (canvas.width + healthWidth) / 2 + padding * 2 + size, canvas.height - size - padding, size, size, padding / 2);
 	ctx.globalAlpha = 1;
 	const img = Vest.vestImages[player.inventory.vestLevel - 1];
-	if (img?.loaded) ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 3 + size, canvas.height - size, size - padding * 2, size - padding * 2);
+	if (img?.complete) ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 3 + size, canvas.height - size, size - padding * 2, size - padding * 2);
 
 	ctx.fillStyle = "#fff";
 	ctx.font = `${canvas.height / 54}px Arial`;
@@ -124,7 +124,7 @@ function drawHelmet(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRe
 	roundRect(ctx, (canvas.width + healthWidth) / 2 + padding * 3 + size * 2, canvas.height - size - padding, size, size, padding / 2);
 	ctx.globalAlpha = 1;
 	const img = Helmet.helmetImages[player.inventory.helmetLevel- 1];
-	if (img?.loaded) ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 4 + size * 2, canvas.height - size, size - padding * 2, size - padding * 2);
+	if (img?.complete) ctx.drawImage(img, (canvas.width + healthWidth) / 2 + padding * 4 + size * 2, canvas.height - size, size - padding * 2, size - padding * 2);
 
 	ctx.fillStyle = "#fff";
 	ctx.font = `${canvas.height / 54}px Arial`;
