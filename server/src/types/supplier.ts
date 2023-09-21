@@ -1,5 +1,5 @@
 import { Roof, castCorrectObstacle } from "../store/obstacles";
-import { Floor, castCorrectTerrain } from "../store/terrains";
+import { castCorrectTerrain } from "../store/terrains";
 import Building from "./building";
 import { BuildingData, ObstacleData, TerrainData } from "./data";
 import { CommonAngles, Hitbox, Vec2 } from "./math";

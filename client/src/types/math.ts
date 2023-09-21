@@ -473,6 +473,10 @@ export enum CommonAngles {
 	TWO_PI = Math.PI * 2
 }
 
+export enum CommonNumbers {
+	SIN45 = Math.sin(CommonAngles.PI_FOUR)
+}
+
 export class Polygon {
 	points: Vec2[];
 

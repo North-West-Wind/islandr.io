@@ -1,5 +1,3 @@
-import { CommonAngle } from "./constants";
-
 // Promisified setTimeout
 export function wait(ms: number) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
@@ -42,6 +40,7 @@ export function twoDigits(num: number | string) {
 import { encode, decode } from "msgpack-lite";
 import { deflate, inflate } from "pako";
 import { ServerPacketResolvable, IPacket } from "./types/packet";
+import { CommonAngles } from "./types/math";
 // Send packet
 export function send(socket: WebSocket, packet: IPacket) {
   //socket.send(deflate(deflate(encode(packet).buffer)));
@@ -57,12 +56,12 @@ export function receive(msg: ArrayBuffer) {
 // Draws circle with x, y center
 export function circleFromCenter(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, fill = true, stroke = false) {
 	ctx.beginPath();
-	ctx.arc(x, y, radius, 0, CommonAngle.TWO_PI, false);
+	ctx.arc(x, y, radius, 0, CommonAngles.TWO_PI, false);
 	ctx.closePath();
 	if (fill) ctx.fill();
 	if (stroke) ctx.stroke();
 }
-export function strokeArc(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, start = 0, end = CommonAngle.TWO_PI, counter = false) {
+export function strokeArc(ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, start = 0, end = CommonAngles.TWO_PI, counter = false) {
 	ctx.beginPath();
 	ctx.arc(x, y, radius, start, end, counter);
 	ctx.stroke();

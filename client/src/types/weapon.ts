@@ -2,9 +2,9 @@ import { Player } from "../store/entities";
 import { MinWeapon } from "./minimized";
 import { Renderable } from "./extenstions";
 import { roundRect, circleFromCenter } from "../utils";
-import { CircleHitbox, Vec2 } from "./math";
+import { CircleHitbox, CommonAngles, CommonNumbers, Vec2 } from "./math";
 import { GunData, MeleeData } from "./data";
-import { CommonNumber, CommonAngle, GunColor } from "../constants";
+import { GunColor } from "../constants";
 import { DEFINED_ANIMATIONS } from "../store/animations";
 import { getBarrelImagePath } from "../textures";
 
@@ -39,12 +39,12 @@ export class MeleeWeapon extends Weapon {
 	render(player: Player, _canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
 		if (!this.currentFistImg.src) this.currentFistImg.src = "assets/images/game/fists/" + player.skin + ".svg";
 		const radius = scale * (<CircleHitbox> player.hitbox).radius;
-		const fistScale = radius * 1.2 * CommonNumber.SIN45;
+		const fistScale = radius * 1.2 * CommonNumbers.SIN45;
 		const fistExtend = Vec2.UNIT_X.scaleAll(fistScale);
 		const fists = [];
 		if (!MeleeWeapon.FIST_ANIMATIONS.some(a => player.animations.find(aa => aa.id == a))) {
-			fists.push(fistExtend.addVec(fistExtend.addAngle(CommonAngle.PI_TWO)));
-			fists.push(fistExtend.addVec(fistExtend.addAngle(-CommonAngle.PI_TWO)));
+			fists.push(fistExtend.addVec(fistExtend.addAngle(CommonAngles.PI_TWO)));
+			fists.push(fistExtend.addVec(fistExtend.addAngle(-CommonAngles.PI_TWO)));
 		} else {
 			for (const animation of player.animations) {
 				const anim = DEFINED_ANIMATIONS.get(animation.id);
@@ -60,7 +60,7 @@ export class MeleeWeapon extends Weapon {
 							break;
 						}
 					}
-					fists.push(fistExtend.addVec(fistExtend.addAngle(CommonAngle.PI_TWO * (-index * 2 + 1))));
+					fists.push(fistExtend.addVec(fistExtend.addAngle(CommonAngles.PI_TWO * (-index * 2 + 1))));
 				}
 			}
 		}

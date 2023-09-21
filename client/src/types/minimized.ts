@@ -60,8 +60,9 @@ export interface MinWeapon {
 }
 
 export interface MinParticle {
-	id: string;
+	type: string;
 	position: MinVec2;
+	size: number;
 }
 
 export interface MinTerrain {

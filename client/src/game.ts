@@ -7,7 +7,7 @@ import { FullPlayer, Healing } from "./store/entities";
 import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
 import { Floor, castCorrectTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket } from "./types/packet";
 import { World } from "./types/world";
 import { receive, send } from "./utils";
 import Building from "./types/building";
@@ -99,6 +99,8 @@ async function init(address: string) {
 						if (gamePkt.nextSafeZone) world.updateNextSafeZone(gamePkt.nextSafeZone);
 						if (!player) player = new FullPlayer(gamePkt.player);
 						else player.copy(gamePkt.player);
+						// Client side ticking
+						world.clientTick(player);
 						break;
 					}
 					case "map": {
@@ -127,6 +129,10 @@ async function init(address: string) {
 						world.sounds.set(id, { howl, pos });
 						howl.on("end", () => world.sounds.delete(id));
 						break;
+					}
+					case "particles": {
+						const partPkt = <ParticlesPacket>data;
+						world.addParticles(partPkt.particles);
 					}
 				}
 			}

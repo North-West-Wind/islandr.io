@@ -1,6 +1,7 @@
 import { Entity } from "./entity";
-import { MinEntity, MinObstacle, MinTerrain } from "./minimized";
+import { MinEntity, MinObstacle, MinParticle, MinTerrain } from "./minimized";
 import { Obstacle } from "./obstacle";
+import { Particle } from "./particle";
 import { Terrain } from "./terrain";
 import { Weapon } from "./weapon";
 
@@ -22,4 +23,8 @@ export interface TerrainSupplier extends Supplier<Terrain> {
 
 export interface WeaponSupplier extends Supplier<Weapon> {
 	create(...arg: any[]): Weapon;
+}
+
+export interface ParticleSupplier extends Supplier<Particle> {
+	create(minParticle: MinParticle & any): Particle;
 }
