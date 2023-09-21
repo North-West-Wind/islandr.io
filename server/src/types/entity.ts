@@ -110,6 +110,8 @@ export class Entity {
 	repelExplosions = false;
 	dirty = true;
 	potentialKiller?: string;
+	// Particle type to emit when damaged
+	damageParticle?: string;
 
 	constructor() {
 		this.id = ID();

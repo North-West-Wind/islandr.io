@@ -10,7 +10,7 @@ export abstract class Particle {
 	position: Vec2;
 	size: number;
 	ended = false;
-	zIndex = 0;
+	zIndex = 10;
 
 	constructor(minParticle: MinParticle) {
 		this.position = Vec2.fromMinVec2(minParticle.position);

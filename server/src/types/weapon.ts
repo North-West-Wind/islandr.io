@@ -8,6 +8,7 @@ import { CircleHitbox, Hitbox, Vec2 } from "./math";
 import { MinWeapon } from "./minimized";
 import { Obstacle } from "./obstacle";
 import { BulletStats, GunData, MeleeData, TracerData } from "./data";
+import { Particle } from "./particle";
 
 export enum WeaponType {
 	MELEE = "melee",
@@ -85,6 +86,7 @@ export class MeleeWeapon extends Weapon {
 			for (const thing of combined)
 				if (thing.collided(dummy) && thing.id != attacker.id) {
 					thing.damage(this.damage, attacker.id);
+					if (thing.damageParticle) world.particles.push(new Particle(thing.damageParticle, position, 0.25));
 					
 					if (!this.cleave) break;
 				}
