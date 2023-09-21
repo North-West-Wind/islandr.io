@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@700&display=swap');
+
 html {
     height: 100%;
 }
 
 body {
-    font-family: 'Jura', Arial, Helvetica, sans-serif;
+    font-family: "Jura", Arial, Helvetica, sans-serif;
     background-image: url('../../assets/images/menu/background.png');
     background-size: cover;
     background-repeat: no-repeat;
