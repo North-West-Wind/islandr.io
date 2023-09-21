@@ -28,13 +28,6 @@ export class PingPacket implements IPacket {
 	type = "ping";
 }
 
-export class CurrencyUpdatePacket implements IPacket{
-	type = "currencyupdatepacket";
-	updationAmount: number;
-	constructor(updationAmount: number){
-		this.updationAmount = updationAmount
-	}
-}
 // Packet to notify movement key press
 export class MovementPressPacket implements IPacket {
 	type = "movementpress";
