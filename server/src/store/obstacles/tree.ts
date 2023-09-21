@@ -31,7 +31,7 @@ export default class Tree extends Obstacle {
 	
 	damage(dmg: number) {
 		super.damage(dmg);
-		world.onceSounds.push({ path: `obstacle/hit/wood/wood_hit_01.mp3`, position: this.position });
+		world.onceSounds.push({ path: `obstacles/tree_hit.mp3`, position: this.position });
 	}
 
 	die() {
@@ -44,7 +44,7 @@ export default class Tree extends Obstacle {
 				break;
 			}
 		}
-		world.onceSounds.push({ path: "objects/tree_break.mp3", position: this.position });
+		world.onceSounds.push({ path: "obstacles/tree_break.mp3", position: this.position });
 	}
 
 	minimize() {
