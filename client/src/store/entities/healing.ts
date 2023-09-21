@@ -17,7 +17,7 @@ class HealingSupplier implements EntitySupplier {
 }
 
 export default class Healing extends Entity {
-	static readonly healingImages = new Map<string, HTMLImageElement & { loaded: boolean }>();
+	static readonly healingImages = new Map<string, HTMLImageElement>();
 	static mapping: string[];
 	static readonly TYPE = "healing";
 	type = Healing.TYPE;
@@ -63,10 +63,9 @@ export default class Healing extends Entity {
 		ctx.fillStyle = "#00000066"; // <- alpha/opacity
 		circleFromCenter(ctx, 0, 0, radius, true, false);
 		const img = Healing.healingImages.get(this.name);
-		if (!img?.loaded) {
+		if (!img?.complete) {
 			if (!img) {
-				const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-				image.onload = () => image.loaded = true;
+				const image = new Image();
 				image.src = getHealingImagePath(this.nameId);
 				Healing.healingImages.set(this.name, image);
 			}

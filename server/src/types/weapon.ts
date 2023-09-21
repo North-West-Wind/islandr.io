@@ -2,14 +2,12 @@ import { world } from "..";
 import { GLOBAL_UNIT_MULTIPLIER, TICKS_PER_SECOND } from "../constants";
 import { Bullet } from "../store/entities";
 import { GunColor } from "./misc";
-import { randomBetween, send, toRadians } from "../utils";
+import { randomBetween, toRadians } from "../utils";
 import { Entity } from "./entity";
 import { CircleHitbox, Hitbox, Vec2 } from "./math";
 import { MinWeapon } from "./minimized";
 import { Obstacle } from "./obstacle";
 import { BulletStats, GunData, MeleeData, TracerData } from "./data";
-import {sockets} from "../index"
-import { CurrencyUpdatePacket } from "./packet";
 
 export enum WeaponType {
 	MELEE = "melee",

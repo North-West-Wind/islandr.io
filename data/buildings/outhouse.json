@@ -5,19 +5,19 @@
 			"hitbox": [7, 0.5],
 			"color": 2908887295,
 			"__color": "(comment) 2908887295 is 0xad6218ff",
-			"position": [0, -3]
+			"position": [0, -3.25]
 		},
 		{
 			"type": "wall",
 			"hitbox": [2, 0.5],
 			"color": 2908887295,
-			"position": [-2.5, 3]
+			"position": [-2.5, 3.25]
 		},
 		{
 			"type": "wall",
 			"hitbox": [2, 0.5],
 			"color": 2908887295,
-			"position": [2.5, 3]
+			"position": [2.5, 3.25]
 		},
 		{
 			"type": "wall",
@@ -39,25 +39,35 @@
 	"zones": [
 		{
 			"position": [0, 0],
-			"hitbox": [6, 6]
+			"hitbox": [6, 6],
+			"map": true
+		},
+		{
+			"position": [0, 4],
+			"hitbox": [2, 2]
 		}
 	],
 	"mapColor": 2942442751,
 	"floors": [
 		{
-			"type": "line",
-			"speed": 1,
-			"damage": 0,
-			"interval": 0,
-			"position": [0, 0]
+			"type": "floor",
+			"size": [8, 7],
+			"position": [0, 0],
+			"texture": {
+				"path": "dynamic/wooden.svg",
+				"horizontalFill": 2
+			}
 		}
 	],
 	"roofs": [
 		{
 			"type": "roof",
-			"hitbox": [7, 6.5],
-			"position": [0, 0],
-			"color": 2942442751
+			"hitbox": [8, 8.5],
+			"position": [0, 0.5],
+			"color": 2942442751,
+			"texture": {
+				"path": "fixed/outhouse.svg"
+			}
 		}
 	]
 }

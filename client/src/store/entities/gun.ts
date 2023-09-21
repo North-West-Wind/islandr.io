@@ -19,7 +19,7 @@ class GunSupplier implements EntitySupplier {
 }
 
 export default class Gun extends Entity {
-	static readonly gunImages = new Map<string, HTMLImageElement & { loaded: boolean }>();
+	static readonly gunImages = new Map<string, HTMLImageElement>();
 	static readonly TYPE = "gun";
 	type = Gun.TYPE;
 	name!: string;
@@ -52,10 +52,9 @@ export default class Gun extends Entity {
 		ctx.fillStyle = `#${Ammo.colorScheme[this.color][2]}66`;
 		circleFromCenter(ctx, 0, 0, radius, true, false);
 		const img = Gun.gunImages.get(this.name);
-		if (!img?.loaded) {
+		if (!img?.complete) {
 			if (!img) {
-				const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-				image.onload = () => image.loaded = true;
+				const image = new Image();
 				image.src = getWeaponImagePath(this.name);
 				Gun.gunImages.set(this.name, image);
 			}

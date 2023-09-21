@@ -17,7 +17,7 @@ class GrenadeSupplier implements EntitySupplier {
 }
 
 export default class Grenade extends Entity {
-	static readonly grenadeImages = new Map<string, HTMLImageElement & { loaded: boolean }>();
+	static readonly grenadeImages = new Map<string, HTMLImageElement>();
 	static readonly TYPE = "grenade";
 	type = Grenade.TYPE;
 	// Used for rendering Grenade size
@@ -49,10 +49,9 @@ export default class Grenade extends Entity {
 		ctx.fillStyle = "#00000066"; // <- alpha/opacity
 		circleFromCenter(ctx, 0, 0, radius, true, false);
 		const img = Grenade.grenadeImages.get(this.name);
-		if (!img?.loaded) {
+		if (!img?.complete) {
 			if (!img) {
-				const image: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-				image.onload = () => image.loaded = true;
+				const image = new Image();
 				image.src = getWeaponImagePath(this.name);
 				Grenade.grenadeImages.set(this.name, image);
 			}

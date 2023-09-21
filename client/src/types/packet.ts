@@ -1,4 +1,4 @@
-import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2, MinBuilding, MinCircleHitbox } from "./minimized";
+import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2, MinBuilding, MinCircleHitbox, MinParticle } from "./minimized";
 import { MovementDirection } from "./misc";
 
 export interface IPacket {
@@ -28,13 +28,6 @@ export class PingPacket implements IPacket {
 	type = "ping";
 }
 
-export class CurrencyUpdatePacket implements IPacket{
-	type = "currencyupdatepacket";
-	updationAmount: number;
-	constructor(updationAmount: number){
-		this.updationAmount = updationAmount
-	}
-}
 // Packet to notify movement key press
 export class MovementPressPacket implements IPacket {
 	type = "movementpress";
@@ -156,4 +149,9 @@ export class SoundPacket implements IPacket {
 	position!: MinVec2;
 }
 
-export type ServerPacketResolvable = AckPacket | GamePacket | MapPacket | SoundPacket;
+export class ParticlesPacket implements IPacket {
+	type = "particles";
+	particles!: MinParticle[];
+}
+
+export type ServerPacketResolvable = AckPacket | GamePacket | MapPacket | SoundPacket | ParticlesPacket;

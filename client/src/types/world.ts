@@ -1,18 +1,21 @@
 import { castCorrectEntity, FullPlayer } from "../store/entities";
 import { Entity } from "./entity";
 import { CircleHitbox, Vec2 } from "./math";
-import { MinCircleHitbox, MinEntity, MinObstacle, MinVec2 } from "./minimized";
+import { MinCircleHitbox, MinEntity, MinObstacle, MinParticle, MinVec2 } from "./minimized";
 import { Obstacle } from "./obstacle";
 import { castCorrectObstacle } from "../store/obstacles";
 import { Howl } from "howler";
 import Building from "./building";
 import { Terrain } from "./terrain";
+import { DummyParticle, Particle } from "./particle";
+import { castCorrectParticle } from "../store/particles";
 
 export class World {
 	size: Vec2;
 	entities: Entity[] = [];
 	obstacles: Obstacle[] = [];
 	buildings: Building[] = [];
+	particles: Particle[] = [];
 	defaultTerrain: Terrain;
 	terrains: Terrain[] = [];
 	aliveCount: Number = 0;
@@ -31,6 +34,7 @@ export class World {
 			const relative = sound.pos.addVec(player.position.inverse()).scaleAll(1 / 60);
 			sound.howl.pos(relative.x, relative.y);
 		}
+		this.particles = this.particles.filter(p => !p.ended);
 	}
 
 	updateEntities(entities: MinEntity[], discardEntities: string[] = []) {
@@ -76,5 +80,9 @@ export class World {
 	updateNextSafeZone(nextSafeZone: { hitbox: MinCircleHitbox; position: MinVec2; }) {
 		this.nextSafeZone.hitbox = CircleHitbox.fromMinCircleHitbox(nextSafeZone.hitbox);
 		this.nextSafeZone.position = Vec2.fromMinVec2(nextSafeZone.position);
+	}
+
+	addParticles(minParticles: MinParticle[]) {
+		this.particles.push(...minParticles.map(p => castCorrectParticle(p)).filter(p => p.id !== DummyParticle.TYPE));
 	}
 }

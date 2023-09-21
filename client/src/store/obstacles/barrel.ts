@@ -5,12 +5,10 @@ import { circleFromCenter } from "../../utils";
 import { ObstacleSupplier } from "../../types/supplier";
 import { OBSTACLE_SUPPLIERS } from ".";
 
-const barrelImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-barrelImg.onload = () => barrelImg.loaded = true;
+const barrelImg = new Image();
 barrelImg.src = "assets/images/game/objects/barrel.svg";
 
-const barrelResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-barrelResidueImg.onload = () => barrelResidueImg.loaded = true;
+const barrelResidueImg = new Image();
 barrelResidueImg.src = "assets/images/game/objects/residues/barrel.svg";
 
 class BarrelSupplier implements ObstacleSupplier {
@@ -30,7 +28,7 @@ export default class Barrel extends Obstacle {
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void {
-		if (!barrelImg.loaded || !barrelResidueImg.loaded) return;
+		if (!barrelImg.complete || !barrelResidueImg.complete) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());

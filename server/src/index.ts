@@ -6,7 +6,7 @@ import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
 import { CommonAngles, Vec2 } from "./types/math";
 import { Player } from "./store/entities";
 import { World } from "./types/world";
-import { Plain, Pond, River, Sea } from "./store/terrains";
+import { Floor, Plain, Pond, River, Sea } from "./store/terrains";
 import { Tree, Bush, Crate, Stone, Barrel } from "./store/obstacles";
 import { BUILDING_SUPPLIERS } from "./store/buildings";
 
@@ -116,7 +116,7 @@ server.on("connection", async socket => {
 	player.boost *= 1.5;
 
 	// Send the player the entire map
-	send(socket, new MapPacket(world.obstacles, world.buildings, world.terrains));
+	send(socket, new MapPacket(world.obstacles, world.buildings, world.terrains.concat(...world.buildings.map(b => b.floors.map(fl => fl.terrain)))));
 	// Send the player initial objects
 	send(socket, new GamePacket(world.entities, world.obstacles.concat(...world.buildings.map(b => b.obstacles.map(o => o.obstacle))), player, world.playerCount, true));
 	// Send the player music

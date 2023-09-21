@@ -5,12 +5,10 @@ import { circleFromCenter } from "../../utils";
 import { ObstacleSupplier } from "../../types/supplier";
 import { OBSTACLE_SUPPLIERS } from ".";
 
-const bushImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-bushImg.onload = () => bushImg.loaded = true;
+const bushImg = new Image();
 bushImg.src = "assets/images/game/objects/bush.svg";
 
-const bushResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-bushResidueImg.onload = () => bushResidueImg.loaded = true;
+const bushResidueImg = new Image();
 bushResidueImg.src = "assets/images/game/objects/residues/bush.svg";
 
 class BushSupplier implements ObstacleSupplier {
@@ -30,7 +28,7 @@ export default class Bush extends Obstacle {
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void {
-		if (!bushImg.loaded || !bushResidueImg.loaded) return;
+		if (!bushImg.complete || !bushResidueImg.complete) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());

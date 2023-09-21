@@ -1,6 +1,7 @@
-import { CommonAngle, KeyBind } from "../constants";
+import { KeyBind } from "../constants";
 import { getTPS } from "../game";
 import { FullPlayer } from "../store/entities";
+import { CommonAngles } from "../types/math";
 import { circleFromCenter, roundRect, strokeArc } from "../utils";
 
 export function drawPrompt(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
@@ -49,7 +50,7 @@ function drawCircleLoading(remain: number, max: number, message: string, canvas:
 	ctx.strokeStyle = "#fff";
 	ctx.globalAlpha = 1;
 	ctx.lineWidth = size / 4;
-	strokeArc(ctx, canvas.width / 2, canvas.height / 2 - yOffset, size * 2 - ctx.lineWidth / 2, -CommonAngle.PI_TWO, -CommonAngle.PI_TWO + CommonAngle.TWO_PI * (max - remain) / max);
+	strokeArc(ctx, canvas.width / 2, canvas.height / 2 - yOffset, size * 2 - ctx.lineWidth / 2, -CommonAngles.PI_TWO, -CommonAngles.PI_TWO + CommonAngles.TWO_PI * (max - remain) / max);
 	ctx.fillStyle = "#fff";
 	ctx.fillText((remain / getTPS()).toFixed(2) + "s", canvas.width / 2, canvas.height / 2 - yOffset);
 	

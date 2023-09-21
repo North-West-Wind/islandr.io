@@ -5,12 +5,10 @@ import { circleFromCenter } from "../../utils";
 import { ObstacleSupplier } from "../../types/supplier";
 import { OBSTACLE_SUPPLIERS } from ".";
 
-const toiletImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-toiletImg.onload = () => toiletImg.loaded = true;
+const toiletImg = new Image();
 toiletImg.src = "assets/images/game/objects/toilet.svg";
 
-const toiletResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
-toiletResidueImg.onload = () => toiletResidueImg.loaded = true;
+const toiletResidueImg = new Image();
 toiletResidueImg.src = "assets/images/game/objects/residues/toilet.svg";
 
 class ToiletSupplier implements ObstacleSupplier {
@@ -30,7 +28,7 @@ export default class Toilet extends Obstacle {
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void {
-		if (!toiletImg.loaded || !toiletResidueImg.loaded) return;
+		if (!toiletImg.complete || !toiletResidueImg.complete) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());

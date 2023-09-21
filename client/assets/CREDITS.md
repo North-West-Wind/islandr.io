@@ -5,13 +5,15 @@
 - `images/game/objects/stone.svg` (modified by NorthWestWind: svg attributes)
 - `images/game/objects/tree.svg` (modified by NorthWestWind: svg attributes)
 
+### DaPoyo (from Discord)
+- `images/game/textures/fixed/outhouse.svg` (modified by NorthWestWind: dimension)
+
 ### Darkside (from Discord)
 - `images/game/loots/backpacks/1.svg`
 - `images/game/loots/backpacks/2.svg`
 - `images/game/loots/backpacks/3.svg`
 
 - `images/game/objects/bush.svg` (modified by NorthWestWind: position)
-
 
 ### Leo. (from Discord)
 - `images/game/guns/ak47.svg` (modified by NorthWestWind: rotation)
