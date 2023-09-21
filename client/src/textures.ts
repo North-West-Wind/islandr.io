@@ -18,9 +18,12 @@ export function getVestImagePath(level: number) {
 	return `assets/images/game/loots/proc-items/vest-level-${level}.svg`;
 }
 
-
 export function getHealingImagePath(id: string) {
 	return `assets/images/game/loots/healings/${id}.svg`;
+}
+
+export function getParticleImagePath(id: string) {
+	return `assets/images/game/particles/${id}.svg`;
 }
 
 const tracerColors = new Map<string, TracerColor>();

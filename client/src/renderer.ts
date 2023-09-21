@@ -13,6 +13,7 @@ import { Healing } from "./store/entities";
 
 import "./homepage";
 import { checkLoggedIn } from "./homepage";
+import { Particle } from "./types/particle";
 
 const canvas = <HTMLCanvasElement> document.getElementById("game");
 canvas.width = window.innerWidth;
@@ -64,8 +65,8 @@ function animate(currentTime: number) {
 			world.terrains.filter(t => t.aboveTerrainLine).forEach(terrain => terrain.render(player, canvas, ctx, scale));
 			
 			// Draw obstacles and entities
-			var combined: (Entity | Obstacle)[] = [];
-			combined = combined.concat(world.entities, world.obstacles);
+			var combined: (Entity | Obstacle | Particle)[] = [];
+			combined = combined.concat(world.entities, world.obstacles, world.particles);
 			combined.push(player);
 			// Sort them by zIndex. Higher = Above
 			combined = combined.sort((a, b) => a.zIndex - b.zIndex);

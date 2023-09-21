@@ -5,7 +5,8 @@ import { ParticleSupplier } from "../../types/supplier";
 export const PARTICLE_SUPPLIERS = new Map<string, ParticleSupplier>();
 
 export { default as Wood } from "./wood";
+export { default as Ripple } from "./ripple";
 
 export function castCorrectParticle(minParticle: MinParticle) {
-	return PARTICLE_SUPPLIERS.get(minParticle.type)?.create(minParticle) || new DummyParticle(minParticle);
+	return PARTICLE_SUPPLIERS.get(minParticle.id)?.create(minParticle) || new DummyParticle(minParticle);
 }

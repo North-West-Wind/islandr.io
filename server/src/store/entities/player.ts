@@ -5,9 +5,11 @@ import { PickupableEntity } from "../../types/extensions";
 import { CircleHitbox, Vec2 } from "../../types/math";
 import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
+import { Particle } from "../../types/particle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { changeCurrency, spawnAmmo, spawnGun } from "../../utils";
 import { Roof } from "../obstacles";
+import { Pond, River, Sea } from "../terrains";
 import Backpack from "./backpack";
 import Healing from "./healing";
 import Helmet from "./helmet";
@@ -43,6 +45,8 @@ export default class Player extends Entity {
 	deathImg: string | null;
 	// Track zone damage ticks
 	zoneDamageTicks = 2 * TICKS_PER_SECOND;
+	// Track ripple particle ticks
+	rippleTicks = 0;
 
 	// Server-side only
 	accessToken?: string;
@@ -109,6 +113,14 @@ export default class Player extends Entity {
 			}
 		}
 		super.tick(entities, obstacles);
+		// Terrain particle
+		const terrain = world.terrainAtPos(this.position);
+		if ([Pond.ID, River.ID, Sea.ID].includes(terrain.id)) {
+			if (this.rippleTicks <= 0) {
+				world.particles.push(new Particle("ripple", this.position, 0.5));
+				this.rippleTicks = 30;
+			} else if (this.velocity.magnitudeSqr() != 0) this.rippleTicks--;
+		}
 		// Check for entity hitbox intersection
 		let breaked = false;
 		for (const entity of entities) {

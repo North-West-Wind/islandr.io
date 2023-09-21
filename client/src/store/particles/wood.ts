@@ -1,6 +1,6 @@
 import { PARTICLE_SUPPLIERS } from ".";
 import { MinParticle } from "../../types/minimized";
-import { FadeParticle, Particle, TextureFadeParticle } from "../../types/particle";
+import { TextureFadeParticle } from "../../types/particle";
 import { ParticleSupplier } from "../../types/supplier";
 
 type AdditionalParticle = {
@@ -14,11 +14,15 @@ class WoodSupplier implements ParticleSupplier {
 }
 
 export default class Wood extends TextureFadeParticle {
-	static readonly TYPE = "wood";
-	type = Wood.TYPE;
+	static readonly ID = "wood";
+	id = Wood.ID;
 	texture = "wood";
 
+	constructor(minParticle: MinParticle) {
+		super(Object.assign(minParticle, { duration: 1000, fadeStart: 1000 }));
+	}
+
 	static {
-		PARTICLE_SUPPLIERS.set(Wood.TYPE, new WoodSupplier());
+		PARTICLE_SUPPLIERS.set(Wood.ID, new WoodSupplier());
 	}
 }

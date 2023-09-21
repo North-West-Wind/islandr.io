@@ -34,12 +34,7 @@ export class World {
 			const relative = sound.pos.addVec(player.position.inverse()).scaleAll(1 / 60);
 			sound.howl.pos(relative.x, relative.y);
 		}
-		const pending: Particle[] = [];
-		for (const particle of this.particles) {
-			particle.clientTick();
-			if (!particle.ended) pending.push(particle);
-		}
-		this.particles = pending;
+		this.particles = this.particles.filter(p => !p.ended);
 	}
 
 	updateEntities(entities: MinEntity[], discardEntities: string[] = []) {
@@ -88,6 +83,6 @@ export class World {
 	}
 
 	addParticles(minParticles: MinParticle[]) {
-		this.particles.push(...minParticles.map(p => castCorrectParticle(p)).filter(p => p.type !== DummyParticle.TYPE));
+		this.particles.push(...minParticles.map(p => castCorrectParticle(p)).filter(p => p.id !== DummyParticle.TYPE));
 	}
 }
