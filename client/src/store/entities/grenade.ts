@@ -7,7 +7,7 @@ import { circleFromCenter } from "../../utils";
 import Player from "./player";
 
 interface AdditionalEntity {
-	name: string;
+	nameId: string;
 }
 
 class GrenadeSupplier implements EntitySupplier {
@@ -21,7 +21,7 @@ export default class Grenade extends Entity {
 	static readonly TYPE = "grenade";
 	type = Grenade.TYPE;
 	// Used for rendering Grenade size
-	name!: string;
+	nameId!: string;
 	zIndex = 8;
 
 	constructor(minEntity: MinEntity & AdditionalEntity) {
@@ -35,7 +35,7 @@ export default class Grenade extends Entity {
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
-		this.name = minEntity.name;
+		this.nameId = minEntity.nameId;
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
@@ -48,18 +48,18 @@ export default class Grenade extends Entity {
 		circleFromCenter(ctx, 0, 0, radius, false, true);
 		ctx.fillStyle = "#00000066"; // <- alpha/opacity
 		circleFromCenter(ctx, 0, 0, radius, true, false);
-		const img = Grenade.grenadeImages.get(this.name);
+		const img = Grenade.grenadeImages.get(this.nameId);
 		if (!img?.complete) {
 			if (!img) {
 				const image = new Image();
-				image.src = getWeaponImagePath(this.name);
-				Grenade.grenadeImages.set(this.name, image);
+				image.src = getWeaponImagePath(this.nameId);
+				Grenade.grenadeImages.set(this.nameId, image);
 			}
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
 			ctx.fillStyle = "#fff";
 			ctx.font = `${canvas.height / 54}px Arial`;
-			ctx.fillText(this.name, 0, 0);
+			ctx.fillText(this.nameId, 0, 0);
 		} else
 			ctx.drawImage(img, -0.6*radius, -0.6*radius, 1.2*radius, 1.2*radius);
 		ctx.resetTransform();

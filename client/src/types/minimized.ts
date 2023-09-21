@@ -55,8 +55,7 @@ export interface MinMinObstacle {
 }
 
 export interface MinWeapon {
-	id: string;
-	name: string;
+	nameId: string;
 }
 
 export interface MinParticle {

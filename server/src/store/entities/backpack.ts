@@ -5,14 +5,12 @@ import Player from "./player";
 
 export default class Backpack extends Item {
 	type = "backpack";
-	name: string;
 	hitbox = new CircleHitbox(1);
 	level: number;
 
 	constructor(level: number) {
 		super();
 		this.level = level;
-		this.name = `Level ${this.level} backpack`
 	}
 
 	picked(player: Player) {
@@ -26,8 +24,12 @@ export default class Backpack extends Item {
 			world.entities.push(backpack);
 		}
 		player.inventory.backpackLevel = this.level;
-		world.onceSounds.push({"path": "item_usage/backpack_wear.mp3", "position": this.position})
+		world.onceSounds.push({ path: "item_usage/backpack_wear.mp3", position: this.position })
 		return true;
+	}
+
+	translationKey() {
+		return `${super.translationKey()} ${this.level}`;
 	}
 
 	minimize() {

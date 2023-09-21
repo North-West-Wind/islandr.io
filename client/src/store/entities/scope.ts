@@ -7,7 +7,6 @@ import Player from "./player";
 
 interface AdditionalEntity {
 	zoom: number;
-	name: string;
 }
 
 class ScopeSupplier implements EntitySupplier {
@@ -18,7 +17,6 @@ class ScopeSupplier implements EntitySupplier {
 
 export default class Scope extends Entity {
 	static readonly TYPE = "scope";
-	name!: string
 	type = Scope.TYPE;
 	zoom!: number;
 	zIndex = 8;
@@ -34,7 +32,6 @@ export default class Scope extends Entity {
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
-		this.name = minEntity.name;
 		this.zoom = minEntity.zoom;
 	}
 

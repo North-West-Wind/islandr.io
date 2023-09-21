@@ -40,7 +40,7 @@ export default class Tree extends Obstacle {
 			case "mosin": {
 				const mosin = <GunWeapon>WEAPON_SUPPLIERS.get("mosin_nagant")?.create();
 				if (mosin)
-					spawnGun(mosin.id, mosin.color, this.position, mosin.ammo);
+					spawnGun(mosin.nameId, mosin.color, this.position, mosin.ammo);
 				break;
 			}
 		}

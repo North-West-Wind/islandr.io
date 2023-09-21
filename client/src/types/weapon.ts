@@ -16,12 +16,10 @@ export enum WeaponType {
 
 export abstract class Weapon implements MinWeapon, Renderable {
 	type!: WeaponType;
-	id: string;
-	name: string;
+	nameId: string;
 
-	constructor(id: string, name: string) {
-		this.id = id;
-		this.name = name;
+	constructor(nameId: string) {
+		this.nameId = nameId;
 	}
 
 	abstract render(player: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void;
@@ -32,8 +30,8 @@ export class MeleeWeapon extends Weapon {
 	type = WeaponType.MELEE;
 	static readonly FIST_ANIMATIONS = ["left_fist", "right_fist"];
 
-	constructor(id: string, data: MeleeData) {
-		super(id, data.name);
+	constructor(nameId: string, _data: MeleeData) {
+		super(nameId);
 	}
 
 	render(player: Player, _canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
@@ -89,8 +87,8 @@ export class GunWeapon extends Weapon {
 	hasBarrelImage: boolean;
 	magazine: number;
 
-	constructor(id: string, data: GunData, magazine = 0) {
-		super(id, data.name);
+	constructor(nameId: string, data: GunData, magazine = 0) {
+		super(nameId);
 		this.color = data.color;
 		this.length = data.length;
 		this.hasBarrelImage = data.visuals.hasBarrelImage;
@@ -108,12 +106,12 @@ export class GunWeapon extends Weapon {
 		if (!this.hasBarrelImage)
 			roundRect(ctx, player.hitbox.comparable * scale, -0.15 * scale, this.length * scale, 0.3 * scale, 0.15 * scale, true, true);
 		else {
-			const img = GunWeapon.barrelImages.get(this.id);
+			const img = GunWeapon.barrelImages.get(this.nameId);
 			if (!img?.complete) {
 				if (!img) {
 					const image = new Image();
-					image.src = getBarrelImagePath(this.id);
-					GunWeapon.barrelImages.set(this.id, image);
+					image.src = getBarrelImagePath(this.nameId);
+					GunWeapon.barrelImages.set(this.nameId, image);
 				}
 				roundRect(ctx, player.hitbox.comparable * scale, -0.15 * scale, this.length * scale, 0.3 * scale, 0.15 * scale, true, true);
 			} else

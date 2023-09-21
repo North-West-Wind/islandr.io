@@ -7,7 +7,6 @@ import * as fs from "fs";
 export default class Helmet extends Item {
 	static readonly HELMET_REDUCTION: number[] = [];
 	type = "helmet";
-	name: string;
 	hitbox = new CircleHitbox(1);
 	level: number;
 
@@ -18,7 +17,6 @@ export default class Helmet extends Item {
 	constructor(level: number) {
 		super();
 		this.level = level;
-		this.name = `Level ${this.level} Helmet`
 	}
 
 	picked(player: Player) {
@@ -34,6 +32,10 @@ export default class Helmet extends Item {
 		player.inventory.helmetLevel = this.level;
 		world.onceSounds.push({ "path": "item_usage/helmet_wear.mp3", "position": this.position })
 		return true;
+	}
+
+	translationKey() {
+		return `${super.translationKey()} ${this.level}`;
 	}
 
 	minimize() {

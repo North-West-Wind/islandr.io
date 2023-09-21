@@ -8,7 +8,7 @@ import { circleFromCenter } from "../../utils";
 import Player from "./player";
 
 interface AdditionalEntity {
-	name: string;
+	nameId: string;
 	color: GunColor;
 }
 
@@ -22,7 +22,7 @@ export default class Gun extends Entity {
 	static readonly gunImages = new Map<string, HTMLImageElement>();
 	static readonly TYPE = "gun";
 	type = Gun.TYPE;
-	name!: string;
+	nameId!: string;
 	color!: GunColor;
 	zIndex = 8;
 
@@ -37,7 +37,7 @@ export default class Gun extends Entity {
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
-		this.name = minEntity.name;
+		this.nameId = minEntity.nameId;
 		this.color = minEntity.color;
 	}
 
@@ -51,18 +51,18 @@ export default class Gun extends Entity {
 		circleFromCenter(ctx, 0, 0, radius, false, true);
 		ctx.fillStyle = `#${Ammo.colorScheme[this.color][2]}66`;
 		circleFromCenter(ctx, 0, 0, radius, true, false);
-		const img = Gun.gunImages.get(this.name);
+		const img = Gun.gunImages.get(this.nameId);
 		if (!img?.complete) {
 			if (!img) {
 				const image = new Image();
-				image.src = getWeaponImagePath(this.name);
-				Gun.gunImages.set(this.name, image);
+				image.src = getWeaponImagePath(this.nameId);
+				Gun.gunImages.set(this.nameId, image);
 			}
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
 			ctx.fillStyle = "#fff";
 			ctx.font = `${canvas.height / 54}px Arial`;
-			ctx.fillText(this.name, 0, 0);
+			ctx.fillText(this.nameId, 0, 0);
 		} else
 			ctx.drawImage(img, -0.7*radius, -0.7*radius, 1.4*radius, 1.4*radius);
 		ctx.resetTransform();

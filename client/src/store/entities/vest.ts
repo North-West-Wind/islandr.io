@@ -8,7 +8,6 @@ import { getVestImagePath } from "../../textures";
 
 interface AdditionalEntity {
 	level: number;
-	name: string;
 }
 
 class VestSupplier implements EntitySupplier {
@@ -20,7 +19,6 @@ class VestSupplier implements EntitySupplier {
 export default class Vest extends Entity {
 	static readonly vestImages: HTMLImageElement[] = Array(4).fill(undefined);
 	static readonly TYPE = "vest";
-	name!: string
 	type = Vest.TYPE;
 	level!: number;
 	zIndex = 8;
@@ -36,7 +34,6 @@ export default class Vest extends Entity {
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
-		this.name = minEntity.name;
 		this.level = minEntity.level;
 	}
 

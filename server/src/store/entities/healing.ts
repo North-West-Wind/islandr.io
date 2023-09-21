@@ -11,14 +11,12 @@ export default class Healing extends Item {
 	type = "healing";
 	hitbox = new CircleHitbox(1);
 	nameId: string; // healing item ID, but id was taken for entity already
-	name: string;
 	amount: number;
 
 	constructor(nameId: string, amount: number) {
 		super();
 		this.nameId = nameId;
 		this.amount = amount;
-		this.name = this.nameId;
 	}
 
 	static {
@@ -41,6 +39,10 @@ export default class Healing extends Item {
 			return false;
 		}
 		return true;
+	}
+
+	translationKey() {
+		return `${super.translationKey()}.${this.nameId} ${this.amount}`;
 	}
 
 	minimize() {

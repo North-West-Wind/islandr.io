@@ -45,7 +45,6 @@ export interface TracerData {
 export type GunData = {
 	[key: string]: Partial<GunStats>
 } & {
-	name: string
 	color: GunColor
 	ammo: number
 	dual: boolean
@@ -85,7 +84,6 @@ interface MeleeStats {
 export type MeleeData = {
 	[key: string]: Partial<MeleeStats>
 } & {
-	name: string
 	reflective?: boolean
 	auto?: boolean
 	droppable: boolean
@@ -127,7 +125,6 @@ export type LootTableData = {
 }
 
 export type HealingData = {
-	name: string;
 	heal: number;
 	boost: number;
 	time: number;

@@ -8,7 +8,6 @@ import Player from "./player";
 
 interface AdditionalEntity {
 	level: number;
-	name: string;
 }
 
 class HelmetSupplier implements EntitySupplier {
@@ -20,7 +19,6 @@ class HelmetSupplier implements EntitySupplier {
 export default class Helmet extends Entity {
 	static readonly helmetImages: HTMLImageElement[] = Array(4).fill(undefined);
 	static readonly TYPE = "helmet";
-	name!: string
 	type = Helmet.TYPE;
 	level!: number;
 	zIndex = 8;
@@ -36,7 +34,6 @@ export default class Helmet extends Entity {
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
-		this.name = minEntity.name;
 		this.level = minEntity.level;
 	}
 

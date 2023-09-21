@@ -87,7 +87,7 @@ class LootTable {
 						const weapon = supplier.create();
 						if (weapon.type != WeaponType.GUN) break;
 						const gun = <GunWeapon>weapon;
-						const entity = new Gun(gun.id, gun.color);
+						const entity = new Gun(gun.nameId, gun.color);
 						const halfAmmo = Math.round(gun.ammo / 2);
 						const ammo0 = new Ammo(halfAmmo, gun.color);
 						const ammo1 = new Ammo(gun.ammo - halfAmmo, gun.color);
@@ -104,7 +104,7 @@ class LootTable {
 					if (supplier) {
 						const weapon = supplier.create();
 						if (weapon.type != WeaponType.GRENADE) break;
-						entities.push(new Grenade((<GrenadeWeapon>weapon).id, result.amount));
+						entities.push(new Grenade((<GrenadeWeapon>weapon).nameId, result.amount));
 					}
 					break;
 				}

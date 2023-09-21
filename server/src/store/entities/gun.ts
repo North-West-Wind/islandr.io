@@ -11,13 +11,13 @@ import Player from "./player";
 export default class Gun extends Item {
 	type = "gun";
 	hitbox = new CircleHitbox(2);
-	name: string; // Gun ID, but id was taken for entity already
+	nameId: string; // Gun ID, but id was taken for entity already
 	color: GunColor;
 
-	constructor(name: string, color: GunColor) {
+	constructor(nameId: string, color: GunColor) {
 		super();
-		if (!WEAPON_SUPPLIERS.has(name)) console.warn("Creating a gun entity that doesn't have a supplier for its type");
-		this.name = name;
+		if (!WEAPON_SUPPLIERS.has(nameId)) console.warn("Creating a gun entity that doesn't have a supplier for its type");
+		this.nameId = nameId;
 		this.color = color;
 	}
 
@@ -25,7 +25,7 @@ export default class Gun extends Item {
 		// Loop through gun slots to see if there's an empty slot
 		for (let ii = 0; ii < 3; ii++) {
 			if (!player.inventory.getWeapon(ii)) {
-				player.inventory.setWeapon(castCorrectWeapon(this.name), ii);
+				player.inventory.setWeapon(castCorrectWeapon(this.nameId), ii);
 				// If player is holding a melee weapon, automatically switch to the gun
 				if (player.inventory.holding == 2)
 					player.inventory.holding = ii;
@@ -37,17 +37,21 @@ export default class Gun extends Item {
 		if (player.inventory.holding >= 2) return false;
 		// Spawn swapped weapon
 		const weapon = <GunWeapon>player.inventory.getWeapon();
-		const gun = new Gun(weapon.id, weapon.color);
+		const gun = new Gun(weapon.nameId, weapon.color);
 		gun.position = this.position;
 		gun.velocity = Vec2.UNIT_X.addAngle(Math.random() * CommonAngles.TWO_PI).scaleAll(0.025);
 		world.entities.push(gun);
 		// Swap the player's weapon on hand with the one on ground
-		player.inventory.setWeapon(castCorrectWeapon(this.name));
+		player.inventory.setWeapon(castCorrectWeapon(this.nameId));
 		return true;
+	}
+
+	translationKey() {
+		return `${super.translationKey()}.${this.nameId}`;
 	}
 
 	minimize() {
 		const min = super.minimize();
-		return Object.assign(min, { name: this.name, color: this.color });
+		return Object.assign(min, { nameId: this.nameId, color: this.color });
 	}
 }

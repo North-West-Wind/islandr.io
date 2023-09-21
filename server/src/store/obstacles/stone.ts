@@ -40,7 +40,7 @@ export default class Stone extends Obstacle {
 			case "ak47": {
 				const ak47 = <GunWeapon>WEAPON_SUPPLIERS.get("mosin_nagant")?.create();
 				if (ak47)
-					spawnGun(ak47.id, ak47.color, this.position, ak47.ammo);
+					spawnGun(ak47.nameId, ak47.color, this.position, ak47.ammo);
 			}
 		}
 		world.onceSounds.push({ path: `obstacles/stone_break.mp3`, position: this.position });

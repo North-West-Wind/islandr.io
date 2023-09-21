@@ -18,17 +18,15 @@ export enum WeaponType {
 
 export abstract class Weapon {
 	type!: WeaponType;
-	id: string;
-	name: string;
+	nameId: string;
 	lock: number;
 	moveSpeed: number;
 	attackSpeed: number;
 	auto: boolean;
 	droppable: boolean;
 
-	constructor(id: string, name: string, lock: number, moveSpeed: number, attackSpeed: number, auto: boolean, droppable: boolean) {
-		this.id = id;
-		this.name = name;
+	constructor(nameId: string, lock: number, moveSpeed: number, attackSpeed: number, auto: boolean, droppable: boolean) {
+		this.nameId = nameId;
 		this.lock = lock;
 		this.moveSpeed = moveSpeed;
 		this.attackSpeed = attackSpeed;
@@ -39,7 +37,7 @@ export abstract class Weapon {
 	abstract attack(attacker: Entity, entities: Entity[], obstacles: Obstacle[]): void;
 
 	minimize() {
-		return <MinWeapon>{ id: this.id, name: this.name };
+		return <MinWeapon>{ nameId: this.nameId };
 	}
 }
 
@@ -53,8 +51,8 @@ export class MeleeWeapon extends Weapon {
 	cleave: boolean;
 	sounds: { swing: string };
 
-	constructor(id: string, data: MeleeData) {
-		super(id, data.name, (data.normal.cooldown / 1000) * TICKS_PER_SECOND, data.normal.speed.equip, data.normal.speed.attack, data.auto || false, data.droppable);
+	constructor(nameId: string, data: MeleeData) {
+		super(nameId, (data.normal.cooldown / 1000) * TICKS_PER_SECOND, data.normal.speed.equip, data.normal.speed.attack, data.auto || false, data.droppable);
 		this.offset = new Vec2(data.normal.offset.x, data.normal.offset.y).scaleAll(GLOBAL_UNIT_MULTIPLIER);
 		this.hitbox = new CircleHitbox(data.normal.radius);
 		this.damage = data.normal.damage;
@@ -112,8 +110,8 @@ export class GunWeapon extends Weapon {
 	// Actual variables
 	magazine = 0;
 
-	constructor(id: string, data: GunData) {
-		super(id, data.name, (data.normal.delay.firing / 1000) * TICKS_PER_SECOND, data.normal.speed.equip, data.normal.speed.attack, data.auto || false, data.droppable);
+	constructor(nameId: string, data: GunData) {
+		super(nameId, (data.normal.delay.firing / 1000) * TICKS_PER_SECOND, data.normal.speed.equip, data.normal.speed.attack, data.auto || false, data.droppable);
 		this.color = data.color;
 		this.ammo = data.ammo;
 		this.bullets = data.normal.bullets;
@@ -150,8 +148,8 @@ export class GrenadeWeapon extends Weapon {
 	type = WeaponType.GRENADE;
 	// Bullet speed. Unit: x units/tick
 
-	constructor(id: string, name: string) {
-		super(id, name, 0, 13, 13, false, true);
+	constructor(nameId: string) {
+		super(nameId, 0, 13, 13, false, true);
 	}
 
 
