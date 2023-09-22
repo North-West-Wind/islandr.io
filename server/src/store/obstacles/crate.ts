@@ -45,7 +45,7 @@ export default class Crate extends Obstacle {
 
 	damage(dmg: number) {
 		super.damage(dmg);
-		world.onceSounds.push({ path: `obstacles/crate_hit.mp3`, position: this.position });
+		world.onceSounds.push({ path: `objects/wood/wood_break.mp3`, position: this.position });
 	}
 
 	die() {
@@ -72,7 +72,7 @@ export default class Crate extends Obstacle {
 				return e;
 			}));
 		}
-		world.onceSounds.push({ path: "obstacles/crate_break.mp3", position: this.position });
+		world.onceSounds.push({ path: "objects/wood/crate_break.mp3", position: this.position });
 	}
 
 	minimize() {

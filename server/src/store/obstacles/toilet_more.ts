@@ -6,14 +6,14 @@ import { ObstacleSupplier } from "../../types/supplier";
 import { ObstacleData } from "../../types/data"; 
 import { OBSTACLE_SUPPLIERS } from ".";
 
-class ToiletSupplier extends ObstacleSupplier {
+class ToiletMoreSupplier extends ObstacleSupplier {
 	make(data: ObstacleData) {
-		return new Toilet();
+		return new ToiletMore();
 	}
 }
-export default class Toilet extends Obstacle {
-	static readonly TYPE = "toilet";
-	type = Toilet.TYPE;
+export default class ToiletMore extends Obstacle {
+	static readonly TYPE = "toilet_more";
+	type = ToiletMore.TYPE;
 
 	constructor() {
 		const hitbox = new CircleHitbox(1.2);
@@ -21,7 +21,7 @@ export default class Toilet extends Obstacle {
 	}
 
 	static {
-		OBSTACLE_SUPPLIERS.set(Toilet.TYPE, new ToiletSupplier());
+		OBSTACLE_SUPPLIERS.set(ToiletMore.TYPE, new ToiletMoreSupplier());
 	}
 
 	damage(dmg: number) {
@@ -31,7 +31,7 @@ export default class Toilet extends Obstacle {
 
 	die() {
 		super.die();
-		const entities = LOOT_TABLES.get("toilet")?.roll();
+		const entities = LOOT_TABLES.get("toilet_more")?.roll();
 		if (entities) {
 			world.entities.push(...entities.map(e => {
 				e.position = this.position;

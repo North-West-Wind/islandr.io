@@ -173,6 +173,8 @@ export class FullPlayer extends Player {
 	maxHealTicks!: number;
 	onTopOfLoot!: string | null;
 	currentHealItem!: string | null;
+	skin!: string | null;
+	deathImg!: string | null;
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
@@ -188,5 +190,7 @@ export class FullPlayer extends Player {
 		this.maxReloadTicks = minEntity.maxReloadTicks;
 		this.healTicks = minEntity.healTicks;
 		this.maxHealTicks = minEntity.maxHealTicks;
+		this.skin = minEntity.skin;
+		this.deathImg = minEntity.deathImg;
 	}
 }

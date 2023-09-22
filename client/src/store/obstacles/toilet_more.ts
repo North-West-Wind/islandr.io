@@ -5,30 +5,32 @@ import { circleFromCenter } from "../../utils";
 import { ObstacleSupplier } from "../../types/supplier";
 import { OBSTACLE_SUPPLIERS } from ".";
 
-const toiletImg = new Image();
-toiletImg.src = "assets/images/game/objects/toilet.svg";
+const toiletImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+toiletImg.onload = () => toiletImg.loaded = true;
+toiletImg.src = "assets/images/game/objects/toilet_more.svg";
 
-const toiletResidueImg = new Image();
+const toiletResidueImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
+toiletResidueImg.onload = () => toiletResidueImg.loaded = true;
 toiletResidueImg.src = "assets/images/game/objects/residues/toilet.svg";
 
-class ToiletSupplier implements ObstacleSupplier {
+class ToiletMoreSupplier implements ObstacleSupplier {
 	create(minObstacle: MinObstacle) {
-		return new Toilet(minObstacle);
+		return new ToiletMore(minObstacle);
 	}
 }
 
 // Toilet
-export default class Toilet extends Obstacle {
-	static readonly TYPE = "toilet";
-	type = Toilet.TYPE;
+export default class ToiletMore extends Obstacle {
+	static readonly TYPE = "toilet_more";
+	type = ToiletMore.TYPE;
 	zIndex = 9;
 
 	static {
-		OBSTACLE_SUPPLIERS.set(Toilet.TYPE, new ToiletSupplier());
+		OBSTACLE_SUPPLIERS.set(ToiletMore.TYPE, new ToiletMoreSupplier());
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void {
-		if (!toiletImg.complete || !toiletResidueImg.complete) return;
+		if (!toiletImg.loaded || !toiletResidueImg.loaded) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());

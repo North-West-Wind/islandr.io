@@ -111,7 +111,6 @@ function setLoggedIn(username: string) {
 		if (res.ok) document.getElementById("currency")!.innerHTML = `Currency: ${(await res.json()).currency}`;
 	});
 }
-
 function setLoggedOut(username?: string) {
 	document.getElementById("account")!.innerHTML = `
 	<h1>Login / Sign up</h1>
@@ -138,9 +137,12 @@ function setLoggedOut(username?: string) {
 					if (cookieExists("gave_me_cookies")) {
 						setCookie({ name: "username", value: username });
 						setCookie({ name: "access_token", value: (await res.json()).accessToken });
+						setToken(getCookieValue("access_token"));
+						console.log("From setcookie accesstoken" + getCookieValue("access_token"));
 					} else {
 						setUsername(username);
 						setToken((await res.json()).accessToken);
+						console.log("From gettoken" + getToken());
 					}
 					setLoggedIn(username);
 				}
