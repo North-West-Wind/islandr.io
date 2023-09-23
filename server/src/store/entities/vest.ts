@@ -7,7 +7,6 @@ import Player from "./player";
 export default class Vest extends Item {
 	static readonly VEST_REDUCTION: number[] = [];
 	type = "vest";
-	name: string;
 	hitbox = new CircleHitbox(1);
 	level: number;
 
@@ -19,7 +18,6 @@ export default class Vest extends Item {
 	constructor(level: number) {
 		super();
 		this.level = level;
-		this.name = ` Level ${this.level} Vest`
 	}
 
 	picked(player: Player) {
@@ -35,6 +33,10 @@ export default class Vest extends Item {
 		player.inventory.vestLevel = this.level;
 		world.onceSounds.push({"path": "item_usage/vest_wear.mp3", "position": this.position})
 		return true;
+	}
+
+	translationKey() {
+		return `${super.translationKey()} ${this.level}`;
 	}
 
 	minimize() {

@@ -6,8 +6,8 @@ import { GunWeapon, MeleeWeapon, Weapon } from "../../types/weapon";
 export const WEAPON_SUPPLIERS = new Map<string, WeaponSupplier>();
 
 export { default as FragGrenade } from "./grenades/frag_grenade";
-export function castCorrectWeapon(id: string): Weapon {
-	return WEAPON_SUPPLIERS.get(id)?.create() || WEAPON_SUPPLIERS.get("fists")!.create();
+export function castCorrectWeapon(nameId: string): Weapon {
+	return WEAPON_SUPPLIERS.get(nameId)?.create() || WEAPON_SUPPLIERS.get("fists")!.create();
 }
 
 class MeleeSupplier implements WeaponSupplier {

@@ -6,7 +6,6 @@ import { EntitySupplier } from "../../types/supplier";
 import { circleFromCenter } from "../../utils";
 
 interface AdditionalEntity {
-	name: string;
 	nameId: string;
 }
 
@@ -23,7 +22,6 @@ export default class Healing extends Entity {
 	type = Healing.TYPE;
 	// Used for rendering Grenade size
 	nameId!: string;
-	name!: string;
 	zIndex = 8;
 
 	constructor(minEntity: MinEntity & AdditionalEntity) {
@@ -48,7 +46,6 @@ export default class Healing extends Entity {
 
 	copy(minEntity: MinEntity & AdditionalEntity) {
 		super.copy(minEntity);
-		this.name = minEntity.name;
 		this.nameId = minEntity.nameId;
 	}
 
@@ -62,18 +59,18 @@ export default class Healing extends Entity {
 		circleFromCenter(ctx, 0, 0, radius, false, true);
 		ctx.fillStyle = "#00000066"; // <- alpha/opacity
 		circleFromCenter(ctx, 0, 0, radius, true, false);
-		const img = Healing.healingImages.get(this.name);
+		const img = Healing.healingImages.get(this.nameId);
 		if (!img?.complete) {
 			if (!img) {
 				const image = new Image();
 				image.src = getHealingImagePath(this.nameId);
-				Healing.healingImages.set(this.name, image);
+				Healing.healingImages.set(this.nameId, image);
 			}
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
 			ctx.fillStyle = "#fff";
 			ctx.font = `${canvas.height / 54}px Arial`;
-			ctx.fillText(this.name, 0, 0);
+			ctx.fillText(this.nameId, 0, 0);
 		} else
 			ctx.drawImage(img, -0.7*radius, -0.7*radius, 1.4*radius, 1.4*radius);
 		ctx.resetTransform();

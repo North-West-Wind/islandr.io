@@ -7,8 +7,8 @@ export const WEAPON_SUPPLIERS = new Map<string, WeaponSupplier>();
 
 export { default as FragGrenade } from "./grenades/frag_grenade";
 
-export function castCorrectWeapon(minWeapon: MinWeapon & any, magazine = 0) {
-	return WEAPON_SUPPLIERS.get(minWeapon.id)?.create(magazine) || WEAPON_SUPPLIERS.get("fists")!.create();
+export function castCorrectWeapon(minWeapon: MinWeapon, magazine = 0) {
+	return WEAPON_SUPPLIERS.get(minWeapon.nameId)?.create(magazine) || WEAPON_SUPPLIERS.get("fists")!.create();
 }
 
 class MeleeSupplier implements WeaponSupplier {

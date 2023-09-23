@@ -31,7 +31,7 @@ export default class Tree extends Obstacle {
 	
 	damage(dmg: number) {
 		super.damage(dmg);
-		world.onceSounds.push({ path: `obstacle/wood/wood_hit_01.mp3`, position: this.position });
+		world.onceSounds.push({ path: `objects/wood/wood_hit_01.mp3`, position: this.position });
 	}
 
 	die() {
@@ -40,11 +40,11 @@ export default class Tree extends Obstacle {
 			case "mosin": {
 				const mosin = <GunWeapon>WEAPON_SUPPLIERS.get("mosin_nagant")?.create();
 				if (mosin)
-					spawnGun(mosin.id, mosin.color, this.position, mosin.ammo);
+					spawnGun(mosin.nameId, mosin.color, this.position, mosin.ammo);
 				break;
 			}
 		}
-		world.onceSounds.push({ path: "objects/tree_break.mp3", position: this.position });
+		world.onceSounds.push({ path: "obstacles/tree_break.mp3", position: this.position });
 	}
 
 	minimize() {

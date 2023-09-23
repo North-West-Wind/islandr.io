@@ -104,8 +104,8 @@ export default class Player extends Entity {
 		const weapon = this.inventory.getWeapon()!;
 		//if weapon == undef then do not reset speed
 		if(weapon){
-			if (weapon.name != this.lastHolding) {
-				this.lastHolding = weapon.name;
+			if (weapon.nameId != this.lastHolding) {
+				this.lastHolding = weapon.nameId;
 				// Allows sniper switching
 				this.attackLock = 0;
 				this.maxReloadTicks = this.reloadTicks = 0;
@@ -127,7 +127,7 @@ export default class Player extends Entity {
 		for (const entity of entities) {
 			if (entity.hitbox.inside(this.position, entity.position, entity.direction) && (<any>entity)['picked']) {
 				this.canInteract = true;
-				this.onTopOfLoot = entity.name;
+				this.onTopOfLoot = entity.translationKey();
 				// Only interact when trying
 				if (this.tryInteracting) {
 					this.canInteract = false;
@@ -240,7 +240,7 @@ export default class Player extends Entity {
 		for (const weapon of this.inventory.weapons) {
 			if (weapon?.droppable) {
 				if (weapon instanceof GunWeapon) {
-					spawnGun(weapon.id, weapon.color, this.position, weapon.magazine);
+					spawnGun(weapon.nameId, weapon.color, this.position, weapon.magazine);
 					// spawnAmmo(weapon.magazine, weapon.color, this.position);
 				}
 			}
@@ -289,7 +289,7 @@ export default class Player extends Entity {
 		const weapon = this.inventory.getWeapon();
 		if (weapon?.type != WeaponType.GUN) return;
 		const gun = <GunWeapon>weapon;
-		world.onceSounds.push({ path: "guns/" + gun.name + "_reload.mp3", position: this.position })
+		world.onceSounds.push({ path: `guns/${gun.nameId}_reload.mp3`, position: this.position })
 		if (!this.inventory.ammos[gun.color] || gun.magazine == gun.capacity) return;
 		this.maxReloadTicks = this.reloadTicks = gun.reloadTicks;
 		this.markDirty();
@@ -299,9 +299,9 @@ export default class Player extends Entity {
 		if (this.maxHealTicks) return;
 		if (!this.inventory.healings[item]) return;
 		if (this.health >= this.maxHealth && !Healing.healingData.get(item)?.boost) return;
-		world.onceSounds.push({ "path": `item_usage/${item}.mp3`, position: this.position })
+		world.onceSounds.push({ path: `item_usage/${item}.mp3`, position: this.position })
 		this.maxHealTicks = this.healTicks = Healing.healingData.get(item)!.time * TICKS_PER_SECOND / 1000;
-		this.currentHealItem = item;
+		this.currentHealItem = `entity.healing.${item}`;
 		this.healItem = item;
 		this.markDirty();
 	}

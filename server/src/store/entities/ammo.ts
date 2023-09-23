@@ -1,12 +1,11 @@
 import { Inventory } from "../../types/entity";
 import { CircleHitbox, Vec2 } from "../../types/math";
-import { GunColor, ReverseGunColour } from "../../types/misc";
+import { GunColor } from "../../types/misc";
 import Item from "./item";
 import Player from "./player";
 
 export default class Ammo extends Item {
 	type = "ammo";
-	name: string;
 	hitbox = new CircleHitbox(1);
 	amount: number;
 	color: GunColor;
@@ -15,8 +14,6 @@ export default class Ammo extends Item {
 		super();
 		this.amount = amount;
 		this.color = color;
-		
-		this.name = `${ReverseGunColour[`a${this.color}`]} (${this.amount})`;
 	}
 
 	picked(player: Player) {
@@ -29,6 +26,10 @@ export default class Ammo extends Item {
 			return false;
 		}
 		return true;
+	}
+
+	translationKey() {
+		return `${super.translationKey()}.${this.color} ${this.amount}`;
 	}
 
 	minimize() {

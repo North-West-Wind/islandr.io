@@ -89,7 +89,6 @@ export class Inventory {
 
 export class Entity {
 	id: string;
-	name = "";
 	type = "";
 	position: Vec2;
 	velocity: Vec2 = Vec2.ZERO;
@@ -110,10 +109,11 @@ export class Entity {
 	repelExplosions = false;
 	dirty = true;
 	potentialKiller?: string;
+	// Particle type to emit when damaged
+	damageParticle?: string;
 
 	constructor() {
 		this.id = ID();
-		if (!this.name) this.name = this.type
 		// Currently selects a random position to spawn. Will change in the future.
 		this.position = world.size.scale(Math.random(), Math.random());
 	}
@@ -185,6 +185,10 @@ export class Entity {
 		this.despawn = true;
 		this.health = 0;
 		this.markDirty();
+	}
+
+	translationKey() {
+		return `entity.${this.type}`;
 	}
 
 	markDirty() {

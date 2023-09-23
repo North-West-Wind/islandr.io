@@ -23,6 +23,8 @@ export class Obstacle {
 	despawn = false;
 	animations: string[] = [];
 	dirty = true;
+	// Particle type to emit when damaged
+	damageParticle?: string;
 
 	constructor(world: World, baseHitbox: Hitbox, minHitbox: Hitbox, health: number, maxHealth: number, direction?: Vec2) {
 		if (baseHitbox.type !== minHitbox.type) throw new Error("Hitboxes are not the same type!");
