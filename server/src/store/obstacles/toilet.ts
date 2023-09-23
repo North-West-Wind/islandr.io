@@ -26,7 +26,7 @@ export default class Toilet extends Obstacle {
 
 	damage(dmg: number) {
 		super.damage(dmg);
-		world.onceSounds.push({ path: `objects/toilet/toilet_hit.mp3`, position: this.position });
+		world.onceSounds.push({ path: `obstacles/toilet_hit.mp3`, position: this.position });
 	}
 
 	die() {
@@ -38,6 +38,6 @@ export default class Toilet extends Obstacle {
 				return e;
 			}));
 		}
-		world.onceSounds.push({ path: `objects/toilet/toilet_break.mp3`, position: this.position });
+		world.onceSounds.push({ path: `obstacles/toilet_break.mp3`, position: this.position });
 	}
 }

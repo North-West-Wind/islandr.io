@@ -45,6 +45,6 @@ var username: string;
 export function getUsername() { return username; }
 export function setUsername(u: string) { return username = u; }
 
-export var  token: string | undefined;
+var token: string | undefined;
 export function getToken() { return token; }
-export function setToken(t?: string) { token = t; return token = t; }
+export function setToken(t?: string) { return token = t; }

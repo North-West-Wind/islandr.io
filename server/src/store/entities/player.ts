@@ -1,6 +1,5 @@
 import { world } from "../..";
 import { GLOBAL_UNIT_MULTIPLIER, TICKS_PER_SECOND } from "../../constants";
-//import { updateUserScore } from "../../currencyUpdate";
 import { Entity, Inventory } from "../../types/entity";
 import { PickupableEntity } from "../../types/extensions";
 import { CircleHitbox, Vec2 } from "../../types/math";
@@ -273,15 +272,13 @@ export default class Player extends Entity {
 			world.entities.push(item);
 		}
 		world.playerDied();
-		// Add currency to user if they are logged in and have kills
+		// Add kill count to killer
 		if (this.potentialKiller) {
 			const entity = world.entities.find(e => e.id == this.potentialKiller);
 			if (entity?.type === this.type) (<Player>entity).killCount++;
-			console.log("sup boi", this.killCount)
 		}
-		if (this.accessToken && this.killCount) { changeCurrency(this.accessToken, this.killCount * 100); console.log("success") }
-		console.log(this.killCount, this.potentialKiller, typeof this.potentialKiller);
-		// Add kill count to killer
+		// Add currency to user if they are logged in and have kills
+		if (this.accessToken && this.killCount) changeCurrency(this.accessToken, this.killCount * 100);
 	}
 
 	reload() {

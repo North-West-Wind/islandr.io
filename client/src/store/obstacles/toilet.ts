@@ -32,8 +32,7 @@ export default class Toilet extends Obstacle {
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
-		var imageToRender = toiletImg
-		const img = this.despawn ? toiletResidueImg : imageToRender;
+		const img = this.despawn ? toiletResidueImg : toiletImg;
 		// Times 2 because radius * 2 = diameter
 		const width = scale * this.hitbox.comparable * 2, height = width * img.naturalWidth / img.naturalHeight;
 		ctx.drawImage(img, -width / 2, -height / 2, width, height);
