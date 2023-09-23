@@ -54,10 +54,10 @@
 	],
 	"roofs": [
 		{
-			"type": "customRoof",
+			"type": "roof",
 			"hitbox": [7, 6.5],
 			"position": [0, 0],
-			"imagePath": "buildings/shack.svg"
+			"imagePath": "assets/images/game/buildings/shack.svg"
 		}
 	]
 }
