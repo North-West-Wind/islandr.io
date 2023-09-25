@@ -2,13 +2,19 @@ import { world } from "../..";
 import { RectHitbox, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 import { LOOT_TABLES } from "../../types/loot_table";
-import { ObstacleSupplier } from "../../types/supplier";
-import { ObstacleData } from "../../types/data";
-import { OBSTACLE_SUPPLIERS, Roof } from ".";
+import { MapObstacleSupplier, ObstacleSupplier } from "../../types/supplier";
+import { MapObstacleData, ObstacleData } from "../../types/data";
+import { MAP_OBSTACLE_SUPPLIERS, OBSTACLE_SUPPLIERS } from ".";
 
 class CrateSupplier extends ObstacleSupplier {
 	make(data: ObstacleData) {
 		return new Crate(data.special || "normal");
+	}
+}
+
+class CrateMapObstacleSupplier extends MapObstacleSupplier {
+	make(data: MapObstacleData) {
+		return new Crate(data.args ? data.args[0] : "normal");
 	}
 }
 
@@ -41,6 +47,7 @@ export default class Crate extends Obstacle {
 
 	static {
 		OBSTACLE_SUPPLIERS.set(Crate.TYPE, new CrateSupplier());
+		MAP_OBSTACLE_SUPPLIERS.set(Crate.TYPE, new CrateMapObstacleSupplier());
 	}
 
 	damage(dmg: number) {

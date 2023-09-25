@@ -1,7 +1,15 @@
+import { MAP_TERRAIN_SUPPLIERS } from ".";
 import { world } from "../..";
 import { Vec2 } from "../../types/math";
+import { MapTerrainSupplier } from "../../types/supplier";
 import { DotTerrain } from "../../types/terrain";
 import { randomBetween } from "../../utils";
+
+class PondMapTerrainSupplier extends MapTerrainSupplier {
+	make() {
+		return new Pond();
+	}
+}
 
 export default class Pond extends DotTerrain {
 	static readonly ID = "pond";
@@ -11,6 +19,10 @@ export default class Pond extends DotTerrain {
 	constructor() {
 		const radius = randomBetween(10, 20);
 		super(0.8, 0, 0, new Vec2(randomBetween(radius + 2, world.size.x - radius), randomBetween(radius + 2, world.size.y - radius)), radius);
+	}
+
+	static {
+		MAP_TERRAIN_SUPPLIERS.set(Pond.ID, new PondMapTerrainSupplier());
 	}
 
 	minimize() {

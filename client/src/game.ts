@@ -4,7 +4,7 @@ import { start, stop } from "./renderer";
 import { initMap } from "./rendering/map";
 import { addKeyPressed, addMousePressed, getToken, isKeyPressed, isMenuHidden, isMouseDisabled, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap, toggleMouseDisabled } from "./states";
 import { FullPlayer, Healing } from "./store/entities";
-import { castCorrectObstacle, castMinObstacle } from "./store/obstacles";
+import { castObstacle, castMinObstacle } from "./store/obstacles";
 import { Floor, castCorrectTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
 import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket } from "./types/packet";
@@ -109,7 +109,7 @@ async function init(address: string) {
 						console.log("packet terrains:", mapPkt.terrains);
 						world.terrains = mapPkt.terrains.map(ter => castCorrectTerrain(ter));
 						console.log("terrains:" , world.terrains);
-						world.obstacles = mapPkt.obstacles.map(obs => castCorrectObstacle(castMinObstacle(obs)));
+						world.obstacles = mapPkt.obstacles.map(obs => castObstacle(castMinObstacle(obs)));
 						world.buildings = mapPkt.buildings.map(bui => new Building(bui));
 						initMap();
 						//Show player count once game starts

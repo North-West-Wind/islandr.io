@@ -17,6 +17,6 @@ export { default as Vest } from "./vest";
 export { default as Helmet} from "./helmet"
 
 // This still need hard-coding unfortunately
-export function castCorrectEntity(minEntity: MinEntity & any) {
+export function castEntity(minEntity: MinEntity & any) {
 	return ENTITY_SUPPLIERS.get(minEntity.type)?.create(minEntity) || new DummyEntity(minEntity);
 }

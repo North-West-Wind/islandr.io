@@ -1,14 +1,14 @@
-import { castCorrectEntity, FullPlayer } from "../store/entities";
+import { castEntity, FullPlayer } from "../store/entities";
 import { Entity } from "./entity";
 import { CircleHitbox, Vec2 } from "./math";
 import { MinCircleHitbox, MinEntity, MinObstacle, MinParticle, MinVec2 } from "./minimized";
 import { Obstacle } from "./obstacle";
-import { castCorrectObstacle } from "../store/obstacles";
+import { castObstacle } from "../store/obstacles";
 import { Howl } from "howler";
 import Building from "./building";
 import { Terrain } from "./terrain";
 import { DummyParticle, Particle } from "./particle";
-import { castCorrectParticle } from "../store/particles";
+import { castParticle } from "../store/particles";
 
 export class World {
 	size: Vec2;
@@ -47,7 +47,7 @@ export class World {
 		}
 		for (const entity of entities) {
 			const existing = this.entities.find(e => e.id == entity.id);
-			if (!existing) pending.push(castCorrectEntity(entity));
+			if (!existing) pending.push(castEntity(entity));
 		}
 		this.entities = pending;
 	}
@@ -62,7 +62,7 @@ export class World {
 		}
 		for (const obstacle of obstacles) {
 			const existing = this.obstacles.find(o => o.id == obstacle.id);
-			if (!existing) pending.push(castCorrectObstacle(obstacle));
+			if (!existing) pending.push(castObstacle(obstacle));
 		}
 		this.obstacles = pending;
 	}
@@ -83,6 +83,6 @@ export class World {
 	}
 
 	addParticles(minParticles: MinParticle[]) {
-		this.particles.push(...minParticles.map(p => castCorrectParticle(p)).filter(p => p.id !== DummyParticle.TYPE));
+		this.particles.push(...minParticles.map(p => castParticle(p)).filter(p => p.id !== DummyParticle.TYPE));
 	}
 }

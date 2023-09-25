@@ -162,3 +162,35 @@ export type TextureData = {
 	path: string;
 	horizontalFill?: number;
 }
+
+export type MapTerrainData = {
+	id: string;
+	position?: number[];
+	direction?: number[];
+	amount?: number;
+	args?: any[];
+}
+
+export type MapBuildingData = {
+	id: string;
+	position?: number[];
+	direction?: number[];
+	amount?: number;
+	includeTerrains?: string[];
+}
+
+export type MapObstacleData = {
+	type: string;
+	position?: number[];
+	direction?: number[];
+	amount?: number;
+	args?: any[];
+}
+
+export type MapData = {
+	size: number[];
+	defaultTerrain: string;
+	terrains: MapTerrainData[];
+	buildings: MapBuildingData[];
+	obstacles: MapObstacleData[];
+}
