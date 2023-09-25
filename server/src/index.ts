@@ -7,7 +7,8 @@ import { DIRECTION_VEC, TICKS_PER_SECOND } from "./constants";
 import { CommonAngles, Vec2 } from "./types/math";
 import { Player } from "./store/entities";
 import { World } from "./types/world";
-import { castMapTerrain } from "./store/terrains";
+import { MapTerrainSupplier } from "./types/supplier";
+import { Plain, castMapTerrain } from "./store/terrains";
 import { castMapObstacle } from "./store/obstacles";
 import { castBuilding } from "./store/buildings";
 import { MapData } from "./types/data";
@@ -27,7 +28,7 @@ export function reset(map = "regular") {
 	
 	const mapData = <MapData>JSON.parse(readFileSync(`../data/maps/${map}.json`, { encoding: "utf8" }));
 
-	world = new World(Vec2.fromArray(mapData.size), castMapTerrain({ id: mapData.defaultTerrain })!);
+	world = new World(Vec2.fromArray(mapData.size), castMapTerrain({ id: mapData.defaultTerrain }) || new Plain());
 	// Add terrains
 	let ii: number;
 	for (const data of mapData.terrains) {

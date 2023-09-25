@@ -1,5 +1,3 @@
-import { Roof, castObstacle } from "../store/obstacles";
-import { castTerrain } from "../store/terrains";
 import Building from "./building";
 import { BuildingData, MapObstacleData, MapTerrainData, ObstacleData, TerrainData } from "./data";
 import { CommonAngles, Hitbox, Vec2 } from "./math";
@@ -27,6 +25,35 @@ export abstract class ObstacleSupplier implements Supplier<Obstacle> {
 	}
 }
 
+export interface TerrainSupplier extends Supplier<Terrain> {
+	create(data: TerrainData): Terrain;
+}
+
+export abstract class MapTerrainSupplier implements Supplier<Terrain> {
+	abstract make(data: MapTerrainData): Terrain;
+
+	create(data: MapTerrainData) {
+		const terrain = this.make(data);
+		if (data.position) terrain.setPosition(Vec2.fromArray(data.position));
+		if (data.direction) terrain.setDirection(Vec2.fromArray(data.direction));
+		return terrain;
+	}
+}
+
+export abstract class MapObstacleSupplier implements Supplier<Obstacle> {
+	abstract make(data: MapObstacleData): Obstacle;
+
+	create(data: MapObstacleData) {
+		const obstacle = this.make(data);
+		if (data.position) obstacle.position = Vec2.fromArray(data.position);
+		if (data.direction) obstacle.direction = Vec2.fromArray(data.direction);
+		return obstacle;
+	}
+}
+
+// This must be put below MapTerrainSupplier
+import { castTerrain } from "../store/terrains";
+import { Roof, castObstacle } from "../store/obstacles";
 export class BuildingSupplier implements Supplier<Building> {
 	id: string;
 	data: BuildingData;
@@ -63,31 +90,5 @@ export class BuildingSupplier implements Supplier<Building> {
 		building.setDirection(direction);
 		building.color = this.data.mapColor;
 		return building;
-	}
-}
-
-export interface TerrainSupplier extends Supplier<Terrain> {
-	create(data: TerrainData): Terrain;
-}
-
-export abstract class MapTerrainSupplier implements Supplier<Terrain> {
-	abstract make(data: MapTerrainData): Terrain;
-
-	create(data: MapTerrainData) {
-		const terrain = this.make(data);
-		if (data.position) terrain.setPosition(Vec2.fromArray(data.position));
-		if (data.direction) terrain.setDirection(Vec2.fromArray(data.direction));
-		return terrain;
-	}
-}
-
-export abstract class MapObstacleSupplier implements Supplier<Obstacle> {
-	abstract make(data: MapObstacleData): Obstacle;
-
-	create(data: MapObstacleData) {
-		const obstacle = this.make(data);
-		if (data.position) obstacle.position = Vec2.fromArray(data.position);
-		if (data.direction) obstacle.direction = Vec2.fromArray(data.direction);
-		return obstacle;
 	}
 }
