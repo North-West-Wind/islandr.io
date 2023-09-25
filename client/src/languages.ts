@@ -18,7 +18,7 @@ export function translate(lang: string, key: string | null, ...args: any[]) {
 	if (mapping[key]) {
 		let translated = mapping[key];
 		for (const arg of args) translated = translated.replace("%?", arg);
-		return translated.replace(/\%\?/g, "");
+		return translated.replace(/%\?/g, "");
 	}
 	return key;
 }

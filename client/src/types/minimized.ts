@@ -50,6 +50,7 @@ export interface MinObstacle {
 }
 
 export interface MinMinObstacle {
+	id: string;
 	type: string;
 	position: MinVec2;
 }

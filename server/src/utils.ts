@@ -1,4 +1,3 @@
-import axios from "axios";
 import * as crypto from "crypto";
 
 // ID generator

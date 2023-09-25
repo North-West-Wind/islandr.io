@@ -5,7 +5,7 @@ import Building from "../../types/building";
 
 export const BUILDING_SUPPLIERS = new Map<string, BuildingSupplier>();
 
-export function castCorrectBuilding(id: string): Building | undefined {
+export function castBuilding(id: string): Building | undefined {
 	return BUILDING_SUPPLIERS.get(id)?.create();
 }
 

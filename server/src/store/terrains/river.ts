@@ -1,8 +1,16 @@
+import { MAP_TERRAIN_SUPPLIERS } from ".";
 import { world } from "../..";
 import { BorderedTerrain } from "../../types/extensions";
 import { Line, Vec2 } from "../../types/math";
+import { MapTerrainSupplier } from "../../types/supplier";
 import { LineTerrain, PiecewiseTerrain } from "../../types/terrain";
 import { randomBetween, randomBoolean, toRadians } from "../../utils";
+
+class RiverMapSupplier extends MapTerrainSupplier {
+	make() {
+		return new River();
+	}
+}
 
 class RiverSegment extends LineTerrain implements BorderedTerrain {
 	id = "river_segment";
@@ -43,6 +51,10 @@ export default class River extends PiecewiseTerrain implements BorderedTerrain {
 		if (line.line.b.x > world.size.x) line.line = new Line(line.line.a, new Vec2(world.size.x, line.line.b.y));
 		if (line.line.b.y > world.size.y) line.line = new Line(line.line.a, new Vec2(line.line.b.x, world.size.y));
 		this.lines.push(line);*/
+	}
+
+	static {
+		MAP_TERRAIN_SUPPLIERS.set(River.ID, new RiverMapSupplier());
 	}
 
 	addLine(line: Line, range: number) {

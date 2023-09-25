@@ -1,14 +1,17 @@
 import "dotenv/config";
+import { readFileSync } from "fs";
 import * as ws from "ws";
 import { ID, receive, send, wait } from "./utils";
 import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
-import { DIRECTION_VEC, MAP_SIZE, TICKS_PER_SECOND } from "./constants";
+import { DIRECTION_VEC, TICKS_PER_SECOND } from "./constants";
 import { CommonAngles, Vec2 } from "./types/math";
 import { Player } from "./store/entities";
 import { World } from "./types/world";
-import { Floor, Plain, Pond, River, Sea } from "./store/terrains";
-import { Tree, Bush, Crate, Stone, Barrel } from "./store/obstacles";
-import { BUILDING_SUPPLIERS } from "./store/buildings";
+import { MapTerrainSupplier } from "./types/supplier";
+import { Plain, castMapTerrain } from "./store/terrains";
+import { castMapObstacle } from "./store/obstacles";
+import { castBuilding } from "./store/buildings";
+import { MapData } from "./types/data";
 
 export var ticksElapsed = 0;
 
@@ -19,45 +22,48 @@ export const sockets = new Map<string, ws.WebSocket>();
 
 // Initialize the map
 export var world: World;
-export function reset() {
+export function reset(map = "regular") {
 	for (const socket of sockets.values()) socket.close();
 	sockets.clear();
+	
+	const mapData = <MapData>JSON.parse(readFileSync(`../data/maps/${map}.json`, { encoding: "utf8" }));
 
-	world = new World(new Vec2(MAP_SIZE[0], MAP_SIZE[1]), new Plain());
-	// Let's add some ponds
+	world = new World(Vec2.fromArray(mapData.size), castMapTerrain({ id: mapData.defaultTerrain }) || new Plain());
+	// Add terrains
 	let ii: number;
-	for (ii = 0; ii < 5; ii++) world.terrains.push(new Pond());
-	// And a river
-	world.terrains.push(new River());
-	// And the sea ring
-	for (ii = 0; ii < 4; ii++) world.terrains.push(new Sea(ii));
+	for (const data of mapData.terrains) {
+		for (ii = 0; ii < (data.amount || 1); ii++) {
+			const terrain = castMapTerrain(data);
+			if (!terrain) continue;
+			world.terrains.push(terrain);
+		}
+	}
 	
 	// Add buildings
-	for (ii = 0; ii < 5; ii++) {
-		const cross = BUILDING_SUPPLIERS.get("cross")!.create();
-		cross.setPosition(world.size.scale(Math.random(), Math.random()));
-		world.buildings.push(cross);
-	}
-	for (ii = 0; ii < 5; ii++) {
-		const outhouse = BUILDING_SUPPLIERS.get("outhouse")!.create();
-		do {
-			var position = world.size.scale(Math.random(), Math.random());
-		} while (world.terrainAtPos(position).id != "plain");
-		outhouse.setPosition(position);
-		outhouse.setDirection(Vec2.UNIT_X.addAngle(Math.floor(Math.random() * 4) * CommonAngles.PI_TWO));
-		world.buildings.push(outhouse);
+	for (const data of mapData.buildings) {
+		for (ii = 0; ii < (data.amount || 1); ii++) {
+			const building = castBuilding(data.id);
+			if (!building) continue;
+			let position = world.size.scale(Math.random(), Math.random());
+			if (data.position) position = Vec2.fromArray(data.position);
+			else if (data.includeTerrains)
+				while (!data.includeTerrains.includes(world.terrainAtPos(position).id))
+					position = world.size.scale(Math.random(), Math.random());
+			building.setPosition(position);
+			if (data.direction) building.setDirection(Vec2.fromArray(data.direction));
+			else building.setDirection(Vec2.UNIT_X.addAngle(Math.floor(Math.random() * 4) * CommonAngles.PI_TWO));
+			world.buildings.push(building);
+		}
 	}
 	
-	// Add random obstacles
-	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Tree());
-	world.obstacles.push(new Tree("mosin"));
-	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Stone());
-	world.obstacles.push(new Stone("ak47"));
-	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Crate());
-	for (ii = 0; ii < 10; ii++) world.obstacles.push(new Crate("soviet"));
-	for (ii = 0; ii < 15; ii++) world.obstacles.push(new Crate("grenade"));
-	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Bush());
-	for (ii = 0; ii < 25; ii++) world.obstacles.push(new Barrel());
+	// Add obstacles
+	for (const data of mapData.obstacles) {
+		for (ii = 0; ii < (data.amount || 1); ii++) {
+			const obstacle = castMapObstacle(data);
+			if (!obstacle) continue;
+			world.obstacles.push(obstacle);
+		}
+	}
 }
 reset();
 

@@ -1,6 +1,5 @@
-import { TerrainData, TextureData } from "./data";
 import { Line, Vec2 } from "./math";
-import { MinLine, MinTerrain, MinVec2 } from "./minimized";
+import { MinTerrain } from "./minimized";
 
 export abstract class Terrain {
 	id!: string;
