@@ -18,7 +18,7 @@ export function castObstacle(minObstacle: MinObstacle & any) {
 	return OBSTACLE_SUPPLIERS.get(minObstacle.type)?.create(minObstacle) || new DummyObstacle(minObstacle);
 }
 
-export function castMinObstacle(minMinObstacle: MinMinObstacle & any) {
+export function castMinObstacle(minMinObstacle: MinMinObstacle) {
 	const copy = minMinObstacle;
 	return Object.assign(copy, { direction: Vec2.UNIT_X, hitbox: new CircleHitbox(0), despawn: false, animations: [] });
 }

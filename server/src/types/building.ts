@@ -1,4 +1,3 @@
-import { Floor } from "../store/terrains";
 import { ID } from "../utils";
 import { Hitbox, Vec2 } from "./math";
 import { MinBuilding } from "./minimized";

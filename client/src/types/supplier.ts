@@ -10,15 +10,15 @@ interface Supplier<T> {
 }
 
 export interface EntitySupplier extends Supplier<Entity> {
-	create(minEntity: MinEntity & any): Entity;
+	create(minEntity: MinEntity  & { [key: string]: any }): Entity;
 }
 
 export interface ObstacleSupplier extends Supplier<Obstacle> {
-	create(minObstacle: MinObstacle & any): Obstacle;
+	create(minObstacle: MinObstacle  & { [key: string]: any }): Obstacle;
 }
 
 export interface TerrainSupplier extends Supplier<Terrain> {
-	create(minTerrain: MinTerrain & any): Terrain;
+	create(minTerrain: MinTerrain  & { [key: string]: any }): Terrain;
 }
 
 export interface WeaponSupplier extends Supplier<Weapon> {
@@ -26,5 +26,5 @@ export interface WeaponSupplier extends Supplier<Weapon> {
 }
 
 export interface ParticleSupplier extends Supplier<Particle> {
-	create(minParticle: MinParticle & any): Particle;
+	create(minParticle: MinParticle  & { [key: string]: any }): Particle;
 }

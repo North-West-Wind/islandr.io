@@ -1,5 +1,5 @@
 import { Player } from "../store/entities";
-import { castCorrectTerrain } from "../store/terrains";
+import { castTerrain } from "../store/terrains";
 import { Line, Vec2 } from "./math";
 import { MinLine, MinTerrain, MinVec2 } from "./minimized";
 import { Renderable, RenderableMap } from "./extenstions";
@@ -126,7 +126,7 @@ export class PiecewiseTerrain extends Terrain {
 	constructor(minTerrain: MinTerrain & { lines: (MinTerrain & { line: MinLine, range: number, boundary: MinVec2[] })[] }) {
 		super(minTerrain);
 		for (const line of minTerrain.lines)
-			this.lines.push(<LineTerrain> castCorrectTerrain(line));
+			this.lines.push(<LineTerrain> castTerrain(line));
 	}
 
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {

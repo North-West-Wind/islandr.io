@@ -1,7 +1,7 @@
 import { Roof, castObstacle } from "../store/obstacles";
 import { castTerrain } from "../store/terrains";
 import Building from "./building";
-import { BuildingData, MapBuildingData, MapObstacleData, MapTerrainData, ObstacleData, TerrainData } from "./data";
+import { BuildingData, MapObstacleData, MapTerrainData, ObstacleData, TerrainData } from "./data";
 import { CommonAngles, Hitbox, Vec2 } from "./math";
 import { Obstacle } from "./obstacle";
 import { Terrain } from "./terrain";

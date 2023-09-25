@@ -5,7 +5,7 @@ import { Line, Vec2 } from "../../types/math";
 import { MapTerrainSupplier } from "../../types/supplier";
 import { LineTerrain } from "../../types/terrain";
 
-class SeaMapTerrainSupplier extends MapTerrainSupplier {
+class SeaMapSupplier extends MapTerrainSupplier {
 	make(data: MapTerrainData) {
 		return new Sea(data.args![0]);
 	}
@@ -23,6 +23,6 @@ export default class Sea extends LineTerrain {
 	}
 
 	static {
-		MAP_TERRAIN_SUPPLIERS.set(Sea.ID, new SeaMapTerrainSupplier());
+		MAP_TERRAIN_SUPPLIERS.set(Sea.ID, new SeaMapSupplier());
 	}
 }

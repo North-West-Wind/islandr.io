@@ -2,7 +2,7 @@ import { MAP_TERRAIN_SUPPLIERS } from ".";
 import { MapTerrainSupplier } from "../../types/supplier";
 import { FullTerrain } from "../../types/terrain";
 
-class PlainMapTerrainSupplier extends MapTerrainSupplier {
+class PlainMapSupplier extends MapTerrainSupplier {
 	make() {
 		return new Plain();
 	}
@@ -17,6 +17,6 @@ export default class Plain extends FullTerrain {
 	}
 
 	static {
-		MAP_TERRAIN_SUPPLIERS.set(Plain.ID, new PlainMapTerrainSupplier());
+		MAP_TERRAIN_SUPPLIERS.set(Plain.ID, new PlainMapSupplier());
 	}
 }

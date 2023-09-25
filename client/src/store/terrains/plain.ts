@@ -1,7 +1,7 @@
 import { TERRAIN_SUPPLIERS } from ".";
 import { MinTerrain } from "../../types/minimized";
 import { TerrainSupplier } from "../../types/supplier";
-import { FullTerrain, Terrain } from "../../types/terrain";
+import { FullTerrain } from "../../types/terrain";
 
 class PlainSupplier implements TerrainSupplier {
 	create(minTerrain: MinTerrain) {

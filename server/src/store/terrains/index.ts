@@ -1,13 +1,12 @@
 import { MapTerrainData, TerrainData } from "../../types/data";
-import { Vec2 } from "../../types/math";
 import { MapTerrainSupplier, TerrainSupplier } from "../../types/supplier";
-import Plain from "./plain";
 
 export const TERRAIN_SUPPLIERS = new Map<string, TerrainSupplier>();
 export const MAP_TERRAIN_SUPPLIERS = new Map<string, MapTerrainSupplier>();
 
+import Plain from "./plain";
+export { Plain };
 export { default as Floor } from "./floor";
-export { default as Plain } from "./plain";
 export { default as Pond } from "./pond";
 export { default as River } from "./river";
 export { default as Sea } from "./sea";

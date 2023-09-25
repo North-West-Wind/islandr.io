@@ -1,7 +1,7 @@
 import { Player } from "../store/entities";
 import { MinWeapon } from "./minimized";
 import { Renderable } from "./extenstions";
-import { roundRect, circleFromCenter } from "../utils";
+import { roundRect } from "../utils";
 import { CircleHitbox, CommonAngles, CommonNumbers, Vec2 } from "./math";
 import { GunData, MeleeData } from "./data";
 import { GunColor } from "../constants";

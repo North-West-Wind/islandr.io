@@ -6,7 +6,7 @@ import { MapTerrainSupplier } from "../../types/supplier";
 import { LineTerrain, PiecewiseTerrain } from "../../types/terrain";
 import { randomBetween, randomBoolean, toRadians } from "../../utils";
 
-class RiverMapTerrainSupplier extends MapTerrainSupplier {
+class RiverMapSupplier extends MapTerrainSupplier {
 	make() {
 		return new River();
 	}
@@ -54,7 +54,7 @@ export default class River extends PiecewiseTerrain implements BorderedTerrain {
 	}
 
 	static {
-		MAP_TERRAIN_SUPPLIERS.set(River.ID, new RiverMapTerrainSupplier());
+		MAP_TERRAIN_SUPPLIERS.set(River.ID, new RiverMapSupplier());
 	}
 
 	addLine(line: Line, range: number) {

@@ -5,7 +5,7 @@ import { initMap } from "./rendering/map";
 import { addKeyPressed, addMousePressed, getToken, isKeyPressed, isMenuHidden, isMouseDisabled, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap, toggleMouseDisabled } from "./states";
 import { FullPlayer, Healing } from "./store/entities";
 import { castObstacle, castMinObstacle } from "./store/obstacles";
-import { Floor, castCorrectTerrain } from "./store/terrains";
+import { castTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
 import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket } from "./types/packet";
 import { World } from "./types/world";
@@ -58,7 +58,7 @@ async function init(address: string) {
 			const data = <AckPacket>receive(event.data);
 			id = data.id;
 			tps = data.tps;
-			world = new World(new Vec2(data.size[0], data.size[1]), castCorrectTerrain(data.terrain));
+			world = new World(new Vec2(data.size[0], data.size[1]), castTerrain(data.terrain));
 	
 			// Call renderer start to setup
 			await start();
@@ -107,7 +107,7 @@ async function init(address: string) {
 						// This should happen once only normally
 						const mapPkt = <MapPacket>data;
 						console.log("packet terrains:", mapPkt.terrains);
-						world.terrains = mapPkt.terrains.map(ter => castCorrectTerrain(ter));
+						world.terrains = mapPkt.terrains.map(ter => castTerrain(ter));
 						console.log("terrains:" , world.terrains);
 						world.obstacles = mapPkt.obstacles.map(obs => castObstacle(castMinObstacle(obs)));
 						world.buildings = mapPkt.buildings.map(bui => new Building(bui));

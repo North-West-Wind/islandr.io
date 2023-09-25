@@ -5,7 +5,7 @@ import { MapTerrainSupplier } from "../../types/supplier";
 import { DotTerrain } from "../../types/terrain";
 import { randomBetween } from "../../utils";
 
-class PondMapTerrainSupplier extends MapTerrainSupplier {
+class PondMapSupplier extends MapTerrainSupplier {
 	make() {
 		return new Pond();
 	}
@@ -22,7 +22,7 @@ export default class Pond extends DotTerrain {
 	}
 
 	static {
-		MAP_TERRAIN_SUPPLIERS.set(Pond.ID, new PondMapTerrainSupplier());
+		MAP_TERRAIN_SUPPLIERS.set(Pond.ID, new PondMapSupplier());
 	}
 
 	minimize() {

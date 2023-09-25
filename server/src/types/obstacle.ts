@@ -113,6 +113,6 @@ export class Obstacle {
 	}
 
 	minmin() {
-		return <MinMinObstacle>{ type: this.type, position: this.position };
+		return <MinMinObstacle>{ id: this.id, type: this.type, position: this.position };
 	}
 }
