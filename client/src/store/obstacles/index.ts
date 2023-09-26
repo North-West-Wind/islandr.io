@@ -15,7 +15,7 @@ export { default as Roof } from "./roof";
 export { default as Toilet} from "./toilet";
 
 export function castObstacle(minObstacle: MinObstacle & any) {
-	return OBSTACLE_SUPPLIERS.get(minObstacle.type)?.create(minObstacle) || new DummyObstacle(minObstacle);
+	return OBSTACLE_SUPPLIERS.get(minObstacle.type)?.create(minObstacle);
 }
 
 export function castMinObstacle(minMinObstacle: MinMinObstacle) {
