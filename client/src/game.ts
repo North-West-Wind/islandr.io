@@ -12,6 +12,7 @@ import { World } from "./types/world";
 import { receive, send } from "./utils";
 import Building from "./types/building";
 import { cookieExists, getCookieValue } from "cookies-utils";
+import { Obstacle } from "./types/obstacle";
 
 //handle users that tried to go to old domain name, or direct ip
 var urlargs = new URLSearchParams(window.location.search);
@@ -109,7 +110,7 @@ async function init(address: string) {
 						console.log("packet terrains:", mapPkt.terrains);
 						world.terrains = mapPkt.terrains.map(ter => castTerrain(ter));
 						console.log("terrains:" , world.terrains);
-						world.obstacles = mapPkt.obstacles.map(obs => castObstacle(castMinObstacle(obs)));
+						world.obstacles = <Obstacle[]>mapPkt.obstacles.map(obs => castObstacle(castMinObstacle(obs))).filter(obs => !!obs);
 						world.buildings = mapPkt.buildings.map(bui => new Building(bui));
 						initMap();
 						//Show player count once game starts

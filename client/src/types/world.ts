@@ -62,7 +62,10 @@ export class World {
 		}
 		for (const obstacle of obstacles) {
 			const existing = this.obstacles.find(o => o.id == obstacle.id);
-			if (!existing) pending.push(castObstacle(obstacle));
+			if (!existing) {
+				const ob = castObstacle(obstacle);
+				if (ob) pending.push(ob);
+			}
 		}
 		this.obstacles = pending;
 	}
