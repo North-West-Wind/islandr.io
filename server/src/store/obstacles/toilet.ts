@@ -17,7 +17,7 @@ export default class Toilet extends Obstacle {
 
 	constructor() {
 		const hitbox = new CircleHitbox(1.2);
-		super(world, hitbox, hitbox.scaleAll(0.5), 120, 120);
+		super(world, hitbox, hitbox.scaleAll(0.75), 120, 120);
 	}
 
 	static {

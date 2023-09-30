@@ -24,6 +24,7 @@ export default class Tree extends Obstacle {
 	static readonly TYPE = "tree";
 	type = Tree.TYPE;
 	special: "normal" | "mosin";
+	damageParticle = "wood";
 
 	constructor(special: "normal" | "mosin" = "normal") {
 		const salt = randomBetween(0.9, 1.1);
