@@ -5,31 +5,36 @@
 			"hitbox": [7, 0.5],
 			"color": 2908887295,
 			"__color": "(comment) 2908887295 is 0xad6218ff",
-			"position": [0, -3.25]
+			"position": [0, -3.25],
+			"health": 125
 		},
 		{
 			"type": "wall",
-			"hitbox": [2, 0.5],
+			"hitbox": [1.5, 0.5],
 			"color": 2908887295,
-			"position": [-2.5, 3.25]
+			"position": [-2.75, 3.25],
+			"health": 125
 		},
 		{
 			"type": "wall",
-			"hitbox": [2, 0.5],
+			"hitbox": [1.5, 0.5],
 			"color": 2908887295,
-			"position": [2.5, 3.25]
+			"position": [2.75, 3.25],
+			"health": 125
 		},
 		{
 			"type": "wall",
 			"hitbox": [0.5, 7],
 			"color": 2908887295,
-			"position": [-3.5, 0]
+			"position": [-3.5, 0],
+			"health": 125
 		},
 		{
 			"type": "wall",
 			"hitbox": [0.5, 7],
 			"color": 2908887295,
-			"position": [3.5, 0]
+			"position": [3.5, 0],
+			"health": 125
 		},
 		{
 			"type": "toilet",
