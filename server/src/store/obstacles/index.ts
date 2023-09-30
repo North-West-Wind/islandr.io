@@ -13,6 +13,7 @@ export { default as Wall } from "./wall";
 export { default as Roof } from "./roof";
 export { default as Toilet} from "./toilet";
 export { default as Spawner } from "./spawner";
+export { default as Door } from "./door";
 
 export function castObstacle(data: ObstacleData) {
 	return OBSTACLE_SUPPLIERS.get(data.type)?.create(data);

@@ -35,6 +35,7 @@ export default class Spawner extends Obstacle {
 	}
 
 	die() {
+		super.die();
 		const entities = LOOT_TABLES.get(this.lootTable)?.roll();
 		if (entities) {
 			world.entities.push(...entities.map(e => {

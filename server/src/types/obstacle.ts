@@ -1,3 +1,4 @@
+import { Player } from "../store/entities";
 import { Roof } from "../store/obstacles";
 import { ID } from "../utils";
 import { Entity } from "./entity";
@@ -21,6 +22,7 @@ export class Obstacle {
 	maxHealth: number;
 	discardable = false;
 	despawn = false;
+	interactable = false;
 	animations: string[] = [];
 	dirty = true;
 	// Particle type to emit when damaged
@@ -77,6 +79,16 @@ export class Obstacle {
 			}
 			return rect.hitbox.collideCircle(rect.position, rect.direction, circle.hitbox, circle.position, circle.direction);
 		}
+	}
+
+	interact(_player: Player) { }
+
+	interactionKey() {
+		return this.translationKey();
+	}
+
+	translationKey() {
+		return `obstacle.${this.type}`;
 	}
 
 	// No implementation by default

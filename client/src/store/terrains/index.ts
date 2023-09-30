@@ -10,6 +10,7 @@ export { default as Pond } from "./pond";
 export { default as River, RiverSegment } from "./river";
 export { default as Sea } from "./sea";
 export { default as Floor } from "./floor";
+export { default as Beach } from "./beach";
 
 export function castTerrain(minTerrain: MinTerrain  & { [key: string]: any }) {
 	return TERRAIN_SUPPLIERS.get(minTerrain.id)?.create(minTerrain) || new Plain(minTerrain);

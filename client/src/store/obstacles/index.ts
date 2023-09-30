@@ -13,6 +13,7 @@ export { default as Barrel } from "./barrel";
 export { default as Wall } from "./wall";
 export { default as Roof } from "./roof";
 export { default as Toilet} from "./toilet";
+export { default as Door } from "./door";
 
 export function castObstacle(minObstacle: MinObstacle & any) {
 	return OBSTACLE_SUPPLIERS.get(minObstacle.type)?.create(minObstacle);

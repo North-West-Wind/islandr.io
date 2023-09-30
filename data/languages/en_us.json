@@ -39,6 +39,8 @@
 	"prompt.heal.coffee": "Coffee",
 	"prompt.heal.pie": "Pie",
 	"prompt.heal.swiss_roll": "Swiss Roll",
+	"prompt.interact.door.open": "[%?] Open Door",
+	"prompt.interact.door.close": "[%?] Close Door",
 
 	"hud.weapon.ak47": "AK-47",
 	"hud.weapon.awc": "AWC",
