@@ -10,8 +10,17 @@
 		{ "id": "sea", "args": [3] }
 	],
 	"buildings": [
-		{ "id": "cross", "direction": [1, 0], "amount": 5 },
-		{ "id": "outhouse", "includeTerrains": ["plain"], "amount": 5 }
+		{ "id": "cross", "direction": [1, 0], "amount": 2 },
+		{
+			"id": "outhouse",
+			"includeTerrains": [ "plain" ],
+			"amount": 5
+		},
+		{
+			"id": "small_building",
+			"includeTerrains": [ "plain" ],
+			"amount": 3
+		}
 	],
 	"obstacles": [
 		{ "type": "tree", "amount": 25 },

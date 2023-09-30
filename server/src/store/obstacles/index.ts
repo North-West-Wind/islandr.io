@@ -13,6 +13,9 @@ export { default as Wall } from "./wall";
 export { default as Roof } from "./roof";
 export { default as Toilet} from "./toilet";
 export { default as Spawner } from "./spawner";
+export { default as ToiletMore } from "./toilet_more";
+export { default as Table } from "./table";
+export { default as Desk } from "./desk";
 
 export function castObstacle(data: ObstacleData) {
 	return OBSTACLE_SUPPLIERS.get(data.type)?.create(data);
