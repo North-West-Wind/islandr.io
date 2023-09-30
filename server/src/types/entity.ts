@@ -8,6 +8,7 @@ import { MinEntity, MinInventory } from "./minimized";
 import { CollisionType, CountableString, GunColor } from "./misc";
 import { world } from "..";
 import { PUSH_THRESHOLD } from "../constants";
+import { Player } from "../store/entities";
 
 export class Inventory {
 	// Maximum amount of things.
@@ -104,6 +105,7 @@ export class Entity {
 	// If discardable, will be removed from memory when despawn
 	discardable = false;
 	despawn = false;
+	interactable = false;
 	// Tells the client what animation should play
 	animations: string[] = [];
 	repelExplosions = false;
@@ -185,6 +187,12 @@ export class Entity {
 		this.despawn = true;
 		this.health = 0;
 		this.markDirty();
+	}
+
+	interact(_player: Player) { }
+
+	interactionKey() {
+		return this.translationKey();
 	}
 
 	translationKey() {

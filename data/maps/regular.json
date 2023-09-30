@@ -1,36 +1,31 @@
 {
-	"size": [200, 200],
+	"size": [400, 400],
 	"defaultTerrain": "plain",
 	"terrains": [
 		{ "id": "pond", "amount": 5 },
+		{ "id": "beach", "args": [0, 60] },
+		{ "id": "beach", "args": [1, 60] },
+		{ "id": "beach", "args": [2, 60] },
+		{ "id": "beach", "args": [3, 60] },
 		{ "id": "river" },
-		{ "id": "sea", "args": [0] },
-		{ "id": "sea", "args": [1] },
-		{ "id": "sea", "args": [2] },
-		{ "id": "sea", "args": [3] }
+		{ "id": "sea", "args": [0, 40] },
+		{ "id": "sea", "args": [1, 40] },
+		{ "id": "sea", "args": [2, 40] },
+		{ "id": "sea", "args": [3, 40] }
 	],
 	"buildings": [
-		{ "id": "cross", "direction": [1, 0], "amount": 2 },
-		{
-			"id": "outhouse",
-			"includeTerrains": [ "plain" ],
-			"amount": 5
-		},
-		{
-			"id": "small_building",
-			"includeTerrains": [ "plain" ],
-			"amount": 3
-		}
+		{ "id": "cross", "includeTerrains": ["beach"], "direction": [1, 0], "amount": 5 },
+		{ "id": "outhouse", "includeTerrains": ["plain"], "amount": 20 }
 	],
 	"obstacles": [
-		{ "type": "tree", "amount": 25 },
-		{ "type": "tree", "args": ["mosin"] },
-		{ "type": "stone", "amount": 25 },
-		{ "type": "stone", "args": ["ak47"] },
-		{ "type": "crate", "amount": 25 },
-		{ "type": "crate", "amount": 10, "args": ["soviet"] },
-		{ "type": "crate", "amount": 15, "args": ["grenade"] },
-		{ "type": "bush", "amount": 25 },
-		{ "type": "barrel", "amount": 25 }
+		{ "type": "tree", "amount": 100 },
+		{ "type": "tree", "args": ["mosin"], "amount": 4 },
+		{ "type": "stone", "amount": 100 },
+		{ "type": "stone", "args": ["ak47"], "amount": 2 },
+		{ "type": "crate", "amount": 100 },
+		{ "type": "crate", "amount": 25, "args": ["soviet"] },
+		{ "type": "crate", "amount": 40, "args": ["grenade"] },
+		{ "type": "bush", "amount": 50 },
+		{ "type": "barrel", "amount": 50 }
 	]
 }

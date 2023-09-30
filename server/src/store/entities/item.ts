@@ -1,14 +1,14 @@
 import { TICKS_PER_SECOND } from "../../constants";
 import { Entity } from "../../types/entity";
-import { PickupableEntity } from "../../types/extensions";
 import { CommonAngles, Vec2 } from "../../types/math";
 import { CollisionType } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import Player from "./player";
 
-export default abstract class Item extends Entity implements PickupableEntity {
+export default abstract class Item extends Entity {
 	type = "item";
 	discardable = true;
+	interactable = true;
 	friction = 0.02; // frictional acceleration, not force
 	collisionLayers = [1];
 	repelExplosions = true;
@@ -47,15 +47,30 @@ export default abstract class Item extends Entity implements PickupableEntity {
 			if (collisionType) {
 				obstacle.onCollision(this);
 				if (!obstacle.noCollision) {
+					const oldPosition = this.position;
 					if (collisionType == CollisionType.CIRCLE_CIRCLE) this.handleCircleCircleCollision(obstacle);
 					else if (collisionType == CollisionType.CIRCLE_RECT_CENTER_INSIDE) this.handleCircleRectCenterCollision(obstacle);
 					else if (collisionType == CollisionType.CIRCLE_RECT_POINT_INSIDE) this.handleCircleRectPointCollision(obstacle);
 					else if (collisionType == CollisionType.CIRCLE_RECT_LINE_INSIDE) this.handleCircleRectLineCollision(obstacle);
+					// Avoid glitchy movements
+					if (this.position.x == oldPosition.x) this.velocity = this.velocity.scale(0, 1);
+					if (this.position.y == oldPosition.y) this.velocity = this.velocity.scale(1, 0);
 					this.markDirty();
 				}
 			}
 		}
 	}
-	
+
+	interact(player: Player) {
+		if (this.picked(player)) {
+			this.die();
+			player.markDirty();
+		}
+	}
+
+	interactionKey() {
+		return `prompt.pickup ${this.translationKey()}`;
+	}
+
 	abstract picked(player: Player): boolean;
 }

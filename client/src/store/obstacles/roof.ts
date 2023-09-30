@@ -45,10 +45,10 @@ export default class Roof extends Obstacle {
 		// We should actually care about fps, but I'm too lazy
 		if (this.roofless.has(you.id)) {
 			if (this.opacity > 0) this.opacity -= 0.05;
-			else this.opacity = 0;
+			if (this.opacity < 0) this.opacity = 0;
 		} else {
 			if (this.opacity < 1) this.opacity += 0.05;
-			else this.opacity = 1;
+			if (this.opacity > 1) this.opacity = 1;
 		}
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
