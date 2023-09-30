@@ -21,6 +21,7 @@ export default class Wall extends Obstacle implements RenderableLayerN1 {
 	static readonly TYPE = "wall";
 	type = Wall.TYPE;
 	color!: number;
+	zIndex = 1;
 
 	static {
 		OBSTACLE_SUPPLIERS.set(Wall.TYPE, new WallSupplier());
@@ -36,14 +37,21 @@ export default class Wall extends Obstacle implements RenderableLayerN1 {
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
 		ctx.scale(scale, scale);
-		const width = (<RectHitbox>this.hitbox).width;
-		const height = (<RectHitbox>this.hitbox).height;
+		let width = (<RectHitbox>this.hitbox).width;
+		let height = (<RectHitbox>this.hitbox).height;
+		if (this.despawn) {
+			width += 0.5;
+			height += 0.5;
+			ctx.globalAlpha = 0.4;
+		}
 		ctx.fillStyle = numToRGBA(this.color);
 		ctx.fillRect(-width / 2, -height / 2, width, height);
+		ctx.globalAlpha = 1;
 		ctx.resetTransform();
 	}
 
-	renderLayerN1(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void {
+	renderLayerN1(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
+		if (this.despawn) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
