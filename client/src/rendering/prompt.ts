@@ -14,10 +14,10 @@ export function drawPrompt(player: FullPlayer, canvas: HTMLCanvasElement, ctx: C
 function drawInteract(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
 	if (player.despawn || !player.canInteract) return;
 	const size = canvas.height / 36;
-	ctx.font = `${size}px Arial bold`;
+	ctx.font = `${size}px Jura bold`;
 	ctx.textBaseline = "top";
 	ctx.textAlign = "center";
-	const metric = ctx.measureText(`[${KeyBind.INTERACT.toUpperCase()}] Pick up ${player.onTopOfLoot}`);
+	const metric = ctx.measureText(`[${KeyBind.INTERACT.toUpperCase()}] Pick up ${player.interactMessage}`);
 	const yOffset = canvas.height / 24;
 	const padding = canvas.height / 72;
 	const width = metric.width + padding * 2;
@@ -26,8 +26,9 @@ function drawInteract(player: FullPlayer, canvas: HTMLCanvasElement, ctx: Canvas
 	roundRect(ctx, (canvas.width - width) / 2, canvas.height / 2 + yOffset, width, size + 2 * padding, canvas.height / 108);
 	ctx.fillStyle = "#fff";
 	ctx.globalAlpha = 1;
-	const split = player.onTopOfLoot?.split(" ");
-	ctx.fillText(translate(LANG, "prompt.pickup", KeyBind.INTERACT.toUpperCase(), split ? translate(LANG, split.shift()!, ...split) : ""), canvas.width / 2, canvas.height / 2 + padding + yOffset);
+	const split = player.interactMessage?.split(" ");
+	if (split)
+		ctx.fillText(translate(LANG, split.shift()!, KeyBind.INTERACT.toUpperCase(), split ? translate(LANG, split.shift()!, ...split) : ""), canvas.width / 2, canvas.height / 2 + padding + yOffset);
 }
 
 function drawReloading(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
@@ -42,7 +43,7 @@ function drawHealing(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasR
 
 function drawCircleLoading(remain: number, max: number, message: string, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
 	const size = canvas.height / 36;
-	ctx.font = `${size}px Arial bold`;
+	ctx.font = `${size}px Jura bold`;
 	ctx.textBaseline = "middle";
 	ctx.textAlign = "center";
 	const yOffset = canvas.height / 24 + size * 2;

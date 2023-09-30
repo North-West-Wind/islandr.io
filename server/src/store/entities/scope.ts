@@ -14,7 +14,7 @@ export default class Scope extends Item {
 	}
 
 	picked(player: Player) {
-		world.onceSounds.push({"path": "item_usage/scope_equip.mp3", "position": this.position})
+		world.onceSounds.push({"path": "items/scope_equip.mp3", "position": this.position})
 		return player.inventory.addScope(this.zoom);
 	}
 

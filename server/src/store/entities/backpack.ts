@@ -24,7 +24,7 @@ export default class Backpack extends Item {
 			world.entities.push(backpack);
 		}
 		player.inventory.backpackLevel = this.level;
-		world.onceSounds.push({ path: "item_usage/backpack_wear.mp3", position: this.position })
+		world.onceSounds.push({ path: "items/backpack_wear.mp3", position: this.position })
 		return true;
 	}
 
