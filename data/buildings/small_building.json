@@ -33,7 +33,14 @@
 		},
 		{
 			"type": "toilet_more",
-			"position": [ 5.5, -3  ]
+			"position": [ 5.5, -3 ]
+		},
+		{
+			"type": "door",
+			"position": [ 5.5, 0 ],
+			"hitbox": [ 3, 0.5 ],
+			"health": 100,
+			"pivot": [3, 0]
 		},
 		{
 			"type": "wall",
@@ -51,7 +58,11 @@
 			"position": [ -2.5, -3 ],
 			"color": 2908887295,
 			"hitbox": [ 0.5, 4 ],
-			"__comment":  "this is the wall that separates the table from the loot-desk. "
+			"__comment": "this is the wall that separates the table from the loot-desk. "
+		},
+		{
+			"type": "desk",
+			"position": [-5.5, -3]
 		}
 	],
 	"zones": [
