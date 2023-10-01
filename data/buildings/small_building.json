@@ -36,13 +36,6 @@
 			"position": [ 5.5, -3 ]
 		},
 		{
-			"type": "door",
-			"position": [ 5.5, 0 ],
-			"hitbox": [ 3, 0.5 ],
-			"health": 100,
-			"pivot": [3, 0]
-		},
-		{
 			"type": "wall",
 			"position": [ 3.5, -3 ],
 			"color": 2908887295,
