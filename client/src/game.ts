@@ -1,3 +1,5 @@
+import * as dotenv from "dotenv"
+dotenv.config({ path: __dirname + '/.env' })
 import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";

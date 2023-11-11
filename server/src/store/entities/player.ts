@@ -6,7 +6,7 @@ import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { Particle } from "../../types/particle";
 import { GunWeapon, WeaponType } from "../../types/weapon";
-import { changeCurrency, spawnAmmo, spawnGun } from "../../utils";
+import { addKillCounts, changeCurrency, spawnAmmo, spawnGun } from "../../utils";
 import { Roof } from "../obstacles";
 import { Pond, River, Sea } from "../terrains";
 import Backpack from "./backpack";
@@ -289,7 +289,8 @@ export default class Player extends Entity {
 			if (entity?.type === this.type) (<Player>entity).killCount++;
 		}
 		// Add currency to user if they are logged in and have kills
-		if (this.accessToken && this.killCount) changeCurrency(this.accessToken, this.killCount * 100);
+		if (this.accessToken && this.killCount) { changeCurrency(this.accessToken, this.killCount * 100); addKillCounts(this.accessToken, this.killCount) }
+
 	}
 
 	reload() {

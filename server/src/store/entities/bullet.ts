@@ -1,7 +1,7 @@
 import { GLOBAL_UNIT_MULTIPLIER } from "../../constants";
 import { TracerData } from "../../types/data";
 import { Entity } from "../../types/entity";
-import { CircleHitbox, Vec2 } from "../../types/math";
+import { CircleHitbox, Line, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 
 export default class Bullet extends Entity {
@@ -42,14 +42,14 @@ export default class Bullet extends Entity {
 					break;
 				}
 		// In case the bullet is moving too fast, check for hitbox intersection
-		/*if (!this.despawn)
+		if (!this.despawn)
 			for (const thing of combined) {
 				if (this.type != thing.type && !thing.despawn && thing.hitbox.lineIntersects(new Line(this.position, this.position.addVec(this.velocity)), thing.position, thing.direction)) {
 					thing.damage(this.dmg);
 					if (!thing.noCollision) this.die();
 					break;
 				}
-			} */
+			} 
 
 		if (!this.despawn) {
 			this.health--;

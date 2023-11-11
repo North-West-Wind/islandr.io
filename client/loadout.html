@@ -1,921 +1,193 @@
-<!DOCTYPE html>
-<html>
+<link rel="stylesheet" href="scripts/css/loadout.css"
+<link />
 
-<head>
-  <style>
-    :root {
-      --primary-color: #218cff;
-      --primary-hover-color: #1669e2;
-      --border-luminosity: 30%;
-    }
+<button id="loadout-button">Loadout</button>
+<div id="overlay"></div>
+<div id="loadout-container">
+    <div id="close-button" onclick="closeLoadout()">X</div>
+    <div class="tab" onclick="showTab('skins')">Skins</div>
+    <div class="tab" onclick="showTab('cursor')">Cursor</div>
+    <div class="tab" onclick="showTab('healing')">Healing</div>
+    <div class="tab-content" id="skins">
+        <div class="skins-container">
+            <section class="section">
+                <div class="card-list">
+                    <div class="card-list__item card">
+                        <h3 class="card__title" >Default</h3>
+                        <div class="card__content">
+                            <div class="card__image-wrapper">
+                                <div class="card__image" >
+                                    <div class="info" id="default" currency="0"></div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+                                        <defs>
+                                            <pattern id="uniqueldbackgroundPattern" x="0" y="0" width="120" height="100"
+                                                     patternUnits="userSpaceOnUse">
+                                            </pattern>
+                                        </defs>
+                                        <circle cx="50" cy="45" r="35" fill="#f8c574" stroke="#322717" stroke-width="0" />
+                                        <circle cx="75" cy="72" r="10" fill="#f8c574" stroke="#322717" stroke-width="3.5" />
+                                        <circle cx="25" cy="72" r="10" fill="#f8c574" stroke="#322717" stroke-width="3.5" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="card__text">Even as a beginner, you can learn to be the best.</div>
+                        </div>
+                        <div class="card__button-wrapper">
+                            <button class="card__button" id="default">Free</button>
+                            <div class="tick-up-skin-rarity">Universal</div>
+                        </div>
+                    </div>
 
+                    <div class="card-list__item card">
+                        <h3 class="card__title" ">Illuminati</h3>
+                        <div class="card__content">
+                            <div class="card__image-wrapper">
+                                <div class="card__image">
+                                    <div class="info" id="illuminati" currency="100"></div>
+                                    <?xml version="1.0" encoding="UTF-8" ?>
+                                    <svg height="100" width="100" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                        <ellipse transform="matrix(.99286 -.1193 .1449 .98945 0 0)" cx="64.064" cy="66.562" rx="63.016" ry="57.278" fill="#496401" stroke="#000" stroke-width="0" />
+                                        <path transform="matrix(.74561 0 0 .74279 46.582 52.171)" d="m59.514 50.101-48.797-0.36983 24.719-42.074z" fill="#199e11" />
+                                        <path transform="matrix(.74561 0 0 .74279 28.39 20.394)" d="m59.514 50.101-48.797-0.36983 24.719-42.074z" fill="#199e11" />
+                                        <path transform="matrix(.74561 0 0 .74279 65.146 20.595)" d="m59.514 50.101-48.797-0.36983 24.719-42.074z" fill="#199e11" />
+                                        <ellipse cx="79.31" cy="51.421" rx="26.602" ry="31.689" fill-opacity="0" stroke-width=".7442" />
+                                        <ellipse cx="70.481" cy="52.436" rx="26.149" ry="31.576" fill-opacity="0" stroke-width=".7442" />
+                                        <ellipse cx="78.858" cy="50.632" rx="25.244" ry="31.125" fill-opacity="0" stroke-width=".7442" />
+                                        <path d="m93.008 48.376a27.281 30.223 0 0 1-0.0039 0.51044l-27.277-0.51044z" fill-opacity="0" stroke-width=".7442" />
+                                        <ellipse cx="73.311" cy="57.511" rx="36.45" ry="37.328" fill-opacity=".082126" stroke="#0a5d0c" stroke-width=".80733" />
+                                        <ellipse cx="33.741" cy="113.64" rx="16.587" ry="17.811" fill="#006310" stroke="#000" stroke-width="4.5874" />
+                                        <ellipse cx="113.64" cy="114.69" rx="16.587" ry="17.811" fill="#006310" stroke="#000" stroke-width="4.5874" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="card__text">
+                                Wanna be the illuminati of the lobby!? Wanna just drop out money?
+                                Use this responsibly or others will drop on you and loot your money
+                            </div>
+                        </div>
+                        <div class="card__button-wrapper">
+                            <button class="card__button" id="illuminati">100 Currency</button>
+                            <div class="tick-up-skin-rarity2">Paid-Common</div>
+                        </div>
+                    </div>
 
-    .bigg-box {
-      border: 2px solid #ccc;
-      width: 400px;
-      /* Adjust the width as needed */
-      height: 230px;
-      /* Adjust the height as needed */
-      margin: 20px auto;
-      /* Adjust the margin as needed */
-      padding: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      align-content: flex-start;
-      background-color: #f7f7f7;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+                    <div class="card-list__item card">
+                        <h3 class="card__title" >Starstruck</h3>
+                        <div class="card__content">
+                            <div class="card__image-wrapper">
+                                <div class="card__image">
+                                    <?xml version="1.0" encoding="UTF-8" ?>
+                                    <div class="info" id="starstruck" currency="250"></div>
+                                    <svg width="100" height="100" version="1.1" viewBox="0 0 100 100" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="a" x1="93.006" x2="93.006" y1="146.72" y2="194.43" gradientUnits="userSpaceOnUse"><stop stop-color="#0e0e0e" offset="0" /><stop stop-color="#fff" offset="1" /></linearGradient></defs><g><circle cx="104.91" cy="148.5" r="11.906" fill="url(#a)" /><g transform="matrix(.12226 0 0 .12226 64.441 132.54)" fill="#dfdfdf" fill-rule="evenodd"><path transform="translate(4.906 6.7929)" d="m258.79 88.402-5.1308-3.7475-5.2088 3.6383 1.9786-6.0378-5.0699-3.8296 6.3537 0.01601 2.0755-6.0051 1.9482 6.0476 6.3526 0.11821-5.1496 3.7216z" /><path transform="translate(45.097 21.511)" d="m258.79 88.402-5.1308-3.7475-5.2088 3.6383 1.9786-6.0378-5.0699-3.8296 6.3537 0.01601 2.0755-6.0051 1.9482 6.0476 6.3526 0.11821-5.1496 3.7216z" /><path transform="translate(64.815 42.833)" d="m258.79 88.402-5.1308-3.7475-5.2088 3.6383 1.9786-6.0378-5.0699-3.8296 6.3537 0.01601 2.0755-6.0051 1.9482 6.0476 6.3526 0.11821-5.1496 3.7216z" /><path transform="translate(85.1 65.476)" d="m258.79 88.402-5.1308-3.7475-5.2088 3.6383 1.9786-6.0378-5.0699-3.8296 6.3537 0.01601 2.0755-6.0051 1.9482 6.0476 6.3526 0.11821-5.1496 3.7216z" /><path transform="translate(82.364 96.893)" d="m258.79 88.402-5.1308-3.7475-5.2088 3.6383 1.9786-6.0378-5.0699-3.8296 6.3537 0.01601 2.0755-6.0051 1.9482 6.0476 6.3526 0.11821-5.1496 3.7216z" /><path transform="translate(127.46 111.57)" d="m258.79 88.402-5.1308-3.7475-5.2088 3.6383 1.9786-6.0378-5.0699-3.8296 6.3537 0.01601 2.0755-6.0051 1.9482 6.0476 6.3526 0.11821-5.1496 3.7216z" /><path transform="translate(144.74 86.819)" d="m258.79 88.402-5.1308-3.7475-5.2088 3.6383 1.9786-6.0378-5.0699-3.8296 6.3537 0.01601 2.0755-6.0051 1.9482 6.0476 6.3526 0.11821-5.1496 3.7216z" /></g><ellipse cx="95.222" cy="136.74" rx="4.1011" ry="4.1011" fill="#4f4f4f" stroke="#171717" stroke-width="1.0583" /><ellipse cx="115.15" cy="136.74" rx="4.1011" ry="4.1011" fill="#4f4f4f" stroke="#171717" stroke-width="1.0583" /></g></svg>
+                                </div>
+                            </div>
+                            <div class="card__text">
+                                Wanna gaze the stars tonight with your islandr bois? Or just be the night when everyone's like a sun?
+                                Be careful or you might go into the night sky (heaven i mean lmao)
+                            </div>
+                        </div>
+                        <div class="card__button-wrapper">
+                            <button class="card__button" id="starstruck">250 currency</button>
+                            <div class="tick-up-skin-rarity3">Paid-Uncommon</div>
+                        </div>
+                    </div>
 
-    .boxè {
-      border: 2px solid #ccc;
-      width: 200px;
-      height: 200px;
-      margin-bottom: 20px;
-      padding: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      align-content: flex-start;
-      overflow: auto;
-      background-color: #f7f7f7;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+                    <div class="card-list__item card">
+                        <h3 class="card__title">Mr-Death</h3>
+                        <div class="card__content">
+                            <div class="card__image-wrapper">
 
+                                <div class="card__image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+                                        <defs>
+                                            <pattern id="uniquebackgroundPattern" x="0" y="0" width="100" height="100"
+                                                     patternUnits="userSpaceOnUse">
+                                                <image href="https://www.fpri.org/wp-content/uploads/2017/08/Hack.png" x="0" y="0" width="145"
+                                                       height="100" />
+                                            </pattern>
+                                        </defs>
+                                        <circle cx="50" cy="45" r="35" fill="url(#uniquebackgroundPattern)" stroke="#000000"
+                                                stroke-width="0" />
+                                        <circle cx="75" cy="72" r="10" fill="url(#uniquebackgroundPattern)" stroke="#757575"
+                                                stroke-width="3.5" />
+                                        <circle cx="25" cy="72" r="10" fill="url(#uniquebackgroundPattern)" stroke="#757575"
+                                                stroke-width="3.5" />
 
-    .emoji {
-      width: 50px;
-      height: 50px;
-      margin: 5px;
-      cursor: move;
-    }
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="card__text">
+                                Are you ready to step into the ultimate test of bravery? Will you emerge as the
+                                triumphant victor or cheat death itself? Prepare to reveal the true identity of Mr. Death and claim
+                                your
+                                title
+                                as the ultimate conqueror.
+                            </div>
+                        </div>
+                        <div class="card__button-wrapper">
+                            <button class="card__button">Select</button>
+                            <div class="tick-up-skin-rarity4">Free-Common</div>
+                        </div>
+                    </div>
+                    <div class="card-list__item card">
+                        <h3 class="card__title">Fired</h3>
+                        <div class="card__content">
+                            <div class="card__image-wrapper">
+                                <div class="card__image">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+                                        <defs>
+                                            <pattern id="uniquesdbackgroundPattern" x="0" y="0" width="120" height="100"
+                                                     patternUnits="userSpaceOnUse">
+                                                <image href="https://media.tenor.com/KAN3wMq2iocAAAAd/fire.gif" x="0" y="0" width="150"
+                                                       height="100" />
+                                            </pattern>
+                                        </defs>
+                                        <circle cx="50" cy="45" r="35" fill="url(#uniquesdbackgroundPattern)" stroke="#000000"
+                                                stroke-width="0" />
+                                        <circle cx="75" cy="72" r="10" fill="url(#uniquesdbackgroundPattern)" stroke="#000000"
+                                                stroke-width="3.5" />
+                                        <circle cx="25" cy="72" r="10" fill="url(#uniquesdbackgroundPattern)" stroke="#000000"
+                                                stroke-width="3.5" />
 
-    .empty-space-container {
-      position: sticky;
-      width: 150px;
-      height: 150px;
-      margin: auto;
-      border-radius: 50%;
-      background-color: #f7f7f7;
-      border: 2px dashed #ccc;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .empty-space {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      border: 2px dashed #ccc;
-    }
-
-    .empty-space:nth-child(1) {
-      transform: rotate(45deg) translate(-50%, -50%) rotate(-45deg);
-    }
-
-    .empty-space:nth-child(2) {
-      transform: rotate(135deg) translate(-50%, -50%) rotate(-135deg);
-    }
-
-    .empty-space:nth-child(3) {
-      transform: rotate(225deg) translate(-50%, -50%) rotate(-225deg);
-    }
-
-    .empty-space:nth-child(4) {
-      transform: rotate(315deg) translate(-50%, -50%) rotate(-315deg);
-    }
-
-    .remove-area {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: border-color 0.3s ease-in-out;
-      background-color: #fff;
-      border: 2px solid #e53935;
-      color: #e53935;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    .remove-area:hover {
-      border-color: #c62828;
-      color: #c62828;
-    }
-
-    .additional-box {
-      border: 1px solid #ccc;
-      width: 300px;
-      /* Adjust the width as desired */
-      height: 240px;
-      /* Adjust the height as desired */
-      padding: 10px;
-      background-color: #f9f9f9;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(110%, -50%);
-      display: none;
-      z-index: 10000;
-      border-radius: 10px;
-      box-sizing: border-box;
-      opacity: 0;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-
-    .additional-box.show {
-      display: block;
-      transform: translate(-50%, -50%);
-      opacity: 1;
-    }
-
-
-    .more-options-btn {
-      position: absolute;
-      bottom: 5px;
-      right: 5px;
-      padding: 5px;
-      background-color: #ddd;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .more-options-btn:hover {
-      color: red;
-    }
-
-    /* Styling for the dark-yellow overlay */
-    .overlayo {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(218, 165, 32, 1);
-      z-index: 9999;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-
-    /* Styling for the inventory box */
-    .inventory-box {
-      border: 1px solid #ccc;
-      width: 500px;
-      height: 400px;
-      padding: 10px;
-      background-color: #f9f9f9;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      display: none;
-      z-index: 10000;
-      border-radius: 10px;
-    }
-
-    .inventory-box.show {
-      opacity: 1 !important;
-      transform: translate(-50%, -50%) scale(1) !important;
-    }
-
-    /* Styling for the close button */
-    .close-btn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      padding: 5px;
-      background-color: #ddd;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .close-btn:hover {
-      color: red;
-    }
-
-    /* Styling for the buttons in the inventory box */
-    .inventory-btn {
-      display: inline-block;
-      border-radius: 10px;
-      padding: 10px;
-      margin-right: 5px;
-      background-color: #ddd;
-      border: none;
-      cursor: pointer;
-      transition: all 0.8s ease;
-      box-shadow: 0 3px 0 #5B6F99;
-    }
-
-    .inventory-btn:hover {
-      box-shadow: 0 1px 0 #5B6F99;
-      transform: translateY(2px);
-    }
-
-
-    .inventory-btn:hover,
-    .inventory-btn:focus {
-      background-color: var(--primary-hover-color);
-      color: #fff;
-    }
-
-    .inventory-btn.selected {
-      background-color: var(--primary-color);
-      color: #fff;
-    }
-
-    .inventory-btn.selected::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: inherit;
-      background-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
-      mix-blend-mode: lighten;
-      pointer-events: none;
-    }
-
-    /* Styling for the content sections */
-    .content-section {
-      display: none;
-    }
-
-    /* Styling for the cursor selection */
-    .cursor-selection {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .cursor {
-      width: 65px;
-      height: 50px;
-      background-color: lightgray;
-      margin: 2px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: bold;
-      color: black;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 0 #5B6F99;
-    }
-
-
-    .cursor:hover {
-      background-color: lightblue;
-      box-shadow: 0 1px 0 #5B6F99;
-      transform: translateY(1px);
-    }
-
-    .Loadout {
-      background-color: lightgoldenrodyellow;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-      box-shadow: 0 3px 0 #5B6F99;
-    }
-
-    .Loadout:hover {
-      box-shadow: 0 1px 0 #5B6F99;
-      transform: translateY(2px);
-    }
-  </style>
-</head>
-
-<body>
-  <div class="overlayo" id="overlayo"></div>
-  <button class="Loadout" id="inventory-btn">Loadout</button>
-  <div id="inventory-box" class="inventory-box">
-    Loadout sections:
-    <button class="close-btn" id="close-btn">X</button>
-    <button class="inventory-btn" id="skins-btn">Skins</button>
-    <button class="inventory-btn" id="emotes-btn">Emotes</button>
-    <button class="inventory-btn" id="cursors-btn">Cursors</button>
-    <div id="additional-box" class="additional-box">
-      <br>(click anywhere on the page to close)</br>
-      Exciting updates are on the horizon for the "More Options" section! Expect to see customizable pointers, a variety
-      of colors, and even more shapes available soon. We value your input, so don't forget to visit our Forum Page or
-      official "islandr.io comments" section to share your ideas and feedback on how we can continue to enhance your
-      gaming experience with us.
-    </div>
-
-    <div id="skins-section" class="content-section">
-      <h3>Skins:</h3>
-      <html>
-
-      <head>
-        <style>
-          .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-            width: 300px;
-            height: 160px;
-          }
-
-          .skin-text {
-            font-size: 16px;
-            /* Decreased font size */
-          }
-
-          .skin-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-right: 10px;
-          }
-
-          .skin-button::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 3px;
-            /* Decreased border radius */
-            pointer-events: none;
-          }
-
-          .skin-button img {
-            width: 80px;
-            /* Decreased width */
-            height: 80px;
-            /* Decreased height */
-            border-radius: 3px;
-            /* Decreased border radius */
-            box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-            /* Decreased box shadow */
-            transition: transform 0.3s;
-          }
-
-          .skin-button:hover img {
-            transform: scale(1.1);
-          }
-
-          .previewed-box-player {
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            /* Decreased border radius */
-            padding: 10px;
-            /* Decreased padding */
-            margin-left: 10px;
-            /* Decreased margin */
-            text-align: center;
-            max-width: 200px;
-            /* Decreased max width */
-            background-color: lightblue;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            /* Decreased box shadow */
-          }
-
-          .previewed-box-player h2 {
-            font-size: 14px;
-            /* Decreased font size */
-            margin-bottom: 5px;
-            /* Decreased margin */
-          }
-
-          #selected-skin {
-            max-width: 100%;
-            height: auto;
-            margin-top: 10px;
-            /* Decreased margin */
-            border-radius: 3px;
-            /* Decreased border radius */
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            /* Decreased box shadow */
-            background-color: green;
-          }
-
-          #apply-button {
-            margin-top: 10px;
-            /* Decreased margin */
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            /* Decreased padding */
-            border-radius: 3px;
-            /* Decreased border radius */
-            cursor: pointer;
-            font-size: 12px;
-            /* Decreased font size */
-            transition: background-color 0.5s ease;
-          }
-
-          #apply-button:hover {
-            background-color: #45a049;
-          }
-
-          .message {
-            margin: 10px auto;
-            /* Update margin to center horizontally */
-            width: 200px;
-            /* Decreased width */
-            border: 1px solid #ccc;
-            background-color: red;
-            border-radius: 10px;
-            /* Decreased border radius */
-            padding: 5px;
-            /* Decreased padding */
-            position: absolute;
-            /* Position the message box absolutely */
-            left: 53%;
-            /* Align the message box to the horizontal center */
-            top: 105%;
-            /* Align the message box to the vertical center */
-            transform: translate(-50%, -50%);
-            /* Adjust horizontal and vertical alignment */
-            text-align: center;
-            color: white;
-            font-size: 16px;
-            /* Decreased font size */
-          }
-
-          .hidden {
-            display: none;
-          }
-        </style>
-      </head>
-
-      <body>
-        <div class="container">
-          <div class="skins">
-            <button id="default-player" class="skin-button">
-              <span class="skin-text">Default</span>
-              <img src="https://pbs.twimg.com/media/DcF-JnCVAAAYgyH.png" alt="Default Player" width="80">
-            </button>
-            <button id="free-skin" class="skin-button">
-              <span class="skin-text">Free Skin</span>
-              <img src="https://pbs.twimg.com/media/DcF-2koVMAAqcv0.png" alt="Free Skin" width="80">
-            </button>
-          </div>
-
-          <div class="previewed-box-player">
-            <h2>Selected Skin:</h2>
-            <img id="selected-skin" src="" alt="Selected Skin">
-            <button id="apply-button">Apply Skin</button>
-          </div>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="card__text">
+                                Enjoy the fire, make your enemy run away or let em win over a fire of angry.
+                            </div>
+                        </div>
+                        <div class="card__button-wrapper">
+                            <button class="card__button">Select</button>
+                            <div class="tick-up-skin-rarity5">Exlusive-animated</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-
-        <div id="message" class="message hidden"></div>
-
-        <script>
-          // Get the elements
-          const defaultButton = document.getElementById('default-player');
-          const freeSkinButton = document.getElementById('free-skin');
-          const previewBox = document.querySelector('.previewed-box-player');
-          const selectedSkinImage = document.getElementById('selected-skin');
-          const applyButton = document.getElementById('apply-button');
-          const messageElement = document.getElementById('message');
-
-          // Function to show the message
-          function showMessage(message) {
-            messageElement.textContent = message;
-            messageElement.classList.remove('hidden');
-            setTimeout(function () {
-              messageElement.classList.add('hidden');
-            }, 3000);
-          }
-
-          // Function to save the selected skin to local storage
-          function saveSelectedSkinToLocalStorage(selectedSkinURL) {
-            localStorage.setItem('playerSkin', selectedSkinURL);
-          }
-
-          // Set up event listeners
-          defaultButton.addEventListener('click', function () {
-            saveSelectedSkinToLocalStorage("default");
-          });
-
-          freeSkinButton.addEventListener('click', function () {
-            saveSelectedSkinToLocalStorage("orange");
-          });
-
-          applyButton.addEventListener('click', function () {
-            // Check if a skin is already selected
-            if (selectedSkinImage.src !== "") {
-              showMessage('Skin selected!');
-            } else {
-              showMessage('No skin selected!');
-            }
-          });
-
-          // Check if there is a saved skin in local storage and display it on page load
-          document.addEventListener('DOMContentLoaded', function () {
-            const savedSkin = localStorage.getItem('playerSkin');
-            if (savedSkin) {
-              selectedSkinImage.src = savedSkin;
-            }
-          });
-        </script>
-      </body>
+    </div>
+    <div class="tab-content" id="cursor">
+        <div class="box" onclick="changeCursor('move')">Aimer</div>
+        <div class="box" onclick="changeCursor('grab')">Hand</div>
+        <div class="box" onclick="changeCursor('crosshair')">Crosshair</div>
+        <div class="box" onclick="resetCursor()">Reset</div>
     </div>
 
 
- <!--<div id="emotes-section" class="content-section">
-  <div class="bigg-box">
-    <div class="boxè" id="emoji-box">
-      <img id="emoji1" class="emoji" src="https://static.vecteezy.com/system/resources/previews/009/268/713/original/yellow-emoji-face-reaction-illustration-free-png.png" draggable="true" ondragstart="drag(event)">
-      <img id="emoji2" class="emoji" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Noto_Emoji_KitKat_263a.svg/800px-Noto_Emoji_KitKat_263a.svg.png" draggable="true" ondragstart="drag(event)">
-      <img id="emoji3" class="emoji" src="https://images.emojiterra.com/google/noto-emoji/unicode-15/color/512px/1f602.png" draggable="true" ondragstart="drag(event)">
-      <img id="emoji4" class="emoji" src="https://cdn4.iconfinder.com/data/icons/expressive-emoticons/64/6b_crying_despair_distress_grief_hopeless_miserable_anguish_hurt_depressed_sadness_depression_frustration_sorrow_regret_upset_disappointment_unhappy_melancholy_emoticon_clipart_facial-512.png" draggable="true" ondragstart="drag(event)">
-      <img id="emoji5" class="emoji" src="https://static-00.iconduck.com/assets.00/snowflake-emoji-1896x2048-90s5mjp5.png" draggable="true" ondragstart="drag(event)">
-      <img id="emoji6" class="emoji" src="https://i.pinimg.com/originals/ba/17/2d/ba172dcc7abf7198d43f4f14e9932b8b.png" draggable="true" ondragstart="drag(event)">
-      <img id="emoji7" class="emoji" src="https://assets.wprock.fr/emoji/joypixels/512/1f613.png" draggable="true" ondragstart="drag(event)">
-      <img id="emoji8" class="emoji" src="https://images.emojiterra.com/twitter/v13.1/512px/1f611.png" draggable="true" ondragstart="drag(event)">
-      <img id="emoji9" class="emoji" src="https://images.emojiterra.com/google/android-12l/512px/1f60d.png" draggable="true" ondragstart="drag(event)">
-      <img id="emoji10" class="emoji" src="https://static.vecteezy.com/system/resources/previews/009/931/816/original/angry-face-emoji-file-png.png" draggable="true" ondragstart="drag(event)">
+    <div class="tab-content" id="healing">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
     </div>
-    <div class="empty-space-container"> -->
-      <!-- Contents of "empty-space-container" -->
-      <!--
-      <div class="empty-space" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-      <div class="empty-space" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-      <div class="empty-space" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-      <div class="empty-space" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-      <div class="remove-area" ondrop="removeEmoji(event)" ondragover="allowDrop(event)">
-        <strong>X</strong>
-      </div>
-    </div>
-  </div>
 </div>
--->
-
-  
-
-  
-
-    <div id="cursors-section" class="content-section">
-      <!-- Cursors content goes here -->
-      <h3>Cursors</h3>
-      <div class="cursor-selection">
-        <div class="cursor" data-cursor="crosshair">Cross</div>
-        <div class="cursor" data-cursor="row-resize">row-resize</div>
-        <div class="cursor" data-cursor="grabbing">grabbing-hand</div>
-        <div class="cursor" data-cursor="cell">Big-cross</div>
-        <div class="cursor" data-cursor="all-scroll">arrowed-cross</div>
-        <div class="cursor" data-cursor="default">none</div><button class="more-options-btn">More Options</button>
-      </div>
+<div id="container2">
+    <div id="preview-box">
+        <div id="in-use-text">In use:</div>
+        <div id="preview-title">Preview</div>
+        <div id="selected-svg-container"></div>
+        <div class="tick-up-skin"></div>
     </div>
-  
-    <script>
-      var overlay = document.getElementById("overlayo");
-      var inventoryBox = document.getElementById("inventory-box");
-      var activeButton = null;
-      var additionalBox = document.getElementById("additional-box");
-
-      document.getElementById("inventory-btn").addEventListener("click", function () {
-        overlay.style.opacity = "1";
-        overlay.style.pointerEvents = "auto";
-        inventoryBox.style.opacity = "1";
-        inventoryBox.style.transform = "translate(-50%, -50%) scale(1)";
-        overlay.style.display = "block";
-        inventoryBox.style.display = "block";
-        additionalBox.style.display = "none";
-      });
-
-      document.getElementById("close-btn").addEventListener("click", function () {
-        overlay.style.opacity = "0";
-        overlay.style.pointerEvents = "none";
-        inventoryBox.style.opacity = "0";
-        inventoryBox.style.transform = "translate(-50%, -50%) scale(0.8)";
-        setTimeout(function () {
-          overlay.style.display = "none";
-          inventoryBox.style.display = "none";
-          additionalBox.style.display = "none";
-        }, 300);
-      });
-
-      document.getElementById("skins-btn").addEventListener("click", function () {
-        showSection("skins-section", this);
-      });
-
-      // document.getElementById("emotes-btn").addEventListener("click", function () {
-      //   showSection("emotes-section", this);
-      // });
-
-      document.getElementById("cursors-btn").addEventListener("click", function () {
-        showSection("cursors-section", this);
-      });
-
-      function showSection(sectionId, button) {
-        if (activeButton) {
-          activeButton.classList.remove("selected");
-        }
-        activeButton = button;
-        activeButton.classList.add("selected");
-
-        var sections = document.getElementsByClassName("content-section");
-        for (var i = 0; i < sections.length; i++) {
-          sections[i].style.display = "none";
-        }
-
-        var section = document.getElementById(sectionId);
-        section.style.display = "block";
-        additionalBox.style.display = "none";
-      }
-
-      var cursorElements = document.getElementsByClassName("cursor");
-      for (var i = 0; i < cursorElements.length; i++) {
-        cursorElements[i].addEventListener("click", function () {
-          var cursorValue = this.getAttribute("data-cursor");
-          document.documentElement.style.cursor = cursorValue;
-          localStorage.setItem("selectedCursor", cursorValue);
-        });
-      }
-
-      // Check if a cursor was previously selected and apply it to the body
-      var selectedCursor = localStorage.getItem("selectedCursor");
-      if (selectedCursor) {
-        document.documentElement.style.cursor = selectedCursor;
-      }
-
-      var additionalBox = document.getElementById("additional-box");
-      var moreOptionsBtn = document.querySelector(".more-options-btn");
-
-      moreOptionsBtn.addEventListener("click", function () {
-        if (additionalBox.style.display === "" || additionalBox.style.display === "none") {
-          additionalBox.style.display = "block";
-        } else {
-          additionalBox.style.display = "none";
-        }
-      });
-
-
-      moreOptionsBtn.addEventListener("click", function () {
-        additionalBox.classList.toggle("show");
-      });
-
-      document.addEventListener("click", function (event) {
-        var targetElement = event.target; // clicked element
-
-        // Check if the clicked element is the inventory box or any of its child elements
-        var isInventoryBox = inventoryBox.contains(targetElement);
-
-        if (!isInventoryBox) {
-          additionalBox.classList.remove("show");
-        }
-      });
-
-
-        function allowDrop(event) {
-      event.preventDefault();
-    }
-
-    function drag(event) {
-      event.dataTransfer.setData("text", event.target.id);
-    }
-
-    function drop(event) {
-      event.preventDefault();
-      var data = event.dataTransfer.getData("text");
-      var target = event.target;
-
-      // Check if the target is an empty space
-      if (target.classList.contains("empty-space")) {
-        // Check if the space is already occupied
-        if (target.childNodes.length > 0) {
-          // Swap the positions of the dropped emoji and the occupying emoji
-          var occupyingEmoji = target.firstChild;
-          var originalSpace = document.getElementById(data);
-
-          target.removeChild(occupyingEmoji);
-          originalSpace.parentNode.replaceChild(occupyingEmoji, originalSpace);
-        }
-
-        // Append the dropped emoji to the empty space
-        target.appendChild(document.getElementById(data));
-
-        // Save the positions to local storage
-        savePositionsToLocalStorage();
-      }
-    }
-
-    // function removeEmoji(event) {
-    //   var data = event.dataTransfer.getData("text");
-    //   var emoji = document.getElementById(data);
-    //   var box = document.getElementById("emoji-box");
-    //   box.appendChild(emoji);
-
-    //   // Save the positions to local storage
-    //   savePositionsToLocalStorage();
-    // }
-
-    // function savePositionsToLocalStorage() {
-    //   var box = document.getElementById("emoji-box");
-    //   var emojiPositions = [];
-
-    //   // Save the positions of the emojis
-    //   box.childNodes.forEach(function (emoji) {
-    //     if (emoji.nodeType === Node.ELEMENT_NODE) {
-    //       emojiPositions.push({
-    //         id: emoji.id,
-    //         top: emoji.style.top,
-    //         left: emoji.style.left
-    //       });
-    //     }
-    //   });
-
-    //   // Store the positions in local storage
-    //   localStorage.setItem("emojiPositions", JSON.stringify(emojiPositions));
-    // }
-
-    // function loadPositionsFromLocalStorage() {
-    //   var box = document.getElementById("emoji-box");
-    //   var emojiPositions = JSON.parse(localStorage.getItem("emojiPositions"));
-
-    //   if (emojiPositions && Array.isArray(emojiPositions)) {
-    //     // Restore the positions of the emojis
-    //     emojiPositions.forEach(function (emojiPosition) {
-    //       var emoji = document.getElementById(emojiPosition.id);
-    //       if (emoji) {
-    //         emoji.style.top = emojiPosition.top;
-    //         emoji.style.left = emojiPosition.left;
-    //       }
-    //     });
-    //   }
-    // }
-
-    // Load the saved positions when the page is reloaded
-    window.addEventListener("load", loadPositionsFromLocalStorage);
-
-
-    </script>
-    <style>
-
-      .boxy {
-        border-radius: 15px;
-        background-color: #233a2f;
-        width: 575px;
-        height: 180px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        align-items: center;
-      }
-  
-      .boxy img {
-        width: 100px;
-        height: 100px;
-        border-radius: 5px;
-        cursor: pointer;
-        position: relative;
-      }
-  
-      .boxy .image-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-  
-      .boxy .image-wrapper:before {
-        content: attr(data-text);
-        color: white;
-        text-align: center;
-        font-size: 14px;
-        margin-bottom: 5px;
-      }
-  
-      .boxy {
-    position: relative; /* Add this line */
-  }
-  
-  
-  .boxy .selected-checkmark {
-    content: '';
-    background-image: url('https://cdn-icons-png.flaticon.com/512/5289/5289675.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-color: gray;
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    width: 20px;
-    height: 20px;
-    z-index: 1;
-  }
-  
-  
-  .boxy img:not(.selected):hover {
-    transform: scale(1.2);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-    </style>
-  </head>
-  <body>
-    <div class="boxy">
-      <div class="image-wrapper" data-text="default">
-        <img src="https://raw.githubusercontent.com/North-West-Wind/islandr.io/b64ec2d302abdebd516c2b7bd29fd75cd421ec18/client/assets/images/game/entities/death.svg">
-      </div>
-      <div class="image-wrapper" data-text="Big-Head-Skull">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Death_skull.svg/796px-Death_skull.svg.png">
-      </div>
-      <div class="image-wrapper" data-text="3d-Quality-Skull">
-        <img src="https://clipart-library.com/img/1609358.png">
-      </div>
-      <div class="image-wrapper" data-text="R.I.P">
-        <img src="https://cdn.pixabay.com/photo/2013/07/13/12/32/tombstone-159792_1280.png">
-      </div>
-      <div class="image-wrapper" data-text="Cartoon-Skull">
-        <img src="https://cdn4.iconfinder.com/data/icons/holidays-18/64/skull_Halloween_bone_death_RIP-512.png">
-      </div>
-    </div>
-  
-  
-    <script>
-     // Get the boxy element
-  const image_array = ["default", "Big-Head-Skull", "3d-Quality-Skull", "R.I.P", "Cartoon-Skull"]
-  const boxy = document.querySelector('.boxy');
-  // Get all the images
-  const images = boxy.querySelectorAll('img');
-  
-  // Check if a selected image index is stored in local storage
-  const selectedImageIndex = localStorage.getItem('selectedImageIndex');
-  
-  // If no selected image index is stored, set the default image as selected
-  if (!selectedImageIndex) {
-    // Set the default image as selected
-    images[0].classList.add('selected');
-  } else {
-    // Get the index from the stored selected image index
-    const index = parseInt(selectedImageIndex);
-  
-    // Check if the index is within the range of available images
-    if (index >= 0 && index < images.length) {
-      // Add 'selected' class to the image with the stored index
-      images[index].classList.add('selected');
-    } else {
-      // Set the default image as selected
-      images[0].classList.add('selected');
-    }
-  }
-  
-  // Create the checkmark element
-  const checkmark = document.createElement('div');
-  checkmark.classList.add('selected-checkmark');
-  boxy.appendChild(checkmark);
-  
-  // Position the checkmark element initially
-  const selectedImage = boxy.querySelector('.selected');
-  if (selectedImage) {
-    const imageRect = selectedImage.getBoundingClientRect();
-    checkmark.style.top = imageRect.top + imageRect.height - 10 + 'px';
-    checkmark.style.left = imageRect.left + imageRect.width - 10 + 'px';
-  }
-  
-  // Add click event listener to the boxy element
-  boxy.addEventListener('click', (event) => {
-    // Check if the clicked element is an image
-    if (event.target.tagName === 'IMG') {
-      // Remove 'selected' class from all images
-      images.forEach((img) => img.classList.remove('selected'));
-  
-      // Add 'selected' class to the clicked image
-      event.target.classList.add('selected');
-  
-      // Get the position of the clicked image
-      const imageRect = event.target.getBoundingClientRect();
-  
-      // Position the checkmark element relative to the clicked image
-      checkmark.style.top = imageRect.top + imageRect.height - 10 + 'px';
-      checkmark.style.left = imageRect.left + imageRect.width - 10 + 'px';
-  
-      // Store the index of the selected image in local storage
-      const selectedIndex = Array.from(images).indexOf(event.target);
-      localStorage.setItem('selectedImageIndex', selectedIndex.toString());
-      localStorage.setItem("playerDeathImg", image_array[selectedIndex]);
-    }
-  });
-  
-    </script>
-</body>
-
-</html>
+</div>
+<script src="https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js"></script>
+<script src="scripts/bundle.min.js"></script>

@@ -55,7 +55,8 @@
 		},
 		{
 			"type": "desk",
-			"position": [-5.5, -3]
+			"position": [ -5.5, -3 ],
+			"hitbox": [5, 2]
 		}
 	],
 	"zones": [

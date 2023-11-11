@@ -28,6 +28,10 @@
 		"rarity": 2,
 		"weight": 5
 	},
+	"scout_21": {
+		"rarity": 2,
+		"weight": 7
+	},
 	"sv98": {
 		"rarity": 2,
 		"weight": 4
@@ -35,5 +39,9 @@
 	"awc": {
 		"rarity": 5,
 		"weight": 1
+	},
+	"vr80": {
+		"rarity": 3,
+		"weight": 5
 	}
 }

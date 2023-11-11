@@ -80,3 +80,7 @@ export function changeCurrency(accessToken: string, delta: number) {
     fetch((process.env.API_URL || "http://localhost:8000") + "/api/delta-currency", { method: "POST", headers: { "Authorization": "Bearer " + process.env.SERVER_DB_TOKEN, "Content-Type": "application/json" }, body: JSON.stringify({ accessToken, delta }) })
         .catch(console.error);
 }
+export function addKillCounts(accessToken: string, delta: number) {
+    fetch((process.env.API_URL || "http://localhost:8000") + "/api/killCount-delta", { method: "POST", headers: { "Authorization": "Bearer " + process.env.SERVER_DB_TOKEN, "Content-Type": "application/json" }, body: JSON.stringify({ accessToken, delta }) })
+        .catch(console.error);
+}

@@ -22,7 +22,8 @@
     "@types/jquery": "^3.5.16",
     "@types/markdown-it": "^13.0.1",
     "@types/msgpack-lite": "^0.1.8",
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.18.8",
+    "@types/node-fetch": "^2.6.4",
     "@types/pako": "^2.0.0",
     "@types/ws": "^8.5.3",
     "browserify": "^17.0.0",
@@ -31,11 +32,14 @@
     "uglify-js": "^3.17.4"
   },
   "dependencies": {
+    "axios": "^1.6.0",
     "cookies-utils": "^1.0.0",
+    "dotenv": "^16.3.1",
     "howler": "^2.2.3",
     "jquery": "^3.7.0",
     "markdown-it": "^13.0.1",
     "msgpack-lite": "^0.1.26",
+    "node-fetch": "^3.3.2",
     "pako": "^2.1.0",
     "ws": "^8.7.0"
   },

@@ -26,5 +26,12 @@
 			"saturated": "ABC4FF",
 			"chambered": "004CFF"
 		}
+	},
+	"556mm": {
+		"color": {
+			"regular": "66FF66",
+			"saturated": "66FF99",
+			"chambered": "66FF33"
+		}
 	}
 }

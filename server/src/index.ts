@@ -79,6 +79,7 @@ server.on("connection", async socket => {
 	// Setup the close connection listener. Socket will be deleted from map.
 	var connected = false;
 	socket.on("close", () => {
+		player.die();
 		console.log("Connection closed");
 		sockets.delete(id);
 		connected = false;
@@ -122,7 +123,7 @@ server.on("connection", async socket => {
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
-		try { socket.close(); } catch (err) { }
+		try { player.die() ;  socket.close(); } catch (err) { }
 	}, 30000);
 
 	// The 4 directions of movement

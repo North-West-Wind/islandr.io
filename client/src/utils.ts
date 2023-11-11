@@ -41,6 +41,7 @@ import { encode, decode } from "msgpack-lite";
 import { deflate, inflate } from "pako";
 import { ServerPacketResolvable, IPacket } from "./types/packet";
 import { CommonAngles } from "./types/math";
+import axios from "axios";
 // Send packet
 export function send(socket: WebSocket, packet: IPacket) {
   //socket.send(deflate(deflate(encode(packet).buffer)));
@@ -101,4 +102,10 @@ export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w
 	ctx.closePath();
 	if (fill) ctx.fill();
 	if (stroke) ctx.stroke();
+}
+export function loadoutChange(accessToken: string, skin: string, delta: number) {
+	fetch((process.env.API_URL || "http://localhost:8000") + "/api/currency-decrement", { method: "POST", headers: {"Content-Type": "application/json" }, body: JSON.stringify({ accessToken, delta }) })
+		.catch(console.error);
+	fetch((process.env.API_URL || "http://localhost:8000") + "/api/addSkins", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accessToken, skin }) })
+		.catch(console.error);
 }

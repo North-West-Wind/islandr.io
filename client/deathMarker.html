@@ -1,0 +1,91 @@
+<html>
+<title>Islandr.io DeathMarker Customization</title>
+<body>
+    <div class="boxy">
+        <div class="image-wrapper" data-text="default">
+            <img src="https://raw.githubusercontent.com/North-West-Wind/islandr.io/b64ec2d302abdebd516c2b7bd29fd75cd421ec18/client/assets/images/game/entities/death.svg">
+        </div>
+        <div class="image-wrapper" data-text="Big-Head-Skull">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Death_skull.svg/796px-Death_skull.svg.png">
+        </div>
+        <div class="image-wrapper" data-text="3d-Quality-Skull">
+            <img src="https://clipart-library.com/img/1609358.png">
+        </div>
+        <div class="image-wrapper" data-text="R.I.P">
+            <img src="https://cdn.pixabay.com/photo/2013/07/13/12/32/tombstone-159792_1280.png">
+        </div>
+        <div class="image-wrapper" data-text="Cartoon-Skull">
+            <img src="https://cdn4.iconfinder.com/data/icons/holidays-18/64/skull_Halloween_bone_death_RIP-512.png">
+        </div>
+    </div>
+
+
+    <script>
+     // Get the boxy element
+  const image_array = ["default", "Big-Head-Skull", "3d-Quality-Skull", "R.I.P", "Cartoon-Skull"]
+  const boxy = document.querySelector('.boxy');
+  // Get all the images
+  const images = boxy.querySelectorAll('img');
+
+  // Check if a selected image index is stored in local storage
+  const selectedImageIndex = localStorage.getItem('selectedImageIndex');
+
+  // If no selected image index is stored, set the default image as selected
+  if (!selectedImageIndex) {
+    // Set the default image as selected
+    images[0].classList.add('selected');
+  } else {
+    // Get the index from the stored selected image index
+    const index = parseInt(selectedImageIndex);
+
+    // Check if the index is within the range of available images
+    if (index >= 0 && index < images.length) {
+      // Add 'selected' class to the image with the stored index
+      images[index].classList.add('selected');
+    } else {
+      // Set the default image as selected
+      images[0].classList.add('selected');
+    }
+  }
+
+  // Create the checkmark element
+  const checkmark = document.createElement('div');
+  checkmark.classList.add('selected-checkmark');
+  boxy.appendChild(checkmark);
+
+  // Position the checkmark element initially
+  const selectedImage = boxy.querySelector('.selected');
+  if (selectedImage) {
+    const imageRect = selectedImage.getBoundingClientRect();
+    checkmark.style.top = imageRect.top + imageRect.height - 10 + 'px';
+    checkmark.style.left = imageRect.left + imageRect.width - 10 + 'px';
+  }
+
+  // Add click event listener to the boxy element
+  boxy.addEventListener('click', (event) => {
+    // Check if the clicked element is an image
+    if (event.target.tagName === 'IMG') {
+      // Remove 'selected' class from all images
+      images.forEach((img) => img.classList.remove('selected'));
+
+      // Add 'selected' class to the clicked image
+      event.target.classList.add('selected');
+
+      // Get the position of the clicked image
+      const imageRect = event.target.getBoundingClientRect();
+
+      // Position the checkmark element relative to the clicked image
+      checkmark.style.top = imageRect.top + imageRect.height - 10 + 'px';
+      checkmark.style.left = imageRect.left + imageRect.width - 10 + 'px';
+
+      // Store the index of the selected image in local storage
+      const selectedIndex = Array.from(images).indexOf(event.target);
+      localStorage.setItem('selectedImageIndex', selectedIndex.toString());
+      localStorage.setItem("playerDeathImg", image_array[selectedIndex]);
+    }
+  });
+
+    </script>
+</body>
+
+</html>

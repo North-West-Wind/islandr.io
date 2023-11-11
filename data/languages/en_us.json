@@ -20,7 +20,9 @@
 	"entity.gun.jm9": "JM9",
 	"entity.gun.m960": "M960",
 	"entity.gun.m1120": "M1120",
+	"entity.gun.vr80":  "VR 80",
 	"entity.gun.mosin_nagant": "Mosin Nagant",
+	"entity.gun.scout_21":  "Scout 21",
 	"entity.gun.mp4.5": "MP4.5",
 	"entity.gun.mp222": "MP222",
 	"entity.gun.sv98": "SV-98",
@@ -51,6 +53,8 @@
 	"hud.weapon.mp4.5": "MP4.5",
 	"hud.weapon.mp222": "MP222",
 	"hud.weapon.sv98": "SV-98",
+	"hud.weapon.vr80": "VR 80",
+	"hud.weapon.scout_21":  "Scout 21",
 
 	"hud.weapon.fists": "Fists"
 }
