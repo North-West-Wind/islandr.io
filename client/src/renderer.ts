@@ -97,10 +97,10 @@ function animate(currentTime: number) {
 			ctx.strokeRect(x, y, width, height);
 	
 			// Draw overlays
-			if (!isHudHidden()) drawHud(player, canvas, ctx);
-			if (isMapOpened()) drawMap(canvas, ctx);
-			else if (!isMapHidden()) drawMinimap(player, canvas, ctx);
-			drawPrompt(player, canvas, ctx, scale);
+			if (!isHudHidden()) drawHud(player, ctx);
+			if (isMapOpened()) drawMap(ctx);
+			else if (!isMapHidden()) drawMinimap(player, ctx);
+			drawPrompt(player, ctx);
 		}
 	} catch (err) { console.error(err); }
 

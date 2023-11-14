@@ -1,4 +1,7 @@
-// More like configuration
+/**
+ * What keys for what actions
+ * @todo make this configurable
+ */
 export enum KeyBind {
 	MENU = "Escape",
 	HIDE_HUD = "F1",
@@ -15,16 +18,19 @@ export enum KeyBind {
 	RELOAD = "r"
 }
 
+// Keys for right, up, left, down (ordered)
 export const movementKeys = [KeyBind.RIGHT, KeyBind.UP, KeyBind.LEFT, KeyBind.DOWN].map(k => <string> k);
-
+// In-game units interval between the grid lines
 export const GRID_INTERVAL = 20;
+// In-game units of the map to be shown with the minimap
 export const MINIMAP_SIZE = 100;
+// Timeout in milliseconds before cancelling connection
 export const TIMEOUT = 10000;
 // Translate original surviv.io game units to suit this one
 export const GLOBAL_UNIT_MULTIPLIER = 0.5;
 // For now we will assume the user uses English
 export const LANG = "en_us";
-
+// Gun color index
 export enum GunColor {
 	YELLOW = 0, // 9mm
 	RED = 1, // 12 gauge
