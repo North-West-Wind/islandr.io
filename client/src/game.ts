@@ -195,7 +195,10 @@ if (touchdevice) {
 	const handle = document.getElementsByClassName('joystick-handle')[0];
 	const aimJoystick = document.getElementsByClassName('aimjoystick-container')[0];
 	const aimHandle = document.getElementsByClassName('aimjoystick-handle')[0];
-
+	const HandlerObjects = [joystick, handle, aimJoystick, aimHandle];
+	HandlerObjects.forEach(handler => {
+		(<HTMLElement>handler).style.display = 'block';
+	});
 	// Add event listeners for touch events
 	(<HTMLElement>handle).addEventListener('touchstart', handleTouchStart);
 	(<HTMLElement>handle).addEventListener('touchmove', handleTouchMove);
