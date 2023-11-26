@@ -184,101 +184,135 @@ document.getElementById("connect")?.addEventListener("click", async () => {
 	}
 });
 
-//const touchdevice = /Android/.test(navigator.userAgent) || /iPhone/.test(navigator.userAgent) || /iPad/.test(navigator.userAgent) || /Tablet/.test(navigator.userAgent)
-var joystickActive = false;
-    var joystickDirection = '';
+const touchdevice = /Android/.test(navigator.userAgent) || /iPhone/.test(navigator.userAgent) || /iPad/.test(navigator.userAgent) || /Tablet/.test(navigator.userAgent)
+if (touchdevice) {
+	var joystickActive = false;
+	var joystickDirection = '';
+	var aimJoystickActive = false;
 
-    // Get the joystick and handle elements
-    var joystick = document.getElementsByClassName('joystick-container')[0];
-    var handle = document.getElementsByClassName('joystick-handle')[0];
+	// Get the joystick and handle elements
+	const joystick = document.getElementsByClassName('joystick-container')[0];
+	const handle = document.getElementsByClassName('joystick-handle')[0];
+	const aimJoystick = document.getElementsByClassName('aimjoystick-container')[0];
+	const aimHandle = document.getElementsByClassName('aimjoystick-handle')[0];
 
-    // Add event listeners for touch events
-    (<HTMLElement>handle).addEventListener('touchstart', handleTouchStart);
-    (<HTMLElement>handle).addEventListener('touchmove', handleTouchMove);
-(<HTMLElement>handle).addEventListener('touchcancel', handleTouchEnd);
-(<HTMLElement>handle).addEventListener('touchend', handleTouchEnd);
-(<HTMLElement>joystick).addEventListener('touchcancel', handleTouchEnd);
-(<HTMLElement>joystick).addEventListener('touchend', handleTouchEnd);
+	// Add event listeners for touch events
+	(<HTMLElement>handle).addEventListener('touchstart', handleTouchStart);
+	(<HTMLElement>handle).addEventListener('touchmove', handleTouchMove);
+	(<HTMLElement>handle).addEventListener('touchcancel', handleTouchEnd);
+	(<HTMLElement>handle).addEventListener('touchend', handleTouchEnd);
+	(<HTMLElement>joystick).addEventListener('touchcancel', handleTouchEnd);
+	(<HTMLElement>joystick).addEventListener('touchend', handleTouchEnd);
 
-    // Function to handle touchstart event
-    function handleTouchStart(event: Event) {
-      event.preventDefault();
-      joystickActive = true;
-    }
+	//Add event listeners for the aim joystick
+	(<HTMLElement>aimJoystick).addEventListener('touchcancel', handleAimJoystickTouchEnd);
+	(<HTMLElement>aimJoystick).addEventListener('touchend', handleAimJoystickTouchEnd);
+	(<HTMLElement>aimHandle).addEventListener('touchstart', handleAimJoystickTouchStart);
+	(<HTMLElement>aimHandle).addEventListener('touchmove', handleTouchMoveAimJoystick);
+	(<HTMLElement>aimHandle).addEventListener('touchcancel', handleAimJoystickTouchEnd);
+	(<HTMLElement>aimHandle).addEventListener('touchend', handleAimJoystickTouchEnd);
 
-    // Function to handle touchmove event
-    function handleTouchMove(event: any) {
-      event.preventDefault();
-      if (joystickActive) {
-        var touch = event.targetTouches[0];
-        var posX = touch.pageX - (<HTMLElement>joystick).offsetLeft;
-        var posY = touch.pageY - (<HTMLElement>joystick).offsetTop;
-        
-        // Calculate the distance from the center of the joystick
-        var distance = Math.sqrt(Math.pow(posX - (<HTMLElement>joystick).offsetWidth / 2, 2) + Math.pow(posY - (<HTMLElement>joystick).offsetHeight / 2, 2));
+	// Function to handle touchstart event
+	function handleTouchStart(event: Event) {
+		event.preventDefault();
+		joystickActive = true;
+		return 0;
+	}
+	function handleAimJoystickTouchStart(event: Event) { event.preventDefault(); aimJoystickActive = true; return 0; }
 
-        // Set the maximum distance to 50px (half of the handle size)
-        var maxDistance = 50;
-
-        // If the distance exceeds the maximum, limit it
-        if (distance > maxDistance) {
-          var angle = Math.atan2(posY - (<HTMLElement>joystick).offsetHeight / 2, posX - (<HTMLElement>joystick).offsetWidth / 2);
-          var deltaX = Math.cos(angle) * maxDistance;
-          var deltaY = Math.sin(angle) * maxDistance;
-          posX = (<HTMLElement>joystick).offsetWidth / 2 + deltaX;
-          posY = (<HTMLElement>joystick).offsetHeight / 2 + deltaY;
-        }
-
-        // Move the handle to the current position
-        (<HTMLElement>handle).style.left = posX + 'px';
-        (<HTMLElement>handle).style.top = posY + 'px';
-
-        // Calculate the joystick direction based on the handle position
-        var centerX = (<HTMLElement>joystick).offsetWidth / 2;
-        var centerY = (<HTMLElement>joystick).offsetHeight / 2;
-        var directionX = posX - centerX;
-        var directionY = posY - centerY;
-        joystickDirection = '';
-
-        if (Math.abs(directionX) > Math.abs(directionY)) {
-          if (directionX > 0) {
-			  joystickDirection = 'D';
-			  send(ws, new MovementPressPacket(MovementDirection.RIGHT));
-          } else {
-			  joystickDirection = 'A';
-			  send(ws, new MovementPressPacket(MovementDirection.LEFT));
-          }
-        } else {
-          if (directionY > 0) {
-			joystickDirection = 'S';
-			send(ws, new MovementPressPacket(MovementDirection.DOWN));
-          } else {
-			joystickDirection = 'W';
-			send(ws, new MovementPressPacket(MovementDirection.UP));
-          }
-        }
-      }
-    }
-
-    // Function to handle touchend event
-function handleTouchEnd(event: Event) {
-	event.preventDefault();
-	  console.log("done")
-      joystickActive = false;
-      (<HTMLElement>handle).style.left = '50%';
-      (<HTMLElement>handle).style.top = '50%';
+	// Function to handle touchmove event
+	function handleTouchMove(event: any) {
+		event.preventDefault();
+		if (joystickActive) {
+			var touch = event.targetTouches[0];
+			var posX = touch.pageX - (<HTMLElement>joystick).offsetLeft;
+			var posY = touch.pageY - (<HTMLElement>joystick).offsetTop;
+			// Calculate the distance from the center of the joystick
+			var distance = Math.sqrt(Math.pow(posX - (<HTMLElement>joystick).offsetWidth / 2, 2) + Math.pow(posY - (<HTMLElement>joystick).offsetHeight / 2, 2));
+			// Set the maximum distance to 50px (half of the handle size)
+			var maxDistance = 50;
+			// If the distance exceeds the maximum, limit it
+			if (distance > maxDistance) {
+				var angle = Math.atan2(posY - (<HTMLElement>joystick).offsetHeight / 2, posX - (<HTMLElement>joystick).offsetWidth / 2);
+				var deltaX = Math.cos(angle) * maxDistance;
+				var deltaY = Math.sin(angle) * maxDistance;
+				posX = (<HTMLElement>joystick).offsetWidth / 2 + deltaX;
+				posY = (<HTMLElement>joystick).offsetHeight / 2 + deltaY;}
+			// Move the handle to the current position
+			(<HTMLElement>handle).style.left = posX + 'px';
+			(<HTMLElement>handle).style.top = posY + 'px';
+			// Calculate the joystick direction based on the handle position
+			var centerX = (<HTMLElement>joystick).offsetWidth / 2;
+			var centerY = (<HTMLElement>joystick).offsetHeight / 2;
+			var directionX = posX - centerX;
+			var directionY = posY - centerY;
+			joystickDirection = '';
+			if (Math.abs(directionX) > Math.abs(directionY)) {
+				if (directionX > 0) { joystickDirection = 'D'; send(ws, new MovementPressPacket(MovementDirection.RIGHT)); send(ws, new MovementReleasePacket(MovementDirection.LEFT)); }
+				if (directionX < 0) { joystickDirection = 'A'; send(ws, new MovementReleasePacket(MovementDirection.RIGHT)); send(ws, new MovementPressPacket(MovementDirection.LEFT));}}
+			if (Math.abs(directionX) < Math.abs(directionY)) {
+				if (directionY > 0) {
+					joystickDirection = 'S'; send(ws, new MovementPressPacket(MovementDirection.DOWN)); send(ws, new MovementReleasePacket(MovementDirection.UP))
+				} if (directionY < 0) { joystickDirection = 'W'; send(ws, new MovementPressPacket(MovementDirection.UP)); send(ws, new MovementReleasePacket(MovementDirection.DOWN)) }
+			}
+		}
+	}
+	//function for joystick aim part
+	function handleTouchMoveAimJoystick(event: any) {
+		event.preventDefault()
+		if (!aimJoystickActive) return;
+		var touch = event.targetTouches[0];
+		var posX = touch.pageX - (<HTMLElement>aimJoystick).offsetLeft;
+		var posY = touch.pageY - (<HTMLElement>aimJoystick).offsetTop;
+		// Calculate the distance from the center of the joystick
+		var distance = Math.sqrt(Math.pow(posX - (<HTMLElement>aimJoystick).offsetWidth / 2, 2) + Math.pow(posY - (<HTMLElement>aimJoystick).offsetHeight / 2, 2));
+		// Set the maximum distance to 50px (half of the handle size)
+		var maxDistance = 75;
+			// If the distance exceeds the maximum, limit it
+		if (distance > maxDistance) {
+			var angle = Math.atan2(posY - (<HTMLElement>aimJoystick).offsetHeight / 2, posX - (<HTMLElement>aimJoystick).offsetWidth / 2);
+			var deltaX = Math.cos(angle) * maxDistance;
+			var deltaY = Math.sin(angle) * maxDistance;
+			posX = (<HTMLElement>aimJoystick).offsetWidth / 2 + deltaX;
+			posY = (<HTMLElement>aimJoystick).offsetHeight / 2 + deltaY;
+		}
+		// Move the handle to the current position
+		(<HTMLElement>aimHandle).style.left = posX + 'px';
+		(<HTMLElement>aimHandle).style.top = posY + 'px';
+		// Calculate the joystick direction based on the handle position
+		var centerX = (<HTMLElement>aimJoystick).offsetWidth / 2;
+		var centerY = (<HTMLElement>aimJoystick).offsetHeight / 2;
+		var directionX = posX - centerX;
+		var directionY = posY - centerY;
+		send(ws, new MouseMovePacket(directionX - maxDistance / 2, directionY - maxDistance / 2))
+		if (distance > 37.5) {
+			send(ws, new MousePressPacket(1))
+		}
+	}
+	// Function to handle touchend event
+	function handleAimJoystickTouchEnd(event: Event) {
+		event.preventDefault();
+		aimJoystickActive = false;
+		send(ws, new MouseReleasePacket(1));
+	}
+	function handleTouchEnd(event: Event) {
+		event.preventDefault();
+		console.log("done")
+		joystickActive = false;
+		(<HTMLElement>handle).style.left = '50%';
+		(<HTMLElement>handle).style.top = '50%';
 		joystickDirection = '';
 		send(ws, new MovementResetPacket())
-    }
+	}
 
-    // Event listener to capture joystick direction changes
-    setInterval(function() {
-		if (joystickDirection == '' || !joystickActive ) {
+	// Event listener to capture joystick direction changes
+	setInterval(function () {
+		if (joystickDirection == '' || !joystickActive) {
 			send(ws, new MovementResetPacket())
 			// You can perform your desired actions here based on the joystick direction
 		}
-    }, 100);
-
+	}, 100);
+}
 function check(username: string, address: string): Error | void {
 	if (!username)
 		throw new Error("Please provide a username.");

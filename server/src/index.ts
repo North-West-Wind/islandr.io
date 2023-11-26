@@ -98,11 +98,10 @@ server.on("connection", async socket => {
 				connected = true;
 				username = decoded.username;
 				accessToken = decoded.accessToken;
-				
 				skin = decoded.skin;
 				deathImg = decoded.deathImg;
 				console.log(skin)
-			} else try { socket.close(); } catch (err) { }
+			} else try { console.log("insufficient info"); socket.close(); } catch (err) { }
 			resolve();
 		})
 	})]);
