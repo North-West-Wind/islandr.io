@@ -138,6 +138,7 @@ server.on("connection", async socket => {
 				break;
 			case "movementReset":
 				for (let ii = 0; ii < movements.length; ii++) { movements[ii] = false }
+				player.setVelocity(Vec2.ZERO)
 				console.log(movements, "success")
 				break;
 			case "movementpress":

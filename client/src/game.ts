@@ -262,8 +262,8 @@ var joystickActive = false;
 
     // Function to handle touchend event
 function handleTouchEnd(event: Event) {
-		alert("GOT CALLED!")
-      event.preventDefault();
+	event.preventDefault();
+	  console.log("done")
       joystickActive = false;
       (<HTMLElement>handle).style.left = '50%';
       (<HTMLElement>handle).style.top = '50%';
