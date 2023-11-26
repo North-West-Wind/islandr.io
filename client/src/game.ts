@@ -15,7 +15,6 @@ import Building from "./types/building";
 import { cookieExists, getCookieValue } from "cookies-utils";
 import { Obstacle } from "./types/obstacle";
 import { getMode } from "./homepage";
-import nipplejs from "nipplejs";
 import { MovementDirection } from "./types/misc";
 
 //handle users that tried to go to old domain name, or direct ip
@@ -232,7 +231,6 @@ if (touchdevice) {
 			var posY = touch.pageY - (<HTMLElement>joystick).offsetTop;
 			// Calculate the distance from the center of the joystick
 			var distance = Math.sqrt(Math.pow(posX - (<HTMLElement>joystick).offsetWidth / 2, 2) + Math.pow(posY - (<HTMLElement>joystick).offsetHeight / 2, 2));
-			// Set the maximum distance to 50px (half of the handle size)
 			var maxDistance = 50;
 			// If the distance exceeds the maximum, limit it
 			if (distance > maxDistance) {

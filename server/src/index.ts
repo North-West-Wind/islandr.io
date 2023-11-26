@@ -7,7 +7,6 @@ import { DIRECTION_VEC, TICKS_PER_SECOND } from "./constants";
 import { CommonAngles, Vec2 } from "./types/math";
 import { Player } from "./store/entities";
 import { World } from "./types/world";
-import { MapTerrainSupplier } from "./types/supplier";
 import { Plain, castMapTerrain } from "./store/terrains";
 import { castMapObstacle } from "./store/obstacles";
 import { castBuilding } from "./store/buildings";
