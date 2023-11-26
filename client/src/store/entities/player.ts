@@ -8,6 +8,7 @@ import { EntitySupplier } from "../../types/supplier";
 import { GunWeapon, WeaponType } from "../../types/weapon";
 import { circleFromCenter } from "../../utils";
 import { castCorrectWeapon, WEAPON_SUPPLIERS } from "../weapons";
+import { getMode } from "../../homepage";
 
 const weaponPanelDivs: HTMLDivElement[] = [];
 const weaponNameDivs: HTMLDivElement[] = [];
@@ -63,8 +64,8 @@ export default class Player extends Entity {
 	constructor(minEntity: MinEntity & AdditionalEntity) {
 		super(minEntity);
 		this.copy(minEntity);
-		this.currentSkinImg.src = "assets/images/game/skins/" + this.skin + ".svg";
-		this.currentDeathImg.src = "assets/images/game/entities/" + this.deathImg + ".svg";
+		this.currentSkinImg.src = "assets/" + getMode() + "/images/game/skins/" + this.skin + ".svg";
+		this.currentDeathImg.src = "assets/" + getMode() + "/images/game/entities/" + this.deathImg + ".svg";
 	}
 
 	copy(minEntity: MinEntity & AdditionalEntity) {

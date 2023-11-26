@@ -81,8 +81,7 @@ export default class Crate extends Obstacle {
 				return e;
 			}));
 		}
-		spawnGun("vr80", GunColor.RED, this.position, 15)
-		spawnGun("scout_21", GunColor.GREEN, this.position, 70)
+		spawnGun("hk_mp6", GunColor.GREEN, this.position, 70)
 		world.onceSounds.push({ path: "obstacles/crate_break.mp3", position: this.position });
 	}
 

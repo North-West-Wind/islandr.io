@@ -1,22 +1,10 @@
 import { OBSTACLE_SUPPLIERS } from ".";
+import { getMode } from "../../homepage";
 import { RectHitbox } from "../../types/math";
 import { MinObstacle } from "../../types/minimized";
 import { Obstacle } from "../../types/obstacle";
 import { ObstacleSupplier } from "../../types/supplier";
 import { Player } from "../entities";
-
-const crateImg = new Image();
-crateImg.src = "assets/images/game/objects/crate.svg";
-
-const crateResidueImg = new Image();
-crateResidueImg.src = "assets/images/game/objects/residues/crate.svg";
-
-const grenadeCrateImg = new Image();
-grenadeCrateImg.src = "assets/images/game/objects/grenade_crate.svg";
-
-const sovietCrateImg = new Image();
-sovietCrateImg.src = "assets/images/game/objects/soviet_crate.svg";
-
 /*
 const awcCrateImg: HTMLImageElement & { loaded: boolean } = Object.assign(new Image(), { loaded: false });
 awcCrateImg.onload = () => awcCrateImg.loaded = true;
@@ -37,9 +25,19 @@ export default class Crate extends Obstacle {
 	static readonly TYPE = "crate";
 	type = Crate.TYPE;
 	special!: "normal" | "grenade" | "soviet" | "awc";
+	static crateImg = new Image();
+	static crateResidueImg = new Image();
+	static grenadeCrateImg = new Image();
+	static sovietCrateImg = new Image();
 
 	static {
 		OBSTACLE_SUPPLIERS.set(Crate.TYPE, new CrateSupplier());
+	}
+	static updateAssets() {
+		this.crateImg.src = "assets/" + getMode() + "/images/game/objects/crate.svg";
+		this.crateResidueImg.src = "assets/" + getMode() + "/images/game/objects/residues/crate.svg";
+		this.grenadeCrateImg.src = "assets/" + getMode() + "/images/game/objects/grenade_crate.svg";
+		this.sovietCrateImg.src = "assets/" + getMode() + "/images/game/objects/soviet_crate.svg";
 	}
 
 	copy(minObstacle: MinObstacle & AdditionalObstacle) {
@@ -51,21 +49,21 @@ export default class Crate extends Obstacle {
 		var img: HTMLImageElement;
 		switch (this.special) {
 			case "grenade":
-				img = grenadeCrateImg;
+				img = Crate.grenadeCrateImg;
 				break;
 			case "soviet":
-				img = sovietCrateImg;
+				img = Crate.sovietCrateImg;
 				break;
 			default:
-				img = crateImg;
+				img = Crate.crateImg;
 				break;
 		}
-		if (!img.complete || !crateResidueImg.complete) return;
+		if (!img.complete || !Crate.crateResidueImg.complete) return;
 		const relative = this.position.addVec(you.position.inverse());
-		const width = scale * (<RectHitbox>this.hitbox).width * (this.despawn ? 0.5 : 1), height = width * crateImg.naturalWidth / crateImg.naturalHeight;
+		const width = scale * (<RectHitbox>this.hitbox).width * (this.despawn ? 0.5 : 1), height = width * Crate.crateImg.naturalWidth / Crate.crateImg.naturalHeight;
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
-		ctx.drawImage(this.despawn ? crateResidueImg : img, -width / 2, -height / 2, width, height);
+		ctx.drawImage(this.despawn ? Crate.crateResidueImg : img, -width / 2, -height / 2, width, height);
 		ctx.resetTransform();
 	}
 

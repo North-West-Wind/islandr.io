@@ -136,6 +136,10 @@ server.on("connection", async socket => {
 			case "ping":
 				timeout.refresh();
 				break;
+			case "movementReset":
+				for (let ii = 0; ii < movements.length; ii++) { movements[ii] = false }
+				console.log(movements, "success")
+				break;
 			case "movementpress":
 				// Make the direction true
 				const mvPPacket = <MovementPressPacket>decoded;

@@ -4,13 +4,7 @@ import { MinObstacle } from "../../types/minimized";
 import { circleFromCenter } from "../../utils";
 import { ObstacleSupplier } from "../../types/supplier";
 import { OBSTACLE_SUPPLIERS } from ".";
-
-const toiletImg = new Image();
-toiletImg.src = "assets/images/game/objects/toilet.svg";
-
-const toiletResidueImg = new Image();
-toiletResidueImg.src = "assets/images/game/objects/residues/toilet.svg";
-
+import { getMode } from "../../homepage";
 class ToiletSupplier implements ObstacleSupplier {
 	create(minObstacle: MinObstacle) {
 		return new Toilet(minObstacle);
@@ -22,17 +16,25 @@ export default class Toilet extends Obstacle {
 	static readonly TYPE = "toilet";
 	type = Toilet.TYPE;
 	zIndex = 9;
+	static toiletImg = new Image();
+	static toiletResidueImg = new Image();
 
 	static {
 		OBSTACLE_SUPPLIERS.set(Toilet.TYPE, new ToiletSupplier());
 	}
 
+	static updateAssets() {
+		this.toiletImg.src = "assets/" + getMode() + "/images/game/objects/toilet.svg";
+		this.toiletResidueImg.src = "assets/" + getMode() + "/images/game/objects/residues/toilet.svg";
+
+	}
+
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void {
-		if (!toiletImg.complete || !toiletResidueImg.complete) return;
+		if (!Toilet.toiletImg.complete || !Toilet.toiletResidueImg.complete) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
-		const img = this.despawn ? toiletResidueImg : toiletImg;
+		const img = this.despawn ? Toilet.toiletResidueImg : Toilet.toiletImg;
 		// Times 2 because radius * 2 = diameter
 		const width = scale * this.hitbox.comparable * 2, height = width * img.naturalWidth / img.naturalHeight;
 		ctx.drawImage(img, -width / 2, -height / 2, width, height);

@@ -20,6 +20,7 @@ export class ResponsePacket implements IPacket {
 	skin!: string | null;
 	deathImg!: string | null;
 	accessToken?: string;
+	mode!: string;
 }
 
 class PingPacket implements IPacket {
@@ -35,7 +36,9 @@ export class MovementPressPacket implements MovementPacket {
 	type = "movementpress";
 	direction!: MovementDirection;
 }
-
+export class MovementResetPacket implements IPacket {
+	type = "movementReset"
+}
 export class MovementReleasePacket implements MovementPacket {
 	type = "movementrelease";
 	direction!: MovementDirection;

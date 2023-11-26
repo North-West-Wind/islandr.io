@@ -4,10 +4,6 @@
 		"rarity": 0,
 		"weight": 10
 	},
-	"mp4.5": {
-		"rarity": 0,
-		"weight": 9
-	},
 	"m960": {
 		"rarity": 0,
 		"weight": 8
@@ -23,6 +19,10 @@
 	"ak47": {
 		"rarity": 1,
 		"weight": 7
+	},
+	"hk_mp6": {
+		"rarity": 1,
+		"weight": 9
 	},
 	"mosin_nagant": {
 		"rarity": 2,

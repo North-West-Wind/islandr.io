@@ -6,10 +6,10 @@ The game got the attention of the masses of surviv.io population, with it came p
 November Xth, 2023 :-
 The game got a huge, i mean VERY HUGE overhaul! We added these
 -New gun: VR 80 (Similar to SAIGA 12), And a gun on 5.56 mm, the Scout 21 (Scout elite)
--New mode: Suroi mode (based on normal mode)
+-New getMode: Suroi getMode (based on normal getMode)
 -New feature: Changing loadout such as skins and crosshairs and death markers, Sounds, Revamped assets, Bigger map with outhouse and small office building, Guns can have custom barrels, Particles
 -Fix: Weapon switch bug and random server crash bug
--New links: Dev test mode (will announce link on discord)
+-New links: Dev test getMode (will announce link on discord)
 -Performance: Improved performance (Reduced TPS to 45 from 120, Reduced packet sizes from 10 mB to Minimum 777kB)
 -New items: Vests, Helmets
 -New player info storage: Accounts. they can store your username, number of kills, number of games played, skins bought.

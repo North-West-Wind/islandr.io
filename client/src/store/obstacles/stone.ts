@@ -1,15 +1,10 @@
 import { OBSTACLE_SUPPLIERS } from ".";
+import { getMode } from "../../homepage";
 import { MinObstacle } from "../../types/minimized";
 import { Obstacle } from "../../types/obstacle";
 import { ObstacleSupplier } from "../../types/supplier";
 import { circleFromCenter } from "../../utils";
 import { Player } from "../entities";
-
-const stoneImg = new Image();
-stoneImg.src = "assets/images/game/objects/stone.svg";
-
-const ak47stoneImg = new Image();
-ak47stoneImg.src = "assets/images/game/objects/ak47_stone.svg";
 
 interface AdditionObstacle {
 	special: "normal" | "ak47";
@@ -25,9 +20,15 @@ export default class Stone extends Obstacle {
 	static readonly TYPE = "stone";
 	type = Stone.TYPE;
 	special!: "normal" | "ak47";
+	static stoneImg = new Image();
+	static ak47stoneImg = new Image();
 
 	static {
 		OBSTACLE_SUPPLIERS.set(Stone.TYPE, new StoneSupplier());
+	}
+	static updateAssets() {
+		this.stoneImg.src = "assets/" + getMode() + "/images/game/objects/stone.svg";
+		this.ak47stoneImg.src = "assets/" + getMode() + "/images/game/objects/ak47_stone.svg";
 	}
 
 	copy(minObstacle: MinObstacle & AdditionObstacle) {
@@ -39,10 +40,10 @@ export default class Stone extends Obstacle {
 		var img: HTMLImageElement;
 		switch (this.special) {
 			case "ak47":
-				img = ak47stoneImg;
+				img = Stone.ak47stoneImg;
 				break;
 			default:
-				img = stoneImg;
+				img = Stone.stoneImg;
 				break;
 		}
 		if (!img.complete) return;
@@ -50,7 +51,7 @@ export default class Stone extends Obstacle {
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());
 		if (!this.despawn) {
-			const width = scale * this.hitbox.comparable * 2, height = width * stoneImg.naturalWidth / stoneImg.naturalHeight;
+			const width = scale * this.hitbox.comparable * 2, height = width * Stone.stoneImg.naturalWidth / Stone.stoneImg.naturalHeight;
 			ctx.drawImage(img, -width / 2, -height / 2, width, height);
 		} else {
 			const radius = scale * this.hitbox.comparable / 2;

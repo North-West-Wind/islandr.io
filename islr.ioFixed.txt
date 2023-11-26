@@ -1,0 +1,37 @@
+/touchdevice is set to true the moment a touch action happens 
+if (touchdevice) {
+
+    /mstick and astick are predefined
+  const mstick = document.querySelector("#mstick");
+  const astick = document.querySelector("#astick");
+
+  const mstickInstance = nipplejs.create({
+    color: "#000000",
+    shape: "square",
+    zone: mstick,
+    threshold: 0.5,
+    fadeTime: 300,
+  });
+
+  const astickInstance = nipplejs.create({
+    color: "#000000",
+    shape: "circle",
+    zone: astick,
+    threshold: 0.5,
+    fadeTime: 300,
+  });
+
+  mstickInstance.on("move", (event, nipple) => {
+    const position = nipple.position;
+    const distance = nipple.distance;
+    console.log("Main stick position:", position);
+    console.log("Main stick distance:", distance);
+  });
+
+  astickInstance.on("move", (event, nipple) => {
+    const position = nipple.position;
+    const distance = nipple.distance;
+    console.log("Auxiliary stick position:", position);
+    console.log("Auxiliary stick distance:", distance);
+  });
+}

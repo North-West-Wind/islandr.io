@@ -1,0 +1,44 @@
+{
+	"name": "HK MP6",
+	"color": 3,
+	"ammo": 90,
+	"dual": false,
+	"auto": true,
+	"length": 2.75,
+	"droppable": true,
+	"normal": {
+		"capacity": 35,
+		"reload": {
+			"time": 3000
+		},
+		"delay": {
+			"switch": 600,
+			"firing": 50
+		},
+		"spread": {
+			"still": 3,
+			"move": 12
+		},
+		"bullets": 1,
+		"speed": {
+			"equip": 13,
+			"attack": 7
+		},
+		"headshot": 1.5,
+		"bullet": {
+			"damage": 11,
+			"falloff": 1,
+			"speed": 175,
+			"range": [200, 200],
+			"suppressed": false
+		}
+	},
+	"visuals": {
+		"tracer": {
+			"type": "556mm",
+			"width": 0.1,
+			"length": 0.9
+		},
+		"animations": ["medium_recoil"]
+	}
+}

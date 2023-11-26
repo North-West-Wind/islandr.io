@@ -14,7 +14,7 @@ export class ResponsePacket implements IPacket {
 	deathImg: string | null;
 	accessToken?: string;
 
-	constructor(id: string, username: string, skin: string | null, deathImg: string | null, accessToken?: string) {
+	constructor(id: string, username: string, skin: string | null, deathImg: string | null, mode: string, accessToken?: string) {
 		this.id = id;
 		this.username = username;
 		this.skin = skin;
@@ -38,6 +38,9 @@ export class MovementPressPacket implements IPacket {
 	}
 }
 
+export class MovementResetPacket implements IPacket {
+	type = "movementReset";
+}
 // Packet to notify movement key release
 export class MovementReleasePacket implements IPacket {
 	type = "movementrelease";

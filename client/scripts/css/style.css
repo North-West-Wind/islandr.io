@@ -6,7 +6,7 @@ html {
 
 body {
     font-family: "Jura", Arial, Helvetica, sans-serif;
-    background-image: url('../../assets/images/menu/background.png');
+    background-image: url('../../assets/normal/images/menu/background.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -747,4 +747,32 @@ div#menu div.panel#account {
 
 .flex {
     display: flex;
+}
+.joystick-container {
+    position: fixed;
+    left: 25%;
+    bottom: 24%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border-color: black;
+    background-image: url('JoystickYep.png');
+    background-size: 50% 50%;
+    background-size: cover;
+    background-color: gray;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.joystick-handle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
 }
