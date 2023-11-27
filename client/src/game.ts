@@ -286,7 +286,7 @@ if (touchdevice) {
 		var directionX = posX - centerX;
 		var directionY = posY - centerY;
 		send(ws, new MouseMovePacket(directionX - maxDistance / 2, directionY - maxDistance / 2))
-		if (distance > 37.5) {
+		if (distance > 37) {
 			send(ws, new MousePressPacket(1))
 		}
 	}

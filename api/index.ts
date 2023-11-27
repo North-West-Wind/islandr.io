@@ -14,7 +14,7 @@ db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='players'", (
 const app = express();
 
 const defaultHeaders = {
-	"X-XSS-Protection": "1; getMode=block",
+	"X-XSS-Protection": "1; mode=block",
 	"X-Frame-Options": "SAMEORIGIN",
 	"Referrer-Policy": "same-origin"
 };
