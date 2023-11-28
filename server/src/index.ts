@@ -78,7 +78,8 @@ server.on("connection", async socket => {
 	// Setup the close connection listener. Socket will be deleted from map.
 	var connected = false;
 	socket.on("close", () => {
-		player.die();
+		try { player.die(); }
+		catch (err) {console.error(err) }		
 		console.log("Connection closed");
 		sockets.delete(id);
 		connected = false;
@@ -99,8 +100,8 @@ server.on("connection", async socket => {
 				accessToken = decoded.accessToken;
 				skin = decoded.skin;
 				deathImg = decoded.deathImg;
-				console.log(skin)
-			} else try { console.log("insufficient info"); socket.close(); } catch (err) { }
+				console.log(skin, deathImg, accessToken, username, connected)
+			} else try { console.log(decoded.skin, decoded.deathImg, decoded.accessToken, decoded.username); socket.close(); } catch (err) { }
 			resolve();
 		})
 	})]);

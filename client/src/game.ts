@@ -287,14 +287,16 @@ if (touchdevice) {
 		var directionY = posY - centerY;
 		send(ws, new MouseMovePacket(directionX - maxDistance / 2, directionY - maxDistance / 2))
 		if (distance > 37) {
-			send(ws, new MousePressPacket(1))
+			addMousePressed(0)
+			send(ws, new MousePressPacket(0))
 		}
 	}
 	// Function to handle touchend event
 	function handleAimJoystickTouchEnd(event: Event) {
 		event.preventDefault();
 		aimJoystickActive = false;
-		send(ws, new MouseReleasePacket(1));
+		removeMousePressed(1)
+		send(ws, new MouseReleasePacket(0));
 	}
 	function handleTouchEnd(event: Event) {
 		event.preventDefault();
