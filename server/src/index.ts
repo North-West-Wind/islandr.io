@@ -2,7 +2,7 @@ import "dotenv/config";
 import { readFileSync } from "fs";
 import * as ws from "ws";
 import { ID, receive, send, wait } from "./utils";
-import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
+import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket, MobileMovementPacket } from "./types/packet";
 import { DIRECTION_VEC, TICKS_PER_SECOND } from "./constants";
 import { CommonAngles, Vec2 } from "./types/math";
 import { Player } from "./store/entities";
@@ -79,7 +79,7 @@ server.on("connection", async socket => {
 	var connected = false;
 	socket.on("close", () => {
 		try { player.die(); }
-		catch (err) {console.error(err) }		
+		catch (err) {console.log("hi") }		
 		console.log("Connection closed");
 		sockets.delete(id);
 		connected = false;
@@ -89,6 +89,7 @@ server.on("connection", async socket => {
 	var accessToken: string | undefined = undefined;
 	var skin = "default";
 	var deathImg = "default";
+	var isMobile = false;
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
 		send(socket, new AckPacket(id, TICKS_PER_SECOND, world.size, world.defaultTerrain));
@@ -100,8 +101,8 @@ server.on("connection", async socket => {
 				accessToken = decoded.accessToken;
 				skin = decoded.skin;
 				deathImg = decoded.deathImg;
-				console.log(skin, deathImg, accessToken, username, connected)
-			} else try { console.log(decoded.skin, decoded.deathImg, decoded.accessToken, decoded.username); socket.close(); } catch (err) { }
+				isMobile = decoded.isMobile;
+			} else try { socket.close(); } catch (err) { }
 			resolve();
 		})
 	})]);
@@ -109,7 +110,7 @@ server.on("connection", async socket => {
 	console.log(`A new player with ID ${id} connected!`);
 
 	// Create the new player and add it to the entity list.
-	const player = new Player(id, username, skin, deathImg, accessToken);
+	const player = new Player(id, username, skin, deathImg, accessToken, isMobile);
 	world.addPlayer(player);
 	player.boost *= 1.5;
 
@@ -138,6 +139,11 @@ server.on("connection", async socket => {
 			case "movementReset":
 				for (let ii = 0; ii < movements.length; ii++) { movements[ii] = false }
 				player.setVelocity(Vec2.ZERO)
+				break;
+			case "mobilemovement":
+				const MMvPacket = <MobileMovementPacket>decoded
+				player.setVelocity(new Vec2(Math.cos(MMvPacket.direction) * 1.45, Math.sin(MMvPacket.direction) * 1.45))
+				console.log(new Vec2(Math.cos(MMvPacket.direction) * 1.45, Math.sin(MMvPacket.direction) * 1.45))
 				break;
 			case "movementpress":
 				// Make the direction true

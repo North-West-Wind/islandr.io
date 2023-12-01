@@ -21,6 +21,7 @@ export class ResponsePacket implements IPacket {
 	deathImg!: string | null;
 	accessToken?: string;
 	mode!: string;
+	isMobile!: boolean;
 }
 
 class PingPacket implements IPacket {
@@ -35,6 +36,11 @@ interface MovementPacket extends IPacket {
 export class MovementPressPacket implements MovementPacket {
 	type = "movementpress";
 	direction!: MovementDirection;
+}
+export class MobileMovementPacket implements IPacket {
+	type = "mobilemovement";
+	direction!: number;
+
 }
 export class MovementResetPacket implements IPacket {
 	type = "movementReset"

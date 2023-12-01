@@ -13,13 +13,15 @@ export class ResponsePacket implements IPacket {
 	skin: string | null;
 	deathImg: string | null;
 	accessToken?: string;
+	isMobile?: boolean;
 
-	constructor(id: string, username: string, skin: string | null, deathImg: string | null, mode: string, accessToken?: string) {
+	constructor(id: string, username: string, skin: string | null, deathImg: string | null, isMobile: boolean, accessToken?: string) {
 		this.id = id;
 		this.username = username;
 		this.skin = skin;
 		this.deathImg = deathImg;
 		this.accessToken = accessToken;
+		this.isMobile = isMobile
 	}
 }
 
@@ -48,6 +50,13 @@ export class MovementReleasePacket implements IPacket {
 
 	constructor(direction: MovementDirection) {
 		this.direction = direction;
+	}
+}
+export class MovementPacket implements IPacket {
+	type = "mobilemovement"
+	direction: number;
+	constructor(direction: number) {
+		this.direction = direction
 	}
 }
 

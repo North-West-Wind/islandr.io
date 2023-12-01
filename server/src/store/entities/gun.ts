@@ -29,6 +29,7 @@ export default class Gun extends Item {
 				// If player is holding a melee weapon, automatically switch to the gun
 				if (player.inventory.holding == 2)
 					player.inventory.holding = ii;
+				player.reload()
 				return true;
 			}
 		}

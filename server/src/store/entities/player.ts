@@ -5,7 +5,7 @@ import { CircleHitbox, Vec2 } from "../../types/math";
 import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { Particle } from "../../types/particle";
-import { GunWeapon, WeaponType } from "../../types/weapon";
+import { GunWeapon, Weapon, WeaponType } from "../../types/weapon";
 import { addKillCounts, changeCurrency, spawnAmmo, spawnGun } from "../../utils";
 import { Roof } from "../obstacles";
 import { Pond, River, Sea } from "../terrains";
@@ -42,6 +42,7 @@ export default class Player extends Entity {
 	healItem: string | undefined = undefined;
 	skin: string | null;
 	deathImg: string | null;
+	isMobile = false
 	// Track zone damage ticks
 	zoneDamageTicks = 2 * TICKS_PER_SECOND;
 	// Track ripple particle ticks
@@ -51,7 +52,7 @@ export default class Player extends Entity {
 	accessToken?: string;
 	killCount = 0;
 
-	constructor(id: string, username: string, skin: string | null, deathImg: string | null, accessToken?: string) {
+	constructor(id: string, username: string, skin: string | null, deathImg: string | null, accessToken?: string, isMobile?: boolean) {
 		super();
 		this.id = id;
 		this.interactMessage = null;
@@ -62,6 +63,7 @@ export default class Player extends Entity {
 		this.inventory = Inventory.defaultEmptyInventory();
 		this.currentHealItem = null;
 		this.accessToken = accessToken;
+		this.isMobile = isMobile!
 	}
 
 	setVelocity(velocity?: Vec2) {
@@ -117,7 +119,7 @@ export default class Player extends Entity {
 		if ([Pond.ID, River.ID, Sea.ID].includes(terrain.id)) {
 			if (this.rippleTicks <= 0) {
 				world.particles.push(new Particle("ripple", this.position, 0.5));
-				this.rippleTicks = 30;
+				this.rippleTicks = 45;
 			} else if (this.velocity.magnitudeSqr() != 0) this.rippleTicks--;
 		}
 		// Check for entity hitbox intersection
@@ -128,7 +130,7 @@ export default class Player extends Entity {
 				this.canInteract = true;
 				this.interactMessage = entity.interactionKey();
 				// Only interact when trying
-				if (this.tryInteracting) {
+				if (this.tryInteracting || this.isMobile) {
 					this.canInteract = false;
 					entity.interact(this);
 				}

@@ -8,7 +8,7 @@ import { FullPlayer, Healing } from "./store/entities";
 import { castObstacle, castMinObstacle, Bush, Tree, Barrel, Crate, Desk, Stone, Toilet, ToiletMore, Table } from "./store/obstacles";
 import { castTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket, MovementResetPacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket, MovementResetPacket, MovementPacket } from "./types/packet";
 import { World } from "./types/world";
 import { receive, send } from "./utils";
 import Building from "./types/building";
@@ -36,6 +36,7 @@ var deathImg: string | null = localStorage.getItem("playerDeathImg");
 
 console.log(skin)
 console.log(deathImg)
+const isMobile = /Android/.test(navigator.userAgent) || /iPhone/.test(navigator.userAgent) || /iPad/.test(navigator.userAgent) || /Tablet/.test(navigator.userAgent)
 var player: FullPlayer | null;
 
 export function getId() { return id; }
@@ -76,7 +77,8 @@ async function init(address: string) {
 			if (!currentCursor){localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor")}
 			if (currentCursor) {document.documentElement.style.cursor = currentCursor}
 			console.log("from game.ts client skin! > " + skin! + " and death img > " + deathImg!)
-			send(ws, new ResponsePacket(id, username!, skin!, deathImg!, (cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()) as string));
+			alert(id+username+skin+deathImg)
+			send(ws, new ResponsePacket(id, username!, skin!, deathImg!, isMobile!, (cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()) as string));
 			connected = true;
 			clearTimeout(timer);
 			
@@ -172,6 +174,7 @@ document.getElementById("connect")?.addEventListener("click", async () => {
 	const errorText = <HTMLDivElement>document.getElementById("error-div");
 	username = (<HTMLInputElement>document.getElementById("username")).value;
 	address = (<HTMLInputElement>document.getElementById("address")).value;
+	alert(username + " " + address)
 	try {
 		check(username, address);
 		await init(address);
@@ -182,9 +185,7 @@ document.getElementById("connect")?.addEventListener("click", async () => {
 		return;
 	}
 });
-
-const touchdevice = /Android/.test(navigator.userAgent) || /iPhone/.test(navigator.userAgent) || /iPad/.test(navigator.userAgent) || /Tablet/.test(navigator.userAgent)
-if (touchdevice) {
+if (isMobile) {
 	var joystickActive = false;
 	var joystickDirection = '';
 	var aimJoystickActive = false;
@@ -232,9 +233,10 @@ if (touchdevice) {
 			// Calculate the distance from the center of the joystick
 			var distance = Math.sqrt(Math.pow(posX - (<HTMLElement>joystick).offsetWidth / 2, 2) + Math.pow(posY - (<HTMLElement>joystick).offsetHeight / 2, 2));
 			var maxDistance = 50;
+			var angle;
 			// If the distance exceeds the maximum, limit it
 			if (distance > maxDistance) {
-				var angle = Math.atan2(posY - (<HTMLElement>joystick).offsetHeight / 2, posX - (<HTMLElement>joystick).offsetWidth / 2);
+				angle = Math.atan2(posY - (<HTMLElement>joystick).offsetHeight / 2, posX - (<HTMLElement>joystick).offsetWidth / 2);
 				var deltaX = Math.cos(angle) * maxDistance;
 				var deltaY = Math.sin(angle) * maxDistance;
 				posX = (<HTMLElement>joystick).offsetWidth / 2 + deltaX;
@@ -248,14 +250,7 @@ if (touchdevice) {
 			var directionX = posX - centerX;
 			var directionY = posY - centerY;
 			joystickDirection = '';
-			if (Math.abs(directionX) > Math.abs(directionY)) {
-				if (directionX > 0) { joystickDirection = 'D'; send(ws, new MovementPressPacket(MovementDirection.RIGHT)); send(ws, new MovementReleasePacket(MovementDirection.LEFT)); }
-				if (directionX < 0) { joystickDirection = 'A'; send(ws, new MovementReleasePacket(MovementDirection.RIGHT)); send(ws, new MovementPressPacket(MovementDirection.LEFT));}}
-			if (Math.abs(directionX) < Math.abs(directionY)) {
-				if (directionY > 0) {
-					joystickDirection = 'S'; send(ws, new MovementPressPacket(MovementDirection.DOWN)); send(ws, new MovementReleasePacket(MovementDirection.UP))
-				} if (directionY < 0) { joystickDirection = 'W'; send(ws, new MovementPressPacket(MovementDirection.UP)); send(ws, new MovementReleasePacket(MovementDirection.DOWN)) }
-			}
+			send(ws, new MovementPacket(angle as number))
 		}
 	}
 	//function for joystick aim part
