@@ -172,6 +172,15 @@ div#menu div#connection.panel {
     width: 15vw;
     empty-cells: show;
 }
+#reload-btn {
+    position: inherit;
+    right: 36vh;
+    top: 3vh;
+    height: 5vh;
+    width: 5vw;
+    empty-cells: show;
+    display: none;
+}
 
 .weapon-panel {
     position: relative;

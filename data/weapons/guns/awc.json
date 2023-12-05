@@ -28,7 +28,7 @@
 			"damage": 180,
 			"objDamage": 270,
 			"falloff": 0.94,
-			"speed": 136,
+			"speed": 129,
 			"range": [300, 300],
 			"suppressed": true
 		}

@@ -143,7 +143,6 @@ server.on("connection", async socket => {
 			case "mobilemovement":
 				const MMvPacket = <MobileMovementPacket>decoded
 				player.setVelocity(new Vec2(Math.cos(MMvPacket.direction) * 1.45, Math.sin(MMvPacket.direction) * 1.45))
-				console.log(new Vec2(Math.cos(MMvPacket.direction) * 1.45, Math.sin(MMvPacket.direction) * 1.45))
 				break;
 			case "movementpress":
 				// Make the direction true
@@ -199,6 +198,7 @@ server.on("connection", async socket => {
 				}
 				break;
 			case "reloadweapon":
+				console.log("Called reload weapon packet haiyaa")
 				player.reload();
 				break;
 			case "usehealing":

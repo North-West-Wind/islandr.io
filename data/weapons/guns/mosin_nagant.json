@@ -29,7 +29,7 @@
 			"damage": 72,
 			"objDamage": 108,
 			"falloff": 0.95,
-			"speed": 178,
+			"speed": 150,
 			"range": [500, 500],
 			"suppressed": false
 		}

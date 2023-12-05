@@ -97,7 +97,7 @@ export class CurrencyUpdatePacket {
 		this.updationAmount = updationAmount
 	}
 }
-export type ClientPacketResolvable = ResponsePacket | PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket | ReloadWeaponPacket;
+export type ClientPacketResolvable = ResponsePacket | PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket | ReloadWeaponPacket | MovementPacket | MovementResetPacket;
 
 export class AckPacket implements IPacket {
 	type = "ack";

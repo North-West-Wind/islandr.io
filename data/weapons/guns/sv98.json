@@ -27,7 +27,7 @@
 		"bullet": {
 			"damage": 80,
 			"falloff": 0.96,
-			"speed": 182,
+			"speed": 140,
 			"range": [520, 520],
 			"suppressed": false
 		}

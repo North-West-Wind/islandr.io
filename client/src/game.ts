@@ -15,7 +15,6 @@ import Building from "./types/building";
 import { cookieExists, getCookieValue } from "cookies-utils";
 import { Obstacle } from "./types/obstacle";
 import { getMode } from "./homepage";
-import { MovementDirection } from "./types/misc";
 
 //handle users that tried to go to old domain name, or direct ip
 var urlargs = new URLSearchParams(window.location.search);
@@ -45,6 +44,8 @@ export function getTPS() { return tps; }
 
 var ws: WebSocket;
 var connected = false;
+function getConnected() { return connected; }
+function setConnected(v: boolean) { connected = v; return connected; }
 enum modeMapColours {
 	normal = 0x80B251,
 	suroi_collab = 0x4823358
@@ -75,11 +76,14 @@ async function init(address: string) {
 			await start();
 			var currentCursor = localStorage.getItem("selectedCursor")
 			if (!currentCursor){localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor")}
-			if (currentCursor) {document.documentElement.style.cursor = currentCursor}
-			console.log("from game.ts client skin! > " + skin! + " and death img > " + deathImg!)
-			alert(id+username+skin+deathImg)
-			send(ws, new ResponsePacket(id, username!, skin!, deathImg!, isMobile!, (cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()) as string));
+			if (currentCursor) { document.documentElement.style.cursor = currentCursor }
+			const responsePacket = new ResponsePacket(id, username!, skin!, deathImg!, isMobile!, (cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()) as string)
+			send(ws, responsePacket);
+			console.log(responsePacket)
 			connected = true;
+			setConnected(true)
+			showMobControls();
+			showReloadBtn();
 			clearTimeout(timer);
 			
 			// Setup healing items click events
@@ -93,7 +97,6 @@ async function init(address: string) {
 					send(ws, new UseHealingPacket(Healing.mapping[ii]));
 				}
 			}
-	
 			const interval = setInterval(() => {
 				if (connected) send(ws, new PingPacket());
 				else clearInterval(interval);
@@ -153,6 +156,7 @@ async function init(address: string) {
 		// Reset everything when connection closes
 		ws.onclose = () => {
 			connected = false;
+			setConnected(false)
 			stop();
 			Howler.stop();
 			id = null;
@@ -174,7 +178,6 @@ document.getElementById("connect")?.addEventListener("click", async () => {
 	const errorText = <HTMLDivElement>document.getElementById("error-div");
 	username = (<HTMLInputElement>document.getElementById("username")).value;
 	address = (<HTMLInputElement>document.getElementById("address")).value;
-	alert(username + " " + address)
 	try {
 		check(username, address);
 		await init(address);
@@ -185,7 +188,18 @@ document.getElementById("connect")?.addEventListener("click", async () => {
 		return;
 	}
 });
-if (isMobile) {
+function showReloadBtn() {
+	if (getConnected() && isMobile) {
+		const ReloadButtonElement = <HTMLElement>document.getElementById("reload-btn");
+		ReloadButtonElement.style.display = 'block';
+		//const listOfEvents = ['click', 'touchend', 'touchcancel', 'touchmove', 'touchstart']
+		ReloadButtonElement.onclick = (event) => { event.preventDefault(); const rlpk = new ReloadWeaponPacket(); send(ws, rlpk); console.log("done", rlpk); }
+		// eslint-disable-next-line no-debugger
+		debugger;
+	}
+}
+function showMobControls() {
+if (isMobile && getConnected()) {
 	var joystickActive = false;
 	var joystickDirection = '';
 	var aimJoystickActive = false;
@@ -305,12 +319,12 @@ if (isMobile) {
 
 	// Event listener to capture joystick direction changes
 	setInterval(function () {
-		if (joystickDirection == '' || !joystickActive) {
+		if ((joystickDirection == '' || !joystickActive) && getConnected()) {
 			send(ws, new MovementResetPacket())
 			// You can perform your desired actions here based on the joystick direction
 		}
 	}, 100);
-}
+}}
 function check(username: string, address: string): Error | void {
 	if (!username)
 		throw new Error("Please provide a username.");
@@ -326,7 +340,6 @@ document.getElementById("disconnect")?.addEventListener("click", () => {
 	document.getElementById("settings")?.classList.add("hidden");
 	toggleMenu();
 });
-
 window.onkeydown = (event) => {
 	if (!connected || isKeyPressed(event.key)) return;
 	event.stopPropagation();
@@ -363,20 +376,20 @@ window.onkeyup = (event) => {
 }
 
 window.onmousemove = (event) => {
-	if (!connected) return;
+	if (!connected || isMobile) return;
 	event.stopPropagation();
 	send(ws, new MouseMovePacket(event.x - window.innerWidth / 2, event.y - window.innerHeight / 2));
 }
 
 window.onmousedown = (event) => {
-	if (!connected || isMouseDisabled()) return;
+	if (!connected || isMouseDisabled() || isMobile) return;
 	event.stopPropagation();
 	addMousePressed(event.button);
 	send(ws, new MousePressPacket(event.button));
 }
 
 window.onmouseup = (event) => {
-	if (!connected) return;
+	if (!connected || isMobile) return;
 	event.stopPropagation();
 	removeMousePressed(event.button);
 	send(ws, new MouseReleasePacket(event.button));
