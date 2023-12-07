@@ -27,6 +27,10 @@ You may also join the [Islandr.io Discord Server](https://discord.gg/jKQEVT7Vd3)
 ## The Story Behind
 [surviv.io](https://surviv.io) has existed since 2017. It was at first quite popular, and really fun, until the initial developers, Justin Kim and Nick Clark, sold it to Kongregate (Kong) in March 2020. Unfortunately, Kong did not pay enough attention to their acquisition, and ended up just squeezing profits from [surviv.io](https://surviv.io) in the mobile market.
 
+## Our past story uptill now
+Our previous name was "Open Surviv" and we both (Me and NorthWestWind) were developing this game trying to popularise this, and all of a sudden, our partner game, resurviv, got DMCA'd by Kong for assets. We used surviv's assets like them, and feared that we could get DMCA'd too, so we changed the name to "OpenSurvive" (this repo's name) and changed every asset in game. It was and still is a hell of a ride for the devs to program this, due to the lack of devs (Literally the new update only me, NorthWestWind, and Adam are doing). 
+Needless to say we'll take our time to catch up to a standard battle royale 2D game. 
+
 ### Cheaters
 And finally, competitors show up. Ice Hacks is currently the most active group that is developing the Surviv.io Cheat Injector. Even more infuriating is that, Ice Hacks is actually from the team of victorr.io, and their game is even worse. Those people ruined [surviv.io](https://surviv.io). So, just don't play victorr.io, or play with an adblock at least.
 
