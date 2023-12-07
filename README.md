@@ -1,4 +1,4 @@
-# Islandr.io
+# Islandr.io [DEVELOPMENT VERSION]
 An open-source 2D browser shooter game inspired by [surviv.io](https://surviv.io), a 2D battle royale game available online for free.  
 This repository contains both the server's and client's code.
 
@@ -11,8 +11,7 @@ Install [Node.js](https://nodejs.org) before hand.
 ### Instructions
 1. Clone this repository by either running the command `git clone https://github.com/North-West-Wind/opensurviv.git` or downloading as ZIP and extracting it.
 2. Open your terminal and `cd` into the directory it is cloned.
-3. Run `npm run deep-install`.
-4. Run `npm run gameserv` to launch the server at port 8080. Run `npm run webserv` to launch the client at port 8000.
+3. Run `npm run start` and wait till both servers have started up
 5. To open the game, go to https://127.0.0.1:8000 in your browser.
 
 Note: Once the project is finished, it will be published in `npm`. Instructions will be different after that.
