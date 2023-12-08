@@ -112,8 +112,6 @@ server.on("connection", async socket => {
 	// Create the new player and add it to the entity list.
 	const player = new Player(id, username, skin, deathImg, accessToken, isMobile);
 	world.addPlayer(player);
-	player.boost *= 1.5;
-
 	// Send the player the entire map
 	send(socket, new MapPacket(world.obstacles, world.buildings, world.terrains.concat(...world.buildings.map(b => b.floors.map(fl => fl.terrain)))));
 	// Send the player initial objects

@@ -110,6 +110,16 @@ div#menu div#connection.panel {
     margin: 2vw auto;
 }
 
+#reload-btn {
+    position: inherit;
+    right: 30vh;
+    top: 20vh;
+    height: 30px;
+    width: 30px;
+    display: none;
+    z-index: 100000;
+}
+
 #hud {
     width: 100%;
     height: 100%;
@@ -171,15 +181,6 @@ div#menu div#connection.panel {
     height: 30vh;
     width: 15vw;
     empty-cells: show;
-}
-#reload-btn {
-    position: inherit;
-    right: 36vh;
-    top: 3vh;
-    height: 5vh;
-    width: 5vw;
-    empty-cells: show;
-    display: none;
 }
 
 .weapon-panel {

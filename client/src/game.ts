@@ -1,4 +1,5 @@
 /* eslint-disable no-fallthrough */
+import $ from 'jquery';
 import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
@@ -190,12 +191,18 @@ document.getElementById("connect")?.addEventListener("click", async () => {
 });
 function showReloadBtn() {
 	if (getConnected() && isMobile) {
+		function __sendPkt() { const rlpk = new ReloadWeaponPacket(); send(ws, rlpk); console.log("done", rlpk); }
 		const ReloadButtonElement = <HTMLElement>document.getElementById("reload-btn");
+		ReloadButtonElement.style.zIndex = '10000000000';
 		ReloadButtonElement.style.display = 'block';
 		//const listOfEvents = ['click', 'touchend', 'touchcancel', 'touchmove', 'touchstart']
-		ReloadButtonElement.onclick = (event) => { event.preventDefault(); const rlpk = new ReloadWeaponPacket(); send(ws, rlpk); console.log("done", rlpk); }
+		
+		ReloadButtonElement.addEventListener('click', (event) => { event.preventDefault(); ReloadButtonElement.click();  __sendPkt() })
+		ReloadButtonElement.addEventListener('touchmove', (event) => { event.preventDefault(); ReloadButtonElement.click(); __sendPkt() })
+		ReloadButtonElement.onclick = () => {console.log("Made it here guys"), __sendPkt() }
+		ReloadButtonElement.addEventListener('touchstart', (event) => { event.preventDefault(); ReloadButtonElement.click(); __sendPkt() })
 		// eslint-disable-next-line no-debugger
-		debugger;
+		//debugger;
 	}
 }
 function showMobControls() {
