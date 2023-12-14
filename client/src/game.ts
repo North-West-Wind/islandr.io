@@ -1,5 +1,4 @@
 /* eslint-disable no-fallthrough */
-import $ from 'jquery';
 import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
@@ -84,7 +83,6 @@ async function init(address: string) {
 			connected = true;
 			setConnected(true)
 			showMobControls();
-			showReloadBtn();
 			clearTimeout(timer);
 			
 			// Setup healing items click events
@@ -98,6 +96,7 @@ async function init(address: string) {
 					send(ws, new UseHealingPacket(Healing.mapping[ii]));
 				}
 			}
+			showReloadBtn();
 			const interval = setInterval(() => {
 				if (connected) send(ws, new PingPacket());
 				else clearInterval(interval);
@@ -165,6 +164,7 @@ async function init(address: string) {
 			username = null;
 			player = null;
 			res(undefined);
+			
 			//remove playercount
 		}
 	
@@ -193,14 +193,10 @@ function showReloadBtn() {
 	if (getConnected() && isMobile) {
 		function __sendPkt() { const rlpk = new ReloadWeaponPacket(); send(ws, rlpk); console.log("done", rlpk); }
 		const ReloadButtonElement = <HTMLElement>document.getElementById("reload-btn");
-		ReloadButtonElement.style.zIndex = '10000000000';
 		ReloadButtonElement.style.display = 'block';
 		//const listOfEvents = ['click', 'touchend', 'touchcancel', 'touchmove', 'touchstart']
-		
-		ReloadButtonElement.addEventListener('click', (event) => { event.preventDefault(); ReloadButtonElement.click();  __sendPkt() })
-		ReloadButtonElement.addEventListener('touchmove', (event) => { event.preventDefault(); ReloadButtonElement.click(); __sendPkt() })
-		ReloadButtonElement.onclick = () => {console.log("Made it here guys"), __sendPkt() }
-		ReloadButtonElement.addEventListener('touchstart', (event) => { event.preventDefault(); ReloadButtonElement.click(); __sendPkt() })
+
+		ReloadButtonElement.addEventListener('click', (event) => { event.stopPropagation(); ReloadButtonElement.click(); __sendPkt() })
 		// eslint-disable-next-line no-debugger
 		//debugger;
 	}
@@ -323,12 +319,9 @@ if (isMobile && getConnected()) {
 		joystickDirection = '';
 		send(ws, new MovementResetPacket())
 	}
-
-	// Event listener to capture joystick direction changes
 	setInterval(function () {
 		if ((joystickDirection == '' || !joystickActive) && getConnected()) {
 			send(ws, new MovementResetPacket())
-			// You can perform your desired actions here based on the joystick direction
 		}
 	}, 100);
 }}
@@ -389,6 +382,7 @@ window.onmousemove = (event) => {
 }
 
 window.onmousedown = (event) => {
+	console.log("HALLO THERE GUYS!!!!")
 	if (!connected || isMouseDisabled() || isMobile) return;
 	event.stopPropagation();
 	addMousePressed(event.button);
