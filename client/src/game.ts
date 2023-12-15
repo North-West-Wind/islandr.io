@@ -50,6 +50,10 @@ enum modeMapColours {
 	normal = 0x80B251,
 	suroi_collab = 0x4823358
 }
+const joystick = document.getElementsByClassName('joystick-container')[0];
+const handle = document.getElementsByClassName('joystick-handle')[0];
+const aimJoystick = document.getElementsByClassName('aimjoystick-container')[0];
+const aimHandle = document.getElementsByClassName('aimjoystick-handle')[0];
 declare type modeMapColourType = keyof typeof modeMapColours
 async function init(address: string) {
 	// Initialize the websocket
@@ -96,7 +100,7 @@ async function init(address: string) {
 					send(ws, new UseHealingPacket(Healing.mapping[ii]));
 				}
 			}
-			showReloadBtn();
+			showMobileExclusiveBtns();
 			const interval = setInterval(() => {
 				if (connected) send(ws, new PingPacket());
 				else clearInterval(interval);
@@ -189,29 +193,33 @@ document.getElementById("connect")?.addEventListener("click", async () => {
 		return;
 	}
 });
-function showReloadBtn() {
+function showMobileExclusiveBtns() {
 	if (getConnected() && isMobile) {
 		function __sendPkt() { const rlpk = new ReloadWeaponPacket(); send(ws, rlpk); console.log("done", rlpk); }
 		const ReloadButtonElement = <HTMLElement>document.getElementById("reload-btn");
 		ReloadButtonElement.style.display = 'block';
-		//const listOfEvents = ['click', 'touchend', 'touchcancel', 'touchmove', 'touchstart']
-
-		ReloadButtonElement.addEventListener('click', (event) => { event.stopPropagation(); ReloadButtonElement.click(); __sendPkt() })
-		// eslint-disable-next-line no-debugger
-		//debugger;
+		ReloadButtonElement.addEventListener('click', (event) => { event.stopPropagation(); __sendPkt() })
+		const MenuBtnElement = <HTMLElement>document.getElementById("menu-btn");
+		MenuBtnElement.style.display = 'block';
+		MenuBtnElement.addEventListener('click', (event) => {
+			event.stopPropagation();
+			document.getElementById("wassup guys")
+			if (isMenuHidden()) { document.getElementById("settings")?.classList.remove("hidden"); toggleMenu() }
+			else { document.getElementById("settings")?.classList.add("hidden"); toggleMenu() }
+		})
 	}
 }
 function showMobControls() {
-if (isMobile && getConnected()) {
+	if (isMobile && getConnected()) {
+		joystick.classList.remove("hidden");
+		handle.classList.remove("hidden");
+		aimJoystick.classList.remove("hidden");
+		aimHandle.classList.remove("hidden");
 	var joystickActive = false;
 	var joystickDirection = '';
 	var aimJoystickActive = false;
 
 	// Get the joystick and handle elements
-	const joystick = document.getElementsByClassName('joystick-container')[0];
-	const handle = document.getElementsByClassName('joystick-handle')[0];
-	const aimJoystick = document.getElementsByClassName('aimjoystick-container')[0];
-	const aimHandle = document.getElementsByClassName('aimjoystick-handle')[0];
 	const HandlerObjects = [joystick, handle, aimJoystick, aimHandle];
 	HandlerObjects.forEach(handler => {
 		(<HTMLElement>handler).style.display = 'block';
@@ -338,8 +346,16 @@ function check(username: string, address: string): Error | void {
 document.getElementById("disconnect")?.addEventListener("click", () => {
 	ws.close();
 	document.getElementById("settings")?.classList.add("hidden");
+	(<HTMLElement>joystick).style.display = 'none';
+	(<HTMLElement>handle).style.display = 'none';
+	(<HTMLElement>aimJoystick).style.display = 'none';
+	(<HTMLElement>aimHandle).style.display = 'none';
 	toggleMenu();
 });
+document.getElementById("resume")?.addEventListener('click', () => {
+	document.getElementById("settings")?.classList.add('hidden');
+	toggleMenu();
+})
 window.onkeydown = (event) => {
 	if (!connected || isKeyPressed(event.key)) return;
 	event.stopPropagation();
