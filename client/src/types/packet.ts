@@ -166,4 +166,8 @@ export class ParticlesPacket implements IPacket {
 	particles!: MinParticle[];
 }
 
-export type ServerPacketResolvable = AckPacket | GamePacket | MapPacket | SoundPacket | ParticlesPacket;
+export class AnnouncementPacket implements IPacket {
+	type = "announce";
+	announcement!: string;
+}
+export type ServerPacketResolvable = AckPacket | GamePacket | MapPacket | SoundPacket | ParticlesPacket | AnnouncementPacket;

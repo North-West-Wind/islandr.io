@@ -1,4 +1,5 @@
 /* eslint-disable no-fallthrough */
+import $ from "jquery"
 import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
@@ -8,7 +9,7 @@ import { FullPlayer, Healing } from "./store/entities";
 import { castObstacle, castMinObstacle, Bush, Tree, Barrel, Crate, Desk, Stone, Toilet, ToiletMore, Table } from "./store/obstacles";
 import { castTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket, MovementResetPacket, MovementPacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket, MovementResetPacket, MovementPacket, AnnouncementPacket } from "./types/packet";
 import { World } from "./types/world";
 import { receive, send } from "./utils";
 import Building from "./types/building";
@@ -152,6 +153,17 @@ async function init(address: string) {
 					case "particles": {
 						const partPkt = <ParticlesPacket>data;
 						world.addParticles(partPkt.particles);
+						break;
+					}
+					case "announce": {
+						const announcementPacket = <AnnouncementPacket>data;
+						console.log("Received announcement packet", announcementPacket)
+						const killFeeds = document.getElementById("kill-feeds")
+						killFeeds?.prepend(`${announcementPacket.announcement}\n`);
+						setTimeout(() => {
+							console.log(killFeeds?.childNodes, killFeeds?.children)
+							killFeeds?.childNodes[killFeeds.childNodes.length-1].remove();
+						}, 5000);
 					}
 				}
 			}
@@ -217,7 +229,8 @@ function showMobControls() {
 		aimHandle.classList.remove("hidden");
 	var joystickActive = false;
 	var joystickDirection = '';
-	var aimJoystickActive = false;
+		var aimJoystickActive = false;
+		let resettedMovement = false;
 
 	// Get the joystick and handle elements
 	const HandlerObjects = [joystick, handle, aimJoystick, aimHandle];
@@ -239,11 +252,13 @@ function showMobControls() {
 	(<HTMLElement>aimHandle).addEventListener('touchmove', handleTouchMoveAimJoystick);
 	(<HTMLElement>aimHandle).addEventListener('touchcancel', handleAimJoystickTouchEnd);
 	(<HTMLElement>aimHandle).addEventListener('touchend', handleAimJoystickTouchEnd);
-
+		var centerX = (<HTMLElement>aimJoystick).offsetWidth / 2;
+		var centerY = (<HTMLElement>aimJoystick).offsetHeight / 2;
 	// Function to handle touchstart event
 	function handleTouchStart(event: Event) {
 		event.preventDefault();
 		joystickActive = true;
+		resettedMovement = false;
 		return 0;
 	}
 	function handleAimJoystickTouchStart(event: Event) { event.preventDefault(); aimJoystickActive = true; return 0; }
@@ -251,29 +266,37 @@ function showMobControls() {
 	// Function to handle touchmove event
 	function handleTouchMove(event: any) {
 		event.preventDefault();
+		resettedMovement = false;
 		if (joystickActive) {
 			var touch = event.targetTouches[0];
 			var posX = touch.pageX - (<HTMLElement>joystick).offsetLeft;
 			var posY = touch.pageY - (<HTMLElement>joystick).offsetTop;
+			var touchX = event.touches[0].clientX - (<HTMLElement>joystick).offsetLeft - (<HTMLElement>joystick).offsetWidth / 2;
+			var touchY = event.touches[0].clientY - (<HTMLElement>joystick).offsetTop - (<HTMLElement>joystick).offsetWidth / 2;
 			// Calculate the distance from the center of the joystick
+			
 			var distance = Math.sqrt(Math.pow(posX - (<HTMLElement>joystick).offsetWidth / 2, 2) + Math.pow(posY - (<HTMLElement>joystick).offsetHeight / 2, 2));
-			var maxDistance = 50;
+			var maxDistance = 100;
 			var angle;
 			// If the distance exceeds the maximum, limit it
+			angle = Math.atan2(posY - (<HTMLElement>joystick).offsetHeight / 2, posX - (<HTMLElement>joystick).offsetWidth / 2);
 			if (distance > maxDistance) {
-				angle = Math.atan2(posY - (<HTMLElement>joystick).offsetHeight / 2, posX - (<HTMLElement>joystick).offsetWidth / 2);
 				var deltaX = Math.cos(angle) * maxDistance;
 				var deltaY = Math.sin(angle) * maxDistance;
 				posX = (<HTMLElement>joystick).offsetWidth / 2 + deltaX;
-				posY = (<HTMLElement>joystick).offsetHeight / 2 + deltaY;}
+				posY = (<HTMLElement>joystick).offsetHeight / 2 + deltaY;
+				var joystickAngle = Math.atan2(touchY, touchX);
+				const joystickX = ((<HTMLElement>joystick).offsetWidth / 2 - (<HTMLElement>handle).offsetWidth / 2) * Math.cos(joystickAngle);
+				const joystickY = ((<HTMLElement>joystick).offsetWidth / 2 - (<HTMLElement>handle).offsetWidth / 2) * Math.sin(joystickAngle);
+				(<HTMLElement>handle).style.transform = 'translate(' + joystickX + 'px, ' + joystickY + 'px)';
+			}
+			(<HTMLElement>handle).style.transform = `translate('${posX}px', '${posY}px')`;
 			// Move the handle to the current position
 			(<HTMLElement>handle).style.left = posX + 'px';
 			(<HTMLElement>handle).style.top = posY + 'px';
 			// Calculate the joystick direction based on the handle position
 			var centerX = (<HTMLElement>joystick).offsetWidth / 2;
 			var centerY = (<HTMLElement>joystick).offsetHeight / 2;
-			var directionX = posX - centerX;
-			var directionY = posY - centerY;
 			joystickDirection = '';
 			send(ws, new MovementPacket(angle as number))
 		}
@@ -287,7 +310,7 @@ function showMobControls() {
 		var posY = touch.pageY - (<HTMLElement>aimJoystick).offsetTop;
 		// Calculate the distance from the center of the joystick
 		var distance = Math.sqrt(Math.pow(posX - (<HTMLElement>aimJoystick).offsetWidth / 2, 2) + Math.pow(posY - (<HTMLElement>aimJoystick).offsetHeight / 2, 2));
-		// Set the maximum distance to 50px (half of the handle size)
+		// Set the maximum distance to 75px (half of the handle size)
 		var maxDistance = 75;
 			// If the distance exceeds the maximum, limit it
 		if (distance > maxDistance) {
@@ -301,12 +324,10 @@ function showMobControls() {
 		(<HTMLElement>aimHandle).style.left = posX + 'px';
 		(<HTMLElement>aimHandle).style.top = posY + 'px';
 		// Calculate the joystick direction based on the handle position
-		var centerX = (<HTMLElement>aimJoystick).offsetWidth / 2;
-		var centerY = (<HTMLElement>aimJoystick).offsetHeight / 2;
 		var directionX = posX - centerX;
 		var directionY = posY - centerY;
 		send(ws, new MouseMovePacket(directionX - maxDistance / 2, directionY - maxDistance / 2))
-		if (distance > 37) {
+		if (distance > maxDistance) {
 			addMousePressed(0)
 			send(ws, new MousePressPacket(0))
 		}
@@ -322,13 +343,13 @@ function showMobControls() {
 		event.preventDefault();
 		console.log("done")
 		joystickActive = false;
-		(<HTMLElement>handle).style.left = '50%';
-		(<HTMLElement>handle).style.top = '50%';
+		(<HTMLElement>handle).style.transform = `translate(${centerX}px, ${centerY}px)`
 		joystickDirection = '';
 		send(ws, new MovementResetPacket())
+		resettedMovement = true;
 	}
 	setInterval(function () {
-		if ((joystickDirection == '' || !joystickActive) && getConnected()) {
+		if ((joystickDirection == '' || !joystickActive && !resettedMovement) && getConnected()) {
 			send(ws, new MovementResetPacket())
 		}
 	}, 100);

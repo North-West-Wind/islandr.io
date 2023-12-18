@@ -80,6 +80,18 @@ div#menu div#connection.panel {
     padding: 1vh;
 }
 
+.kill-feeds {
+    position: relative;
+        text-align: center;
+        top: 3vh;
+        right: 5vh;
+}
+.kill-feed-item {
+    position: fixed;
+    text-align: center;
+    height: 15px;
+    width: 100px;
+}
 .panel {
     position: relative;
     margin: auto;
@@ -775,10 +787,10 @@ div#menu div.panel#account {
     height: 100px;
     border-radius: 50%;
     border-color: black;
-    background-image: url('JoystickYep.png');
+    background-image: url('/assets/JoystickYep.png');
     background-size: 50% 50%;
     background-size: cover;
-    background-color: gray;
+    background-color: rgba(51, 51, 51, 0.5);
     z-index: 999;
     display: flex;
     align-items: center;
@@ -792,7 +804,7 @@ div#menu div.panel#account {
     border-radius: 50%;
     background-color: #fff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(52, 52, 52, 0.6);
     cursor: pointer;
     display: none;
 }
@@ -805,10 +817,10 @@ div#menu div.panel#account {
     height: 100px;
     border-radius: 50%;
     border-color: black;
-    background-image: url('JoystickYep.png');
+    background-image: url('/assets/JoystickYep.png');
     background-size: 50% 50%;
     background-size: cover;
-    background-color: gray;
+    background-color: rgba(51, 51, 51, 0.5);
     z-index: 999;
     display: flex;
     align-items: center;
@@ -821,7 +833,7 @@ div#menu div.panel#account {
     border-radius: 50%;
     background-color: #fff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(52, 52, 52, 0.6);
     cursor: pointer;
     display: none;
 }

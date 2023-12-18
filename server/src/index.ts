@@ -2,7 +2,7 @@ import "dotenv/config";
 import { readFileSync } from "fs";
 import * as ws from "ws";
 import { ID, receive, send, wait } from "./utils";
-import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket, MobileMovementPacket } from "./types/packet";
+import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket, MobileMovementPacket, AnnouncePacket } from "./types/packet";
 import { DIRECTION_VEC, TICKS_PER_SECOND } from "./constants";
 import { CommonAngles, Vec2 } from "./types/math";
 import { Player } from "./store/entities";
@@ -196,7 +196,6 @@ server.on("connection", async socket => {
 				}
 				break;
 			case "reloadweapon":
-				console.log("Called reload weapon packet haiyaa")
 				player.reload();
 				break;
 			case "usehealing":
@@ -219,6 +218,7 @@ setInterval(() => {
 		send(socket, pkt);
 		if (world.particles.length) send(socket, new ParticlesPacket(world.particles, player));
 		for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
+		for (const killFeed of world.killFeeds) send(socket, new AnnouncePacket(killFeed))
 	});
 	world.postTick();
 }, 1000 / TICKS_PER_SECOND);
