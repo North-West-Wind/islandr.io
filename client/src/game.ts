@@ -157,9 +157,11 @@ async function init(address: string) {
 					}
 					case "announce": {
 						const announcementPacket = <AnnouncementPacket>data;
-						console.log("Received announcement packet", announcementPacket)
 						const killFeeds = document.getElementById("kill-feeds")
-						killFeeds?.prepend(`${announcementPacket.announcement}\n`);
+						const killFeedItem = document.createElement("div")
+						if (killFeeds?.childNodes.length as number > 5) {killFeeds?.childNodes[killFeeds.childNodes.length - 1].remove();}
+						killFeedItem.prepend(`${announcementPacket.announcement}\n`)
+						killFeeds?.prepend(killFeedItem);
 						setTimeout(() => {
 							console.log(killFeeds?.childNodes, killFeeds?.children)
 							killFeeds?.childNodes[killFeeds.childNodes.length-1].remove();

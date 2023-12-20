@@ -80,17 +80,12 @@ div#menu div#connection.panel {
     padding: 1vh;
 }
 
-.kill-feeds {
-    position: relative;
-        text-align: center;
-        top: 3vh;
-        right: 5vh;
-}
-.kill-feed-item {
-    position: fixed;
+#kill-feeds {
+    position: inherit;
     text-align: center;
-    height: 15px;
-    width: 100px;
+    top: 13vh;
+    right: 5vh;
+    background-color: rgba(5, 5, 5, 0.5);
 }
 .panel {
     position: relative;
@@ -265,7 +260,7 @@ div#menu div#connection.panel {
 
 #healing-container {
     position: inherit;
-    top: 16vh;
+    top: 27vh;
     right: 2vh;
     height: 8vh;
     width: 7vw;
