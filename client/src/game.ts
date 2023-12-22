@@ -159,7 +159,9 @@ async function init(address: string) {
 						const announcementPacket = <AnnouncementPacket>data;
 						const killFeeds = document.getElementById("kill-feeds")
 						const killFeedItem = document.createElement("div")
-						if (killFeeds?.childNodes.length as number > 5) {killFeeds?.childNodes[killFeeds.childNodes.length - 1].remove();}
+						if (killFeeds?.childNodes.length as number > 5) { killFeeds?.childNodes[killFeeds.childNodes.length - 1].remove(); }
+						if (announcementPacket.killer == getPlayer()!.id) { killFeedItem.style.background = "rgba(0, 0, 139, 0.5)" }
+						else { killFeedItem.style.background = "rgba(139, 0, 0, 0.5)" }
 						killFeedItem.prepend(`${announcementPacket.announcement}\n`)
 						killFeeds?.prepend(killFeedItem);
 						setTimeout(() => {
@@ -297,8 +299,8 @@ function showMobControls() {
 			(<HTMLElement>handle).style.left = posX + 'px';
 			(<HTMLElement>handle).style.top = posY + 'px';
 			// Calculate the joystick direction based on the handle position
-			var centerX = (<HTMLElement>joystick).offsetWidth / 2;
-			var centerY = (<HTMLElement>joystick).offsetHeight / 2;
+			centerX = (<HTMLElement>joystick).offsetWidth / 2;
+			centerY = (<HTMLElement>joystick).offsetHeight / 2;
 			joystickDirection = '';
 			send(ws, new MovementPacket(angle as number))
 		}

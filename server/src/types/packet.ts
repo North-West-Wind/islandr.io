@@ -151,9 +151,11 @@ export class MapPacket implements IPacket {
 export class AnnouncePacket implements IPacket {
 	type = "announce";
 	announcement: string;
+	killer: string;
 
-	constructor(announcement: string) {
+	constructor(announcement: string, killer: string) {
 		this.announcement = announcement;
+		this.killer = killer;
 	}
 }
 

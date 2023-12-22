@@ -290,7 +290,7 @@ export default class Player extends Entity {
 			const entity = world.entities.find(e => e.id == this.potentialKiller);
 			if (entity?.type === this.type) {
 				(<Player>entity).killCount++;
-				world.killFeeds.push(`${(<Player>entity).username} killed ${this.username} with ${(<Player>entity).lastHolding}`)
+				world.killFeeds.push({ killFeed: `${(<Player>entity).username} killed ${this.username} with ${(<Player>entity).lastHolding}`, killer: (<Player>entity).id});
 			}
 		}
 		// Add currency to user if they are logged in and have kills

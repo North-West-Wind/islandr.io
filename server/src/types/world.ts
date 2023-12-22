@@ -41,7 +41,7 @@ export class World {
 	joinSounds: { path: string; position: Vec2; }[] = []; // Sent when player joins, e.g. music
 
 	//Kill feed storage
-	killFeeds:string[] = [];
+	killFeeds: { killFeed: string; killer: string; }[] = [];
 	constructor(size: Vec2, defaultTerrain: Terrain) {
 		// Set the size of map
 		this.size = size;

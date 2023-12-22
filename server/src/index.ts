@@ -218,7 +218,7 @@ setInterval(() => {
 		send(socket, pkt);
 		if (world.particles.length) send(socket, new ParticlesPacket(world.particles, player));
 		for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
-		for (const killFeed of world.killFeeds) send(socket, new AnnouncePacket(killFeed))
+		for (const killFeed of world.killFeeds) send(socket, new AnnouncePacket(killFeed.killFeed, killFeed.killer))
 	});
 	world.postTick();
 }, 1000 / TICKS_PER_SECOND);

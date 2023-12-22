@@ -1,3 +1,4 @@
+import { Player } from "../store/entities";
 import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2, MinBuilding, MinCircleHitbox, MinParticle } from "./minimized";
 import { MovementDirection } from "./misc";
 
@@ -169,5 +170,6 @@ export class ParticlesPacket implements IPacket {
 export class AnnouncementPacket implements IPacket {
 	type = "announce";
 	announcement!: string;
+	killer!: string;
 }
 export type ServerPacketResolvable = AckPacket | GamePacket | MapPacket | SoundPacket | ParticlesPacket | AnnouncementPacket;
