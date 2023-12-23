@@ -3,7 +3,13 @@ import { cookieExists, setCookie, getCookieValue, deleteCookie } from "cookies-u
 import MarkdownIt from "markdown-it";
 import { createHash } from "crypto";
 import { getToken, setToken, setUsername } from "./states";
-
+let mode = "normal"
+export function setMode(md: string) {
+	mode = md
+}
+export function getMode(): string {
+	return mode
+}
 	$(document).ready(function () {
 		$('.arrow').click(function () {
 			$('.box-selectable').toggle();
@@ -23,19 +29,15 @@ import { getToken, setToken, setUsername } from "./states";
 			$('.partner-box').toggle();
 		});
 	});
-	$.get("assets/CREDITS.md", function (data) {
+	$.get("assets/" + getMode() + "/CREDITS.md", function (data) {
 		document.getElementById("contents")!.innerHTML = new MarkdownIt().render(data);
 	}, "text");
 if (!window.location.href!.includes("/loadout")) {
 	window.onload = function () {
-		// Who tf made this long-ass waiting time for no reason???
-		//setTimeout(function () {
-
 		document.getElementById('loading')!.classList.add('zoom-out');
 		setTimeout(function () {
 			document.getElementById('loading')!.style.display = 'none';
 		}, 1000);
-		//}, 3000);
 	};
 	document.addEventListener('DOMContentLoaded', function () {
 		var audio = <HTMLAudioElement>document.getElementById('menu-audio');
@@ -77,12 +79,6 @@ if (!window.location.href!.includes("/loadout")) {
 		closeBox();
 	}
 	document.getElementById("button-close")!.onclick = closeBox;
-}
-let mode = "normal"
-export function setMode(md: string) {
-mode = md}
-export function getMode(): string {
-	return mode
 }
 const modes = ["normal", "suroi_collab", "dfbg-collab"]
 modes.forEach(md => {

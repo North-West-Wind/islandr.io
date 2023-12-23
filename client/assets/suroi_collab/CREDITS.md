@@ -1,60 +1,60 @@
-# Assets providers
+Skins:
+  Default skin body: Image by flatart on Freepik: https://www.freepik.com/free-vector/army-camouflage-vector-seamless-pattern-texture-military-camouflage-repeats-seamless-army-design-vector-background_34294124.htm
+  Loadout & game skins: Asultra, ScaredPenguinXXL, Pirelli, Slapdap, EndermanKing
+Loot:
+  Armor/Equipment: Slapdap
+  Scopes: Slapdap
+  Pills: jchen
+  Medkit, Soda: Asultra
+Weapons: 
+  Gun icons: eiπ, hester, jchen, vp, ScaredPenguinXXL, DogEnjoyer, yeet120, Megashark25098
+  Gun top down images: Tacomy Loh, jchen, ItzBlover, Megashark25098, 1092384, DogEnjoyer
+  Melee weapons: Radians
 
-### [a-w-a-y (hmm)](https://github.com/a-w-a-y)
-- `images/game/objects/crate.svg` (modified by NorthWestWind: dimension)
-- `images/game/objects/stone.svg` (modified by NorthWestWind: svg attributes)
-- `images/game/objects/tree.svg` (modified by NorthWestWind: svg attributes)
+Obstacles: 
+  Barrel: 123OP, Asultra, Henry Sanger
+  Barrel residue: Dachselt, Leo, Henry Sanger
 
-### Darkside (from Discord)
-- `images/game/loots/backpacks/1.svg`
-- `images/game/loots/backpacks/2.svg`
-- `images/game/loots/backpacks/3.svg`
+  Bush: Glek
+  Bush particles: Asultra, Radians
+  Bush residue: Henry Sanger, Asultra, Radians
+  Blueberry bush: Katloo
 
-- `images/game/objects/bush.svg` (modified by NorthWestWind: position)
+  Regular crate: Henry Sanger, 123OP
+  Health crate: Henry Sanger, Radians
 
+  Barrel explosion: Leia
+  Barrel explosion particles: Radians
 
-### Leo. (from Discord)
-- `images/game/guns/ak47.svg` (modified by NorthWestWind: rotation)
+  Soviet crate: Henry Sanger, DogEnjoyer, 123OP
 
-- `images/game/loots/weapons/ak47.svg` (modified by NorthWestWind: mirror)
+  Rocks: Leia
+  Rock particles: Radians
+  Rock residue: Henry Sanger, Radians
+  Mossy & cracked rocks: Hester, Leo, Henry Sanger
+  Gold rock: Katloo
 
-### [North-West-Wind (NorthWestWind)](https://github.com/North-West-Wind)
-- `images/game/entities/death.svg`
+  Oak trees: Asultra
+  Oak tree particles & residue: Radians
+  Pine tree: SquareCube
+  Pine tree particles: Radians
+  Pine tree residue: Radians, Henry Sanger
+  Birch tree, particles, & residue: Hester
 
-- `images/game/objects/ak47_stone.svg`
-- `images/game/objects/mosin_tree.svg`
+  Bed, drawers, couch, chair, table, fridge, walls, door, window, ceramic toilet, garage, washing machine: platonthek, Henry Sanger
+  Stove: 1092384
+  Residues for above obstacles: plantonthek
 
-- `images/game/objects/residues/barrel.svg`
-- `images/game/objects/residues/bush.svg`
-- `images/game/objects/residues/crate.svg`
-- `images/game/objects/residues/tree.svg`
+Building designs:
+  House: platonthek
+  Warehouse: Leia, 1092384
+  Porta potty: Katloo, Slapdap, 1092384
 
-- `images/menu/background.png`
-
-### SquareCube (from Discord)
-- `images/game/loots/weapons/awc.svg` (modified by NorthWestWind: mirror)
-- `images/game/loots/weapons/jm9.svg` (modified by NorthWestWind: mirror)
-- `images/game/loots/weapons/m960.svg` (modified by NorthWestWind: mirror)
-- `images/game/loots/weapons/m1120.svg` (modified by NorthWestWind: mirror)
-- `images/game/loots/weapons/mp4.5.svg` (modified by NorthWestWind: mirror)
-- `images/game/loots/weapons/mp222.svg` (modified by NorthWestWind: mirror)
-- `images/game/loots/weapons/sv98.svg` (modified by NorthWestWind: mirror)
-
-### ur mom Gary (from Discord)
-- `images/game/loots/weapons/mosin_nagant.svg` (modified by NorthWestWind: rotation)
-
-- `images/game/objects/grenade_crate.svg` (modified by NorthWestWind: dimension)
-- `images/game/objects/soviet_crate.svg` (modified by NorthWestWind: dimension)
-- `image/game/objects/barrel.svg` (modified by NorthWestWind: svg attributes)
-- `sounds/guns/jm9_reload.mp3`
-- `sounds/guns/m960_reload.mp3`
-
-
-### piesimp (from Discord)
-- `images/menu/islandr-logo.svg `
-
-### xpayton (from Discord)
-- `images/game/loots/weapons/frag_grenade.svg` (modified by NorthWestWind: color)
-
-### piesimp (from Discord)
- - `images/menu/logo.png` (modified by hmm: dimension)
+Other:
+  Death marker & skull: Henry Sanger
+  Bullet trails: Henry Sanger
+  Emotes: EndermanKing, Slapdap, Tofi38
+  Main logo: Henry Sanger
+  Small/square logo: Glek
+  Aegis/Flint logos: Katloo
+  Tap icon - "One Finger Tap Gesture Of Outlined Hand Symbol" from OnlineWebFonts: https://www.onlinewebfonts.com/icon/57341
