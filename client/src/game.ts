@@ -289,18 +289,12 @@ function showMobControls() {
 				var deltaY = Math.sin(angle) * maxDistance;
 				posX = (<HTMLElement>joystick).offsetWidth / 2 + deltaX;
 				posY = (<HTMLElement>joystick).offsetHeight / 2 + deltaY;
-				var joystickAngle = Math.atan2(touchY, touchX);
-				const joystickX = ((<HTMLElement>joystick).offsetWidth / 2 - (<HTMLElement>handle).offsetWidth / 2) * Math.cos(joystickAngle);
-				const joystickY = ((<HTMLElement>joystick).offsetWidth / 2 - (<HTMLElement>handle).offsetWidth / 2) * Math.sin(joystickAngle);
-				(<HTMLElement>handle).style.transform = 'translate(' + joystickX + 'px, ' + joystickY + 'px)';
 			}
-			(<HTMLElement>handle).style.transform = `translate('${posX}px', '${posY}px')`;
-			// Move the handle to the current position
-			(<HTMLElement>handle).style.left = posX + 'px';
-			(<HTMLElement>handle).style.top = posY + 'px';
+			var joystickAngle = Math.atan2(touchY, touchX);
+			const joystickX = ((<HTMLElement>joystick).offsetWidth / 2 - (<HTMLElement>handle).offsetWidth / 2) * Math.cos(joystickAngle);
+			const joystickY = ((<HTMLElement>joystick).offsetWidth / 2 - (<HTMLElement>handle).offsetWidth / 2) * Math.sin(joystickAngle);
+			(<HTMLElement>handle).style.transform = 'translate(' + joystickX + 'px, ' + joystickY + 'px)';
 			// Calculate the joystick direction based on the handle position
-			centerX = (<HTMLElement>joystick).offsetWidth / 2;
-			centerY = (<HTMLElement>joystick).offsetHeight / 2;
 			joystickDirection = '';
 			send(ws, new MovementPacket(angle as number))
 		}
@@ -312,22 +306,25 @@ function showMobControls() {
 		var touch = event.targetTouches[0];
 		var posX = touch.pageX - (<HTMLElement>aimJoystick).offsetLeft;
 		var posY = touch.pageY - (<HTMLElement>aimJoystick).offsetTop;
+		var touchX = event.touches[0].clientX - (<HTMLElement>aimJoystick).offsetLeft - (<HTMLElement>aimJoystick).offsetWidth / 2;
+		var touchY = event.touches[0].clientY - (<HTMLElement>aimJoystick).offsetTop - (<HTMLElement>aimJoystick).offsetWidth / 2;
 		// Calculate the distance from the center of the joystick
+
 		var distance = Math.sqrt(Math.pow(posX - (<HTMLElement>aimJoystick).offsetWidth / 2, 2) + Math.pow(posY - (<HTMLElement>aimJoystick).offsetHeight / 2, 2));
-		// Set the maximum distance to 75px (half of the handle size)
-		var maxDistance = 75;
-			// If the distance exceeds the maximum, limit it
+		var maxDistance = 100;
+		var angle;
+		// If the distance exceeds the maximum, limit it
+		angle = Math.atan2(posY - (<HTMLElement>aimJoystick).offsetHeight / 2, posX - (<HTMLElement>aimJoystick).offsetWidth / 2);
 		if (distance > maxDistance) {
-			var angle = Math.atan2(posY - (<HTMLElement>aimJoystick).offsetHeight / 2, posX - (<HTMLElement>aimJoystick).offsetWidth / 2);
 			var deltaX = Math.cos(angle) * maxDistance;
 			var deltaY = Math.sin(angle) * maxDistance;
 			posX = (<HTMLElement>aimJoystick).offsetWidth / 2 + deltaX;
 			posY = (<HTMLElement>aimJoystick).offsetHeight / 2 + deltaY;
 		}
-		// Move the handle to the current position
-		(<HTMLElement>aimHandle).style.left = posX + 'px';
-		(<HTMLElement>aimHandle).style.top = posY + 'px';
-		// Calculate the joystick direction based on the handle position
+		var joystickAngle = Math.atan2(touchY, touchX);
+		const joystickX = ((<HTMLElement>aimJoystick).offsetWidth / 2 - (<HTMLElement>aimHandle).offsetWidth / 2) * Math.cos(joystickAngle);
+		const joystickY = ((<HTMLElement>aimJoystick).offsetWidth / 2 - (<HTMLElement>aimHandle).offsetWidth / 2) * Math.sin(joystickAngle);
+		(<HTMLElement>aimHandle).style.transform = 'translate(' + joystickX + 'px, ' + joystickY + 'px)';
 		var directionX = posX - centerX;
 		var directionY = posY - centerY;
 		send(ws, new MouseMovePacket(directionX - maxDistance / 2, directionY - maxDistance / 2))
@@ -340,6 +337,7 @@ function showMobControls() {
 	function handleAimJoystickTouchEnd(event: Event) {
 		event.preventDefault();
 		aimJoystickActive = false;
+		(<HTMLElement>aimHandle).style.transform = "translate(0px, 0px)";
 		removeMousePressed(1)
 		send(ws, new MouseReleasePacket(0));
 	}
@@ -347,7 +345,8 @@ function showMobControls() {
 		event.preventDefault();
 		console.log("done")
 		joystickActive = false;
-		(<HTMLElement>handle).style.transform = `translate(${centerX}px, ${centerY}px)`
+		(<HTMLElement>handle).style.transform = "translate(0px, 0px)";
+
 		joystickDirection = '';
 		send(ws, new MovementResetPacket())
 		resettedMovement = true;
