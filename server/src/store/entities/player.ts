@@ -63,7 +63,7 @@ export default class Player extends Entity {
 		this.inventory = Inventory.defaultEmptyInventory();
 		this.currentHealItem = null;
 		this.accessToken = accessToken;
-		this.isMobile = isMobile!
+		this.isMobile = isMobile!;
 	}
 
 	setVelocity(velocity?: Vec2) {

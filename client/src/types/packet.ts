@@ -61,6 +61,11 @@ export class MovementPacket implements IPacket {
 	}
 }
 
+export class PlayerRotationDelta implements IPacket {
+	type = "playerRotation";
+	angle: number;
+	constructor(angle: number) { this.angle = angle }
+}
 // Packet to notify mouse button press
 export class MousePressPacket implements IPacket {
 	type = "mousepress";

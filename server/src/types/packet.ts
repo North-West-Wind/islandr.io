@@ -42,6 +42,10 @@ export class MobileMovementPacket implements IPacket {
 	direction!: number;
 
 }
+export class PlayerRotationDelta implements IPacket {
+	type = "playerRotation";
+	angle!: number;
+}
 export class MovementResetPacket implements IPacket {
 	type = "movementReset"
 }

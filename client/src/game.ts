@@ -9,7 +9,7 @@ import { FullPlayer, Healing } from "./store/entities";
 import { castObstacle, castMinObstacle, Bush, Tree, Barrel, Crate, Desk, Stone, Toilet, ToiletMore, Table } from "./store/obstacles";
 import { castTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket, MovementResetPacket, MovementPacket, AnnouncementPacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket, MovementResetPacket, MovementPacket, AnnouncementPacket, PlayerRotationDelta } from "./types/packet";
 import { World } from "./types/world";
 import { receive, send } from "./utils";
 import Building from "./types/building";
@@ -327,7 +327,7 @@ function showMobControls() {
 		(<HTMLElement>aimHandle).style.transform = 'translate(' + joystickX + 'px, ' + joystickY + 'px)';
 		var directionX = posX - centerX;
 		var directionY = posY - centerY;
-		send(ws, new MouseMovePacket(directionX - maxDistance / 2, directionY - maxDistance / 2))
+		send(ws, new PlayerRotationDelta(angle as number));
 		if (distance > maxDistance) {
 			addMousePressed(0)
 			send(ws, new MousePressPacket(0))
@@ -343,12 +343,11 @@ function showMobControls() {
 	}
 	function handleTouchEnd(event: Event) {
 		event.preventDefault();
-		console.log("done")
 		joystickActive = false;
 		(<HTMLElement>handle).style.transform = "translate(0px, 0px)";
 
 		joystickDirection = '';
-		send(ws, new MovementResetPacket())
+		if (!resettedMovement) send(ws, new MovementResetPacket())
 		resettedMovement = true;
 	}
 	setInterval(function () {
@@ -422,7 +421,6 @@ window.onmousemove = (event) => {
 }
 
 window.onmousedown = (event) => {
-	console.log("HALLO THERE GUYS!!!!")
 	if (!connected || isMouseDisabled() || isMobile) return;
 	event.stopPropagation();
 	addMousePressed(event.button);

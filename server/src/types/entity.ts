@@ -113,6 +113,7 @@ export class Entity {
 	potentialKiller?: string;
 	// Particle type to emit when damaged
 	damageParticle?: string;
+	isMobile = false;
 
 	constructor() {
 		this.id = ID();
@@ -146,8 +147,9 @@ export class Entity {
 	}
 
 	setDirection(direction: Vec2) {
-		this.direction = direction.unit();
-		this.markDirty();
+		if (this.isMobile) { this.direction = direction; }
+		else { this.direction = direction.unit(); }
+		this.markDirty()
 	}
 
 	// Hitbox collision check
