@@ -117,7 +117,6 @@ export default class Player extends Entity {
 		}
 		super.tick(entities, obstacles);
 		// Terrain particle
-		console.log("this.scope, this._scope", this.scope, this._scope)
 		const terrain = world.terrainAtPos(this.position);
 		if ([Pond.ID, River.ID, Sea.ID].includes(terrain.id)) {
 			if (this.rippleTicks <= 0) {
