@@ -347,18 +347,14 @@ function showMobControls() {
 		(<HTMLElement>handle).style.transform = "translate(0px, 0px)";
 
 		joystickDirection = '';
-		console.log("handleTouchEnd before packet", resettedMovement)
 		if (resettedMovement == false) send(ws, new MovementResetPacket())
 		console.log(resettedMovement)
 		resettedMovement = true;
-		console.log("handleTouchEnd after packet", resettedMovement)
 	}
 	setInterval(function () {
 		if ((joystickDirection == '' || !joystickActive) && getConnected() && resettedMovement == false ) {
-			console.log("setInterval before packet", resettedMovement)
 			send(ws, new MovementResetPacket())
 			resettedMovement = true;
-			console.log("setInterval after packet", resettedMovement)
 		}
 	}, 100);
 }}
