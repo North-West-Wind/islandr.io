@@ -24,6 +24,8 @@ export default class Player extends Entity {
 	boost = 0;
 	maxBoost = 100;
 	scope = 1;
+	buildingEnterScope = 1;
+	_scope = 1;
 	tryAttacking = false;
 	attackLock = 0;
 	tryInteracting = false;
@@ -115,6 +117,7 @@ export default class Player extends Entity {
 		}
 		super.tick(entities, obstacles);
 		// Terrain particle
+		console.log("this.scope, this._scope", this.scope, this._scope)
 		const terrain = world.terrainAtPos(this.position);
 		if ([Pond.ID, River.ID, Sea.ID].includes(terrain.id)) {
 			if (this.rippleTicks <= 0) {
@@ -167,8 +170,9 @@ export default class Player extends Entity {
 		const rooflessAdd = new Set<string>();
 		const rooflessDel = new Set<string>();
 		for (const building of world.buildings) {
-			if (building.zones.some(z => z.hitbox.collideCircle(z.position.addVec(building.position), building.direction, this.hitbox, this.position, this.direction) != CollisionType.NONE)) rooflessAdd.add(building.id);
-			else rooflessDel.add(building.id);
+			if (building.zones.some(z => z.hitbox.collideCircle(z.position.addVec(building.position), building.direction, this.hitbox, this.position, this.direction) != CollisionType.NONE)) { rooflessAdd.add(building.id); this.scope = 1; }
+			else {
+				setTimeout(() => { rooflessDel.add(building.id);  this.scope = this._scope }, 45 ) }
 		}
 		// Collision handling
 		for (const obstacle of obstacles) {
@@ -186,8 +190,8 @@ export default class Player extends Entity {
 			// For roof to be roofless
 			if (obstacle.type === Roof.ID) {
 				const roof = <Roof>obstacle;
-				if (rooflessAdd.has(roof.buildingId)) roof.addRoofless(this.id);
-				if (rooflessDel.has(roof.buildingId)) roof.delRoofless(this.id);
+				if (rooflessAdd.has(roof.buildingId)) roof.addRoofless(this.id)
+				if (rooflessDel.has(roof.buildingId) || rooflessAdd.size == 0 ) roof.delRoofless(this.id)
 			}
 		}
 
@@ -226,7 +230,7 @@ export default class Player extends Entity {
 		}
 
 		// Check scope difference
-		if (this.inventory.selectedScope != this.scope) this.scope = this.inventory.selectedScope;
+		if (this.inventory.selectedScope != this._scope) this._scope = this.inventory.selectedScope;
 
 		// Check red zone
 		if (!world.safeZone.hitbox.inside(this.position, world.safeZone.position, Vec2.UNIT_X)) {

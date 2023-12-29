@@ -130,7 +130,6 @@ server.on("connection", async socket => {
 
 	socket.on("message", (msg: ArrayBuffer) => {
 		const decoded = receive(msg);
-		console.log(decoded.type	)
 		switch (decoded.type) {
 			case "ping":
 				timeout.refresh();
