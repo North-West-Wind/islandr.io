@@ -211,7 +211,7 @@ document.getElementById("connect")?.addEventListener("click", async () => {
 });
 function showMobileExclusiveBtns() {
 	if (getConnected() && isMobile) {
-		function __sendPkt() { const rlpk = new ReloadWeaponPacket(); send(ws, rlpk); console.log("done", rlpk); }
+		function __sendPkt() { const rlpk = new ReloadWeaponPacket(); send(ws, rlpk); }
 		const ReloadButtonElement = <HTMLElement>document.getElementById("reload-btn");
 		ReloadButtonElement.style.display = 'block';
 		ReloadButtonElement.addEventListener('click', (event) => { event.stopPropagation(); __sendPkt() })
@@ -219,10 +219,14 @@ function showMobileExclusiveBtns() {
 		MenuBtnElement.style.display = 'block';
 		MenuBtnElement.addEventListener('click', (event) => {
 			event.stopPropagation();
-			document.getElementById("wassup guys")
 			if (isMenuHidden()) { document.getElementById("settings")?.classList.remove("hidden"); toggleMenu() }
 			else { document.getElementById("settings")?.classList.add("hidden"); toggleMenu() }
 		})
+		for (let ii = 0; ii < 4; ii++) {
+			(document.getElementsByClassName("weapon-panel")[ii] as HTMLElement).style.height = "8.5vh";
+			(document.getElementsByClassName("weapon-index")[ii] as HTMLElement).style.height = "4vh";
+}
+		document.getElementById("weapon-container")!.style.top = "-4%";
 	}
 }
 function showMobControls() {
@@ -325,8 +329,6 @@ function showMobControls() {
 		const joystickX = ((<HTMLElement>aimJoystick).offsetWidth / 2 - (<HTMLElement>aimHandle).offsetWidth / 2) * Math.cos(joystickAngle);
 		const joystickY = ((<HTMLElement>aimJoystick).offsetWidth / 2 - (<HTMLElement>aimHandle).offsetWidth / 2) * Math.sin(joystickAngle);
 		(<HTMLElement>aimHandle).style.transform = 'translate(' + joystickX + 'px, ' + joystickY + 'px)';
-		var directionX = posX - centerX;
-		var directionY = posY - centerY;
 		send(ws, new PlayerRotationDelta(angle as number));
 		if (distance > maxDistance) {
 			addMousePressed(0)

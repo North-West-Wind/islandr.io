@@ -192,9 +192,9 @@ div#menu div#connection.panel {
 }
 
 #weapon-container {
-    position: inherit;
-    right: 2vh;
-    bottom: 2vh;
+    position: relative;
+    left: 84%;
+    top: 33.5%;
     height: 30vh;
     width: 15vw;
     empty-cells: show;
