@@ -124,7 +124,7 @@ export class GunWeapon extends Weapon {
 		if (!img) {
 			const newImg = new Image();
 			MeleeWeapon.fistImages.set(player.skin!, newImg);
-			newImg.src = "assets/images/game/fists/" + player.skin + ".svg";
+			newImg.src = "assets/" + getMode() + "/images/game/fists/" + player.skin + ".svg";
 		} else if (img.complete)
 			for (const pos of fistPositions) {
 				const fist = pos.addVec(offset).scaleAll(scale);
