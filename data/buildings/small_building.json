@@ -93,7 +93,7 @@
 	"roofs": [
 		{
 			"type": "roof",
-			"hitbox": [17, 10],
+			"hitbox": [17, 10.5],
 			"position": [0, 0.5],
 			"color": 2942442751,
 			"texture": {

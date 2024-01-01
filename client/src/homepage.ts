@@ -2,8 +2,10 @@ import $ from "jquery";
 import { cookieExists, setCookie, getCookieValue, deleteCookie } from "cookies-utils";
 import MarkdownIt from "markdown-it";
 import { createHash } from "crypto";
+import "./loadout";
 import { getToken, setToken, setUsername } from "./states";
 let mode = "normal"
+console.log("homepage ts called")
 export function setMode(md: string) {
 	mode = md
 }

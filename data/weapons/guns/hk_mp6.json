@@ -26,7 +26,7 @@
 		},
 		"headshot": 1.5,
 		"bullet": {
-			"damage": 11,
+			"damage": 8,
 			"falloff": 1,
 			"speed": 110,
 			"range": [200, 200],
