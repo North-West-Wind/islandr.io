@@ -17,15 +17,9 @@ import { cookieExists, getCookieValue } from "cookies-utils";
 import { Obstacle } from "./types/obstacle";
 import { getMode } from "./homepage";
 
-//handle users that tried to go to old domain name, or direct ip
-var urlargs = new URLSearchParams(window.location.search);
-if(urlargs.get("from")){
-	alert("We have moved from " + urlargs.get("from") + " to islandr.io!")
-}
-
 export var world: World;
 
-var id: string | null;
+var id: string | null; // Player ID, obtained when connected
 var tps = 1; // Default should be 1, so even if no TPS detail from server, we will not be dividing by 0
 var username: string | null;
 var address: string | null;
@@ -39,9 +33,21 @@ console.log(deathImg)
 const isMobile = /Android/.test(navigator.userAgent) || /iPhone/.test(navigator.userAgent) || /iPad/.test(navigator.userAgent) || /Tablet/.test(navigator.userAgent)
 var player: FullPlayer | null;
 
-export function getId() { return id; }
-export function getPlayer() { return player; }
-export function getTPS() { return tps; }
+/**
+ * Getter of player ID
+ * @returns Player ID
+ */
+export function getId(): string | null { return id; }
+/**
+ * Getter of the client player object
+ * @returns Client Player object
+ */
+export function getPlayer(): FullPlayer | null { return player; }
+/**
+ * Getter of server TPS
+ * @returns Server TPS
+ */
+export function getTPS(): number { return tps; }
 
 var ws: WebSocket;
 var connected = false;
@@ -56,6 +62,11 @@ const handle = document.getElementsByClassName('joystick-handle')[0];
 const aimJoystick = document.getElementsByClassName('aimjoystick-container')[0];
 const aimHandle = document.getElementsByClassName('aimjoystick-handle')[0];
 declare type modeMapColourType = keyof typeof modeMapColours
+
+/**
+ * Initializes connection with a given address from the <input> tag
+ * @param address Websocket address from the <input> tag
+ */
 async function init(address: string) {
 	// Initialize the websocket
 	var protocol = "ws";
@@ -102,6 +113,8 @@ async function init(address: string) {
 				}
 			}
 			showMobileExclusiveBtns();
+	
+			// Ping server every second to ensure connection
 			const interval = setInterval(() => {
 				if (connected) send(ws, new PingPacket());
 				else clearInterval(interval);
@@ -110,6 +123,7 @@ async function init(address: string) {
 			ws.onmessage = (event) => {
 				const data = receive(event.data);
 				switch (data.type) {
+					// The update packet. It syncs the client world with the server world.
 					case "game": {
 						const gamePkt = <GamePacket>data;
 						world.updateEntities(gamePkt.entities, gamePkt.discardEntities);
@@ -123,8 +137,8 @@ async function init(address: string) {
 						world.clientTick(player);
 						break;
 					}
+					// The map packet. Sent once only. Client caches the map with this packet.
 					case "map": {
-						// This should happen once only normally
 						const mapPkt = <MapPacket>data;
 						console.log("packet terrains:", mapPkt.terrains);
 						world.terrains = mapPkt.terrains.map(ter => castTerrain(ter));
@@ -132,10 +146,11 @@ async function init(address: string) {
 						world.obstacles = <Obstacle[]>mapPkt.obstacles.map(obs => castObstacle(castMinObstacle(obs))).filter(obs => !!obs);
 						world.buildings = mapPkt.buildings.map(bui => new Building(bui));
 						initMap();
-						//Show player count once game starts
+						// Show player count once game starts
 						(document.querySelector("#playercountcontainer") as HTMLInputElement).style.display = "block";
 						break;
 					}
+					// The sound packet. Each packet contains one sound.
 					case "sound": {
 						if (!player) break;
 						const soundPkt = <SoundPacket>data;
@@ -150,6 +165,7 @@ async function init(address: string) {
 						howl.on("end", () => world.sounds.delete(id));
 						break;
 					}
+					// The particles packet. Client handles the drawing of particles.
 					case "particles": {
 						const partPkt = <ParticlesPacket>data;
 						world.addParticles(partPkt.particles);
@@ -184,8 +200,6 @@ async function init(address: string) {
 			username = null;
 			player = null;
 			res(undefined);
-			
-			//remove playercount
 		}
 	
 		ws.onerror = (err) => {
@@ -200,6 +214,7 @@ document.getElementById("connect")?.addEventListener("click", async () => {
 	username = (<HTMLInputElement>document.getElementById("username")).value;
 	address = (<HTMLInputElement>document.getElementById("address")).value;
 	try {
+		// check if username and address are valid before initializing
 		check(username, address);
 		await init(address);
 		errorText.style.display = "none";
@@ -360,6 +375,12 @@ function showMobControls() {
 		}
 	}, 100);
 }}
+
+/**
+ * Validates username and address
+ * @param username <input> username
+ * @param address <input> address
+ */
 function check(username: string, address: string): Error | void {
 	if (!username)
 		throw new Error("Please provide a username.");
@@ -371,6 +392,7 @@ function check(username: string, address: string): Error | void {
 }
 
 document.getElementById("disconnect")?.addEventListener("click", () => {
+	// when disconnect is clicked, close the socket and return to home screen
 	ws.close();
 	document.getElementById("settings")?.classList.add("hidden");
 	(<HTMLElement>joystick).style.display = 'none';

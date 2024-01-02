@@ -13,7 +13,9 @@ var constScale: number;
 
 const tmpCanvas = document.createElement("canvas");
 
-// Initialize the map when MapPacket is received
+/**
+ * Initializes the map when MapPacket is received
+ */
 export function initMap() {
 	// Determine the dimension
 	const size = world.size;
@@ -51,8 +53,12 @@ export function initMap() {
 	obstacles.forEach(obstacle => obstacle.renderMap(mapCanvas, mapCtx, scale));
 }
 
-// Draw world map
-export function drawMap(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+/**
+ * Draws world map (full screen)
+ * @param ctx Rendering Context of the client HTML canvas
+ */
+export function drawMap(ctx: CanvasRenderingContext2D) {
+	const canvas = ctx.canvas;
 	// Determine the dimension
 	const scaleByWidth = canvas.width / mapCanvas.width;
 	const scaleByHeight = canvas.height / mapCanvas.height;
@@ -96,8 +102,13 @@ export function drawMap(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D
 	circleFromCenter(ctx, (canvas.width - width) / 2 + player.position.x * scale, (canvas.height - height) / 2 + player.position.y * scale, 12, false, true);
 }
 
-// Draw minimap
-export function drawMinimap(player: FullPlayer, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+/**
+ * Draws minimap
+ * @param player Client player
+ * @param ctx Rendering Context of the client HTML canvas
+ */
+export function drawMinimap(player: FullPlayer, ctx: CanvasRenderingContext2D) {
+	const canvas = ctx.canvas;
 	// Determine the dimension
 	const size = MINIMAP_SIZE * constScale * (isBigMap() ? 1.5 : 1);
 	const x = player.position.x * constScale - size / 2;
