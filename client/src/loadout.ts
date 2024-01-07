@@ -53,7 +53,7 @@ if (window.location.href!.includes("/loadout")) {
         (<HTMLElement>overlay).style.display = 'block';
         showTab('skins'); // Show the 'Skins' tab by default
     });
-
+    (<HTMLElement>document.getElementById('loadout-button')).click();
     // Function to close the loadout container
     function closeLoadout() {
         hideContainer2(); // Close container2 if it's open

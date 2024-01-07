@@ -30,6 +30,7 @@ export function getMode(): string {
 		$('.partner').click(function () {
 			$('.partner-box').toggle();
 		});
+		$('.loadout').click(function () { window.location.replace(window.location.href += "loadout") })
 	});
 	$.get("assets/" + getMode() + "/CREDITS.md", function (data) {
 		document.getElementById("contents")!.innerHTML = new MarkdownIt().render(data);
