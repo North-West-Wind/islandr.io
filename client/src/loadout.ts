@@ -114,7 +114,7 @@ if (window.location.href!.includes("/loadout")) {
                 }
             }).then(() => {
                 const buttonID = button.getAttribute("id")
-            if((skins as string[]).includes(buttonID as string)) { button.textContent = "Equip Skin"; console.log("yo wassup") }
+            if((skins as string[]).includes(buttonID as string)) { button.textContent = "Equip Skin"; (button as HTMLElement).style.background = "#00ff00" }
             button.addEventListener('click', handleSelectSkin);
         })
             return button

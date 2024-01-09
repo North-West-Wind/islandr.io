@@ -43,5 +43,9 @@
 	"vr80": {
 		"rarity": 3,
 		"weight": 5
+	},
+	"bt_apc": {
+		"rarity": 2,
+		"weight":  5
 	}
 }
