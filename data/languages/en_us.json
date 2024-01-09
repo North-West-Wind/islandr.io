@@ -25,6 +25,8 @@
 	"entity.gun.scout_21": "Scout 21",
 	"entity.gun.hk_mp6": "HK MP6",
 	"entity.gun.bt_apc": "BT APC",
+	"entity.gun.tec-9": "TEC-9",
+	"entity.gun.fn_five_seven": "FN Five Seven",
 	"entity.gun.mp222": "MP222",
 	"entity.gun.sv98": "SV-98",
 	"entity.healing.chocolate": "Chocolate (%?)",
@@ -56,7 +58,10 @@
 	"hud.weapon.sv98": "SV-98",
 	"hud.weapon.vr80": "VR 80",
 	"hud.weapon.scout_21": "Scout 21",
-	"hud.weapon.bt_apc": "BT APC", 
+	"hud.weapon.bt_apc": "BT APC",
+	"hud.weapon.tec-9": "TEC-9",
+	"hud.weapon.fn_five_seven": "FN Five Seven",
+
 
 	"hud.weapon.fists": "Fists"
 }
