@@ -1,12 +1,12 @@
 {
 	"name": "FN Five Seven",
-	"color": 4,
+	"color": 8,
 	"ammo": 45,
 	"dual": true,
 	"length": 2.2,
 	"droppable": true,
 	"normal": {
-		"capacity": 10,
+		"capacity": 20,
 		"reload": {
 			"time": 2000
 		},
@@ -25,7 +25,7 @@
 		},
 		"headshot": 2,
 		"bullet": {
-			"damage": 23,
+			"damage": 18,
 			"falloff": 0.7,
 			"speed": 110,
 			"range": [100, 100],
@@ -34,7 +34,7 @@
 	},
 	"visuals": {
 		"tracer": {
-			"type": "50ae",
+			"type": "5.7mm",
 			"width": 0.1,
 			"length": 0.7
 		},

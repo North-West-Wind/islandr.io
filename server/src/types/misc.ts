@@ -30,7 +30,7 @@ export enum GunColor {
 	OLIVE = 5, // .308 Subsonic
 	ORANGE = 6, // Flare
 	PURPLE = 7, // .45 ACP
-	TEAL = 8, // 40mm
+	TEAL = 8, // 5.7mm
 	BROWN = 9, // potato
 	PINK = 10, // Heart
 	PURE_BLACK = 11, // Rainbow
