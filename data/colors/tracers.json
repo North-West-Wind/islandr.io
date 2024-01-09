@@ -34,11 +34,11 @@
 			"chambered": "66FF33"
 		}
 	},
-	"50ae": {
+	"5.7mm": {
 		"color": {
-			"regular": "#625518",
-			"saturated": "5b4f16",
-			"chambered":  "#554914"
+			"regular": "#005254",
+			"saturated": "#003e3f",
+			"chambered": "#00292a"
 		}
 	}
 }

@@ -81,6 +81,7 @@ export default class Crate extends Obstacle {
 				return e;
 			}));
 		}
+		spawnGun('fn_five_seven', GunColor.TEAL, this.position, 90)
 		world.onceSounds.push({ path: "obstacles/crate_break.mp3", position: this.position });
 	}
 
