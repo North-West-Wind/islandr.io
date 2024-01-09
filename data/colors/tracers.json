@@ -33,5 +33,12 @@
 			"saturated": "66FF99",
 			"chambered": "66FF33"
 		}
+	},
+	"50ae": {
+		"color": {
+			"regular": "#625518",
+			"saturated": "5b4f16",
+			"chambered":  "#554914"
+		}
 	}
 }

@@ -22,7 +22,7 @@
 	},
 	"hk_mp6": {
 		"rarity": 1,
-		"weight": 9
+		"weight": 6
 	},
 	"mosin_nagant": {
 		"rarity": 2,
@@ -43,5 +43,17 @@
 	"vr80": {
 		"rarity": 3,
 		"weight": 5
+	},
+	"bt_apc": {
+		"rarity": 2,
+		"weight": 5
+	},
+	"tec-9": {
+		"rarity": 1,
+		"weight": 6
+	},
+	"fn_five_seven": {
+		"rarity": 4,
+		"weight":  2
 	}
 }

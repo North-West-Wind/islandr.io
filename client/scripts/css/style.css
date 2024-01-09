@@ -438,6 +438,17 @@ input[type="text"], input[type="password"] {
     border-radius: 1vh;
     text-align: center;
 }
+.loadout {
+    position: absolute;
+    top: 1vh;
+    left: 30vh;
+    background-color: rgba(0, 255, 0, 0.5);
+    color: #fff;
+    padding: 1vh;
+    cursor: pointer;
+    border-radius: 1vh;
+    text-align: center;
+}
 
 .partner-box {
     position: absolute;
