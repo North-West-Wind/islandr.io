@@ -3,6 +3,8 @@ The game got a huge, i mean VERY HUGE overhaul! We added these
 -New guns: 
 	--Shotgun VR 80 (Similar to SAIGA 12)
 	--Sniper gun on 5.56 mm, the Scout 21 (Similar to Scout elite)
+	--FN Five Seven, a pistol that uses 5.7mm ammo (the new ammo type launched for this :P )
+	--TEC-9, it's like a DMR but lower than the damage of it. Basically surviv's SVD-63 but worse, but common.
 -New mode: Suroi mode (based on normal mode)
 -New features: 
 	--Changing loadout such as skins and death markers
@@ -11,8 +13,7 @@ The game got a huge, i mean VERY HUGE overhaul! We added these
 	--Guns can have custom barrels
 	--Particles when hit something
 	--Mobile Controls
--Fix: Weapon switch bug and random server crash bug
--New links: Dev test mode (will announce link on discord)
+	--Now pressing ESC will also bring an option to resume.
 -Performance: 
 	--Reduced TPS to 45 from 120
 	--Reduced packet sizes from 10 mB to Minimum 777kB
