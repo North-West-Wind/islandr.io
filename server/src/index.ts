@@ -121,7 +121,7 @@ server.on("connection", async socket => {
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
-		try { player.die() ;  socket.close(); } catch (err) { }
+		try {socket.close(); } catch (err) { }
 	}, 30000);
 
 	// The 4 directions of movement
