@@ -53,6 +53,7 @@ export default class Player extends Entity {
 	// Server-side only
 	accessToken?: string;
 	killCount = 0;
+	currencyChanged = false;
 
 	constructor(id: string, username: string, skin: string | null, deathImg: string | null, accessToken?: string, isMobile?: boolean) {
 		super();
@@ -297,7 +298,7 @@ export default class Player extends Entity {
 			}
 		}
 		// Add currency to user if they are logged in and have kills
-		if (this.accessToken && this.killCount) { changeCurrency(this.accessToken, this.killCount * 100); addKillCounts(this.accessToken, this.killCount) }
+		if (this.accessToken && this.killCount && !this.currencyChanged) { changeCurrency(this.accessToken, this.killCount * 100); addKillCounts(this.accessToken, this.killCount); this.currencyChanged = true; }
 
 	}
 
