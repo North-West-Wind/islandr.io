@@ -10,7 +10,7 @@ import { Terrain } from "./types/terrain";
 import { lineBetween } from "./utils";
 import { drawPrompt } from "./rendering/prompt";
 import { Healing } from "./store/entities";
-
+import "./loadout";
 import "./homepage";
 import { checkLoggedIn } from "./homepage";
 import { Particle } from "./types/particle";

@@ -1,0 +1,34 @@
+January 14th 2024 :-
+The game got a huge, i mean VERY HUGE overhaul! We added these
+-New guns: 
+	--Shotgun VR 80 (Similar to SAIGA 12)
+	--Sniper gun on 5.56 mm, the Scout 21 (Similar to Scout elite)
+	--FN Five Seven, a pistol that uses 5.7mm ammo (the new ammo type launched for this :P )
+	--TEC-9, it's like a DMR but lower than the damage of it. Basically surviv's SVD-63 but worse, but common.
+-New mode: Suroi mode (based on normal mode)
+-New features: 
+	--Changing loadout such as skins
+	--Sounds, Revamped assets for some objects
+	--Bigger map with outhouse and small office building
+	--Guns can have custom barrels now and AK 47 and Scout 21 has that
+	--Particles when hit something (Not fully done due to lack of assets for diff objects, currently only wood)
+	--Mobile Controls
+	--Now pressing ESC will also bring an option to resume.
+-Performance: 
+	--Reduced TPS to 45 from 120
+-New items: 
+	--Vests
+	--Helmets
+-New player info storage: 
+	Accounts. they can store: 
+		Username
+		Number of kills
+		Number of games played
+		Skins bought.
+		With it comes currency, for one kill you get 100 currency
+-New skins: 
+	--Default: 0 Currency
+	--Illuminati: 100 Currency
+	--Starstruck: 150 currency
+	--Tulip: 200 currency
+	--Abyssal: 350 currency

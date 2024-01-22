@@ -1,0 +1,104 @@
+{
+	"obstacles": [
+		{
+			"type": "wall",
+			"hitbox": [17, 0.5],
+			"color": 2908887295,
+			"__color": "(comment) 2908887295 is 0xad6218ff",
+			"position": [0, -5]
+		},
+		{
+			"type": "wall",
+			"hitbox": [6, 0.5],
+			"color": 2908887295,
+			"position": [-5.5, 5]
+		},
+		{
+			"type": "wall",
+			"hitbox": [6, 0.5],
+			"color": 2908887295,
+			"position": [5.5, 5]
+		},
+		{
+			"type": "wall",
+			"hitbox": [0.5, 9],
+			"color": 2908887295,
+			"position": [-8.5, 0]
+		},
+		{
+			"type": "wall",
+			"hitbox": [ 0.5, 9 ],
+			"color": 2908887295,
+			"position": [ 8.5, 0 ]
+		},
+		{
+			"type": "toilet_more",
+			"position": [ 5.5, -3 ]
+		},
+		{
+			"type": "wall",
+			"position": [ 3.5, -3 ],
+			"color": 2908887295,
+			"hitbox": [ 0.5, 4 ],
+			"__comment":  "This is the wall that separates the table from the toilet_more."
+		},
+		{
+			"type": "table",
+			"position": [ 0.5, -3 ]
+		},
+		{
+			"type": "wall",
+			"position": [ -2.5, -3 ],
+			"color": 2908887295,
+			"hitbox": [ 0.5, 4 ],
+			"__comment": "this is the wall that separates the table from the loot-desk. "
+		},
+		{
+			"type": "desk",
+			"position": [ -5.5, -3 ],
+			"hitbox": [5, 2]
+		}
+	],
+	"zones": [
+		{
+			"position": [0, 0],
+			"hitbox": [16, 9],
+			"map": true
+		},
+		{
+			"position": [0, 4],
+			"hitbox": [2, 2]
+		}
+	],
+	"mapColor": 2942442751,
+	"floors": [
+		{
+			"type": "floor",
+			"size": [ 17, 10.5 ],
+			"position": [ 0, 0 ],
+			"texture": {
+				"path": "dynamic/cedar-wood.svg",
+				"horizontalFill": 2
+			}
+		},
+		{
+			"type": "floor",
+			"size": [ 6.3, 3 ],
+			"position": [ 0, 6 ],
+			"texture": {
+				"path": "fixed/small_building_entrance.svg"
+			}
+		}
+	],
+	"roofs": [
+		{
+			"type": "roof",
+			"hitbox": [17, 10.5],
+			"position": [0, 0.5],
+			"color": 2942442751,
+			"texture": {
+				"path": "fixed/small-build.svg"
+			}
+		}
+	]
+}

@@ -20,6 +20,8 @@ export class ResponsePacket implements IPacket {
 	skin!: string | null;
 	deathImg!: string | null;
 	accessToken?: string;
+	mode!: string;
+	isMobile!: boolean;
 }
 
 class PingPacket implements IPacket {
@@ -35,7 +37,18 @@ export class MovementPressPacket implements MovementPacket {
 	type = "movementpress";
 	direction!: MovementDirection;
 }
+export class MobileMovementPacket implements IPacket {
+	type = "mobilemovement";
+	direction!: number;
 
+}
+export class PlayerRotationDelta implements IPacket {
+	type = "playerRotation";
+	angle!: number;
+}
+export class MovementResetPacket implements IPacket {
+	type = "movementReset"
+}
 export class MovementReleasePacket implements MovementPacket {
 	type = "movementrelease";
 	direction!: MovementDirection;
@@ -80,15 +93,7 @@ export class UseHealingPacket {
 	type = "usehealing";
 	item!: string;
 }
-
-export class CurrencyUpdatePacket {
-	type = "currencyupdatepacket"
-	updationAmount!: number
-	constructor(updationAmount: number){
-		this.updationAmount = updationAmount
-	}
-}
-export type ClientPacketResolvable = ResponsePacket | PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket | ReloadWeaponPacket;
+export type ClientPacketResolvable = ResponsePacket | PingPacket | MousePressPacket | MouseReleasePacket | MouseMovePacket | MovementPressPacket | MovementReleasePacket | InteractPacket | SwitchWeaponPacket | ReloadWeaponPacket | MovementPacket | MovementResetPacket;
 
 export class AckPacket implements IPacket {
 	type = "ack";
@@ -150,9 +155,11 @@ export class MapPacket implements IPacket {
 export class AnnouncePacket implements IPacket {
 	type = "announce";
 	announcement: string;
+	killer: string;
 
-	constructor(announcement: string) {
+	constructor(announcement: string, killer: string) {
 		this.announcement = announcement;
+		this.killer = killer;
 	}
 }
 

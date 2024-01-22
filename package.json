@@ -10,7 +10,8 @@
     "build-client": "cd client && npm run build",
     "deep-install": "npm i && cd server && npm i && cd ../client && npm i",
     "gameserv": "cd server && npm run build && npm start",
-    "webserv": "npm run build-client && npm run build && node lib/index.js"
+    "webserv": "npm run build-client && npm run build && node lib/index.js",
+    "start": "concurrently \"npm run webserv\" \"npm run gameserv\" "
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "@types/node": "^18.15.5",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
+    "concurrently": "^8.2.2",
     "eslint": "^8.28.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "typescript": "^5.0.2"
@@ -40,6 +42,7 @@
     "express": "^4.18.2",
     "mime-types": "^2.1.35",
     "mysql2": "^3.6.0",
+    "nipplejs": "^0.10.1",
     "sqlite3": "^5.1.6"
   }
 }

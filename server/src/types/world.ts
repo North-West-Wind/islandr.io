@@ -40,6 +40,8 @@ export class World {
 	onceSounds: { path: string; position: Vec2; }[] = []; // Sent when stuff happens, e.g. effect sounds
 	joinSounds: { path: string; position: Vec2; }[] = []; // Sent when player joins, e.g. music
 
+	//Kill feed storage
+	killFeeds: { killFeed: string; killer: string; }[] = [];
 	constructor(size: Vec2, defaultTerrain: Terrain) {
 		// Set the size of map
 		this.size = size;
@@ -178,6 +180,7 @@ export class World {
 		});
 		this.particles = [];
 		this.onceSounds = [];
+		this.killFeeds = [];
 		this.discardEntities = [];
 		this.discardObstacles = [];
 		this.dirtyEntities = [];

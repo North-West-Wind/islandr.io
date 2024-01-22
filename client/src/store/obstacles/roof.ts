@@ -1,4 +1,5 @@
 import { OBSTACLE_SUPPLIERS } from ".";
+import { getMode } from "../../homepage";
 import { getTexture } from "../../textures";
 import { TextureData } from "../../types/data";
 import { CircleHitbox, RectHitbox, Vec2 } from "../../types/math";
@@ -56,7 +57,7 @@ export default class Roof extends Obstacle {
 		ctx.rotate(-this.direction.angle());
 		ctx.globalAlpha = this.opacity;
 		if (this.texture?.path) {
-			const img = getTexture("assets/images/game/textures/" + this.texture.path);
+			const img = getTexture("assets/" + getMode() + "/images/game/textures/" + this.texture.path);
 			let dim: Vec2;
 			if (this.hitbox.type === "circle") {
 				const radius = (<CircleHitbox>this.hitbox).radius;

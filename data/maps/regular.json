@@ -15,7 +15,12 @@
 	],
 	"buildings": [
 		{ "id": "cross", "includeTerrains": ["beach"], "direction": [1, 0], "amount": 5 },
-		{ "id": "outhouse", "includeTerrains": ["plain"], "amount": 20 }
+		{
+			"id": "outhouse",
+			"includeTerrains": [ "plain" ],
+			"amount": 15
+		},
+		{ "id": "small_building", "includeTerrains": ["plain"], "amount": 5 }
 	],
 	"obstacles": [
 		{ "type": "tree", "amount": 100 },

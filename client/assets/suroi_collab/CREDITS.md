@@ -1,0 +1,60 @@
+Skins:
+  Default skin body: Image by flatart on Freepik: https://www.freepik.com/free-vector/army-camouflage-vector-seamless-pattern-texture-military-camouflage-repeats-seamless-army-design-vector-background_34294124.htm
+  Loadout & game skins: Asultra, ScaredPenguinXXL, Pirelli, Slapdap, EndermanKing
+Loot:
+  Armor/Equipment: Slapdap
+  Scopes: Slapdap
+  Pills: jchen
+  Medkit, Soda: Asultra
+Weapons: 
+  Gun icons: eiπ, hester, jchen, vp, ScaredPenguinXXL, DogEnjoyer, yeet120, Megashark25098
+  Gun top down images: Tacomy Loh, jchen, ItzBlover, Megashark25098, 1092384, DogEnjoyer
+  Melee weapons: Radians
+
+Obstacles: 
+  Barrel: 123OP, Asultra, Henry Sanger
+  Barrel residue: Dachselt, Leo, Henry Sanger
+
+  Bush: Glek
+  Bush particles: Asultra, Radians
+  Bush residue: Henry Sanger, Asultra, Radians
+  Blueberry bush: Katloo
+
+  Regular crate: Henry Sanger, 123OP
+  Health crate: Henry Sanger, Radians
+
+  Barrel explosion: Leia
+  Barrel explosion particles: Radians
+
+  Soviet crate: Henry Sanger, DogEnjoyer, 123OP
+
+  Rocks: Leia
+  Rock particles: Radians
+  Rock residue: Henry Sanger, Radians
+  Mossy & cracked rocks: Hester, Leo, Henry Sanger
+  Gold rock: Katloo
+
+  Oak trees: Asultra
+  Oak tree particles & residue: Radians
+  Pine tree: SquareCube
+  Pine tree particles: Radians
+  Pine tree residue: Radians, Henry Sanger
+  Birch tree, particles, & residue: Hester
+
+  Bed, drawers, couch, chair, table, fridge, walls, door, window, ceramic toilet, garage, washing machine: platonthek, Henry Sanger
+  Stove: 1092384
+  Residues for above obstacles: plantonthek
+
+Building designs:
+  House: platonthek
+  Warehouse: Leia, 1092384
+  Porta potty: Katloo, Slapdap, 1092384
+
+Other:
+  Death marker & skull: Henry Sanger
+  Bullet trails: Henry Sanger
+  Emotes: EndermanKing, Slapdap, Tofi38
+  Main logo: Henry Sanger
+  Small/square logo: Glek
+  Aegis/Flint logos: Katloo
+  Tap icon - "One Finger Tap Gesture Of Outlined Hand Symbol" from OnlineWebFonts: https://www.onlinewebfonts.com/icon/57341

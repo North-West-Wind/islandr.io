@@ -7,6 +7,7 @@ import { GunData, MeleeData } from "./data";
 import { GunColor } from "../constants";
 import { DEFINED_ANIMATIONS } from "../store/animations";
 import { getBarrelImagePath } from "../textures";
+import { getMode } from "../homepage";
 
 export enum WeaponType {
 	MELEE = "melee",
@@ -69,7 +70,7 @@ export class MeleeWeapon extends Weapon {
 		if (!img) {
 			const newImg = new Image();
 			MeleeWeapon.fistImages.set(player.skin!, newImg);
-			newImg.src = "assets/images/game/fists/" + player.skin + ".svg";
+			newImg.src = "assets/" + getMode() + "/images/game/fists/" + player.skin + ".svg";
 		} else if (img.complete)
 			for (const fist of fists) {
 				//circleFromCenter(ctx, fist.x, fist.y, fistRadius, true, true);
@@ -123,7 +124,7 @@ export class GunWeapon extends Weapon {
 		if (!img) {
 			const newImg = new Image();
 			MeleeWeapon.fistImages.set(player.skin!, newImg);
-			newImg.src = "assets/images/game/fists/" + player.skin + ".svg";
+			newImg.src = "assets/" + getMode() + "/images/game/fists/" + player.skin + ".svg";
 		} else if (img.complete)
 			for (const pos of fistPositions) {
 				const fist = pos.addVec(offset).scaleAll(scale);

@@ -4,10 +4,6 @@
 		"rarity": 0,
 		"weight": 10
 	},
-	"mp4.5": {
-		"rarity": 0,
-		"weight": 9
-	},
 	"m960": {
 		"rarity": 0,
 		"weight": 8
@@ -24,9 +20,17 @@
 		"rarity": 1,
 		"weight": 7
 	},
+	"hk_mp6": {
+		"rarity": 1,
+		"weight": 6
+	},
 	"mosin_nagant": {
 		"rarity": 2,
 		"weight": 5
+	},
+	"scout_21": {
+		"rarity": 2,
+		"weight": 7
 	},
 	"sv98": {
 		"rarity": 2,
@@ -35,5 +39,21 @@
 	"awc": {
 		"rarity": 5,
 		"weight": 1
+	},
+	"vr80": {
+		"rarity": 3,
+		"weight": 5
+	},
+	"bt_apc": {
+		"rarity": 2,
+		"weight": 5
+	},
+	"tec-9": {
+		"rarity": 1,
+		"weight": 6
+	},
+	"fn_five_seven": {
+		"rarity": 4,
+		"weight":  2
 	}
 }

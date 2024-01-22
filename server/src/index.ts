@@ -2,12 +2,11 @@ import "dotenv/config";
 import { readFileSync } from "fs";
 import * as ws from "ws";
 import { ID, receive, send, wait } from "./utils";
-import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket } from "./types/packet";
+import { MousePressPacket, MouseReleasePacket, MouseMovePacket, MovementPressPacket, MovementReleasePacket, GamePacket, ParticlesPacket, MapPacket, AckPacket, SwitchWeaponPacket, SoundPacket, UseHealingPacket, ResponsePacket, MobileMovementPacket, AnnouncePacket, PlayerRotationDelta } from "./types/packet";
 import { DIRECTION_VEC, TICKS_PER_SECOND } from "./constants";
 import { CommonAngles, Vec2 } from "./types/math";
 import { Player } from "./store/entities";
 import { World } from "./types/world";
-import { MapTerrainSupplier } from "./types/supplier";
 import { Plain, castMapTerrain } from "./store/terrains";
 import { castMapObstacle } from "./store/obstacles";
 import { castBuilding } from "./store/buildings";
@@ -79,6 +78,8 @@ server.on("connection", async socket => {
 	// Setup the close connection listener. Socket will be deleted from map.
 	var connected = false;
 	socket.on("close", () => {
+		try { player.die(); }
+		catch (err) {console.log("hi") }		
 		console.log("Connection closed");
 		sockets.delete(id);
 		connected = false;
@@ -88,6 +89,7 @@ server.on("connection", async socket => {
 	var accessToken: string | undefined = undefined;
 	var skin = "default";
 	var deathImg = "default";
+	var isMobile = false;
 	// Communicate with the client by sending the ID and map size. The client should respond with ID and username, or else close the connection.
 	await Promise.race([wait(10000), new Promise<void>(resolve => {
 		send(socket, new AckPacket(id, TICKS_PER_SECOND, world.size, world.defaultTerrain));
@@ -97,10 +99,9 @@ server.on("connection", async socket => {
 				connected = true;
 				username = decoded.username;
 				accessToken = decoded.accessToken;
-				
 				skin = decoded.skin;
 				deathImg = decoded.deathImg;
-				console.log(skin)
+				isMobile = decoded.isMobile;
 			} else try { socket.close(); } catch (err) { }
 			resolve();
 		})
@@ -109,10 +110,8 @@ server.on("connection", async socket => {
 	console.log(`A new player with ID ${id} connected!`);
 
 	// Create the new player and add it to the entity list.
-	const player = new Player(id, username, skin, deathImg, accessToken);
+	const player = new Player(id, username, skin, deathImg, accessToken, isMobile);
 	world.addPlayer(player);
-	player.boost *= 1.5;
-
 	// Send the player the entire map
 	send(socket, new MapPacket(world.obstacles, world.buildings, world.terrains.concat(...world.buildings.map(b => b.floors.map(fl => fl.terrain)))));
 	// Send the player initial objects
@@ -122,7 +121,7 @@ server.on("connection", async socket => {
 
 	// If the client doesn't ping for 30 seconds, we assume it is a disconnection.
 	const timeout = setTimeout(() => {
-		try { socket.close(); } catch (err) { }
+		try {socket.close(); } catch (err) { }
 	}, 30000);
 
 	// The 4 directions of movement
@@ -134,6 +133,17 @@ server.on("connection", async socket => {
 		switch (decoded.type) {
 			case "ping":
 				timeout.refresh();
+				break;
+			case "movementReset":
+				player.setVelocity(Vec2.ZERO)
+				break;
+			case "playerRotation":
+				const RotationPacket = <PlayerRotationDelta>decoded;
+				player.setDirection(new Vec2(Math.cos(RotationPacket.angle) * 1.45, Math.sin(RotationPacket.angle) * 1.45))
+				break;
+			case "mobilemovement":
+				const MMvPacket = <MobileMovementPacket>decoded
+				player.setVelocity(new Vec2(Math.cos(MMvPacket.direction) * 1.45, Math.sin(MMvPacket.direction) * 1.45))
 				break;
 			case "movementpress":
 				// Make the direction true
@@ -211,6 +221,7 @@ setInterval(() => {
 		send(socket, pkt);
 		if (world.particles.length) send(socket, new ParticlesPacket(world.particles, player));
 		for (const sound of world.onceSounds) send(socket, new SoundPacket(sound.path, sound.position));
+		for (const killFeed of world.killFeeds) send(socket, new AnnouncePacket(killFeed.killFeed, killFeed.killer))
 	});
 	world.postTick();
 }, 1000 / TICKS_PER_SECOND);

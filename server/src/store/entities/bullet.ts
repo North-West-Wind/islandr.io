@@ -1,7 +1,7 @@
 import { GLOBAL_UNIT_MULTIPLIER } from "../../constants";
 import { TracerData } from "../../types/data";
 import { Entity } from "../../types/entity";
-import { CircleHitbox, Vec2 } from "../../types/math";
+import { CircleHitbox, Line, Vec2 } from "../../types/math";
 import { Obstacle } from "../../types/obstacle";
 
 export default class Bullet extends Entity {

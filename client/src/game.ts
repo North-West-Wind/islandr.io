@@ -1,18 +1,21 @@
+/* eslint-disable no-fallthrough */
+import $ from "jquery"
 import { Howl, Howler } from "howler";
 import { KeyBind, movementKeys, TIMEOUT } from "./constants";
 import { start, stop } from "./renderer";
 import { initMap } from "./rendering/map";
 import { addKeyPressed, addMousePressed, getToken, isKeyPressed, isMenuHidden, isMouseDisabled, removeKeyPressed, removeMousePressed, toggleBigMap, toggleHud, toggleMap, toggleMenu, toggleMinimap, toggleMouseDisabled } from "./states";
 import { FullPlayer, Healing } from "./store/entities";
-import { castObstacle, castMinObstacle } from "./store/obstacles";
+import { castObstacle, castMinObstacle, Bush, Tree, Barrel, Crate, Desk, Stone, Toilet, ToiletMore, Table } from "./store/obstacles";
 import { castTerrain } from "./store/terrains";
 import { Vec2 } from "./types/math";
-import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket } from "./types/packet";
+import { PingPacket, MovementPressPacket, MovementReleasePacket, MouseMovePacket, MousePressPacket, MouseReleasePacket, GamePacket, MapPacket, AckPacket, InteractPacket, SwitchWeaponPacket, ReloadWeaponPacket, UseHealingPacket, ResponsePacket, SoundPacket, ParticlesPacket, MovementResetPacket, MovementPacket, AnnouncementPacket, PlayerRotationDelta } from "./types/packet";
 import { World } from "./types/world";
 import { receive, send } from "./utils";
 import Building from "./types/building";
 import { cookieExists, getCookieValue } from "cookies-utils";
 import { Obstacle } from "./types/obstacle";
+import { getMode } from "./homepage";
 
 export var world: World;
 
@@ -27,6 +30,7 @@ var deathImg: string | null = localStorage.getItem("playerDeathImg");
 
 console.log(skin)
 console.log(deathImg)
+const isMobile = /Android/.test(navigator.userAgent) || /iPhone/.test(navigator.userAgent) || /iPad/.test(navigator.userAgent) || /Tablet/.test(navigator.userAgent)
 var player: FullPlayer | null;
 
 /**
@@ -47,6 +51,17 @@ export function getTPS(): number { return tps; }
 
 var ws: WebSocket;
 var connected = false;
+function getConnected() { return connected; }
+function setConnected(v: boolean) { connected = v; return connected; }
+enum modeMapColours {
+	normal = 0x80B251,
+	suroi_collab = 0x4823358
+}
+const joystick = document.getElementsByClassName('joystick-container')[0];
+const handle = document.getElementsByClassName('joystick-handle')[0];
+const aimJoystick = document.getElementsByClassName('aimjoystick-container')[0];
+const aimHandle = document.getElementsByClassName('aimjoystick-handle')[0];
+declare type modeMapColourType = keyof typeof modeMapColours
 
 /**
  * Initializes connection with a given address from the <input> tag
@@ -69,16 +84,21 @@ async function init(address: string) {
 			const data = <AckPacket>receive(event.data);
 			id = data.id;
 			tps = data.tps;
-			world = new World(new Vec2(data.size[0], data.size[1]), castTerrain(data.terrain));
+			world = new World(new Vec2(data.size[0], data.size[1]), castTerrain(data.terrain).setColour((modeMapColours[getMode() as modeMapColourType])));
+			const gameObjects = [Bush, Tree, Barrel, Crate, Desk, Stone, Toilet, ToiletMore, Table]
+			gameObjects.forEach(OBJ => {OBJ.updateAssets() })
 	
 			// Call renderer start to setup
 			await start();
 			var currentCursor = localStorage.getItem("selectedCursor")
 			if (!currentCursor){localStorage.setItem("selectedCursor", "default"); currentCursor = localStorage.getItem("selectedCursor")}
-			if (currentCursor) {document.documentElement.style.cursor = currentCursor}
-			console.log("from game.ts client skin! > " + skin! + " and death img > " + deathImg!)
-			send(ws, new ResponsePacket(id, username!, skin!, deathImg!, cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()));
+			if (currentCursor) { document.documentElement.style.cursor = currentCursor }
+			const responsePacket = new ResponsePacket(id, username!, skin!, deathImg!, isMobile!, (cookieExists("gave_me_cookies") ? getCookieValue("access_token") : getToken()) as string)
+			send(ws, responsePacket);
+			console.log(responsePacket)
 			connected = true;
+			setConnected(true)
+			showMobControls();
 			clearTimeout(timer);
 			
 			// Setup healing items click events
@@ -92,6 +112,7 @@ async function init(address: string) {
 					send(ws, new UseHealingPacket(Healing.mapping[ii]));
 				}
 			}
+			showMobileExclusiveBtns();
 	
 			// Ping server every second to ensure connection
 			const interval = setInterval(() => {
@@ -134,7 +155,7 @@ async function init(address: string) {
 						if (!player) break;
 						const soundPkt = <SoundPacket>data;
 						const howl = new Howl({
-							src: `assets/sounds/${soundPkt.path}`
+							src: `assets/${getMode()}/sounds/${soundPkt.path}`
 						});
 						const pos = Vec2.fromMinVec2(soundPkt.position);
 						const relative = pos.addVec(player.position.inverse()).scaleAll(1/60);
@@ -148,6 +169,21 @@ async function init(address: string) {
 					case "particles": {
 						const partPkt = <ParticlesPacket>data;
 						world.addParticles(partPkt.particles);
+						break;
+					}
+					case "announce": {
+						const announcementPacket = <AnnouncementPacket>data;
+						const killFeeds = document.getElementById("kill-feeds")
+						const killFeedItem = document.createElement("div")
+						if (killFeeds?.childNodes.length as number > 5) { killFeeds?.childNodes[killFeeds.childNodes.length - 1].remove(); }
+						if (announcementPacket.killer == getPlayer()!.id) { killFeedItem.style.background = "rgba(0, 0, 139, 0.5)" }
+						else { killFeedItem.style.background = "rgba(139, 0, 0, 0.5)" }
+						killFeedItem.prepend(`${announcementPacket.announcement}\n`)
+						killFeeds?.prepend(killFeedItem);
+						setTimeout(() => {
+							console.log(killFeeds?.childNodes, killFeeds?.children)
+							killFeeds?.childNodes[killFeeds.childNodes.length-1].remove();
+						}, 5000);
 					}
 				}
 			}
@@ -156,6 +192,7 @@ async function init(address: string) {
 		// Reset everything when connection closes
 		ws.onclose = () => {
 			connected = false;
+			setConnected(false)
 			stop();
 			Howler.stop();
 			id = null;
@@ -187,6 +224,157 @@ document.getElementById("connect")?.addEventListener("click", async () => {
 		return;
 	}
 });
+function showMobileExclusiveBtns() {
+	if (getConnected() && isMobile) {
+		function __sendPkt() { const rlpk = new ReloadWeaponPacket(); send(ws, rlpk); }
+		const ReloadButtonElement = <HTMLElement>document.getElementById("reload-btn");
+		ReloadButtonElement.style.display = 'block';
+		ReloadButtonElement.addEventListener('click', (event) => { event.stopPropagation(); __sendPkt() })
+		const MenuBtnElement = <HTMLElement>document.getElementById("menu-btn");
+		MenuBtnElement.style.display = 'block';
+		MenuBtnElement.addEventListener('click', (event) => {
+			event.stopPropagation();
+			if (isMenuHidden()) { document.getElementById("settings")?.classList.remove("hidden"); toggleMenu() }
+			else { document.getElementById("settings")?.classList.add("hidden"); toggleMenu() }
+		})
+		for (let ii = 0; ii < 4; ii++) {
+			(document.getElementsByClassName("weapon-panel")[ii] as HTMLElement).style.height = "8.5vh";
+			(document.getElementsByClassName("weapon-index")[ii] as HTMLElement).style.height = "4vh";
+}
+		document.getElementById("weapon-container")!.style.top = "-4%";
+	}
+}
+function showMobControls() {
+	if (isMobile && getConnected()) {
+		joystick.classList.remove("hidden");
+		handle.classList.remove("hidden");
+		aimJoystick.classList.remove("hidden");
+		aimHandle.classList.remove("hidden");
+	var joystickActive = false;
+	var joystickDirection = '';
+		var aimJoystickActive = false;
+		let resettedMovement = false;
+
+	// Get the joystick and handle elements
+	const HandlerObjects = [joystick, handle, aimJoystick, aimHandle];
+	HandlerObjects.forEach(handler => {
+		(<HTMLElement>handler).style.display = 'block';
+	});
+	// Add event listeners for touch events
+	(<HTMLElement>handle).addEventListener('touchstart', handleTouchStart);
+	(<HTMLElement>handle).addEventListener('touchmove', handleTouchMove);
+	(<HTMLElement>handle).addEventListener('touchcancel', handleTouchEnd);
+	(<HTMLElement>handle).addEventListener('touchend', handleTouchEnd);
+	(<HTMLElement>joystick).addEventListener('touchcancel', handleTouchEnd);
+	(<HTMLElement>joystick).addEventListener('touchend', handleTouchEnd);
+
+	//Add event listeners for the aim joystick
+	(<HTMLElement>aimJoystick).addEventListener('touchcancel', handleAimJoystickTouchEnd);
+	(<HTMLElement>aimJoystick).addEventListener('touchend', handleAimJoystickTouchEnd);
+	(<HTMLElement>aimHandle).addEventListener('touchstart', handleAimJoystickTouchStart);
+	(<HTMLElement>aimHandle).addEventListener('touchmove', handleTouchMoveAimJoystick);
+	(<HTMLElement>aimHandle).addEventListener('touchcancel', handleAimJoystickTouchEnd);
+	(<HTMLElement>aimHandle).addEventListener('touchend', handleAimJoystickTouchEnd);
+		var centerX = (<HTMLElement>aimJoystick).offsetWidth / 2;
+		var centerY = (<HTMLElement>aimJoystick).offsetHeight / 2;
+	// Function to handle touchstart event
+	function handleTouchStart(event: Event) {
+		event.preventDefault();
+		joystickActive = true;
+		resettedMovement = false;
+		return 0;
+	}
+	function handleAimJoystickTouchStart(event: Event) { event.preventDefault(); aimJoystickActive = true; return 0; }
+
+	// Function to handle touchmove event
+	function handleTouchMove(event: any) {
+		event.preventDefault();
+		resettedMovement = false;
+		if (joystickActive) {
+			var touch = event.targetTouches[0];
+			var posX = touch.pageX - (<HTMLElement>joystick).offsetLeft;
+			var posY = touch.pageY - (<HTMLElement>joystick).offsetTop;
+			var touchX = event.touches[0].clientX - (<HTMLElement>joystick).offsetLeft - (<HTMLElement>joystick).offsetWidth / 2;
+			var touchY = event.touches[0].clientY - (<HTMLElement>joystick).offsetTop - (<HTMLElement>joystick).offsetWidth / 2;
+			// Calculate the distance from the center of the joystick
+			
+			var distance = Math.sqrt(Math.pow(posX - (<HTMLElement>joystick).offsetWidth / 2, 2) + Math.pow(posY - (<HTMLElement>joystick).offsetHeight / 2, 2));
+			var maxDistance = 100;
+			var angle;
+			// If the distance exceeds the maximum, limit it
+			angle = Math.atan2(posY - (<HTMLElement>joystick).offsetHeight / 2, posX - (<HTMLElement>joystick).offsetWidth / 2);
+			if (distance > maxDistance) {
+				var deltaX = Math.cos(angle) * maxDistance;
+				var deltaY = Math.sin(angle) * maxDistance;
+				posX = (<HTMLElement>joystick).offsetWidth / 2 + deltaX;
+				posY = (<HTMLElement>joystick).offsetHeight / 2 + deltaY;
+			}
+			var joystickAngle = Math.atan2(touchY, touchX);
+			const joystickX = ((<HTMLElement>joystick).offsetWidth / 2 - (<HTMLElement>handle).offsetWidth / 2) * Math.cos(joystickAngle);
+			const joystickY = ((<HTMLElement>joystick).offsetWidth / 2 - (<HTMLElement>handle).offsetWidth / 2) * Math.sin(joystickAngle);
+			(<HTMLElement>handle).style.transform = 'translate(' + joystickX + 'px, ' + joystickY + 'px)';
+			// Calculate the joystick direction based on the handle position
+			joystickDirection = '';
+			send(ws, new MovementPacket(angle as number))
+		}
+	}
+	//function for joystick aim part
+	function handleTouchMoveAimJoystick(event: any) {
+		event.preventDefault()
+		if (!aimJoystickActive) return;
+		var touch = event.targetTouches[0];
+		var posX = touch.pageX - (<HTMLElement>aimJoystick).offsetLeft;
+		var posY = touch.pageY - (<HTMLElement>aimJoystick).offsetTop;
+		var touchX = event.touches[0].clientX - (<HTMLElement>aimJoystick).offsetLeft - (<HTMLElement>aimJoystick).offsetWidth / 2;
+		var touchY = event.touches[0].clientY - (<HTMLElement>aimJoystick).offsetTop - (<HTMLElement>aimJoystick).offsetWidth / 2;
+		// Calculate the distance from the center of the joystick
+
+		var distance = Math.sqrt(Math.pow(posX - (<HTMLElement>aimJoystick).offsetWidth / 2, 2) + Math.pow(posY - (<HTMLElement>aimJoystick).offsetHeight / 2, 2));
+		var maxDistance = 100;
+		var angle;
+		// If the distance exceeds the maximum, limit it
+		angle = Math.atan2(posY - (<HTMLElement>aimJoystick).offsetHeight / 2, posX - (<HTMLElement>aimJoystick).offsetWidth / 2);
+		if (distance > maxDistance) {
+			var deltaX = Math.cos(angle) * maxDistance;
+			var deltaY = Math.sin(angle) * maxDistance;
+			posX = (<HTMLElement>aimJoystick).offsetWidth / 2 + deltaX;
+			posY = (<HTMLElement>aimJoystick).offsetHeight / 2 + deltaY;
+		}
+		var joystickAngle = Math.atan2(touchY, touchX);
+		const joystickX = ((<HTMLElement>aimJoystick).offsetWidth / 2 - (<HTMLElement>aimHandle).offsetWidth / 2) * Math.cos(joystickAngle);
+		const joystickY = ((<HTMLElement>aimJoystick).offsetWidth / 2 - (<HTMLElement>aimHandle).offsetWidth / 2) * Math.sin(joystickAngle);
+		(<HTMLElement>aimHandle).style.transform = 'translate(' + joystickX + 'px, ' + joystickY + 'px)';
+		send(ws, new PlayerRotationDelta(angle as number));
+		if (distance > maxDistance) {
+			addMousePressed(0)
+			send(ws, new MousePressPacket(0))
+		}
+	}
+	// Function to handle touchend event
+	function handleAimJoystickTouchEnd(event: Event) {
+		event.preventDefault();
+		aimJoystickActive = false;
+		(<HTMLElement>aimHandle).style.transform = "translate(0px, 0px)";
+		removeMousePressed(1)
+		send(ws, new MouseReleasePacket(0));
+	}
+	function handleTouchEnd(event: Event) {
+		event.preventDefault();
+		joystickActive = false;
+		(<HTMLElement>handle).style.transform = "translate(0px, 0px)";
+
+		joystickDirection = '';
+		if (resettedMovement == false) send(ws, new MovementResetPacket())
+		console.log(resettedMovement)
+		resettedMovement = true;
+	}
+	setInterval(function () {
+		if ((joystickDirection == '' || !joystickActive) && getConnected() && resettedMovement == false ) {
+			send(ws, new MovementResetPacket())
+			resettedMovement = true;
+		}
+	}, 100);
+}}
 
 /**
  * Validates username and address
@@ -207,9 +395,16 @@ document.getElementById("disconnect")?.addEventListener("click", () => {
 	// when disconnect is clicked, close the socket and return to home screen
 	ws.close();
 	document.getElementById("settings")?.classList.add("hidden");
+	(<HTMLElement>joystick).style.display = 'none';
+	(<HTMLElement>handle).style.display = 'none';
+	(<HTMLElement>aimJoystick).style.display = 'none';
+	(<HTMLElement>aimHandle).style.display = 'none';
 	toggleMenu();
 });
-
+document.getElementById("resume")?.addEventListener('click', () => {
+	document.getElementById("settings")?.classList.add('hidden');
+	toggleMenu();
+})
 window.onkeydown = (event) => {
 	if (!connected || isKeyPressed(event.key)) return;
 	event.stopPropagation();
@@ -246,20 +441,20 @@ window.onkeyup = (event) => {
 }
 
 window.onmousemove = (event) => {
-	if (!connected) return;
+	if (!connected || isMobile) return;
 	event.stopPropagation();
 	send(ws, new MouseMovePacket(event.x - window.innerWidth / 2, event.y - window.innerHeight / 2));
 }
 
 window.onmousedown = (event) => {
-	if (!connected || isMouseDisabled()) return;
+	if (!connected || isMouseDisabled() || isMobile) return;
 	event.stopPropagation();
 	addMousePressed(event.button);
 	send(ws, new MousePressPacket(event.button));
 }
 
 window.onmouseup = (event) => {
-	if (!connected) return;
+	if (!connected || isMobile) return;
 	event.stopPropagation();
 	removeMousePressed(event.button);
 	send(ws, new MouseReleasePacket(event.button));

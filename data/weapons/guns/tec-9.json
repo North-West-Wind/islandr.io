@@ -1,0 +1,43 @@
+{
+	"name": "TEC-9",
+	"color": 0,
+	"ammo": 90,
+	"dual": false,
+	"length": 2.5,
+	"droppable": true,
+	"normal": {
+		"capacity": 20,
+		"reload": {
+			"time": 2100
+		},
+		"delay": {
+			"switch": 220,
+			"firing": 130
+		},
+		"spread": {
+			"still": 4,
+			"move": 6
+		},
+		"bullets": 1,
+		"speed": {
+			"equip": 12,
+			"attack": 6
+		},
+		"headshot": 1.75,
+		"bullet": {
+			"damage": 12,
+			"falloff": 0.8,
+			"speed": 100,
+			"range": [100, 100],
+			"suppressed": false
+		}
+	},
+	"visuals": {
+		"tracer": {
+			"type": "9mm",
+			"width": 0.15,
+			"length": 0.8
+		},
+		"animations": ["small_recoil"]
+	}
+}

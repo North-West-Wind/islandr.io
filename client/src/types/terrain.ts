@@ -20,6 +20,11 @@ export abstract class Terrain implements Renderable, RenderableMap {
 		if (!color) color = this.color;
 		return "#" + color.toString(16);
 	}
+	setColour(color?: number): Terrain {
+		if (!color) return this;
+		this.color = color
+		return this
+	}
 
 	abstract render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void;
 	abstract renderMap(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number): void;

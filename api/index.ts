@@ -8,7 +8,7 @@ const sqlite3 = verbose();
 const db = new sqlite3.Database("players.db");
 db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='players'", (err, row) => {
 	if (err) throw err;
-	if (!row) db.run("CREATE TABLE players (id integer PRIMARY KEY AUTOINCREMENT, username varchar(255) NOT NULL, password char(16) NOT NULL, access_token char(128), games_played int DEFAULT 0, kills int DEFAULT 0, currency int DEFAULT 0)");
+	if (!row) db.run("CREATE TABLE players (id integer PRIMARY KEY AUTOINCREMENT, username varchar(255) NOT NULL, password char(16) NOT NULL, access_token char(128), games_played int DEFAULT 0, kills int DEFAULT 0, currency int DEFAULT 0, skinsAvailable varchar(255) DEFAULT 'default;')");
 });
 
 const app = express();
@@ -28,6 +28,16 @@ app.get("/loadout", (_req, res) => {
 	for (const [key, value] of Object.entries(defaultHeaders))
 		res.setHeader(key, value);
 	res.sendFile("loadout.html", { root: "client" });
+});
+app.get("/deathMarker", (_req, res) => {
+	for (const [key, value] of Object.entries(defaultHeaders))
+		res.setHeader(key, value);
+	res.sendFile("deathMarker.html", { root: "client" });
+});
+app.get("/changelog", (_req, res) => {
+	for (const [key, value] of Object.entries(defaultHeaders))
+		res.setHeader(key, value);
+	res.sendFile("changelog.txt", { root: "client" });
 });
 
 app.get("/discord", (_req, res) => {
@@ -83,6 +93,7 @@ app.post("/api/validate", jsonParser, (req, res) => {
 });
 // Get player currency
 app.get("/api/currency", (req, res) => {
+	console.log("Came here :)")
 	if (!req.headers.authorization?.startsWith("Bearer")) return res.status(400).json({ success: false, error: "No access token provided" });
 	const token = req.headers.authorization.split(" ")[1];
 	db.get("SELECT currency FROM players WHERE access_token = ?", token, (err, row?: { currency: number }) => {
@@ -93,6 +104,7 @@ app.get("/api/currency", (req, res) => {
 		if (!row) return res.status(403).json({ success: false, error: "No user found" });
 		res.json({ success: true, currency: row.currency });
 	});
+	console.log("Finished :)")
 });
 // Add currency to player
 app.post("/api/delta-currency", jsonParser, (req, res) => {
@@ -117,6 +129,92 @@ app.post("/api/delta-currency", jsonParser, (req, res) => {
 	});
 });
 
+app.get("/api/getKillCount", (req, res) => {
+	if (!req.headers.authorization?.startsWith("Bearer")) return res.status(400).json({ success: false, error: "No access token provided" });
+	const token = req.headers.authorization.split(" ")[1];
+	db.get("SELECT kills FROM players WHERE access_token = ?", token, (err, row?: { kills: number }) => {
+		if (err) {
+			console.error(err);
+			return res.status(500).json({ success: false, error: "Server database failed" });
+		}
+		if (!row) return res.status(403).json({ success: false, error: "No user found" });
+		res.json({ success: true, kills	: row.kills });
+	});
+});
+
+app.post("/api/killCount-delta", jsonParser, (req, res) => {
+	if (!req.headers.authorization?.startsWith("Bearer")) return res.status(400).json({ success: false, error: "No server access token provided" });
+	if (!req.body?.accessToken || !req.body.delta) return res.status(400).json({ success: false, error: "No delta or access token provided" });
+	if (typeof req.body.delta !== "number") return res.status(400).json({ success: false, error: "Data type of delta is invalid" });
+	const token = req.headers.authorization.split(" ")[1];
+	if (token !== process.env.SERVER_DB_TOKEN) return res.status(403).json({ success: false, error: "Unauthorized server access token" });
+	db.get("SELECT kills FROM players WHERE access_token = ?", req.body.accessToken, (err, row?: { kills: number }) => {
+		if (err) {
+			console.error(err);
+			return res.status(500).json({ success: false, error: "Server database failed" });
+		}
+		if (!row) return res.status(403).json({ success: false, error: "No user found" });
+		db.run("UPDATE players SET kills = ? WHERE access_token = ?", [row.kills + req.body.delta, req.body.accessToken], err => {
+			if (err) {
+				console.error(err);
+				return res.status(500).json({ success: false, error: "Server database failed" });
+			}
+			res.json({ success: true, currency: row.kills + req.body.delta });
+		});
+	});
+});
+
+app.post("/api/currency-decrement", jsonParser, (req, res) => {
+	if (!req.body?.accessToken || !req.body.delta) return res.status(400).json({ success: false, error: "No delta or access token provided" });
+	if (typeof req.body.delta !== "number") return res.status(400).json({ success: false, error: "Data type of delta is invalid" });
+	db.get("SELECT currency FROM players WHERE access_token = ?", req.body.accessToken, (err, row?: { currency: number }) => {
+		if (err) {
+			console.error(err);
+			return res.status(500).json({ success: false, error: "Server database failed" });
+		}
+		if (!row) return res.status(403).json({ success: false, error: "No user found" });
+		db.run("UPDATE players SET currency = ? WHERE access_token = ?", [row.currency - req.body.delta, req.body.accessToken], err => {
+			if (err) {
+				console.error(err);
+				return res.status(500).json({ success: false, error: "Server database failed" });
+			}
+			res.json({ success: true, currency: row.currency - req.body.delta });
+		});
+	});
+});
+app.get("/api/getSkins", (req, res) => {
+	if (!req.headers.authorization?.startsWith("Bearer")) return res.status(400).json({ success: false, error: "No access token provided" });
+	const token = req.headers.authorization.split(" ")[1];
+	db.get("SELECT skinsAvailable FROM players WHERE access_token = ?", token, (err, row?: { skinsAvailable: string }) => {
+		if (err) {
+			console.error(err);
+			return res.status(500).json({ success: false, error: "Server database failed" });
+		}
+		if (!row) return res.status(403).json({ success: false, error: "No user found" });
+		res.json({ success: true, skinsAvailable: row.skinsAvailable });
+	});
+});
+app.post("/api/addSkins", jsonParser, (req, res) => {
+	if (!req.body?.accessToken || !req.body.skin) return res.status(400).json({ success: false, error: "No skin or access token provided" });
+	if (typeof req.body.skin !== "string") return res.status(400).json({ success: false, error: "Data type of skin is invalid" });
+	db.get("SELECT skinsAvailable FROM players WHERE access_token = ?", req.body.accessToken, (err, row?: { skinsAvailable: string }) => {
+		if (err) {
+			console.error(err);
+			return res.status(500).json({ success: false, error: "Server database failed" });
+		}
+		if (!row) return res.status(403).json({ success: false, error: "No user found" });
+		if (!(<string[]>row.skinsAvailable.split(";")).includes(req.body.skin)) {
+			db.run("UPDATE players SET skinsAvailable = ? WHERE access_token = ?", [row.skinsAvailable += `${req.body.skin};`, req.body.accessToken], err => {
+				if (err) {
+					console.error(err);
+					return res.status(500).json({ success: false, error: "Server database failed" });
+				}
+				res.json({ success: true, skinsAvailable: row.skinsAvailable += `${req.body.skin};` });
+			});
+		}
+	});
+});
+app.get("/gameStatus", (req, res) => { res.status(204).json({ success: true, message: "Game is running!" }); });
 app.use("/data", express.static("data", { dotfiles: "allow", fallthrough: false }));
 app.use("/assets", express.static("client/assets", { fallthrough: false }));
 app.use("/scripts", express.static("client/scripts", { fallthrough: false }));

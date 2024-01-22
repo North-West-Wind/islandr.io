@@ -5,8 +5,8 @@ import { CircleHitbox, Vec2 } from "../../types/math";
 import { CollisionType, GunColor } from "../../types/misc";
 import { Obstacle } from "../../types/obstacle";
 import { Particle } from "../../types/particle";
-import { GunWeapon, WeaponType } from "../../types/weapon";
-import { changeCurrency, spawnAmmo, spawnGun } from "../../utils";
+import { GunWeapon, Weapon, WeaponType } from "../../types/weapon";
+import { addKillCounts, changeCurrency, spawnAmmo, spawnGun } from "../../utils";
 import { Roof } from "../obstacles";
 import { Pond, River, Sea } from "../terrains";
 import Backpack from "./backpack";
@@ -24,6 +24,8 @@ export default class Player extends Entity {
 	boost = 0;
 	maxBoost = 100;
 	scope = 1;
+	buildingEnterScope = 1;
+	_scope = 1;
 	tryAttacking = false;
 	attackLock = 0;
 	tryInteracting = false;
@@ -42,6 +44,7 @@ export default class Player extends Entity {
 	healItem: string | undefined = undefined;
 	skin: string | null;
 	deathImg: string | null;
+	isMobile = false
 	// Track zone damage ticks
 	zoneDamageTicks = 2 * TICKS_PER_SECOND;
 	// Track ripple particle ticks
@@ -50,8 +53,9 @@ export default class Player extends Entity {
 	// Server-side only
 	accessToken?: string;
 	killCount = 0;
+	currencyChanged = false;
 
-	constructor(id: string, username: string, skin: string | null, deathImg: string | null, accessToken?: string) {
+	constructor(id: string, username: string, skin: string | null, deathImg: string | null, accessToken?: string, isMobile?: boolean) {
 		super();
 		this.id = id;
 		this.interactMessage = null;
@@ -62,6 +66,7 @@ export default class Player extends Entity {
 		this.inventory = Inventory.defaultEmptyInventory();
 		this.currentHealItem = null;
 		this.accessToken = accessToken;
+		this.isMobile = isMobile!;
 	}
 
 	setVelocity(velocity?: Vec2) {
@@ -117,7 +122,7 @@ export default class Player extends Entity {
 		if ([Pond.ID, River.ID, Sea.ID].includes(terrain.id)) {
 			if (this.rippleTicks <= 0) {
 				world.particles.push(new Particle("ripple", this.position, 0.5));
-				this.rippleTicks = 30;
+				this.rippleTicks = 45;
 			} else if (this.velocity.magnitudeSqr() != 0) this.rippleTicks--;
 		}
 		// Check for entity hitbox intersection
@@ -128,7 +133,7 @@ export default class Player extends Entity {
 				this.canInteract = true;
 				this.interactMessage = entity.interactionKey();
 				// Only interact when trying
-				if (this.tryInteracting) {
+				if (this.tryInteracting || this.isMobile) {
 					this.canInteract = false;
 					entity.interact(this);
 				}
@@ -165,8 +170,9 @@ export default class Player extends Entity {
 		const rooflessAdd = new Set<string>();
 		const rooflessDel = new Set<string>();
 		for (const building of world.buildings) {
-			if (building.zones.some(z => z.hitbox.collideCircle(z.position.addVec(building.position), building.direction, this.hitbox, this.position, this.direction) != CollisionType.NONE)) rooflessAdd.add(building.id);
-			else rooflessDel.add(building.id);
+			if (building.zones.some(z => z.hitbox.collideCircle(z.position.addVec(building.position), building.direction, this.hitbox, this.position, this.direction) != CollisionType.NONE)) { rooflessAdd.add(building.id); this.scope = 1; }
+			else {
+				setTimeout(() => { rooflessDel.add(building.id);  this.scope = this._scope }, 45 ) }
 		}
 		// Collision handling
 		for (const obstacle of obstacles) {
@@ -184,8 +190,8 @@ export default class Player extends Entity {
 			// For roof to be roofless
 			if (obstacle.type === Roof.ID) {
 				const roof = <Roof>obstacle;
-				if (rooflessAdd.has(roof.buildingId)) roof.addRoofless(this.id);
-				if (rooflessDel.has(roof.buildingId)) roof.delRoofless(this.id);
+				if (rooflessAdd.has(roof.buildingId)) roof.addRoofless(this.id)
+				if (rooflessDel.has(roof.buildingId) || rooflessAdd.size == 0 ) roof.delRoofless(this.id)
 			}
 		}
 
@@ -224,7 +230,7 @@ export default class Player extends Entity {
 		}
 
 		// Check scope difference
-		if (this.inventory.selectedScope != this.scope) this.scope = this.inventory.selectedScope;
+		if (this.inventory.selectedScope != this._scope) this._scope = this.inventory.selectedScope;
 
 		// Check red zone
 		if (!world.safeZone.hitbox.inside(this.position, world.safeZone.position, Vec2.UNIT_X)) {
@@ -286,10 +292,14 @@ export default class Player extends Entity {
 		// Add kill count to killer
 		if (this.potentialKiller) {
 			const entity = world.entities.find(e => e.id == this.potentialKiller);
-			if (entity?.type === this.type) (<Player>entity).killCount++;
+			if (entity?.type === this.type) {
+				(<Player>entity).killCount++;
+				world.killFeeds.push({ killFeed: `${(<Player>entity).username} killed ${this.username} with ${(<Player>entity).lastHolding}`, killer: (<Player>entity).id});
+			}
 		}
 		// Add currency to user if they are logged in and have kills
-		if (this.accessToken && this.killCount) changeCurrency(this.accessToken, this.killCount * 100);
+		if (this.accessToken && this.killCount && !this.currencyChanged) { changeCurrency(this.accessToken, this.killCount * 100); addKillCounts(this.accessToken, this.killCount); this.currencyChanged = true; }
+
 	}
 
 	reload() {

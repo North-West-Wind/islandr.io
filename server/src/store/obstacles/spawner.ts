@@ -23,10 +23,11 @@ export default class Spawner extends Obstacle {
 	type = Spawner.TYPE;
 	lootTable: string;
 
-	constructor(lootTable: string) {
+	constructor(lootTable="toilet") {
 		super(world, new CircleHitbox(0), new CircleHitbox(0), 0, 0);
 		this.discardable = true;
 		this.lootTable = lootTable;
+
 	}
 
 	static {

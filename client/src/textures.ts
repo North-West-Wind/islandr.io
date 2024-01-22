@@ -1,29 +1,30 @@
 import { TracerColor, TracerColorData } from "./types/data";
+import { getMode } from "./homepage";
 
 export function getWeaponImagePath(id: string) {
-	return id ? `assets/images/game/loots/weapons/${id}.svg` : "";
+	return id ? `assets/${getMode()}/images/game/loots/weapons/${id}.svg` : "";
 }
 
 export function getBarrelImagePath(id: string) {
-	return `assets/images/game/guns/${id}.svg`;
+	return `assets/${getMode()}/images/game/guns/${id}.svg`;
 }
 
 export function getBackpackImagePath(level: number) {
-	return `assets/images/game/loots/backpacks/${level}.svg`;
+	return `assets/${getMode()}/images/game/loots/backpacks/${level}.svg`;
 }
 export function getHelmetImagePath(level: number) {
-	return `assets/images/game/loots/proc-items/helmet-level-${level}.svg`;
+	return `assets/${getMode()}/images/game/loots/proc-items/helmet-level-${level}.svg`;
 }
 export function getVestImagePath(level: number) {
-	return `assets/images/game/loots/proc-items/vest-level-${level}.svg`;
+	return `assets/${getMode()}/images/game/loots/proc-items/vest-level-${level}.svg`;
 }
 
 export function getHealingImagePath(id: string) {
-	return `assets/images/game/loots/healings/${id}.svg`;
+	return `assets/${getMode()}/images/game/loots/healings/${id}.svg`;
 }
 
 export function getParticleImagePath(id: string) {
-	return `assets/images/game/particles/${id}.svg`;
+	return `assets/${getMode()}/images/game/particles/${id}.svg`;
 }
 
 const tracerColors = new Map<string, TracerColor>();

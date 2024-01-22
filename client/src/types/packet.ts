@@ -1,3 +1,4 @@
+import { Player } from "../store/entities";
 import { MinEntity, MinObstacle, MinMinObstacle, MinTerrain, MinVec2, MinBuilding, MinCircleHitbox, MinParticle } from "./minimized";
 import { MovementDirection } from "./misc";
 
@@ -13,13 +14,15 @@ export class ResponsePacket implements IPacket {
 	skin: string | null;
 	deathImg: string | null;
 	accessToken?: string;
+	isMobile?: boolean;
 
-	constructor(id: string, username: string, skin: string | null, deathImg: string | null, accessToken?: string) {
+	constructor(id: string, username: string, skin: string | null, deathImg: string | null, isMobile: boolean, accessToken?: string) {
 		this.id = id;
 		this.username = username;
 		this.skin = skin;
 		this.deathImg = deathImg;
 		this.accessToken = accessToken;
+		this.isMobile = isMobile
 	}
 }
 
@@ -38,6 +41,9 @@ export class MovementPressPacket implements IPacket {
 	}
 }
 
+export class MovementResetPacket implements IPacket {
+	type = "movementReset";
+}
 // Packet to notify movement key release
 export class MovementReleasePacket implements IPacket {
 	type = "movementrelease";
@@ -47,7 +53,19 @@ export class MovementReleasePacket implements IPacket {
 		this.direction = direction;
 	}
 }
+export class MovementPacket implements IPacket {
+	type = "mobilemovement"
+	direction: number;
+	constructor(direction: number) {
+		this.direction = direction
+	}
+}
 
+export class PlayerRotationDelta implements IPacket {
+	type = "playerRotation";
+	angle: number;
+	constructor(angle: number) { this.angle = angle }
+}
 // Packet to notify mouse button press
 export class MousePressPacket implements IPacket {
 	type = "mousepress";
@@ -154,4 +172,9 @@ export class ParticlesPacket implements IPacket {
 	particles!: MinParticle[];
 }
 
-export type ServerPacketResolvable = AckPacket | GamePacket | MapPacket | SoundPacket | ParticlesPacket;
+export class AnnouncementPacket implements IPacket {
+	type = "announce";
+	announcement!: string;
+	killer!: string;
+}
+export type ServerPacketResolvable = AckPacket | GamePacket | MapPacket | SoundPacket | ParticlesPacket | AnnouncementPacket;

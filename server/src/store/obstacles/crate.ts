@@ -5,6 +5,8 @@ import { LOOT_TABLES } from "../../types/loot_table";
 import { MapObstacleSupplier, ObstacleSupplier } from "../../types/supplier";
 import { MapObstacleData, ObstacleData } from "../../types/data";
 import { MAP_OBSTACLE_SUPPLIERS, OBSTACLE_SUPPLIERS } from ".";
+import { spawnGun } from "../../utils";
+import { GunColor } from "../../types/misc";
 
 class CrateSupplier extends ObstacleSupplier {
 	make(data: ObstacleData) {

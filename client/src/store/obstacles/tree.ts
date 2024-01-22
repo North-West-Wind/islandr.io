@@ -4,15 +4,7 @@ import { MinObstacle } from "../../types/minimized";
 import { circleFromCenter } from "../../utils";
 import { ObstacleSupplier } from "../../types/supplier";
 import { OBSTACLE_SUPPLIERS } from ".";
-
-const treeImg = new Image();
-treeImg.src = "assets/images/game/objects/tree.svg";
-
-const mosinTreeImg = new Image();
-mosinTreeImg.src = "assets/images/game/objects/mosin_tree.svg";
-
-const treeResidueImg = new Image();
-treeResidueImg.src = "assets/images/game/objects/residues/tree.svg";
+import { getMode } from "../../homepage";
 
 interface AdditionalObstacle {
 	special: "normal" | "mosin";
@@ -28,11 +20,20 @@ export default class Tree extends Obstacle {
 	static readonly TYPE = "tree";
 	type = Tree.TYPE;
 	zIndex = 1000;
+	static treeImg = new Image();
+	static mosinTreeImg = new Image();
+	static treeResidueImg = new Image();
 
 	special!: "normal" | "mosin";
 
 	static {
 		OBSTACLE_SUPPLIERS.set(Tree.TYPE, new TreeSupplier());
+	}
+
+	static updateAssets() {
+		this.treeImg.src = "assets/" + getMode() + "/images/game/objects/tree.svg";
+		this.mosinTreeImg.src = "assets/" + getMode() + "/images/game/objects/mosin_tree.svg";
+		this.treeResidueImg.src = "assets/" + getMode() + "/images/game/objects/residues/tree.svg";
 	}
 
 	copy(minObstacle: MinObstacle & AdditionalObstacle) {
@@ -43,17 +44,17 @@ export default class Tree extends Obstacle {
 	render(you: Player, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, scale: number) {
 		var img: HTMLImageElement;
 		var renderScale = 1;
-		if (this.despawn) img = treeResidueImg;
+		if (this.despawn) img = Tree.treeResidueImg;
 		else switch (this.special) {
 			case "mosin":
-				img = mosinTreeImg;
+				img = Tree.mosinTreeImg;
 				renderScale = 3.6;
 				break;
 			default:
-				img = treeImg;
+				img = Tree.treeImg;
 				renderScale = 5;
 		}
-		if (!img.complete || !treeResidueImg.complete) return;
+		if (!img.complete || !Tree.treeResidueImg.complete) return;
 		const relative = this.position.addVec(you.position.inverse());
 		ctx.translate(canvas.width / 2 + relative.x * scale, canvas.height / 2 + relative.y * scale);
 		ctx.rotate(-this.direction.angle());

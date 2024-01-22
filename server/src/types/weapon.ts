@@ -111,7 +111,7 @@ export class GunWeapon extends Weapon {
 	magazine = 0;
 
 	constructor(nameId: string, data: GunData) {
-		super(nameId, (data.normal.delay.firing / 1000) * TICKS_PER_SECOND, data.normal.speed.equip, data.normal.speed.attack, data.auto || false, data.droppable);
+		super(nameId, (data.normal.delay.firing / 1000) * (TICKS_PER_SECOND), data.normal.speed.equip, data.normal.speed.attack, data.auto || false, data.droppable);
 		this.color = data.color;
 		this.ammo = data.ammo;
 		this.bullets = data.normal.bullets;
@@ -120,7 +120,7 @@ export class GunWeapon extends Weapon {
 		this.offset = new Vec2(data.length, 0);
 		this.bullet = data.normal.bullet;
 		this.tracer = data.visuals.tracer;
-		this.reloadTicks = (data.normal.reload.time / 1000) * TICKS_PER_SECOND;
+		this.reloadTicks = (data.normal.reload.time / 1000) * (60);
 		this.reloadBullets = data.normal.reload.bullets || data.normal.capacity;
 		this.capacity = data.normal.capacity;
 	}

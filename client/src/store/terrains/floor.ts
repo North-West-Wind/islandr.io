@@ -1,4 +1,5 @@
 import { TERRAIN_SUPPLIERS } from ".";
+import { getMode } from "../../homepage";
 import { getTexture } from "../../textures";
 import { TextureData } from "../../types/data";
 import { Vec2 } from "../../types/math";
@@ -46,7 +47,7 @@ export default class Floor extends LineTerrain {
 		ctx.scale(scale, scale);
 		ctx.translate(relative.x + vec.x * 0.5, relative.y + vec.y * 0.5);
 		ctx.rotate(-vec.angle());
-		const path = "assets/images/game/textures/" + this.texture.path;
+		const path = "assets/" + getMode() + "/images/game/textures/" + this.texture.path;
 		const img = getTexture(path);
 		const dim = new Vec2(vec.magnitude(), this.range * 2);
 		if (!img?.complete) this.defaultRender(ctx, dim);
